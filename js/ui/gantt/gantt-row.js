@@ -10,6 +10,10 @@
 
   const menuButton = MP.contextMenu.createMenuButton;
 
+  // Colori decorativi per la barra progetto (colonna 1): ciclici in base
+  // all'ordine dei progetti nel manifest, non legati ai colori dei team.
+  const PROJECT_BAR_COLORS = ['#5b8def', '#e0965a', '#6fb37c', '#b073c9', '#d4886e', '#4fb0b0', '#c9a227', '#e07e97'];
+
   function fixedCell(text, colClass, extraClass) {
     const div = document.createElement('div');
     div.className = `gantt-cell col-fixed ${colClass}${extraClass ? ' ' + extraClass : ''}`;
@@ -21,13 +25,18 @@
     return div;
   }
 
-  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved }) {
+  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved }) {
     const cells = [];
 
     const col1 = fixedCell(showProgetto ? progetto.nome : '', 'col-1');
+    col1.classList.add('project-color-bar');
+    col1.style.setProperty('--project-bar-color', PROJECT_BAR_COLORS[projectIndex % PROJECT_BAR_COLORS.length]);
     if (showProgetto) {
+      const nomeSpan = col1.querySelector('.cell-text');
+      if (nomeSpan) nomeSpan.title = progetto.team ? `${progetto.nome}\n${progetto.team}` : progetto.nome;
       col1.appendChild(menuButton([
         { label: 'Rinomina progetto', onClick: () => MP.projectCrud.renameProject(state, file) },
+        { label: 'Team di progetto…', onClick: () => MP.projectCrud.editTeam(state, file) },
         { label: progetto.archiviato ? 'Riattiva progetto' : 'Archivia progetto', onClick: () => MP.projectCrud.toggleArchivio(state, file) },
         { label: '+ Nuova baseline', onClick: () => MP.baselineCrud.createBaseline(state, file) },
         { label: 'Sposta su', onClick: () => MP.projectCrud.moveProject(state, file, -1) },
@@ -86,9 +95,10 @@
     }
     cells.push(col3);
 
+    const weekCells = [];
     for (const settimana of weeks) {
       if (task) {
-        cells.push(renderWeekCell({
+        const cell = renderWeekCell({
           task,
           settimana,
           teamMap,
@@ -98,13 +108,39 @@
           state,
           file,
           onCellSaved,
-        }));
+        });
+        cells.push(cell);
+        weekCells.push({ settimana, div: cell });
       } else {
         const empty = document.createElement('div');
         empty.className = 'gantt-cell week-cell';
         cells.push(empty);
       }
     }
+
+    if (task) {
+      weekCells.forEach(({ settimana, div }) => {
+        div.addEventListener('click', (event) => {
+          MP.cellSelection.handleCellClick({
+            event,
+            file,
+            task,
+            settimana,
+            div,
+            weekCells,
+            dataset: state.dataset,
+            onApply: (weeksRange, newEntry) => onBulkCellsSaved({ state, file, task, weeksRange, newEntry }),
+          });
+        });
+      });
+    }
+
+    for (const cell of cells) {
+      if (showProgetto) cell.classList.add('row-project-start');
+      else if (showBaseline) cell.classList.add('row-baseline-start');
+      if (baselineIndex % 2 === 1) cell.classList.add('row-baseline-alt');
+    }
+
     return cells;
   }
 

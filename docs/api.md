@@ -32,7 +32,7 @@ the closest thing this app has to an "API," and it's what a new UI file or a new
 | `MP.validation` | `js/model/validation.js` | `findOrphanTeam`, `findOrphanRisorse`, `findTeamMismatches` — non-blocking data-consistency warnings |
 | `MP.modal`, `MP.toast`, `MP.contextMenu`, `MP.toolbar` | `js/ui/common/*.js` | Generic UI building blocks shared across views |
 | `MP.projectCrud`, `MP.baselineCrud`, `MP.taskCrud`, `MP.resourceCrud`, `MP.teamCrud` | `js/ui/crud/*.js` | Create/rename/delete/reorder operations against the in-memory dataset, persisted via `MP.saveCoordinator` |
-| `MP.ganttView`, `MP.ganttRow`, `MP.ganttCell`, `MP.cellPopover`, `MP.legend` | `js/ui/gantt/*.js` | The main grid view |
+| `MP.ganttView`, `MP.ganttRow`, `MP.ganttCell`, `MP.cellPopover`, `MP.cellSelection`, `MP.legend` | `js/ui/gantt/*.js` | The main grid view |
 | `MP.resourceLoadView`, `MP.teamRisorsaView`, `MP.weekControls` | `js/ui/*/*.js` | Secondary views |
 
 ### Conventions

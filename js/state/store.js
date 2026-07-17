@@ -10,6 +10,7 @@
     ui: {
       vistaCorrente: 'gantt', // gantt | carico-risorse | team-risorse
       mostraArchiviati: false,
+      mostraConclusi: false,
     },
   };
 

@@ -167,57 +167,6 @@
       ]
     },
     {
-      "versione": "2.0",
-      "task": [
-        {
-          "nome": "Sprint Planning",
-          "concluso": false,
-          "settimane": {
-            "2026-04-27": {
-              "team": "dev",
-              "risorse": [
-                "MH",
-                "AL"
-              ]
-            },
-            "2026-06-15": {
-              "milestone": true
-            }
-          }
-        },
-        {
-          "nome": "Third-Party Data Feed Import",
-          "concluso": true,
-          "settimane": {
-            "2026-06-08": {
-              "team": "run",
-              "risorse": [
-                "JR"
-              ]
-            },
-            "2026-06-15": {
-              "milestone": true
-            }
-          }
-        },
-        {
-          "nome": "Hardware Integration",
-          "concluso": true,
-          "settimane": {
-            "2026-04-27": {
-              "team": "dev",
-              "risorse": [
-                "DK"
-              ]
-            },
-            "2026-06-15": {
-              "milestone": true
-            }
-          }
-        }
-      ]
-    },
-    {
       "versione": "3.0",
       "task": [
         {

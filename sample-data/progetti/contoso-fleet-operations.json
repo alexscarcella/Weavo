@@ -411,6 +411,13 @@
                 "GK"
               ],
               "milestone": true
+            },
+            "2025-12-08": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "GK"
+              ]
             }
           }
         },

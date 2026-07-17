@@ -56,6 +56,21 @@
     await persist(state, { manifest: true, projectFiles: [file] });
   }
 
+  async function editTeam(state, file, teamInput) {
+    const entry = state.dataset.progetti.get(file);
+    const nuovoTeam = teamInput !== undefined
+      ? teamInput
+      : await MP.modal.promptText({
+          title: 'Team di progetto',
+          label: 'Riferimenti/team di progetto (referenti, note libere):',
+          value: entry.data.team || '',
+          multiline: true,
+        });
+    if (nuovoTeam === null) return;
+    entry.data.team = nuovoTeam.trim();
+    await persist(state, { manifest: false, projectFiles: [file] });
+  }
+
   async function toggleArchivio(state, file) {
     const entry = state.dataset.progetti.get(file);
     entry.data.archiviato = !entry.data.archiviato;
@@ -90,5 +105,5 @@
     await persist(state, { manifest: true, projectFiles: [] });
   }
 
-  MP.projectCrud = { createProject, renameProject, toggleArchivio, deleteProject, moveProject };
+  MP.projectCrud = { createProject, renameProject, editTeam, toggleArchivio, deleteProject, moveProject };
 })(window.MP = window.MP || {});

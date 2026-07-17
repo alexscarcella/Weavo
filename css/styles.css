@@ -140,6 +140,24 @@ code {
 
 .gantt-cell.milestone { box-shadow: inset 0 0 0 2px #d32f2f; }
 
+/* --- Separatori visivi progetto/baseline --- */
+.gantt-cell.row-project-start { border-top: 3px solid #4a5768; }
+.gantt-cell.row-baseline-start { border-top: 2px solid #b9c2cc; }
+
+.gantt-cell.row-baseline-alt { background: #f5f7fa; }
+.gantt-cell.col-fixed.row-baseline-alt { background: #eef2f7; }
+
+.gantt-cell.col-1.project-color-bar { padding-left: 8px; }
+.gantt-cell.col-1.project-color-bar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--project-bar-color, transparent);
+}
+
 .badge-orfano {
   position: absolute;
   top: 1px;
@@ -158,10 +176,15 @@ code {
 }
 .badge-orfano-risorsa { background: #ff8a65; color: #4a1c00; }
 
-.toggle-archiviati { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+.toggle-archiviati, .toggle-conclusi { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
 
 .gantt-cell.editable-cell { cursor: pointer; }
 .gantt-cell.editable-cell:hover { outline: 2px solid #2E86FF; outline-offset: -2px; }
+
+/* --- Selezione range multi-cella (click + shift-click, vedi cell-selection.js) --- */
+.gantt-cell.cell-selected {
+  outline: 2px solid #2E86FF; outline-offset: -2px; background-color: rgba(46, 134, 255, 0.15);
+}
 
 /* --- Popover di editing cella --- */
 
@@ -193,6 +216,10 @@ code {
   padding: 0.4rem 0.5rem; font-size: 0.78rem; margin-top: 0.3rem;
 }
 .popover-hint { margin: 0.5rem 0 0; font-size: 0.75rem; }
+.popover-bulk-hint {
+  margin: 0 0 0.6rem; font-size: 0.78rem; color: #1a5fb4;
+  background: #e8f1ff; border: 1px solid #bcd8ff; border-radius: 4px; padding: 0.4rem 0.5rem;
+}
 
 /* --- Sovrallocazione --- */
 .gantt-cell.overallocated { outline: 2px dashed #ff6f00; outline-offset: -2px; }
@@ -257,10 +284,17 @@ code {
   background: #fff; border-radius: 8px; padding: 1.25rem 1.5rem; max-width: 480px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
-.modal-box h2 { margin-top: 0; font-size: 1.1rem; color: #b00020; }
+.modal-box h2 { margin-top: 0; font-size: 1.1rem; }
+.modal-conflict h2 { color: #b00020; }
 .modal-box p { font-size: 0.9rem; line-height: 1.4; }
+.modal-field-label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 0.3rem; }
+.modal-input, .modal-textarea {
+  width: 100%; font: inherit; padding: 0.5rem; border: 1px solid #bbb; border-radius: 4px;
+  resize: vertical;
+}
 .modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1rem; }
-.modal-btn-overwrite { background: #b00020; color: #fff; border-color: #b00020; }
+.modal-btn-overwrite, .modal-btn-save { background: #2E86FF; color: #fff; border-color: #2E86FF; }
+.modal-conflict .modal-btn-overwrite { background: #b00020; border-color: #b00020; }
 
 /* --- Toast --- */
 .toast-container {

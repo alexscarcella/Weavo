@@ -188,9 +188,17 @@ inserted at the right point in that list. Layers, low → high:
    - `gantt/`: the main view. `gantt-view.js` builds the compact grid (CSS Grid + `position:
      sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
      gantt library, per spec §9); `gantt-row.js` renders one task row; `gantt-cell.js` renders one
-     week×task cell; `cell-popover.js` is the click-to-edit popover (team-first, then multi-select
-     resources restricted to that team, then milestone flag, autosave on close, non-blocking
-     double-allocation warning); `legend.js` renders the color legend dynamically from
+     week×task cell (double click opens `cell-popover.js` for that single cell, resetting any
+     pending range selection first); `cell-popover.js` is the editing popover (team-first, then
+     multi-select resources restricted to that team, then milestone flag — milestone only in
+     single-cell mode, see below — autosave on close, non-blocking double-allocation warning);
+     `cell-selection.js` is the click/shift-click range-selection controller, confined to one
+     task row at a time (module-singleton state, highlighted via a CSS class rather than the app
+     store, since it doesn't need to survive a full re-render) — a shift-click extends the range
+     from the last plain-clicked cell ("anchor") and immediately opens `cell-popover.js` in bulk
+     mode (`weeksRange`), which applies the same team+resources to every selected week in one
+     save (no milestone in bulk mode — see `requirements/backlog.md` on why milestone stays a
+     single-cell/single-baseline concept); `legend.js` renders the color legend dynamically from
      `team-risorse.json`, read-only (links to the dedicated team/risorse page for editing).
    - `resource-load/resource-load-view.js`: per-resource per-week allocation count (replaces the
      original spreadsheet's `COUNTIF` formulas), highlighting overallocation — read-only, links

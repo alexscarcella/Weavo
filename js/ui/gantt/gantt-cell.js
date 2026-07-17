@@ -1,4 +1,7 @@
-// Rendering di una singola cella settimana×task.
+// Rendering di una singola cella settimana×task. Il doppio click apre il
+// popover di edit per questa sola cella (resettando un'eventuale selezione
+// multi-cella in corso); il click semplice è gestito da gantt-row.js tramite
+// cell-selection.js, che serve invece alla selezione di un range sulla riga.
 (function (MP) {
   'use strict';
 
@@ -71,7 +74,8 @@
 
     if (titleParts.length) div.title = titleParts.join(' — ');
 
-    div.addEventListener('click', () => {
+    div.addEventListener('dblclick', () => {
+      MP.cellSelection.reset();
       MP.cellPopover.openPopover({
         anchorEl: div,
         dataset: state.dataset,

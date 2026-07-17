@@ -1,12 +1,16 @@
-// Popover di editing per una cella settimana×task: prima si sceglie il team,
-// poi si selezionano multiple risorse (solo tra quelle di quel team), poi
-// l'eventuale flag milestone. Salvataggio automatico alla chiusura (nessun
-// bottone "salva" separato), con avviso non bloccante su doppia allocazione.
+// Popover di editing per una cella settimana×task, o per un range di settimane
+// selezionato sulla stessa riga (vedi cell-selection.js): prima si sceglie il
+// team, poi si selezionano multiple risorse (solo tra quelle di quel team),
+// poi l'eventuale flag milestone (solo modalità singola cella — un range
+// applica solo team+risorse, la milestone resta un concetto per singola
+// settimana). Salvataggio automatico alla chiusura (nessun bottone "salva"
+// separato), con avviso non bloccante su doppia allocazione.
 (function (MP) {
   'use strict';
 
   const { buildAllocationIndex, findAllocations } = MP.overallocation;
   const { createWeekEntry } = MP.schema;
+  const { formatWeekLabel } = MP.weekUtils;
 
   let activeContext = null;
 
@@ -46,10 +50,19 @@
     pop.style.left = `${Math.max(8, left)}px`;
   }
 
-  function openPopover({ anchorEl, dataset, task, settimana, onSave }) {
+  // `weeksRange` (opzionale): array di iso settimana quando il popover è
+  // aperto su un range multi-cella (vedi cell-selection.js) invece che sulla
+  // singola `settimana`. In quel caso i valori iniziali vengono presi dalla
+  // prima settimana del range ("cella ancora") e propagati identici a tutte
+  // le settimane del range al salvataggio — la milestone resta esclusa.
+  function openPopover({ anchorEl, dataset, task, settimana, weeksRange, onSave }) {
     closeExisting();
 
-    const entry = (task.settimane || {})[settimana] || {};
+    const weeks = weeksRange && weeksRange.length ? weeksRange : [settimana];
+    const isBulk = weeks.length > 1;
+    const anchorWeek = weeks[0];
+
+    const entry = (task.settimane || {})[anchorWeek] || {};
     let selectedTeam = entry.team || '';
     const selectedRisorse = new Set(entry.risorse || []);
     let selectedMilestone = entry.milestone === true;
@@ -63,7 +76,17 @@
       .map((t) => `<option value="${t.codice}" ${t.codice === selectedTeam ? 'selected' : ''}>${t.nome}</option>`)
       .join('');
 
+    const altreDiverse = isBulk
+      ? weeks.slice(1).filter((w) => {
+          const e = (task.settimane || {})[w];
+          const vuota = !e || (!e.team && !(e.risorse || []).length && !e.milestone);
+          return !vuota && JSON.stringify({ team: e.team, risorse: e.risorse || [] }) !== JSON.stringify({ team: entry.team, risorse: entry.risorse || [] });
+        }).length
+      : 0;
+
     pop.innerHTML = `
+      ${isBulk ? `<p class="popover-bulk-hint">Allocazione su ${weeks.length} settimane, dal ${formatWeekLabel(weeks[0])}
+        al ${formatWeekLabel(weeks[weeks.length - 1])}${altreDiverse ? ` — sovrascrive ${altreDiverse} settimane con dati diversi` : ''}.</p>` : ''}
       <div class="popover-field">
         <label>Team</label>
         <select class="popover-team">
@@ -75,9 +98,9 @@
         <label>Risorse</label>
         <div class="popover-risorse-list"></div>
       </div>
-      <div class="popover-field popover-milestone-field">
+      ${isBulk ? '' : `<div class="popover-field popover-milestone-field">
         <label><input type="checkbox" class="popover-milestone" ${selectedMilestone ? 'checked' : ''}> Milestone di consegna</label>
-      </div>
+      </div>`}
       <div class="popover-conflicts"></div>
       <p class="hint popover-hint">Chiudi (clic fuori o Esc) per salvare.</p>
     `;
@@ -91,9 +114,12 @@
     function refreshConflicts() {
       const righe = [];
       for (const sigla of selectedRisorse) {
-        const refs = findAllocations(index, sigla, settimana).filter((r) => r.taskRef !== task);
-        for (const ref of refs) {
-          righe.push(`<strong>${sigla}</strong> già allocata su ${ref.progettoNome} / BL ${ref.baselineVersione} / ${ref.taskNome}`);
+        for (const w of weeks) {
+          const refs = findAllocations(index, sigla, w).filter((r) => r.taskRef !== task);
+          for (const ref of refs) {
+            const settimanaLabel = isBulk ? ` (${formatWeekLabel(w)})` : '';
+            righe.push(`<strong>${sigla}</strong>${settimanaLabel} già allocata su ${ref.progettoNome} / BL ${ref.baselineVersione} / ${ref.taskNome}`);
+          }
         }
       }
       conflictsEl.innerHTML = righe.length
@@ -135,9 +161,12 @@
       renderRisorseList();
       refreshConflicts();
     });
-    pop.querySelector('.popover-milestone').addEventListener('change', (e) => {
-      selectedMilestone = e.target.checked;
-    });
+    const milestoneCheckbox = pop.querySelector('.popover-milestone');
+    if (milestoneCheckbox) {
+      milestoneCheckbox.addEventListener('change', (e) => {
+        selectedMilestone = e.target.checked;
+      });
+    }
 
     renderRisorseList();
     refreshConflicts();
@@ -147,7 +176,7 @@
         const newEntry = createWeekEntry({
           team: selectedTeam,
           risorse: [...selectedRisorse],
-          milestone: selectedMilestone,
+          milestone: isBulk ? false : selectedMilestone,
         });
         onSave(newEntry);
       },

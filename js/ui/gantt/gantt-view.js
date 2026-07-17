@@ -8,28 +8,33 @@
   const { renderLegend } = MP.legend;
   const { findOrphanTeam, findOrphanRisorse, findTeamMismatches } = MP.validation;
 
-  // Un progetto senza baseline, o una baseline senza task, non deve sparire dal
-  // gantt: senza una riga non ci sarebbe modo di raggiungerne il menu "⋮" per
-  // aggiungere la prima baseline/task (righe segnaposto con baseline/task null).
-  function buildRows(dataset, mostraArchiviati) {
+  // Un progetto senza baseline, o una baseline senza task (visibili — vedi
+  // mostraConclusi), non deve sparire dal gantt: senza una riga non ci
+  // sarebbe modo di raggiungerne il menu "⋮" per aggiungere la prima
+  // baseline/task (righe segnaposto con baseline/task null).
+  function buildRows(dataset, mostraArchiviati, mostraConclusi) {
     const rows = [];
+    let projectIndex = 0;
     for (const voce of dataset.manifest.progetti) {
       const entry = dataset.progetti.get(voce.file);
       if (!entry) continue;
       const progetto = entry.data;
       if (progetto.archiviato && !mostraArchiviati) continue;
 
+      const pIdx = projectIndex++;
+
       if (progetto.baseline.length === 0) {
-        rows.push({ progetto, baseline: null, task: null, file: voce.file, showProgetto: true, showBaseline: false });
+        rows.push({ progetto, baseline: null, task: null, file: voce.file, showProgetto: true, showBaseline: false, projectIndex: pIdx, baselineIndex: 0 });
         continue;
       }
 
       progetto.baseline.forEach((baseline, bi) => {
-        if (baseline.task.length === 0) {
-          rows.push({ progetto, baseline, task: null, file: voce.file, showProgetto: bi === 0, showBaseline: true });
+        const taskVisibili = baseline.task.filter((t) => mostraConclusi || !t.concluso);
+        if (taskVisibili.length === 0) {
+          rows.push({ progetto, baseline, task: null, file: voce.file, showProgetto: bi === 0, showBaseline: true, projectIndex: pIdx, baselineIndex: bi });
           return;
         }
-        baseline.task.forEach((task, ti) => {
+        taskVisibili.forEach((task, ti) => {
           rows.push({
             progetto,
             baseline,
@@ -37,6 +42,8 @@
             file: voce.file,
             showProgetto: bi === 0 && ti === 0,
             showBaseline: ti === 0,
+            projectIndex: pIdx,
+            baselineIndex: bi,
           });
         });
       });
@@ -53,6 +60,24 @@
     try {
       await MP.saveCoordinator.saveProject(state, file);
       MP.store.setState({}); // dataset mutato in place: basta ri-notificare i subscriber
+    } catch (e) {
+      window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);
+    }
+  }
+
+  // Applica la stessa allocazione (team+risorse) a tutte le settimane del
+  // range selezionato (vedi cell-selection.js), con un solo salvataggio.
+  async function handleBulkCellsSaved({ state, file, task, weeksRange, newEntry }) {
+    for (const settimana of weeksRange) {
+      if (MP.schema.isWeekEntryEmpty(newEntry)) {
+        delete task.settimane[settimana];
+      } else {
+        task.settimane[settimana] = newEntry;
+      }
+    }
+    try {
+      await MP.saveCoordinator.saveProject(state, file);
+      MP.store.setState({});
     } catch (e) {
       window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);
     }
@@ -91,7 +116,7 @@
     const sigleValide = new Set(risorseFlat.map((r) => r.sigla));
     const siglaTeamMap = new Map(risorseFlat.map((r) => [r.sigla, r.teamCodice]));
     const allocationIndex = MP.overallocation.buildAllocationIndex(dataset);
-    const rows = buildRows(dataset, state.ui.mostraArchiviati);
+    const rows = buildRows(dataset, state.ui.mostraArchiviati, state.ui.mostraConclusi);
 
     const page = document.createElement('div');
     page.className = 'gantt-page';
@@ -107,9 +132,16 @@
           <input type="checkbox" id="chk-archiviati" ${state.ui.mostraArchiviati ? 'checked' : ''}>
           Mostra archiviati
         </label>
+        <label class="toggle-conclusi">
+          <input type="checkbox" id="chk-conclusi" ${state.ui.mostraConclusi ? 'checked' : ''}>
+          Mostra conclusi
+        </label>
       </span>`;
     toolbar.querySelector('#chk-archiviati').addEventListener('change', (e) => {
       MP.store.setState((s) => ({ ui: { ...s.ui, mostraArchiviati: e.target.checked } }));
+    });
+    toolbar.querySelector('#chk-conclusi').addEventListener('change', (e) => {
+      MP.store.setState((s) => ({ ui: { ...s.ui, mostraConclusi: e.target.checked } }));
     });
     toolbar.querySelector('.btn-nuovo-progetto').addEventListener('click', () => {
       MP.projectCrud.createProject(state);
@@ -152,6 +184,7 @@
         siglaTeamMap,
         allocationIndex,
         onCellSaved: handleCellSaved,
+        onBulkCellsSaved: handleBulkCellsSaved,
       });
       cells.forEach((cell) => grid.appendChild(cell));
     }
