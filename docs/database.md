@@ -91,6 +91,13 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
   together, or with `milestone: true` set — never a partial state like `{ "team": "dev",
   "risorse": [] }`. Entries are always built through `MP.schema.createWeekEntry(...)` to enforce
   this.
+- A task admits only **one** milestone week, and all tasks of the same baseline share a single
+  milestone deadline: setting `milestone: true` on one task's week propagates it (same week) to
+  every other non-`concluso` task of that baseline, clearing it from any other week on all of
+  them (last one set wins, never two milestones in the same baseline); unsetting it removes it
+  from the others too. Enforced in the gantt UI when saving a cell (`gantt-view.js`), not in the
+  schema itself — the flag stays duplicated per `task.settimane[iso]` rather than living on
+  `baseline` directly.
 - `concluso: true` marks a task as finished: it's excluded from overallocation counting and from
   team-mismatch detection, but its data is never deleted or rewritten automatically.
 - `archiviato: true` marks a whole project as archived — same principle, no destructive

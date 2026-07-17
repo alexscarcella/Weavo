@@ -355,6 +355,30 @@
               "risorse": [
                 "JR"
               ]
+            },
+            "2026-06-01": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-06-08": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-06-15": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-06-22": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
             }
           }
         },

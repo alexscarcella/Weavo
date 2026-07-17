@@ -8,7 +8,7 @@
     dataset: null, // { manifest, teamRisorsa, progetti, warnings }
     error: null,
     ui: {
-      vistaCorrente: 'gantt', // gantt | carico-risorse | team-risorse
+      vistaCorrente: 'gantt', // gantt | carico-risorse | milestones | team-risorse
       mostraArchiviati: false,
       mostraConclusi: false,
     },

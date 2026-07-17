@@ -315,6 +315,38 @@ code {
 .legend-swatch.load-2 { background: #fff9c4; }
 .legend-swatch.load-3plus { background: #ffcdd2; }
 
+/* --- Vista milestone --- */
+.milestone-counter { font-weight: 600; color: #2a3542; }
+.gantt-cell.col-fixed.row-inconsistent { box-shadow: inset 3px 0 0 #ffb300; }
+.gantt-cell.week-cell.milestone-total-cell { font-weight: 700; color: #b71c1c; }
+
+.milestone-histogram {
+  display: flex;
+  align-items: stretch;
+  height: 70px;
+  border: 1px solid #e6e6e6;
+  border-top: none;
+  background: #fff;
+}
+.milestone-hist-spacer { flex: 0 0 260px; }
+.milestone-hist-cell {
+  flex: 0 0 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  border-left: 1px solid #f0f0f0;
+  padding-bottom: 2px;
+}
+.milestone-hist-cell.current-week-line { border-left: 3px solid #1a5fb4; }
+.milestone-hist-count { font-size: 0.65rem; color: #555; margin-bottom: 2px; }
+.milestone-hist-bar {
+  width: 22px;
+  min-height: 4px;
+  background: #d32f2f;
+  border-radius: 4px 4px 0 0;
+}
+
 .gantt-cell.col-1.team-color-bar { padding-left: 8px; }
 .gantt-cell.col-1.team-color-bar::before {
   content: '';

@@ -161,6 +161,54 @@
               "milestone": true
             }
           }
+        },
+        {
+          "nome": "Degug",
+          "concluso": false,
+          "settimane": {
+            "2026-07-20": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "KT"
+              ]
+            },
+            "2026-07-27": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "KT"
+              ]
+            },
+            "2026-08-03": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "KT"
+              ]
+            },
+            "2026-08-10": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "KT"
+              ]
+            },
+            "2026-08-17": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "KT"
+              ]
+            },
+            "2026-08-24": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "KT"
+              ]
+            }
+          }
         }
       ]
     },

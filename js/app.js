@@ -118,6 +118,7 @@
     const viewRenderers = {
       'carico-risorse': MP.resourceLoadView.renderResourceLoadView,
       'team-risorse': MP.teamRisorsaView.renderTeamRisorsaView,
+      milestones: MP.milestonesView.renderMilestonesView,
     };
     const renderView = viewRenderers[state.ui.vistaCorrente] || MP.ganttView.renderGanttView;
     wrapper.appendChild(renderView(state));

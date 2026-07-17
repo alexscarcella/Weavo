@@ -100,6 +100,7 @@
       if (task) {
         const cell = renderWeekCell({
           task,
+          baseline,
           settimana,
           teamMap,
           sigleValide,

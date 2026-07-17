@@ -5,13 +5,13 @@
 (function (MP) {
   'use strict';
 
-  function renderWeekCell({ task, settimana, teamMap, sigleValide, siglaTeamMap, allocationIndex, state, file, onCellSaved, lastEdited }) {
+  function renderWeekCell({ task, baseline, settimana, teamMap, sigleValide, siglaTeamMap, allocationIndex, state, file, onCellSaved, lastEdited }) {
     const entry = (task.settimane || {})[settimana];
     const div = document.createElement('div');
     div.className = 'gantt-cell week-cell editable-cell';
     const titleParts = [];
 
-    if (lastEdited && lastEdited.task === task && lastEdited.weeks.has(settimana)) {
+    if (lastEdited && lastEdited.tasks.has(task) && lastEdited.weeks.has(settimana)) {
       div.classList.add('cell-just-edited');
     }
 
@@ -85,7 +85,7 @@
         dataset: state.dataset,
         task,
         settimana,
-        onSave: (newEntry) => onCellSaved({ state, file, task, settimana, newEntry }),
+        onSave: (newEntry) => onCellSaved({ state, file, task, baseline, settimana, newEntry }),
       });
     });
 

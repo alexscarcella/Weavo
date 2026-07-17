@@ -44,8 +44,10 @@ week range (`settimane.prima`/`settimane.ultima`). See [database.md](database.md
 
 ### Milestone
 A flag (`milestone: true`) on a specific week entry within a task, meaning that week is a
-deadline/checkpoint for that task. Currently modeled per task-per-week, not per baseline — see the
-backlog note on making a milestone a baseline-wide concept for the intended future direction.
+deadline/checkpoint. Stored per task-per-week in the schema, but the gantt UI enforces it as a
+baseline-wide concept: setting it on one task propagates it to every other non-`concluso` task of
+the same baseline (same week), and only one milestone week exists per baseline at a time. See
+[database.md](database.md).
 
 ### Orphan reference
 A `team` code or resource `sigla` used in a task's week entry that no longer exists in

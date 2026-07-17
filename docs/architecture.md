@@ -44,12 +44,13 @@ flowchart TB
         weekutils["week-utils.js"]
         overalloc["overallocation.js"]
         validation["validation.js"]
+        milestones["milestones.js"]
     end
     subgraph ui["js/ui — rendering + events"]
         common["common/\nmodal, toast, context-menu, toolbar, dataset-header, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
         gantt["gantt/\nmain view, cell popover, legend"]
-        other["resource-load/, team-risorse/, weeks/"]
+        other["resource-load/, team-risorse/, milestones/, weeks/"]
     end
     app["js/app.js — entry point"]
 
@@ -70,15 +71,17 @@ flowchart TB
    `setState`, `subscribe`. No framework, no virtual DOM, no reducers. `setState` shallow-merges a
    patch and notifies every subscriber synchronously.
 3. **`js/model/`** — pure functions over an in-memory dataset: week arithmetic, the
-   cross-project overallocation index, and non-blocking validation (orphan references, team
-   mismatches). No I/O, no DOM access, so these are trivially unit-testable in isolation.
+   cross-project overallocation index, non-blocking validation (orphan references, team
+   mismatches), and baseline-release-milestone derivation (`milestones.js`, used by the
+   milestones page). No I/O, no DOM access, so these are trivially unit-testable in isolation.
 4. **`js/ui/`** — rendering and event wiring, split by concern rather than by component
    framework conventions: `common/` (modal, toast, context menu, toolbar — including the current
    page's title next to the hamburger button — dataset-header, app-header), `crud/` (one file per
    entity), `gantt/` (the main grid view), plus one folder per secondary view (resource load,
-   team/resource management, week-range controls). The gantt and resource-load pages share a
-   header (week range, task/project counts, color legend) via `common/dataset-header.js`, so the
-   two views always report identical numbers.
+   team/resource management, milestones density report, week-range controls). The gantt and
+   resource-load pages share a header (week range, task/project counts, color legend) via
+   `common/dataset-header.js`, so the two views always report identical numbers; the milestones
+   page reuses the same header component.
 5. **`js/app.js`** — the entry point. Subscribes to the store, maps `state.status` to a render
    function, and owns the initial directory-picker flow. Also renders the static brand header
    (`MP.appHeader`) once at startup into `#app-header`, a sibling of `#app` — it sits outside the
@@ -104,8 +107,8 @@ stateDiagram-v2
 
 `state.dataset` (present only in `ready`) holds `{ manifest, teamRisorsa, progetti, warnings }`
 plus per-file `*Meta` entries used by the save coordinator. `state.ui.vistaCorrente` picks which
-top-level view renders inside the `ready` state: the gantt grid, the resource-load view, or the
-team/resource management page.
+top-level view renders inside the `ready` state: the gantt grid, the resource-load view, the
+milestones density report, or the team/resource management page.
 
 ## Render flow
 

@@ -17,9 +17,12 @@
   let lastEdited = null;
   let lastEditedTimer = null;
 
-  function markLastEdited(task, weeks) {
+  // `tasks` è sempre un array: normalmente un solo task, ma la sincronizzazione
+  // della milestone di baseline (vedi `syncBaselineMilestone`) tocca più task
+  // in un colpo solo, e tutti vanno rievidenziati.
+  function markLastEdited(tasks, weeks) {
     if (lastEditedTimer) clearTimeout(lastEditedTimer);
-    lastEdited = { task, weeks: new Set(weeks) };
+    lastEdited = { tasks: new Set(tasks), weeks: new Set(weeks) };
     lastEditedTimer = setTimeout(() => {
       lastEdited = null;
       lastEditedTimer = null;
@@ -70,7 +73,59 @@
     return rows;
   }
 
-  async function handleCellSaved({ state, file, task, settimana, newEntry }) {
+  // Un task ammette una sola settimana di milestone: impostandola su una nuova
+  // settimana, l'eventuale flag su un'altra settimana dello stesso task va rimosso
+  // (l'ultima impostata sovrascrive la precedente, mai due milestone residue).
+  function clearOtherMilestones(task, settimana) {
+    for (const [iso, entry] of Object.entries(task.settimane || {})) {
+      if (iso === settimana || !entry.milestone) continue;
+      delete entry.milestone;
+      if (MP.schema.isWeekEntryEmpty(entry)) delete task.settimane[iso];
+    }
+  }
+
+  // Tutti i task di una stessa baseline condividono un'unica scadenza: impostando
+  // la milestone su un task, viene ereditata (stessa settimana) da tutti gli
+  // altri task non conclusi della baseline, applicando anche a loro la regola
+  // "una sola milestone per task" — mai due scadenze diverse nella stessa
+  // baseline. I task già conclusi non vengono toccati automaticamente (stesso
+  // principio del team-mismatch: dati chiusi mai auto-corretti, vedi CLAUDE.md).
+  function syncBaselineMilestone(baseline, task, settimana) {
+    clearOtherMilestones(task, settimana);
+    const affected = [task];
+    for (const t of baseline.task) {
+      if (t === task || t.concluso) continue;
+      clearOtherMilestones(t, settimana);
+      const existing = t.settimane[settimana];
+      t.settimane[settimana] = existing ? { ...existing, milestone: true } : { milestone: true };
+      affected.push(t);
+    }
+    return affected;
+  }
+
+  // Simmetrico a `syncBaselineMilestone`: se l'utente toglie la scadenza
+  // condivisa (checkbox smarcata, non uno spostamento su un'altra settimana),
+  // va rimossa dagli altri task della baseline che la avevano ereditata, non
+  // lasciata residua solo perché il task originario non la mostra più.
+  function clearBaselineMilestone(baseline, task, settimana) {
+    const affected = [task];
+    for (const t of baseline.task) {
+      if (t === task || t.concluso) continue;
+      const entry = (t.settimane || {})[settimana];
+      if (!entry || !entry.milestone) continue;
+      delete entry.milestone;
+      if (MP.schema.isWeekEntryEmpty(entry)) delete t.settimane[settimana];
+      affected.push(t);
+    }
+    return affected;
+  }
+
+  async function handleCellSaved({ state, file, task, baseline, settimana, newEntry }) {
+    const wasMilestone = ((task.settimane || {})[settimana] || {}).milestone === true;
+    const isMilestone = newEntry.milestone === true;
+    let affectedTasks = [task];
+    if (baseline && isMilestone) affectedTasks = syncBaselineMilestone(baseline, task, settimana);
+    else if (baseline && wasMilestone) affectedTasks = clearBaselineMilestone(baseline, task, settimana);
     if (MP.schema.isWeekEntryEmpty(newEntry)) {
       delete task.settimane[settimana];
     } else {
@@ -78,7 +133,7 @@
     }
     try {
       await MP.saveCoordinator.saveProject(state, file);
-      markLastEdited(task, [settimana]);
+      markLastEdited(affectedTasks, [settimana]);
       MP.store.setState({}); // dataset mutato in place: basta ri-notificare i subscriber
     } catch (e) {
       window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);
@@ -97,7 +152,7 @@
     }
     try {
       await MP.saveCoordinator.saveProject(state, file);
-      markLastEdited(task, weeksRange);
+      markLastEdited([task], weeksRange);
       MP.store.setState({});
     } catch (e) {
       window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);

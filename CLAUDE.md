@@ -192,7 +192,8 @@ inserted at the right point in that list. Layers, low → high:
    `init | unsupported | not-connected | loading | ready | error`. `state.dataset` (present when
    `ready`) holds `{ manifest, teamRisorsa, progetti: Map<file, {data, rawText}>, warnings }`
    plus `*Meta` entries used by save-coordinator for conflict checks. `state.ui.vistaCorrente`
-   (`gantt | carico-risorse | team-risorse`) picks the page `js/app.js` renders below the top bar.
+   (`gantt | carico-risorse | milestones | team-risorse`) picks the page `js/app.js` renders below
+   the top bar.
 3. **`js/model/`** — pure derivations over an in-memory dataset, no I/O, no DOM:
    `week-utils.js` (ISO week arithmetic, Monday-based; `getCurrentWeekIso()` returns the Monday of
    the real-world current week — used by both the gantt and resource-load views to highlight
@@ -201,7 +202,12 @@ inserted at the right point in that list. Layers, low → high:
    never persisted/stored), `overallocation.js` (cross-project sigla×week allocation index, used
    both by the cell popover warning and the gantt/resource-load highlighting), `validation.js`
    (orphan `team`/`sigla` detection, plus `findTeamMismatches` for
-   resources allocated under a team they no longer belong to).
+   resources allocated under a team they no longer belong to), `milestones.js`
+   (`computeBaselineMilestones`: for each baseline, derives the single "effective" release week
+   from the (possibly duplicated/inconsistent) `milestone: true` flags across its tasks — the mode
+   across all tasks that have one set, reading concluso tasks too since this is read-only
+   derivation, not the write-side sync in `gantt-view.js`; flags a baseline `inconsistent` if its
+   tasks disagree on the week, without correcting the underlying data — feeds the milestones page).
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs, used
      only for save conflicts), `toast.js` (non-blocking notifications), `context-menu.js` (the
@@ -210,12 +216,13 @@ inserted at the right point in that list. Layers, low → high:
      duplicating open/close logic — plus `renderPageTitle`, a small label next to the hamburger
      showing the current view's name, sourced from the same `VIEWS` list used to build the menu
      so the two never drift apart: `gantt` → "Master Plan", `carico-risorse` → "Carico risorse",
-     `team-risorse` → "Team e risorse"), `dataset-header.js` (the header shared by the gantt and
-     resource-load pages: a `.gantt-toolbar` info line — week range + task-row count + project
-     count, computed via `MP.ganttView.buildRows` so both pages report the exact same numbers —
-     plus the team-color legend from `legend.js`; takes an optional extra element to append to
-     the info line, used by the gantt page only for its "+ Nuovo progetto" button and
-     archiviati/conclusi toggles), `app-header.js` (static brand header — logo, "Weavo" title,
+     `milestones` → "Milestone", `team-risorse` → "Team e risorse"), `dataset-header.js` (the
+     header shared by the gantt, resource-load, and milestones pages: a `.gantt-toolbar` info
+     line — week range + task-row count + project count, computed via `MP.ganttView.buildRows` so
+     all pages report the exact same numbers — plus the team-color legend from `legend.js`; takes
+     an optional extra element to append to the info line, used by the gantt page for its
+     "+ Nuovo progetto" button and archiviati/conclusi toggles, and by the milestones page for its
+     "Totale rilasci nel periodo" counter), `app-header.js` (static brand header — logo, "Weavo" title,
      version, copyright — rendered once into `#app-header` from `app.js`'s `bootstrap()`,
      outside the `state.status` render cycle since its content never changes; present on every
      screen including `not-connected`/`unsupported`/`error`, not just the `ready` views).
@@ -232,6 +239,21 @@ inserted at the right point in that list. Layers, low → high:
      pending range selection first); `cell-popover.js` is the editing popover (team-first, then
      multi-select resources restricted to that team, then milestone flag — milestone only in
      single-cell mode, see below — autosave on close, non-blocking double-allocation warning);
+     a task admits only **one** milestone week, and all tasks of the same baseline share a single
+     milestone: `gantt-view.js`'s `handleCellSaved` calls `syncBaselineMilestone` when a saved
+     entry has `milestone: true` — it clears the flag from every other week of every non-`concluso`
+     task in `baseline.task` (including the edited task itself) and sets it on the new week for
+     all of them, preserving any existing `team`/`risorse` on that week rather than overwriting it;
+     unchecking the milestone (`clearBaselineMilestone`) is symmetric, removing it from the other
+     tasks that had inherited it too — otherwise the "shared deadline" invariant would silently
+     drift. `concluso` tasks are skipped in both directions (same "closed tasks are never
+     auto-touched" principle as team-mismatch handling above). This still uses the existing
+     per-cell `cell-popover.js` as the only UI — no dedicated baseline-deadline popover — and the
+     field stays duplicated on each `task.settimane[iso]` rather than moving to `baseline` itself;
+     pre-existing datasets with inconsistent milestones across a baseline's tasks are **not**
+     migrated automatically — they self-heal only the next time any task in that baseline has its
+     milestone touched via the popover. This resolves the "Milestone unica per baseline" item in
+     `requirements/backlog.md`, which should be removed/marked done there.
      `cell-selection.js` is the click/shift-click range-selection controller, confined to one
      task row at a time (module-singleton state, highlighted via a CSS class rather than the app
      store, since it doesn't need to survive a full re-render) — a shift-click extends the range
@@ -260,6 +282,20 @@ inserted at the right point in that list. Layers, low → high:
    - `team-risorse/team-risorse-view.js`: the dedicated CRUD page for teams and their resources
      (create/rename/recolor/delete team; create/rename/move/delete resource within a team) — the
      only place in the UI where `team-risorse.json` is edited.
+   - `milestones/milestones-view.js`: read-only report on the density of baseline release
+     milestones across the calendar, one row per baseline (fixed columns "Attività"/"Baseline"
+     only — no per-task row, since `MP.milestones.computeBaselineMilestones` already collapses
+     each baseline to its single effective release week) instead of the gantt's per-task rows;
+     same week columns/range as gantt and carico-risorse (`MP.weekUtils.getWeeksInRange`) and the
+     same shared `dataset-header.js`, filtered by the same `state.ui.mostraArchiviati` flag (no
+     dedicated toggle on this page, so its row set always matches the project count shown in the
+     shared header). A row whose baseline has inconsistent milestone dates across its tasks gets a
+     `row-inconsistent` amber marker (never auto-corrected, same non-blocking-warning principle as
+     team mismatches). Below the grid — inside the same `.gantt-scroll` so it scrolls horizontally
+     in sync without any dedicated sync code — a bar-chart row (`.milestone-histogram`) of releases
+     per week, outside the `.gantt-grid` itself because CSS Grid's `grid-auto-rows: 24px` is too
+     short for readable bars. The total release count feeds the "Totale rilasci nel periodo"
+     counter passed as `dataset-header.js`'s extra element.
    - `weeks/week-controls.js`: exports two standalone edge-button renderers (no combined control
      bar, no count input). `gantt-view.js` places them **inside the weeks grid itself**, in an
      extra row above the column-label row (`.gantt-cell.week-edge-row`, class `has-week-edge-row`
@@ -289,7 +325,8 @@ inserted at the right point in that list. Layers, low → high:
    the picked handle across sessions is possible (see Hard Constraints above) — this is expected.
    Because `render()` does `appEl.innerHTML = ''` and rebuilds the whole tree on every state
    change, it explicitly saves the `.gantt-scroll` container's `scrollLeft`/`scrollTop` (a class
-   shared by the gantt and carico-risorse pages) before clearing and restores it on the freshly
+   shared by the gantt, carico-risorse, and milestones pages) before clearing and restores it on
+   the freshly
    rendered element afterward — otherwise every cell edit (which calls `setState({})` to
    re-notify subscribers after mutating the in-memory dataset) would snap the grid back to
    scroll position 0,0, hiding whatever cell the user just edited if they were scrolled away from

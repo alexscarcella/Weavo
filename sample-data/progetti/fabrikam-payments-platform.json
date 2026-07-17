@@ -96,6 +96,12 @@
             },
             "2026-02-16": {
               "milestone": true
+            },
+            "2026-07-27": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
             }
           }
         },
@@ -470,7 +476,7 @@
         },
         {
           "nome": "Requirements Analysis",
-          "concluso": false,
+          "concluso": true,
           "settimane": {
             "2026-09-21": {
               "team": "dev",

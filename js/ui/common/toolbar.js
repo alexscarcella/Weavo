@@ -7,6 +7,7 @@
   const VIEWS = [
     { id: 'gantt', label: 'Master Plan' },
     { id: 'carico-risorse', label: 'Carico risorse' },
+    { id: 'milestones', label: 'Milestone' },
     { id: 'team-risorse', label: 'Team e risorse' },
   ];
 
