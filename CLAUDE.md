@@ -96,14 +96,21 @@ tag to fix a bad release — delete it (local + remote) and the GitHub Release, 
 
 [scripts/import-excel/](scripts/import-excel/) is a one-shot Node script (uses `exceljs`, needs
 `npm install`) that converts the "Master Plan" sheet of `requirements/Master plan software.xlsx`
-into the `manifest.json` / `progetti/*.json` structure. Run with `--dry-run` first and review the
-report before writing real output. See [scripts/import-excel/README.md](scripts/import-excel/README.md)
-for the full set of parsing heuristics (column layout, baseline carry-over, color→team mapping,
-milestone detection) — these were reverse-engineered from the real spreadsheet, not assumed, so
-re-derive from the actual file rather than guessing if the heuristics need adjusting.
-**Not yet updated for the team/risorse merge** (still emits the old `risorse.json` +
-`tipi-risorsa.json` split, and has no notion of "one team per resource") — needs a pass before
-its output can be used as-is; see the "Team/risorse model" section below.
+into the `manifest.json` / `team-risorse.json` / `progetti/*.json` structure (current team/risorse
+model — see below). Run with `--dry-run` first and review the report before writing real output.
+See [scripts/import-excel/README.md](scripts/import-excel/README.md) for the full set of parsing
+heuristics (column layout, baseline carry-over, color→team mapping, milestone detection, valid
+sigla format, never-allocated-resource exclusion) — these were reverse-engineered from the real
+spreadsheet, not assumed, so re-derive from the actual file rather than guessing if the heuristics
+need adjusting. Since the sheet has no explicit sigla→team column, each resource's team is inferred
+by majority vote over the colors of the cells it appears in; sigle that tie or have no color signal
+at all make the script stop **without writing anything** until resolved via a local, gitignored
+`team-overrides.json` (real personnel data, never committed — see the README for its shape). A
+companion script, `scripts/import-excel/analyze-output.js`, re-runs `js/model/validation.js`'s
+orphan/mismatch checks against an already-written data folder (via a Node `vm` sandbox, no browser
+needed) — useful after any import or hand-edit, not just right after running `import.js`. The
+script's own default output folder, `import-output/` at repo root, is gitignored (may contain a
+full real copy of project data).
 
 ## Data model
 
@@ -216,10 +223,15 @@ inserted at the right point in that list. Layers, low → high:
      duplicating open/close logic — plus `renderPageTitle`, a small label next to the hamburger
      showing the current view's name, sourced from the same `VIEWS` list used to build the menu
      so the two never drift apart: `gantt` → "Master Plan", `carico-risorse` → "Carico risorse",
-     `milestones` → "Milestone", `team-risorse` → "Team e risorse"), `dataset-header.js` (the
+     `milestones` → "Milestone", `team-risorse` → "Team e risorse"; `.page-title`'s font-size is
+     tuned in CSS to make its box the same height as `.hamburger-btn` next to it, since it has no
+     padding/border of its own to match the button's box with), `dataset-header.js` (the
      header shared by the gantt, resource-load, and milestones pages: a `.gantt-toolbar` info
-     line — week range + task-row count + project count, computed via `MP.ganttView.buildRows` so
-     all pages report the exact same numbers — plus the team-color legend from `legend.js`; takes
+     line — connected folder name (`state.dirHandle.name`; the File System Access API never
+     exposes an absolute filesystem path, see Hard Constraints/`app.js` — this is the closest
+     available proxy for "which data folder is this") + week range + task-row count + project
+     count, computed via `MP.ganttView.buildRows` so all pages report the exact same numbers —
+     plus the team-color legend from `legend.js`; takes
      an optional extra element to append to the info line, used by the gantt page for its
      "+ Nuovo progetto" button and archiviati/conclusi toggles, and by the milestones page for its
      "Totale rilasci nel periodo" counter), `app-header.js` (static brand header — logo, "Weavo" title,
@@ -236,7 +248,11 @@ inserted at the right point in that list. Layers, low → high:
      `mostraArchiviati`/`mostraConclusi`) so `dataset-header.js` can compute the same row count
      shown in both pages; `gantt-row.js` renders one task row; `gantt-cell.js` renders one
      week×task cell (double click opens `cell-popover.js` for that single cell, resetting any
-     pending range selection first); `cell-popover.js` is the editing popover (team-first, then
+     pending range selection first; a cell whose resource(s) are overallocated gets a native
+     `title` tooltip built from `MP.overallocation.findAllocations`, listing per sigla the other
+     project/baseline/task it's allocated to that same week — same `progettoNome`/`baselineVersione`/
+     `taskNome` shape the carico-risorse heat cells already use in `resource-load-view.js`, so the
+     wording matches across both views); `cell-popover.js` is the editing popover (team-first, then
      multi-select resources restricted to that team, then milestone flag — milestone only in
      single-cell mode, see below — autosave on close, non-blocking double-allocation warning);
      a task admits only **one** milestone week, and all tasks of the same baseline share a single
@@ -333,6 +349,18 @@ inserted at the right point in that list. Layers, low → high:
    the top-left. See also the `lastEdited` highlight mechanism in `gantt-view.js` above, which
    solves the companion problem of visually losing track of the edited cell.
 
+   **Single-scrollbar page layout** (css/styles.css): `html body` is a `height: 100%` flex column
+   with `overflow: hidden`, so the outer document itself never scrolls. `#app` (flex: 1 1 auto,
+   `min-height: 0`) is the fallback scroll container for non-grid content (`.connect-panel`,
+   `.error-panel`, `.team-risorse-page`, etc. — these just overflow `#app` normally if too tall).
+   For the three grid pages, `.app-ready` (the wrapper `app.js`'s `renderReady` builds around
+   `top-bar` + the page) and `.gantt-page` are themselves `flex: 1 1 auto; min-height: 0` flex
+   columns, so they're stretched to fill `#app` exactly rather than growing with their content;
+   `.gantt-toolbar`/`.legend`/`.warnings`/`.top-bar` are pinned `flex: 0 0 auto` so only
+   `.gantt-scroll` (also `flex: 1 1 auto; min-height: 0`, in place of the old
+   `max-height: calc(100vh - 220px)` magic number) absorbs the remaining space and produces the
+   grid's own — and only — scrollbar, both vertically and horizontally.
+
 ### Where to make common changes
 
 - New team, new color: **do not touch code** — it's user-editable data in `team-risorse.json`,
@@ -344,6 +372,3 @@ inserted at the right point in that list. Layers, low → high:
 - Any code path that writes a project/manifest/team-risorse file in response to a user action
   must go through `MP.saveCoordinator`, not call `MP.repository.save*` directly — that's what
   gives conflict detection.
-- **`scripts/import-excel/import.js` is stale**: it still emits the old split `risorse.json` +
-  `tipi-risorsa.json` (with no team assigned to resources) and needs a pass to emit
-  `team-risorse.json` before it can be used again — see the "Team/risorse model" section above.

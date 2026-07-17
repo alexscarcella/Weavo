@@ -59,7 +59,15 @@
         );
         if (sovrallocate.length) {
           div.classList.add('overallocated');
-          titleParts.push(`Sovrallocazione: ${sovrallocate.join(', ')} allocata anche su altri task questa settimana`);
+          const dettagli = sovrallocate.map((s) => {
+            const altri = MP.overallocation
+              .findAllocations(allocationIndex, s, settimana)
+              .filter((r) => r.taskRef !== task)
+              .map((r) => `${r.progettoNome} / BL ${r.baselineVersione} / ${r.taskNome}`)
+              .join('; ');
+            return `${s} → ${altri}`;
+          });
+          titleParts.push(`Sovrallocazione questa settimana:\n${dettagli.join('\n')}`);
         }
 
         const daRegolarizzare = entry.team

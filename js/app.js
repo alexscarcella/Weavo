@@ -110,6 +110,7 @@
 
   function renderReady(state) {
     const wrapper = document.createElement('div');
+    wrapper.className = 'app-ready';
     const topBar = document.createElement('div');
     topBar.className = 'top-bar';
     topBar.appendChild(MP.toolbar.renderHamburgerMenu(state));

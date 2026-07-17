@@ -4,16 +4,41 @@
 
 * { box-sizing: border-box; }
 
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   color: #1a1a1a;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
+/* Unica barra di scorrimento "di pagina": se il contenuto di una vista non è
+   una griglia con scroll proprio (es. team-risorse-page), scrolla qui. Le
+   viste a griglia (gantt/carico-risorse/milestones) riempiono invece
+   esattamente questo spazio (.app-ready/.gantt-page sotto sono flex a
+   riempimento) e delegano lo scroll solo a .gantt-scroll, cosicché non
+   compaia mai una seconda barra fuori dalla griglia. */
 #app {
   padding: 1.25rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-ready {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 /* --- Header di brand (vedi js/ui/common/app-header.js) --- */
@@ -25,6 +50,7 @@ body {
   padding: 0.6rem 1.25rem;
   border-bottom: 1px solid #e0e4ea;
   background: #fff;
+  flex: 0 0 auto;
 }
 .app-header-brand { display: flex; align-items: center; gap: 0.6rem; }
 .app-header-title {
@@ -81,7 +107,7 @@ code {
   margin-top: 1rem;
 }
 .warnings ul { margin: 0.3rem 0 0; padding-left: 1.2rem; }
-.warnings { font-size: 0.85rem; max-height: 160px; overflow-y: auto; }
+.warnings { font-size: 0.85rem; max-height: 160px; overflow-y: auto; flex: 0 0 auto; }
 
 /* --- Vista gantt --- */
 
@@ -92,6 +118,7 @@ code {
   gap: 1rem;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
+  flex: 0 0 auto;
 }
 
 .legend {
@@ -101,6 +128,7 @@ code {
   align-items: center;
   font-size: 0.8rem;
   margin-bottom: 0.5rem;
+  flex: 0 0 auto;
 }
 .legend-item { display: inline-flex; align-items: center; gap: 0.3rem; }
 .legend-swatch {
@@ -116,9 +144,17 @@ code {
 .legend-item:hover .legend-menu-btn { opacity: 1; }
 .btn-nuovo-tipo, .btn-nuova-risorsa { padding: 0.3rem 0.6rem; font-size: 0.78rem; margin-left: 0.25rem; }
 
+.gantt-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .gantt-scroll {
   overflow: auto;
-  max-height: calc(100vh - 220px);
+  flex: 1 1 auto;
+  min-height: 0;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -381,8 +417,12 @@ code {
 .hamburger-btn:hover { background: #eef1f5; }
 
 /* --- Barra superiore --- */
-.top-bar { display: flex; align-items: center; justify-content: flex-start; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
-.page-title { font-size: 1rem; font-weight: 700; color: #2a3542; }
+.top-bar { display: flex; align-items: center; justify-content: flex-start; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.5rem; flex: 0 0 auto; }
+/* font-size scelto per eguagliare l'altezza del box di .hamburger-btn (1rem di
+   contenuto + 0.4rem di padding sopra/sotto + 1px di bordo sopra/sotto = 30.8px
+   a 16px di root): line-height:1 senza padding/bordo propri, quindi
+   font-size*line-height deve dare la stessa altezza totale. */
+.page-title { font-size: 1.9rem; line-height: 1; font-weight: 700; color: #2a3542; }
 
 /* --- CRUD: righe con testo troncato + azioni --- */
 .toolbar-actions { display: flex; align-items: center; gap: 0.75rem; }
@@ -476,6 +516,7 @@ code {
 .context-menu-item:hover { background: #eef1f5; }
 .context-menu-item.danger { color: #b00020; }
 .context-menu-item.danger:hover { background: #fdecea; }
+.context-menu-item-icon { text-align: center; font-size: 1rem; line-height: 1; padding: 0.35rem 0.6rem; }
 .context-menu-separator { border-top: 1px solid #e0e0e0; margin: 0.25rem 0; }
 .context-menu-item-action { font-weight: 600; color: #2E86FF; }
 .context-menu-item-action:hover { background: #e8f1ff; }

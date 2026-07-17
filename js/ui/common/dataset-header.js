@@ -18,7 +18,11 @@
     toolbar.className = 'gantt-toolbar';
     const info = document.createElement('span');
     info.className = 'dataset-info';
-    info.textContent = `${dataset.manifest.settimane.prima} → ${dataset.manifest.settimane.ultima} — ${rows.length} righe task — ${dataset.progetti.size} progetti`;
+    // La File System Access API non espone mai il percorso assoluto su disco
+    // (sandboxing di piattaforma — vedi CLAUDE.md/app.js), solo il nome della
+    // cartella selezionata: è il meglio disponibile come "percorso" dei dati.
+    const cartella = state.dirHandle ? state.dirHandle.name : '';
+    info.textContent = `${cartella} — ${dataset.manifest.settimane.prima} → ${dataset.manifest.settimane.ultima} — ${rows.length} righe task — ${dataset.progetti.size} progetti`;
     toolbar.appendChild(info);
     if (extraActionsEl) toolbar.appendChild(extraActionsEl);
     fragment.appendChild(toolbar);
