@@ -1,0 +1,466 @@
+{
+  "nome": "NORTHWIND TRADERS CHECKOUT",
+  "team": "Team NORTHWIND TRADERS CHECKOUT (Kohsuke Kawaguchi / Werner Vogels)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Penetration Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-16": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "GS"
+              ]
+            },
+            "2026-02-16": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-02-09": {
+              "team": "parc",
+              "risorse": [
+                "LT",
+                "BT"
+              ]
+            },
+            "2026-03-23": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-26": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "PD"
+              ]
+            },
+            "2026-03-02": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-03-23": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "CI/CD Pipeline Setup",
+          "concluso": true,
+          "settimane": {
+            "2026-03-09": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-01-26": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-03-23": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "User Acceptance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-09": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-03-09": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-02-23": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-03-23": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Localization",
+          "concluso": true,
+          "settimane": {
+            "2026-03-23": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "JH"
+              ],
+              "milestone": true
+            },
+            "2026-02-02": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "PD"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "User Acceptance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "GH"
+              ]
+            },
+            "2026-07-27": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Backend Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-07-27": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "MN"
+              ],
+              "milestone": true
+            },
+            "2026-06-29": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-06-15": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-07-20": {
+              "team": "build",
+              "risorse": [
+                "JH"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Data Migration",
+          "concluso": true,
+          "settimane": {
+            "2026-07-20": {
+              "team": "vv",
+              "risorse": [
+                "BL",
+                "RP"
+              ]
+            },
+            "2026-06-15": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-07-27": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Accessibility Compliance",
+          "concluso": true,
+          "settimane": {
+            "2026-09-14": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-09-21": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Checkout Module Development",
+          "concluso": false,
+          "settimane": {
+            "2026-09-07": {
+              "team": "parc",
+              "risorse": [
+                "GS",
+                "CT"
+              ]
+            },
+            "2026-09-21": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Sprint Planning",
+          "concluso": false,
+          "settimane": {
+            "2026-08-17": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-08-10": {
+              "team": "parc",
+              "risorse": [
+                "BT",
+                "BU"
+              ]
+            },
+            "2026-09-21": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "WH"
+              ],
+              "milestone": true
+            },
+            "2026-09-07": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Hardware Integration",
+          "concluso": false,
+          "settimane": {
+            "2026-09-07": {
+              "team": "parc",
+              "risorse": [
+                "GS",
+                "CT"
+              ]
+            },
+            "2026-09-21": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ],
+              "milestone": true
+            },
+            "2026-08-03": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Payment Gateway Integration",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ],
+              "milestone": true
+            },
+            "2026-08-31": {
+              "team": "vv",
+              "risorse": [
+                "WH"
+              ]
+            },
+            "2026-08-10": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Change Request Analysis",
+          "concluso": false,
+          "settimane": {
+            "2026-07-27": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-09-21": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Integration Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-08-24": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "AL"
+              ]
+            },
+            "2026-09-14": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-08-10": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-09-21": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Training & Handover",
+          "concluso": false,
+          "settimane": {
+            "2026-08-03": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ]
+            },
+            "2026-08-10": {
+              "team": "dev",
+              "risorse": [
+                "DK"
+              ]
+            },
+            "2026-08-31": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "RP"
+              ]
+            },
+            "2026-09-21": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-08-17": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "RP"
+              ]
+            },
+            "2026-08-03": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-07-27": {
+              "team": "parc",
+              "risorse": [
+                "BT",
+                "GS"
+              ]
+            },
+            "2026-09-21": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Mobile App Development",
+          "concluso": false,
+          "settimane": {
+            "2026-08-10": {
+              "team": "vv",
+              "risorse": [
+                "WH"
+              ]
+            },
+            "2026-09-21": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ],
+              "milestone": true
+            },
+            "2026-08-31": {
+              "team": "vv",
+              "risorse": [
+                "BL",
+                "RP"
+              ]
+            },
+            "2026-07-27": {
+              "team": "parc",
+              "risorse": [
+                "BT",
+                "LT"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

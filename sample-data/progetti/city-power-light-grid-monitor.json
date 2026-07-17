@@ -1,0 +1,389 @@
+{
+  "nome": "CITY POWER & LIGHT GRID MONITOR",
+  "team": "Team CITY POWER & LIGHT GRID MONITOR (Alan Kay / Jesse Robbins)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Data Migration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "WH"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Frontend Implementation",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ]
+            },
+            "2026-01-12": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "KB"
+              ]
+            },
+            "2026-02-23": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Integration Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-12": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-01-26": {
+              "team": "build",
+              "risorse": [
+                "MF",
+                "KK"
+              ]
+            },
+            "2026-03-02": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "KT"
+              ]
+            },
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "JH"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Deployment to Staging",
+          "concluso": true,
+          "settimane": {
+            "2026-02-02": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "MN"
+              ]
+            },
+            "2026-03-09": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "CK"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Training & Handover",
+          "concluso": false,
+          "settimane": {
+            "2026-01-19": {
+              "team": "parc",
+              "risorse": [
+                "CT",
+                "AK"
+              ]
+            },
+            "2026-02-02": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Localization",
+          "concluso": false,
+          "settimane": {
+            "2026-01-19": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-03-09": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "CT"
+              ],
+              "milestone": true
+            },
+            "2026-01-26": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KB"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-01-12": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "JR"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Unit Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-12": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "CK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "User Acceptance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-04-27": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "JA"
+              ]
+            },
+            "2026-05-11": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-06-08": {
+              "team": "vv",
+              "risorse": [
+                "BL",
+                "RP"
+              ]
+            },
+            "2026-06-01": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Deployment to Staging",
+          "concluso": true,
+          "settimane": {
+            "2026-05-25": {
+              "team": "vv",
+              "risorse": [
+                "WH"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": true,
+          "settimane": {
+            "2026-06-15": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "MF"
+              ],
+              "milestone": true
+            },
+            "2026-06-08": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-05-18": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "GH"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Backend Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-05-25": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Deployment to Staging",
+          "concluso": false,
+          "settimane": {
+            "2026-08-17": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-08-31": {
+              "team": "parc",
+              "risorse": [
+                "GS"
+              ]
+            },
+            "2026-09-14": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "WH"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Third-Party API Integration",
+          "concluso": false,
+          "settimane": {
+            "2026-08-03": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-09-21": {
+              "team": "parc",
+              "risorse": [
+                "LT",
+                "AK"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Bug Fixing",
+          "concluso": false,
+          "settimane": {
+            "2026-09-28": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "DR"
+              ],
+              "milestone": true
+            },
+            "2026-09-07": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "JR"
+              ]
+            },
+            "2026-08-03": {
+              "team": "parc",
+              "risorse": [
+                "LT",
+                "GS"
+              ]
+            },
+            "2026-08-24": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "RP"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

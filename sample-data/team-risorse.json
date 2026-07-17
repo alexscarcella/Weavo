@@ -1,0 +1,158 @@
+{
+  "team": [
+    {
+      "codice": "dev",
+      "nome": "Development",
+      "colore": "#00B050",
+      "risorse": [
+        {
+          "sigla": "GH",
+          "nome": "Grace Hopper"
+        },
+        {
+          "sigla": "DR",
+          "nome": "Dennis Ritchie"
+        },
+        {
+          "sigla": "MH",
+          "nome": "Margaret Hamilton"
+        },
+        {
+          "sigla": "AL",
+          "nome": "Ada Lovelace"
+        },
+        {
+          "sigla": "KT",
+          "nome": "Ken Thompson"
+        },
+        {
+          "sigla": "DK",
+          "nome": "Donald Knuth"
+        }
+      ]
+    },
+    {
+      "codice": "vv",
+      "nome": "Verification & Validation",
+      "colore": "#FFC000",
+      "risorse": [
+        {
+          "sigla": "RP",
+          "nome": "Radia Perlman"
+        },
+        {
+          "sigla": "BL",
+          "nome": "Barbara Liskov"
+        },
+        {
+          "sigla": "FA",
+          "nome": "Frances Allen"
+        },
+        {
+          "sigla": "WH",
+          "nome": "Watts Humphrey"
+        },
+        {
+          "sigla": "CK",
+          "nome": "Cem Kaner"
+        }
+      ]
+    },
+    {
+      "codice": "devops",
+      "nome": "DevOps",
+      "colore": "#2E86FF",
+      "risorse": [
+        {
+          "sigla": "JA",
+          "nome": "John Allspaw"
+        },
+        {
+          "sigla": "PD",
+          "nome": "Patrick Debois"
+        },
+        {
+          "sigla": "GK",
+          "nome": "Gene Kim"
+        },
+        {
+          "sigla": "MN",
+          "nome": "Mike Nygard"
+        }
+      ]
+    },
+    {
+      "codice": "run",
+      "nome": "Team Run",
+      "colore": "#8E44AD",
+      "risorse": [
+        {
+          "sigla": "WV",
+          "nome": "Werner Vogels"
+        },
+        {
+          "sigla": "JR",
+          "nome": "Jesse Robbins"
+        },
+        {
+          "sigla": "AC",
+          "nome": "Adrian Cockcroft"
+        }
+      ]
+    },
+    {
+      "codice": "build",
+      "nome": "Team Build",
+      "colore": "#D4AC0D",
+      "risorse": [
+        {
+          "sigla": "KB",
+          "nome": "Kent Beck"
+        },
+        {
+          "sigla": "MF",
+          "nome": "Martin Fowler"
+        },
+        {
+          "sigla": "JH",
+          "nome": "Jez Humble"
+        },
+        {
+          "sigla": "KK",
+          "nome": "Kohsuke Kawaguchi"
+        }
+      ]
+    },
+    {
+      "codice": "parc",
+      "nome": "Xerox PARC",
+      "colore": "#2FBBFF",
+      "risorse": [
+        {
+          "sigla": "AK",
+          "nome": "Alan Kay"
+        },
+        {
+          "sigla": "CT",
+          "nome": "Chuck Thacker"
+        },
+        {
+          "sigla": "BT",
+          "nome": "Bob Taylor"
+        },
+        {
+          "sigla": "GS",
+          "nome": "Gary Starkweather"
+        },
+        {
+          "sigla": "LT",
+          "nome": "Larry Tesler"
+        },
+        {
+          "sigla": "BU",
+          "nome": "Butler Lampson"
+        }
+      ]
+    }
+  ]
+}

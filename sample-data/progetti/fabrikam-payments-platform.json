@@ -1,0 +1,597 @@
+{
+  "nome": "FABRIKAM PAYMENTS PLATFORM",
+  "team": "Team FABRIKAM PAYMENTS PLATFORM (Bob Taylor / Gene Kim)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "System Architecture Design",
+          "concluso": false,
+          "settimane": {
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "MF"
+              ]
+            },
+            "2026-02-16": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "MN"
+              ],
+              "milestone": true
+            },
+            "2026-02-09": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "DK"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Hardware Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-09": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "CK"
+              ]
+            },
+            "2026-01-19": {
+              "team": "dev",
+              "risorse": [
+                "KT"
+              ]
+            },
+            "2026-02-02": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2025-12-22": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "MN"
+              ]
+            },
+            "2026-02-16": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Change Request Analysis",
+          "concluso": true,
+          "settimane": {
+            "2026-02-09": {
+              "team": "parc",
+              "risorse": [
+                "BT",
+                "AK"
+              ]
+            },
+            "2026-01-26": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KB"
+              ]
+            },
+            "2026-01-19": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "BT"
+              ]
+            },
+            "2026-02-16": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Sprint Planning",
+          "concluso": true,
+          "settimane": {
+            "2025-12-22": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "GS"
+              ]
+            },
+            "2026-02-16": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Frontend Implementation",
+          "concluso": true,
+          "settimane": {
+            "2026-01-05": {
+              "team": "parc",
+              "risorse": [
+                "LT",
+                "CT"
+              ]
+            },
+            "2026-02-16": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ],
+              "milestone": true
+            },
+            "2026-01-26": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-01-12": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "WH"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Technical Documentation",
+          "concluso": true,
+          "settimane": {
+            "2025-12-29": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-01-26": {
+              "team": "dev",
+              "risorse": [
+                "KT"
+              ]
+            },
+            "2026-02-16": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "CI/CD Pipeline Setup",
+          "concluso": true,
+          "settimane": {
+            "2026-05-25": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ],
+              "milestone": true
+            },
+            "2026-04-20": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "FA"
+              ]
+            },
+            "2026-05-18": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "GS"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Third-Party Data Feed Import",
+          "concluso": false,
+          "settimane": {
+            "2026-04-06": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "KT"
+              ]
+            },
+            "2026-05-04": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "WV"
+              ]
+            },
+            "2026-05-25": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Code Review",
+          "concluso": true,
+          "settimane": {
+            "2026-05-25": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "JA"
+              ],
+              "milestone": true
+            },
+            "2026-04-20": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "GK"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Technical Documentation",
+          "concluso": false,
+          "settimane": {
+            "2026-04-06": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            },
+            "2026-04-20": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "CT"
+              ]
+            },
+            "2026-04-13": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "JA"
+              ]
+            },
+            "2026-05-25": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Bug Fixing",
+          "concluso": false,
+          "settimane": {
+            "2026-06-01": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-07-13": {
+              "team": "dev",
+              "risorse": [
+                "GH"
+              ]
+            },
+            "2026-07-06": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-07-27": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Sprint Planning",
+          "concluso": true,
+          "settimane": {
+            "2026-06-01": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "BT"
+              ]
+            },
+            "2026-06-29": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "GS"
+              ]
+            },
+            "2026-07-27": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Localization",
+          "concluso": true,
+          "settimane": {
+            "2026-07-13": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "MF"
+              ]
+            },
+            "2026-07-06": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-07-27": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": true,
+          "settimane": {
+            "2026-06-22": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-06-29": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "KB"
+              ]
+            },
+            "2026-07-27": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "4.0",
+      "task": [
+        {
+          "nome": "Disaster Recovery Plan",
+          "concluso": false,
+          "settimane": {
+            "2026-09-28": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-10-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Accessibility Compliance",
+          "concluso": false,
+          "settimane": {
+            "2026-10-12": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-09-28": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "FA"
+              ]
+            },
+            "2026-10-19": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "KT"
+              ]
+            },
+            "2026-09-21": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "MF"
+              ]
+            },
+            "2026-10-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-10-12": {
+              "team": "parc",
+              "risorse": [
+                "CT",
+                "AK"
+              ]
+            },
+            "2026-10-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Requirements Analysis",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-10-19": {
+              "team": "parc",
+              "risorse": [
+                "AK"
+              ]
+            },
+            "2026-10-05": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-08-31": {
+              "team": "parc",
+              "risorse": [
+                "BU"
+              ]
+            },
+            "2026-10-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Production Rollout",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "AL"
+              ]
+            },
+            "2026-10-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Third-Party Data Feed Import",
+          "concluso": false,
+          "settimane": {
+            "2026-09-28": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "PD"
+              ]
+            },
+            "2026-10-05": {
+              "team": "parc",
+              "risorse": [
+                "BU"
+              ]
+            },
+            "2026-10-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "CI/CD Pipeline Setup",
+          "concluso": false,
+          "settimane": {
+            "2026-10-05": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "PD"
+              ]
+            },
+            "2026-09-07": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "GK"
+              ]
+            },
+            "2026-10-19": {
+              "team": "parc",
+              "risorse": [
+                "BT",
+                "BU"
+              ]
+            },
+            "2026-10-26": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Unit Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-09-07": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-10-12": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "DK"
+              ]
+            },
+            "2026-08-31": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "PD"
+              ]
+            },
+            "2026-09-14": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "PD"
+              ]
+            },
+            "2026-10-26": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

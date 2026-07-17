@@ -1,0 +1,486 @@
+{
+  "nome": "LITWARE CLAIMS SYSTEM",
+  "team": "Team LITWARE CLAIMS SYSTEM (Margaret Hamilton / Werner Vogels)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Disaster Recovery Plan",
+          "concluso": true,
+          "settimane": {
+            "2026-01-12": {
+              "team": "build",
+              "risorse": [
+                "KB"
+              ]
+            },
+            "2026-01-26": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "WV"
+              ]
+            },
+            "2026-03-09": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "CT"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Sprint Planning",
+          "concluso": true,
+          "settimane": {
+            "2026-02-23": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-03-09": {
+              "team": "parc",
+              "risorse": [
+                "LT",
+                "BT"
+              ],
+              "milestone": true
+            },
+            "2026-02-02": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "GK"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-02-02": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "KT"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-26": {
+              "team": "vv",
+              "risorse": [
+                "WH"
+              ]
+            },
+            "2026-03-09": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ],
+              "milestone": true
+            },
+            "2026-01-12": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "KT"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Certification Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "GK"
+              ]
+            },
+            "2026-01-12": {
+              "team": "parc",
+              "risorse": [
+                "GS",
+                "BU"
+              ]
+            },
+            "2026-02-23": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "MF"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Checkout Module Development",
+          "concluso": true,
+          "settimane": {
+            "2026-01-19": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            },
+            "2026-01-12": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "MN"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Legacy System Decommissioning",
+          "concluso": false,
+          "settimane": {
+            "2026-02-09": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Bug Fixing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-02-02": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "JA"
+              ]
+            },
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "JA"
+              ]
+            },
+            "2026-03-02": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "User Acceptance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-19": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "AL"
+              ]
+            },
+            "2026-03-02": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-02-09": {
+              "team": "dev",
+              "risorse": [
+                "KT",
+                "DK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Disaster Recovery Plan",
+          "concluso": false,
+          "settimane": {
+            "2026-06-08": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "WV"
+              ]
+            },
+            "2026-05-04": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "DR"
+              ]
+            },
+            "2026-05-11": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-06-29": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-29": {
+              "team": "dev",
+              "risorse": [
+                "KT"
+              ],
+              "milestone": true
+            },
+            "2026-06-08": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Penetration Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-05-04": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            },
+            "2026-06-29": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Production Rollout",
+          "concluso": false,
+          "settimane": {
+            "2026-06-08": {
+              "team": "dev",
+              "risorse": [
+                "KT"
+              ]
+            },
+            "2026-05-04": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KB"
+              ]
+            },
+            "2026-06-15": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "FA"
+              ]
+            },
+            "2026-05-25": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-06-29": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Hardware Integration",
+          "concluso": false,
+          "settimane": {
+            "2026-08-31": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Technical Documentation",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-09-07": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "PD"
+              ]
+            },
+            "2026-08-10": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-08-17": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "CK"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Field Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-09-14": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "RP"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Refactoring",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "GH"
+              ]
+            },
+            "2026-08-10": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-08-31": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-08-03": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Security Audit",
+          "concluso": false,
+          "settimane": {
+            "2026-08-10": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ]
+            },
+            "2026-08-17": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-08-24": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-09-28": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

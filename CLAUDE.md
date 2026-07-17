@@ -1,0 +1,220 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+Master Plan is a client-side, server-less web app that replaces an Excel-based weekly resource
+allocation gantt (projects → baseline/release → task, with dev/V&V resources allocated per
+week). It persists data as human-readable/editable JSON files in a shared network/OneDrive
+folder, opened directly via the browser's File System Access API — no backend, no build step,
+no npm install required to run it.
+
+The authoritative spec is [requirements/master-plan-webapp_spec_v0.1.md](requirements/master-plan-webapp_spec_v0.1.md)
+(local-only, gitignored — see below). Unimplemented/future requirements needing more design are
+tracked in [requirements/backlog.md](requirements/backlog.md) — don't implement anything from
+there without first resolving the open questions listed.
+
+[docs/](docs/) holds the public-facing, GitHub-tracked documentation (architecture, API surface,
+deployment, data model, security, glossary) — read it alongside this file before starting work;
+it's kept scrubbed of anything specific to any one deployment/organization, so prefer it over
+`requirements/` when writing anything that will be committed.
+
+## Local-only files (not pushed to GitHub)
+
+`requirements/` (the spec, the backlog, and the real source spreadsheet) and `sample-data/backup/`
+exist on disk but are excluded via `.gitignore` — the former because it's internal planning
+material and the source spreadsheet contains real project data, the latter because it's backups
+of a real data folder. `.claude/` is excluded too, since local permission settings end up with
+machine-specific absolute paths in them. Don't assume `git status`/`git log` reflect these; check
+the filesystem directly, and never `git add -f` anything under these paths.
+
+## Hard constraints (non-negotiable, verified empirically)
+
+- **No build step, no bundler, no TypeScript.** The app is plain HTML/CSS/JS copied as static
+  files into the shared folder; opening `index.html` must just work. Any change must remain
+  runnable this way.
+- **No ES modules.** `<script type="module">` is blocked by CORS when `index.html` is opened via
+  `file://` (verified with headless Chrome). Every JS file is a classic script using the IIFE
+  pattern `(function (MP) { ... })(window.MP = window.MP || {});`, attaching itself to a
+  namespace on the global `window.MP` object (e.g. `MP.schema`, `MP.fsAccess`, `MP.ganttView`).
+  New files must follow this exact pattern and be added to `index.html`'s `<script>` list in
+  dependency order (see that list for the current load order).
+- **No IndexedDB.** `indexedDB.open()` never fires `onsuccess`/`onerror` under `file://` in
+  Chrome (opaque/partitioned origin) — verified, not a missing optimization. `localStorage`
+  works under `file://` but can't store a `FileSystemDirectoryHandle`. Consequence: **the
+  directory handle cannot persist across sessions** — the user re-picks the data folder every
+  time the app is opened. This is expected/spec'd behavior, not a bug to fix.
+- Target browsers are **Chrome/Edge** only (File System Access API dependency); no
+  Firefox/Safari support is in scope.
+
+If a future task reconsiders adding a local dev server, these constraints could be relaxed
+(real ES modules, IndexedDB) — but treat that as an explicit scope change to confirm with the
+user, never assume it.
+
+## Running / testing
+
+There is no build, dev server, or automated test suite in this repo. To run the app: open
+[index.html](index.html) directly in Chrome or Edge (`file://` path). Sample data for manual
+testing lives in [sample-data/](sample-data/) (a full dataset: `manifest.json`,
+`team-risorse.json`, `progetti/*.json`) — point the app's folder picker at that directory.
+
+For quick non-interactive checks (no real directory handle available headlessly, since
+`showDirectoryPicker()` needs a user gesture), load the plain-script modules into a Node `vm`
+sandbox with a stubbed `window`/`document` and call their exported `MP.*` functions directly
+against JSON read from `sample-data/` — this exercises the real `schema.js`/`validation.js`/etc.
+logic without a browser. Combine with the headless-Chrome check below for script-loading/console
+errors.
+
+To verify a change headlessly (e.g. checking for console errors after opening the page), use
+headless Chrome with an explicit `--user-data-dir` and a native Windows path:
+```
+chrome.exe --headless=new --disable-gpu --no-sandbox --user-data-dir=<writable dir> --enable-logging=stderr --v=1 --virtual-time-budget=3000 --dump-dom "file:///<absolute Windows path>"
+```
+then grep the stderr output for `CONSOLE` to see `console.log`/errors from the page. A Git-Bash
+style path (`/tmp/...`) resolves incorrectly — always use a native Windows path.
+
+[spike-fsa/index.html](spike-fsa/index.html) is a standalone throwaway test page (not part of the
+app) for manually checking whether File System Access API directory permissions survive a
+browser/PC restart on a real network/OneDrive folder — unrelated to the main app's code path.
+
+### Excel import script (dev-time only, not part of the app runtime)
+
+[scripts/import-excel/](scripts/import-excel/) is a one-shot Node script (uses `exceljs`, needs
+`npm install`) that converts the "Master Plan" sheet of `requirements/Master plan software.xlsx`
+into the `manifest.json` / `progetti/*.json` structure. Run with `--dry-run` first and review the
+report before writing real output. See [scripts/import-excel/README.md](scripts/import-excel/README.md)
+for the full set of parsing heuristics (column layout, baseline carry-over, color→team mapping,
+milestone detection) — these were reverse-engineered from the real spreadsheet, not assumed, so
+re-derive from the actual file rather than guessing if the heuristics need adjusting.
+**Not yet updated for the team/risorse merge** (still emits the old `risorse.json` +
+`tipi-risorsa.json` split, and has no notion of "one team per resource") — needs a pass before
+its output can be used as-is; see the "Team/risorse model" section below.
+
+## Data model
+
+One JSON file per project under `progetti/`, plus two shared files at the data folder root:
+`manifest.json` (project index + global week range `settimane.prima`/`settimane.ultima`) and
+`team-risorse.json` (the team/resource anagraphics, see below).
+
+### Team/risorse model
+
+A **team** (`dev`/`vv`/`devops`/`run`/`build`/... — dynamic, not an enum in code) is the only
+grouping entity, with a color and a name. A **resource** (sigla + full name) always belongs to
+exactly **one** team — this is a real 1-team-to-N-resources relationship, not a loose tag:
+resources are nested inside their team in `team-risorse.json`, never listed independently.
+
+```json
+{ "team": [ { "codice": "dev", "nome": "Sviluppo", "colore": "#00B050", "risorse": [ { "sigla": "LC", "nome": "Luca Cozzi" } ] } ] }
+```
+
+- All CRUD for teams and resources is centralized in the dedicated page
+  [js/ui/team-risorse/team-risorse-view.js](js/ui/team-risorse/team-risorse-view.js)
+  (`js/ui/crud/team-crud.js` + `js/ui/crud/resource-crud.js`). The gantt legend
+  ([js/ui/gantt/legend.js](js/ui/gantt/legend.js)) and the resource-load view
+  ([js/ui/resource-load/resource-load-view.js](js/ui/resource-load/resource-load-view.js)) are
+  **read-only** and link to that page — don't add editing affordances back there.
+- A team can have zero resources; deleting a team with resources still assigned is **blocked**
+  (`MP.teamCrud.deleteTeam`) — the user must move or delete its resources first.
+- Moving a resource to a different team (`MP.resourceCrud.moveResource`) only rewrites
+  `team-risorse.json`. It deliberately does **not** touch any project file: existing week
+  entries keep the `team` they were saved with. `MP.validation.findTeamMismatches` (see below)
+  is what surfaces the resulting inconsistency for the user to fix by hand — there is no
+  assisted bulk-regularization flow yet (tracked in `requirements/backlog.md`).
+- A week entry's `team` field must match the team of every sigla in its `risorse` array in
+  principle, but this isn't enforced at write time for pre-existing data — only flagged. The
+  cell popover ([js/ui/gantt/cell-popover.js](js/ui/gantt/cell-popover.js)) enforces it going
+  forward: you pick a team first, then only resources belonging to that team are selectable.
+
+Key rules (see [js/data/schema.js](js/data/schema.js) and spec §4 for full detail — note the spec
+predates the team/risorse merge and still describes the old two-file `risorse.json` +
+`tipi-risorsa.json` split; trust the code over §4.5/§4.7 there):
+- **Nothing about teams/colors is hardcoded in app code** — everything renders dynamically from
+  `team-risorse.json` (legend, popover options). `SEED_TEAM` in `schema.js` is only a proposed
+  starting point for a brand-new empty dataset, not a constraint.
+- Allocation model is **boolean** — a resource is either allocated to a task in a given week or
+  not; no percentages/fractions.
+- A week entry (`task.settimane[iso]`) is only meaningful if `team` + non-empty `risorse` are
+  both present together, or if `milestone: true` is set — never a partial state like
+  `{team: "dev", risorse: []}`. Always construct these via `MP.schema.createWeekEntry(...)`.
+- `team` codes and resource `sigla`s referenced by a task but missing from `team-risorse.json`
+  are **orphan references** (`MP.validation.findOrphanTeam`/`findOrphanRisorse`); a resource
+  allocated under a `team` different from the one it currently belongs to is a **mismatch**
+  (`MP.validation.findTeamMismatches`, non-concluso tasks only). Both are surfaced as
+  non-blocking warnings (badge on the cell + line in the warnings panel), never silently
+  dropped or auto-corrected.
+- A task marked `concluso: true` is excluded from overallocation counting *and* from mismatch
+  detection (its weeks no longer count as active commitment) but its data is not deleted or
+  auto-corrected — closed tasks are never touched by team/resource changes.
+
+## Architecture
+
+Load order in [index.html](index.html) reflects the dependency chain; a new file must be
+inserted at the right point in that list. Layers, low → high:
+
+1. **`js/data/`** — persistence primitives and dataset shape.
+   - `schema.js`: canonical shape of every JSON file + factory/validity helpers (no I/O).
+   - `fs-access.js`: thin wrapper over the browser File System Access API (permissions,
+     read/write text file, list dir) — no application logic.
+   - `repository.js`: composes `fs-access` into whole-dataset load (`loadDataset`) and raw
+     per-file save/backup operations, with no conflict checking of its own.
+   - `save-coordinator.js`: the **only** place that should perform a write in response to a user
+     edit. Wraps `repository` saves with reread-before-write conflict detection (§6.4 of spec):
+     rereads the file from disk immediately before writing, and if it differs from the last text
+     this session knows about, prompts via `MP.modal.confirmConflict` before overwriting.
+   - `slug.js`: kebab-case ASCII slug generation for project filenames, with collision
+     suffixing — shared between the app and the Excel import script's own copy of the algorithm.
+2. **`js/state/store.js`** — minimal in-memory state container + pub/sub (`getState`/`setState`/
+   `subscribe`), no framework. `state.status` drives which top-level view `js/app.js` renders:
+   `init | unsupported | not-connected | loading | ready | error`. `state.dataset` (present when
+   `ready`) holds `{ manifest, teamRisorsa, progetti: Map<file, {data, rawText}>, warnings }`
+   plus `*Meta` entries used by save-coordinator for conflict checks. `state.ui.vistaCorrente`
+   (`gantt | carico-risorse | team-risorse`) picks the page `js/app.js` renders below the top bar.
+3. **`js/model/`** — pure derivations over an in-memory dataset, no I/O, no DOM:
+   `week-utils.js` (ISO week arithmetic, Monday-based), `overallocation.js` (cross-project
+   sigla×week allocation index, used both by the cell popover warning and the gantt/resource-load
+   highlighting), `validation.js` (orphan `team`/`sigla` detection, plus `findTeamMismatches` for
+   resources allocated under a team they no longer belong to).
+4. **`js/ui/`** — rendering + event wiring, organized by concern:
+   - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs, used
+     only for save conflicts), `toast.js` (non-blocking notifications), `context-menu.js` (the
+     "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu, the
+     single entry point for view switching / backup — reuses `context-menu` rather than
+     duplicating open/close logic).
+   - `crud/`: one file per entity (`project-crud.js`, `baseline-crud.js`, `task-crud.js`,
+     `resource-crud.js`, `team-crud.js`). Each is create/rename/delete/reorder (+ `toggleConcluso`
+     for tasks, `recolorTeam`/`moveResource` for team/risorse) directly against the in-memory
+     dataset, persisted via `MP.saveCoordinator`/`MP.repository`, then triggers re-render.
+   - `gantt/`: the main view. `gantt-view.js` builds the compact grid (CSS Grid + `position:
+     sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
+     gantt library, per spec §9); `gantt-row.js` renders one task row; `gantt-cell.js` renders one
+     week×task cell; `cell-popover.js` is the click-to-edit popover (team-first, then multi-select
+     resources restricted to that team, then milestone flag, autosave on close, non-blocking
+     double-allocation warning); `legend.js` renders the color legend dynamically from
+     `team-risorse.json`, read-only (links to the dedicated team/risorse page for editing).
+   - `resource-load/resource-load-view.js`: per-resource per-week allocation count (replaces the
+     original spreadsheet's `COUNTIF` formulas), highlighting overallocation — read-only, links
+     to the dedicated team/risorse page for editing.
+   - `team-risorse/team-risorse-view.js`: the dedicated CRUD page for teams and their resources
+     (create/rename/recolor/delete team; create/rename/move/delete resource within a team) — the
+     only place in the UI where `team-risorse.json` is edited.
+   - `weeks/week-controls.js`: append-only week range extension/trimming (trim only from the
+     tail, with a confirmation if active allocations exist in the weeks being removed).
+5. **`js/app.js`** — entry point. Subscribes to the store, maps `state.status` to a render
+   function, and owns the initial directory-picker flow (`connectToDirectory`). No persistence of
+   the picked handle across sessions is possible (see Hard Constraints above) — this is expected.
+
+### Where to make common changes
+
+- New team, new color: **do not touch code** — it's user-editable data in `team-risorse.json`,
+  managed through the dedicated team/risorse page. If a task references how the app *renders*
+  teams, check it reads from `dataset.teamRisorsa` rather than assuming a fixed list.
+- New field on the week-entry / task / project shape: start in `js/data/schema.js` (factories +
+  `isWeekEntryEmpty`), then thread through `repository.js` save/load, then the relevant `ui/`
+  renderer(s).
+- Any code path that writes a project/manifest/team-risorse file in response to a user action
+  must go through `MP.saveCoordinator`, not call `MP.repository.save*` directly — that's what
+  gives conflict detection.
+- **`scripts/import-excel/import.js` is stale**: it still emits the old split `risorse.json` +
+  `tipi-risorsa.json` (with no team assigned to resources) and needs a pass to emit
+  `team-risorse.json` before it can be used again — see the "Team/risorse model" section above.

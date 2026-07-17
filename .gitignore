@@ -1,0 +1,14 @@
+# OS / OneDrive noise
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# Internal requirements/spec notes and local autosave backups — never version-controlled
+requirements/
+sample-data/backup/
+
+# Claude Code local settings (contain machine-specific absolute paths)
+.claude/
+
+# Node (scripts/import-excel is a dev-time-only tool with its own deps)
+node_modules/

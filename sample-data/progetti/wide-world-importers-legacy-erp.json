@@ -1,0 +1,310 @@
+{
+  "nome": "WIDE WORLD IMPORTERS LEGACY ERP",
+  "team": "Team WIDE WORLD IMPORTERS LEGACY ERP (Barbara Liskov / Kohsuke Kawaguchi)",
+  "archiviato": true,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Unit Testing",
+          "concluso": true,
+          "settimane": {
+            "2025-12-08": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2025-12-15": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-01-26": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": true,
+          "settimane": {
+            "2025-12-29": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-01-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "System Architecture Design",
+          "concluso": true,
+          "settimane": {
+            "2026-01-19": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "GH"
+              ]
+            },
+            "2025-12-01": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "JR"
+              ]
+            },
+            "2026-01-26": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Legacy System Decommissioning",
+          "concluso": true,
+          "settimane": {
+            "2025-12-15": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "MF"
+              ]
+            },
+            "2025-12-29": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "PD"
+              ]
+            },
+            "2025-12-08": {
+              "team": "build",
+              "risorse": [
+                "KB"
+              ]
+            },
+            "2026-01-26": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Disaster Recovery Plan",
+          "concluso": true,
+          "settimane": {
+            "2026-01-12": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-01-19": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "MF"
+              ]
+            },
+            "2026-02-02": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-19": {
+              "team": "vv",
+              "risorse": [
+                "WH"
+              ]
+            },
+            "2026-01-12": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Accessibility Compliance",
+          "concluso": true,
+          "settimane": {
+            "2026-03-02": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Payment Gateway Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "dev",
+              "risorse": [
+                "DK"
+              ]
+            },
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KK"
+              ]
+            },
+            "2026-01-26": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "BL"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Performance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "MH"
+              ]
+            },
+            "2026-01-19": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "JH"
+              ]
+            },
+            "2026-02-02": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Change Request Analysis",
+          "concluso": true,
+          "settimane": {
+            "2026-03-16": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "RP"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Code Review",
+          "concluso": true,
+          "settimane": {
+            "2026-03-23": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-02-23": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ]
+            },
+            "2026-03-09": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "JA"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Third-Party API Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-23": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-03-02": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-02-09": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "DK"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

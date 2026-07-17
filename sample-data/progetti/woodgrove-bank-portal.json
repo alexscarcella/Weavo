@@ -1,0 +1,278 @@
+{
+  "nome": "WOODGROVE BANK PORTAL",
+  "team": "Team WOODGROVE BANK PORTAL (Cem Kaner / Margaret Hamilton)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Monitoring & Alerting Setup",
+          "concluso": true,
+          "settimane": {
+            "2026-03-16": {
+              "team": "vv",
+              "risorse": [
+                "BL",
+                "WH"
+              ]
+            },
+            "2026-04-06": {
+              "team": "parc",
+              "risorse": [
+                "CT",
+                "GS"
+              ],
+              "milestone": true
+            },
+            "2026-03-09": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": true,
+          "settimane": {
+            "2026-03-23": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "JH"
+              ]
+            },
+            "2026-03-02": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "JA"
+              ]
+            },
+            "2026-03-30": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-04-06": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Regression Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-15": {
+              "team": "build",
+              "risorse": [
+                "KB"
+              ]
+            },
+            "2026-06-29": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "CT"
+              ]
+            },
+            "2026-06-08": {
+              "team": "parc",
+              "risorse": [
+                "AK"
+              ]
+            },
+            "2026-07-20": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Penetration Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-07-06": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-06-22": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-07-20": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-06-01": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-07-20": {
+              "team": "parc",
+              "risorse": [
+                "CT",
+                "GS"
+              ],
+              "milestone": true
+            },
+            "2026-07-13": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-08-03": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-09-07": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "BL"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Legacy System Decommissioning",
+          "concluso": false,
+          "settimane": {
+            "2026-09-07": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-08-03": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-09-14": {
+              "team": "parc",
+              "risorse": [
+                "BT",
+                "GS"
+              ],
+              "milestone": true
+            },
+            "2026-08-31": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Performance Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-08-03": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "JH"
+              ]
+            },
+            "2026-08-17": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "DR"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Mobile App Development",
+          "concluso": false,
+          "settimane": {
+            "2026-07-20": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Code Review",
+          "concluso": false,
+          "settimane": {
+            "2026-07-20": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

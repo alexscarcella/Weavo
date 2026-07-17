@@ -1,0 +1,470 @@
+{
+  "nome": "PROSEWARE MEDIA STREAMING",
+  "team": "Team PROSEWARE MEDIA STREAMING (Ken Thompson / Martin Fowler)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Third-Party Data Feed Import",
+          "concluso": false,
+          "settimane": {
+            "2026-01-26": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "JA"
+              ]
+            },
+            "2026-03-16": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-23": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-03-16": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Production Rollout",
+          "concluso": true,
+          "settimane": {
+            "2026-01-26": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "MF"
+              ]
+            },
+            "2026-01-19": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "PD"
+              ]
+            },
+            "2026-02-02": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "JA"
+              ]
+            },
+            "2026-03-16": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Hardware Integration",
+          "concluso": false,
+          "settimane": {
+            "2026-02-02": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "DR"
+              ]
+            },
+            "2026-02-23": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-01-26": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ]
+            },
+            "2026-02-09": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-03-16": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "API Development",
+          "concluso": true,
+          "settimane": {
+            "2026-05-18": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KB"
+              ]
+            },
+            "2026-06-15": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ]
+            },
+            "2026-06-29": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "BL"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Payment Gateway Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-06-29": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "DR"
+              ]
+            },
+            "2026-07-06": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-15": {
+              "team": "dev",
+              "risorse": [
+                "DK"
+              ]
+            },
+            "2026-07-06": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-06-08": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-06-01": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Production Rollout",
+          "concluso": true,
+          "settimane": {
+            "2026-07-06": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "MF"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Change Request Analysis",
+          "concluso": true,
+          "settimane": {
+            "2026-05-18": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-07-06": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-06-29": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Code Review",
+          "concluso": true,
+          "settimane": {
+            "2026-06-22": {
+              "team": "dev",
+              "risorse": [
+                "MH"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-29": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-07-06": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "PD"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Checkout Module Development",
+          "concluso": true,
+          "settimane": {
+            "2026-07-06": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "GK"
+              ]
+            },
+            "2026-06-15": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-05-18": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "PD"
+              ]
+            },
+            "2026-06-29": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "GH"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Requirements Analysis",
+          "concluso": true,
+          "settimane": {
+            "2026-06-22": {
+              "team": "parc",
+              "risorse": [
+                "AK"
+              ]
+            },
+            "2026-05-25": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Monitoring & Alerting Setup",
+          "concluso": false,
+          "settimane": {
+            "2026-06-08": {
+              "team": "parc",
+              "risorse": [
+                "GS",
+                "BT"
+              ]
+            },
+            "2026-05-25": {
+              "team": "dev",
+              "risorse": [
+                "KT",
+                "GH"
+              ]
+            },
+            "2026-06-01": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "CK"
+              ]
+            },
+            "2026-07-13": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Change Request Analysis",
+          "concluso": false,
+          "settimane": {
+            "2026-08-17": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-08-31": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "WH"
+              ]
+            },
+            "2026-07-27": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Server Provisioning",
+          "concluso": true,
+          "settimane": {
+            "2026-08-17": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "KT"
+              ]
+            },
+            "2026-08-31": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "JH"
+              ]
+            },
+            "2026-08-24": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Data Migration",
+          "concluso": true,
+          "settimane": {
+            "2026-09-07": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-07-27": {
+              "team": "build",
+              "risorse": [
+                "MF",
+                "KK"
+              ]
+            },
+            "2026-08-03": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "CK"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Spike — File System Access API</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 780px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.3rem; }
+  section { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+  button { padding: 0.5rem 1rem; margin-right: 0.5rem; cursor: pointer; }
+  button:disabled { cursor: not-allowed; opacity: 0.5; }
+  #log { background: #111; color: #0f0; font-family: monospace; font-size: 0.85rem;
+         padding: 0.75rem; height: 320px; overflow-y: auto; white-space: pre-wrap; border-radius: 6px; }
+  .ok { color: #7CFC00; }
+  .err { color: #ff6b6b; }
+  .warn { color: #ffd166; }
+  code { background: #eee; padding: 0 4px; border-radius: 3px; }
+  ol li { margin-bottom: 0.4rem; }
+</style>
+</head>
+<body>
+<h1>Spike — persistenza permessi File System Access API</h1>
+
+<section>
+  <p>
+    Pagina di test isolata (non fa parte dell'app finale) per verificare se i permessi di
+    accesso a una cartella selezionata con <code>showDirectoryPicker()</code> sopravvivono a un
+    riavvio del browser e del PC, quando la cartella è su un drive di rete o una cartella
+    OneDrive/SharePoint sincronizzata localmente.
+  </p>
+  <p><strong>Protocollo di test consigliato:</strong></p>
+  <ol>
+    <li>Apri questa pagina in Chrome o Edge, direttamente da file (<code>file://...</code>) o da un mini server locale — entrambi vanno testati se possibile.</li>
+    <li>Click su <strong>1. Seleziona cartella</strong> e scegli la cartella dati reale (es. su rete/OneDrive).</li>
+    <li>Click su <strong>2. Verifica permesso</strong> e <strong>4. Test scrittura</strong> — dovrebbero funzionare subito (sessione corrente).</li>
+    <li>Chiudi <em>completamente</em> il browser (tutte le finestre, non solo la scheda).</li>
+    <li>Riapri il browser e questa stessa pagina. Click su <strong>2. Verifica permesso</strong> SENZA rifare la selezione cartella — annota se risulta <code>granted</code> o <code>prompt</code>.</li>
+    <li>Se <code>prompt</code>: click su <strong>3. Richiedi permesso</strong> e osserva se il browser mostra un vero dialogo o lo concede silenziosamente.</li>
+    <li>Ripeti idealmente anche dopo un riavvio completo del PC, e su una cartella di rete reale (non solo locale), per avere un risultato rappresentativo dell'uso reale del team.</li>
+  </ol>
+</section>
+
+<section>
+  <button id="btn-pick">1. Seleziona cartella</button>
+  <button id="btn-query">2. Verifica permesso (queryPermission)</button>
+  <button id="btn-request">3. Richiedi permesso (requestPermission)</button>
+  <button id="btn-write">4. Test scrittura file</button>
+  <button id="btn-read">5. Test lettura file</button>
+  <button id="btn-forget">Dimentica handle salvato</button>
+</section>
+
+<section>
+  <div id="log"></div>
+</section>
+
+<script type="module">
+const DB_NAME = 'fsa-spike';
+const STORE_NAME = 'handles';
+const HANDLE_KEY = 'dirHandle';
+const TEST_FILE = 'fsa-spike-test.txt';
+
+const logEl = document.getElementById('log');
+function log(msg, cls) {
+  const ts = new Date().toLocaleTimeString('it-IT');
+  const line = document.createElement('div');
+  if (cls) line.className = cls;
+  line.textContent = `[${ts}] ${msg}`;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function openDb() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(STORE_NAME);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function idbGet(key) {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function idbSet(key, value) {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).put(value, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function idbDelete(key) {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).delete(key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+let dirHandle = null;
+
+if (!('showDirectoryPicker' in window)) {
+  log('File System Access API NON disponibile in questo browser. Usa Chrome o Edge aggiornati.', 'err');
+}
+
+// All'avvio: prova a recuperare l'handle salvato in una sessione precedente.
+(async () => {
+  try {
+    const stored = await idbGet(HANDLE_KEY);
+    if (stored) {
+      dirHandle = stored;
+      log(`Handle recuperato da IndexedDB: "${dirHandle.name}". Usa "2. Verifica permesso" per controllarne lo stato (senza aver rifatto la selezione).`, 'ok');
+    } else {
+      log('Nessun handle salvato in IndexedDB. Click su "1. Seleziona cartella" per iniziare.');
+    }
+  } catch (e) {
+    log(`Errore nel recupero handle da IndexedDB: ${e.message}`, 'err');
+  }
+})();
+
+document.getElementById('btn-pick').addEventListener('click', async () => {
+  try {
+    dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    await idbSet(HANDLE_KEY, dirHandle);
+    log(`Cartella selezionata: "${dirHandle.name}". Handle salvato in IndexedDB.`, 'ok');
+  } catch (e) {
+    log(`Selezione annullata o fallita: ${e.message}`, 'warn');
+  }
+});
+
+document.getElementById('btn-query').addEventListener('click', async () => {
+  if (!dirHandle) return log('Nessun handle disponibile. Seleziona prima una cartella.', 'warn');
+  try {
+    const status = await dirHandle.queryPermission({ mode: 'readwrite' });
+    log(`queryPermission({mode:'readwrite'}) -> "${status}"`, status === 'granted' ? 'ok' : 'warn');
+  } catch (e) {
+    log(`Errore queryPermission: ${e.message}`, 'err');
+  }
+});
+
+document.getElementById('btn-request').addEventListener('click', async () => {
+  if (!dirHandle) return log('Nessun handle disponibile. Seleziona prima una cartella.', 'warn');
+  try {
+    const status = await dirHandle.requestPermission({ mode: 'readwrite' });
+    log(`requestPermission({mode:'readwrite'}) -> "${status}" (annota se è comparso un dialogo visibile o è stato concesso silenziosamente)`, status === 'granted' ? 'ok' : 'warn');
+  } catch (e) {
+    log(`Errore requestPermission (deve partire da un gesto utente diretto): ${e.message}`, 'err');
+  }
+});
+
+document.getElementById('btn-write').addEventListener('click', async () => {
+  if (!dirHandle) return log('Nessun handle disponibile. Seleziona prima una cartella.', 'warn');
+  try {
+    const fileHandle = await dirHandle.getFileHandle(TEST_FILE, { create: true });
+    const writable = await fileHandle.createWritable();
+    const content = `Scritto da spike-fsa il ${new Date().toISOString()}`;
+    await writable.write(content);
+    await writable.close();
+    log(`Scrittura riuscita: "${TEST_FILE}" -> "${content}"`, 'ok');
+  } catch (e) {
+    log(`Errore in scrittura: ${e.message}`, 'err');
+  }
+});
+
+document.getElementById('btn-read').addEventListener('click', async () => {
+  if (!dirHandle) return log('Nessun handle disponibile. Seleziona prima una cartella.', 'warn');
+  try {
+    const fileHandle = await dirHandle.getFileHandle(TEST_FILE);
+    const file = await fileHandle.getFile();
+    const text = await file.text();
+    log(`Lettura riuscita: "${TEST_FILE}" -> "${text}"`, 'ok');
+  } catch (e) {
+    log(`Errore in lettura (il file esiste? hai fatto prima "4. Test scrittura"?): ${e.message}`, 'err');
+  }
+});
+
+document.getElementById('btn-forget').addEventListener('click', async () => {
+  await idbDelete(HANDLE_KEY);
+  dirHandle = null;
+  log('Handle rimosso da IndexedDB. Ricarica la pagina per simulare un "primo avvio" pulito.', 'warn');
+});
+</script>
+</body>
+</html>

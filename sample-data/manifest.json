@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "settimane": {
+    "prima": "2025-11-24",
+    "ultima": "2027-01-11"
+  },
+  "progetti": [
+    {
+      "file": "progetti/contoso-fleet-operations.json",
+      "nome": "CONTOSO FLEET OPERATIONS"
+    },
+    {
+      "file": "progetti/fabrikam-payments-platform.json",
+      "nome": "FABRIKAM PAYMENTS PLATFORM"
+    },
+    {
+      "file": "progetti/northwind-traders-checkout.json",
+      "nome": "NORTHWIND TRADERS CHECKOUT"
+    },
+    {
+      "file": "progetti/adventure-works-booking.json",
+      "nome": "ADVENTURE WORKS BOOKING"
+    },
+    {
+      "file": "progetti/woodgrove-bank-portal.json",
+      "nome": "WOODGROVE BANK PORTAL"
+    },
+    {
+      "file": "progetti/litware-claims-system.json",
+      "nome": "LITWARE CLAIMS SYSTEM"
+    },
+    {
+      "file": "progetti/humongous-insurance-records.json",
+      "nome": "HUMONGOUS INSURANCE RECORDS"
+    },
+    {
+      "file": "progetti/tailspin-toys-inventory.json",
+      "nome": "TAILSPIN TOYS INVENTORY"
+    },
+    {
+      "file": "progetti/wingtip-toys-storefront.json",
+      "nome": "WINGTIP TOYS STOREFRONT"
+    },
+    {
+      "file": "progetti/proseware-media-streaming.json",
+      "nome": "PROSEWARE MEDIA STREAMING"
+    },
+    {
+      "file": "progetti/trey-research-data-platform.json",
+      "nome": "TREY RESEARCH DATA PLATFORM"
+    },
+    {
+      "file": "progetti/city-power-light-grid-monitor.json",
+      "nome": "CITY POWER & LIGHT GRID MONITOR"
+    },
+    {
+      "file": "progetti/coho-winery-supply-chain.json",
+      "nome": "COHO WINERY SUPPLY CHAIN"
+    },
+    {
+      "file": "progetti/graphic-design-institute-lms.json",
+      "nome": "GRAPHIC DESIGN INSTITUTE LMS"
+    },
+    {
+      "file": "progetti/wide-world-importers-legacy-erp.json",
+      "nome": "WIDE WORLD IMPORTERS LEGACY ERP"
+    }
+  ]
+}

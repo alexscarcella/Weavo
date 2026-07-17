@@ -1,0 +1,557 @@
+{
+  "nome": "CONTOSO FLEET OPERATIONS",
+  "team": "Team CONTOSO FLEET OPERATIONS (Larry Tesler / Frances Allen)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Penetration Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-09": {
+              "team": "parc",
+              "risorse": [
+                "BT",
+                "LT"
+              ]
+            },
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KK"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Refactoring",
+          "concluso": true,
+          "settimane": {
+            "2026-03-09": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-03-02": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-02-16": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Hardware Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-02": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-02-09": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "AC"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Bug Fixing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-23": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "AC"
+              ]
+            },
+            "2026-03-09": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            },
+            "2026-03-30": {
+              "team": "build",
+              "risorse": [
+                "MF",
+                "JH"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "CI/CD Pipeline Setup",
+          "concluso": true,
+          "settimane": {
+            "2026-02-23": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-03-16": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Requirements Analysis",
+          "concluso": true,
+          "settimane": {
+            "2026-03-02": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "MN"
+              ]
+            },
+            "2026-02-02": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-03-30": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Database Schema Migration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-23": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-03-02": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-02": {
+              "team": "vv",
+              "risorse": [
+                "BL",
+                "WH"
+              ]
+            },
+            "2026-03-16": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "KT"
+              ]
+            },
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "MF"
+              ]
+            },
+            "2026-02-16": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "KT"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Change Request Analysis",
+          "concluso": false,
+          "settimane": {
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "JH"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Third-Party Data Feed Import",
+          "concluso": true,
+          "settimane": {
+            "2026-05-18": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "KT"
+              ]
+            },
+            "2026-05-25": {
+              "team": "build",
+              "risorse": [
+                "JH"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "API Development",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "vv",
+              "risorse": [
+                "WH"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Code Review",
+          "concluso": true,
+          "settimane": {
+            "2026-05-25": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "KT"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Disaster Recovery Plan",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-06-01": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Backend Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-05-25": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Localization",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-05-04": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-06-15": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "DR"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Security Audit",
+          "concluso": true,
+          "settimane": {
+            "2026-05-04": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KB"
+              ]
+            },
+            "2026-06-15": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "WH"
+              ],
+              "milestone": true
+            },
+            "2026-04-20": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-05-25": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "JA"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Mobile App Development",
+          "concluso": true,
+          "settimane": {
+            "2026-05-18": {
+              "team": "parc",
+              "risorse": [
+                "GS"
+              ]
+            },
+            "2026-04-20": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-06-15": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "GK"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "System Architecture Design",
+          "concluso": true,
+          "settimane": {
+            "2026-04-20": {
+              "team": "build",
+              "risorse": [
+                "JH"
+              ]
+            },
+            "2026-06-01": {
+              "team": "parc",
+              "risorse": [
+                "GS"
+              ]
+            },
+            "2026-05-04": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-05-11": {
+              "team": "build",
+              "risorse": [
+                "KB"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Performance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-01": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-07-06": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-06-08": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KK"
+              ]
+            },
+            "2026-06-15": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "WH"
+              ]
+            },
+            "2026-07-20": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-05-25": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "WV"
+              ]
+            },
+            "2026-06-29": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            },
+            "2026-07-06": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-07-20": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "4.0",
+      "task": [
+        {
+          "nome": "Mobile App Development",
+          "concluso": false,
+          "settimane": {
+            "2026-10-19": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-11-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Unit Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-10-26": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-11-09": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

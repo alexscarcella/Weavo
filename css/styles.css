@@ -1,0 +1,318 @@
+:root {
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+#app {
+  padding: 1.25rem;
+}
+
+.connect-panel, .blocking-message, .error-panel, .status-message {
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+h1 { font-size: 1.4rem; margin-top: 0; }
+
+button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid #888;
+  border-radius: 6px;
+  background: #f5f5f5;
+}
+button:hover { background: #ececec; }
+
+code {
+  background: #f0f0f0;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.hint { color: #666; font-size: 0.9rem; }
+
+.blocking-message, .error-panel { color: #b00020; }
+
+.warnings {
+  background: #fff8e1;
+  border: 1px solid #ffca28;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+.warnings ul { margin: 0.3rem 0 0; padding-left: 1.2rem; }
+.warnings { font-size: 0.85rem; max-height: 160px; overflow-y: auto; }
+
+/* --- Vista gantt --- */
+
+.gantt-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+.legend-item { display: inline-flex; align-items: center; gap: 0.3rem; }
+.legend-swatch {
+  width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.15);
+  display: inline-block;
+}
+.legend-swatch.legend-milestone {
+  background: #fff;
+  box-shadow: inset 0 0 0 2px #d32f2f;
+}
+.legend-badge { position: static !important; display: inline-flex !important; }
+.legend-menu-btn { opacity: 0.35; }
+.legend-item:hover .legend-menu-btn { opacity: 1; }
+.btn-nuovo-tipo, .btn-nuova-risorsa { padding: 0.3rem 0.6rem; font-size: 0.78rem; margin-left: 0.25rem; }
+
+.gantt-scroll {
+  overflow: auto;
+  max-height: calc(100vh - 220px);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.gantt-grid {
+  display: grid;
+  grid-auto-rows: 24px;
+  font-size: 0.75rem;
+  width: max-content;
+}
+
+.gantt-cell {
+  border-right: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.gantt-cell.week-cell { justify-content: center; }
+.gantt-cell .cell-text { overflow: hidden; text-overflow: ellipsis; }
+
+.gantt-cell.col-fixed {
+  position: sticky;
+  background: #fafafa;
+  z-index: 2;
+  font-weight: 500;
+}
+.gantt-cell.col-1 { left: 0; width: 170px; }
+.gantt-cell.col-2 { left: 170px; width: 90px; color: #555; }
+.gantt-cell.col-3 { left: 260px; width: 200px; font-weight: 400; }
+.gantt-cell.task-concluso { color: #888; }
+
+.gantt-cell.header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #eef1f5;
+  font-weight: 600;
+  border-bottom: 1px solid #b9c2cc;
+}
+.gantt-cell.header.col-fixed { z-index: 4; background: #e3e8ee; }
+
+.gantt-cell.milestone { box-shadow: inset 0 0 0 2px #d32f2f; }
+
+.badge-orfano {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ffca28;
+  color: #5a4600;
+  font-size: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.badge-orfano-risorsa { background: #ff8a65; color: #4a1c00; }
+
+.toggle-archiviati { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+
+.gantt-cell.editable-cell { cursor: pointer; }
+.gantt-cell.editable-cell:hover { outline: 2px solid #2E86FF; outline-offset: -2px; }
+
+/* --- Popover di editing cella --- */
+
+.cell-popover {
+  z-index: 50;
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  padding: 0.75rem;
+  width: 260px;
+  font-size: 0.85rem;
+}
+.popover-field { margin-bottom: 0.6rem; }
+.popover-field label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+.popover-field select {
+  width: 100%; padding: 0.3rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid #aaa;
+}
+.popover-risorse-list {
+  max-height: 160px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 4px; padding: 0.3rem;
+}
+.popover-risorsa {
+  display: flex; align-items: center; gap: 0.4rem; font-weight: 400 !important;
+  padding: 0.15rem 0; cursor: pointer;
+}
+.popover-milestone-field label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; cursor: pointer; }
+.popover-warning {
+  background: #fff3e0; border: 1px solid #ffb74d; border-radius: 4px;
+  padding: 0.4rem 0.5rem; font-size: 0.78rem; margin-top: 0.3rem;
+}
+.popover-hint { margin: 0.5rem 0 0; font-size: 0.75rem; }
+
+/* --- Sovrallocazione --- */
+.gantt-cell.overallocated { outline: 2px dashed #ff6f00; outline-offset: -2px; }
+.legend-swatch.legend-overallocated { background: #fff; outline: 2px dashed #ff6f00; outline-offset: -2px; }
+
+/* --- Mismatch team/risorsa (risorsa spostata di team dopo l'allocazione) --- */
+.gantt-cell.team-mismatch { outline: 2px dashed #7b1fa2; outline-offset: -2px; }
+.legend-swatch.legend-mismatch { background: #fff; outline: 2px dashed #7b1fa2; outline-offset: -2px; }
+.badge-mismatch { background: #ce93d8; color: #3c0a4d; top: auto; bottom: 1px; }
+
+/* --- Vista carico risorse --- */
+.load-cell { font-weight: 600; color: #555; }
+.load-cell.overallocated { color: #b35400; background: #fff3e0; }
+
+/* --- Menu a scomparsa (funzioni: viste + backup) --- */
+.hamburger-btn {
+  padding: 0.4rem 0.7rem; font-size: 1rem; line-height: 1; border: 1px solid #888; border-radius: 6px;
+  background: #f5f5f5; cursor: pointer; margin-bottom: 0.75rem;
+}
+.hamburger-btn:hover { background: #eef1f5; }
+
+/* --- Barra superiore / gestione settimane --- */
+.top-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.week-controls { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; }
+.week-controls button { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+.week-remove-input { width: 3.5rem; padding: 0.35rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid #aaa; }
+
+/* --- CRUD: righe con testo troncato + azioni --- */
+.toolbar-actions { display: flex; align-items: center; gap: 0.75rem; }
+.btn-nuovo-progetto { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+
+.gantt-cell.col-fixed .cell-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-menu-btn {
+  flex: none;
+  border: none;
+  background: transparent;
+  padding: 0 0.25rem;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+  opacity: 0.35;
+}
+.gantt-cell.col-fixed:hover .row-menu-btn { opacity: 1; }
+.row-menu-btn:hover { color: #2E86FF; }
+
+.task-concluso-checkbox { flex: none; margin-right: 0.3rem; cursor: pointer; }
+.hint-text { color: #999; font-style: italic; }
+
+/* --- Modal bloccante (conflitto di salvataggio) --- */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45);
+  display: flex; align-items: center; justify-content: center; z-index: 100;
+}
+.modal-box {
+  background: #fff; border-radius: 8px; padding: 1.25rem 1.5rem; max-width: 480px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.modal-box h2 { margin-top: 0; font-size: 1.1rem; color: #b00020; }
+.modal-box p { font-size: 0.9rem; line-height: 1.4; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1rem; }
+.modal-btn-overwrite { background: #b00020; color: #fff; border-color: #b00020; }
+
+/* --- Toast --- */
+.toast-container {
+  position: fixed; bottom: 1rem; right: 1rem; z-index: 200;
+  display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;
+}
+.toast {
+  background: #263238; color: #fff; padding: 0.6rem 1rem; border-radius: 6px;
+  font-size: 0.85rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); max-width: 360px;
+  animation: toast-in 0.15s ease-out;
+}
+.toast-success { background: #1b5e20; }
+.toast-error { background: #b00020; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.context-menu {
+  z-index: 60;
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  padding: 0.25rem;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+}
+.context-menu-item {
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.82rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.context-menu-item:hover { background: #eef1f5; }
+.context-menu-item.danger { color: #b00020; }
+.context-menu-item.danger:hover { background: #fdecea; }
+
+/* --- Pagina "Team e risorse" --- */
+.team-risorse-page { max-width: 640px; }
+.team-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.team-card {
+  border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem 0.9rem; background: #fafafa;
+}
+.team-card-header { display: flex; align-items: center; gap: 0.5rem; }
+.team-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.15); flex: none; }
+.team-titolo { font-weight: 600; flex: 1; }
+.team-resources { margin: 0.6rem 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.resource-row {
+  display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.4rem; border-radius: 4px; font-size: 0.85rem;
+}
+.resource-row:hover { background: #eef1f5; }
+.resource-sigla { font-weight: 600; width: 2.5rem; flex: none; }
+.resource-nome { flex: 1; color: #444; }

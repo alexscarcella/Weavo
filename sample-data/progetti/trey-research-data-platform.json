@@ -1,0 +1,386 @@
+{
+  "nome": "TREY RESEARCH DATA PLATFORM",
+  "team": "Team TREY RESEARCH DATA PLATFORM (Gene Kim / Werner Vogels)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Code Review",
+          "concluso": true,
+          "settimane": {
+            "2026-03-02": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-02-02": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "AK"
+              ]
+            },
+            "2026-01-26": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "BU"
+              ]
+            },
+            "2026-02-23": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "GH"
+              ]
+            },
+            "2026-03-16": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "System Architecture Design",
+          "concluso": false,
+          "settimane": {
+            "2026-03-09": {
+              "team": "vv",
+              "risorse": [
+                "BL",
+                "FA"
+              ]
+            },
+            "2026-02-23": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-03-16": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Accessibility Compliance",
+          "concluso": true,
+          "settimane": {
+            "2026-01-26": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "KK"
+              ]
+            },
+            "2026-02-16": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            },
+            "2026-03-16": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "GK"
+              ],
+              "milestone": true
+            },
+            "2026-02-02": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Penetration Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-02": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ]
+            },
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-03-16": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Backend Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-06-22": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ],
+              "milestone": true
+            },
+            "2026-06-01": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-06-08": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "GK"
+              ]
+            },
+            "2026-05-11": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "CI/CD Pipeline Setup",
+          "concluso": true,
+          "settimane": {
+            "2026-04-27": {
+              "team": "dev",
+              "risorse": [
+                "GH"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Checkout Module Development",
+          "concluso": true,
+          "settimane": {
+            "2026-06-22": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ],
+              "milestone": true
+            },
+            "2026-06-08": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "BL"
+              ]
+            },
+            "2026-04-27": {
+              "team": "build",
+              "risorse": [
+                "MF"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Performance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-01": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "JR"
+              ]
+            },
+            "2026-05-04": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "JA"
+              ]
+            },
+            "2026-05-18": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "JH"
+              ]
+            },
+            "2026-06-08": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "MH"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Localization",
+          "concluso": true,
+          "settimane": {
+            "2026-05-18": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-05-04": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            },
+            "2026-06-01": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Change Request Analysis",
+          "concluso": true,
+          "settimane": {
+            "2026-04-27": {
+              "team": "dev",
+              "risorse": [
+                "GH"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Training & Handover",
+          "concluso": false,
+          "settimane": {
+            "2026-08-10": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "GS"
+              ]
+            },
+            "2026-09-21": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "PD"
+              ]
+            },
+            "2026-08-17": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-10-05": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "AL"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Technical Documentation",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "parc",
+              "risorse": [
+                "AK"
+              ]
+            },
+            "2026-08-10": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-08-24": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "WH"
+              ]
+            },
+            "2026-10-05": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Performance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-09-14": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-10-05": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Integration Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-08-24": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "JR"
+              ]
+            },
+            "2026-10-05": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

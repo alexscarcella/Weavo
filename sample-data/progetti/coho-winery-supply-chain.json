@@ -1,0 +1,478 @@
+{
+  "nome": "COHO WINERY SUPPLY CHAIN",
+  "team": "Team COHO WINERY SUPPLY CHAIN (Barbara Liskov / Jez Humble)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Production Rollout",
+          "concluso": true,
+          "settimane": {
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ]
+            },
+            "2026-02-16": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "MN"
+              ]
+            },
+            "2026-04-06": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Checkout Module Development",
+          "concluso": true,
+          "settimane": {
+            "2026-03-09": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KK"
+              ]
+            },
+            "2026-02-16": {
+              "team": "build",
+              "risorse": [
+                "MF",
+                "KB"
+              ]
+            },
+            "2026-03-23": {
+              "team": "build",
+              "risorse": [
+                "JH"
+              ]
+            },
+            "2026-04-06": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Refactoring",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "GH"
+              ]
+            },
+            "2026-02-09": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-04-06": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Bug Fixing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-09": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "FA"
+              ]
+            },
+            "2026-03-30": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-04-06": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Deployment to Staging",
+          "concluso": true,
+          "settimane": {
+            "2026-03-16": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-03-30": {
+              "team": "dev",
+              "risorse": [
+                "DK"
+              ]
+            },
+            "2026-03-23": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "JR"
+              ]
+            },
+            "2026-02-23": {
+              "team": "vv",
+              "risorse": [
+                "BL"
+              ]
+            },
+            "2026-04-06": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-09": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "AC"
+              ]
+            },
+            "2026-03-16": {
+              "team": "build",
+              "risorse": [
+                "JH"
+              ]
+            },
+            "2026-03-02": {
+              "team": "parc",
+              "risorse": [
+                "GS"
+              ]
+            },
+            "2026-04-06": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Sprint Planning",
+          "concluso": false,
+          "settimane": {
+            "2026-04-27": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "AL"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Third-Party Data Feed Import",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Hardware Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-04-27": {
+              "team": "dev",
+              "risorse": [
+                "DK"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "System Architecture Design",
+          "concluso": true,
+          "settimane": {
+            "2026-09-28": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "KT"
+              ]
+            },
+            "2026-09-21": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "KT"
+              ]
+            },
+            "2026-10-12": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Accessibility Compliance",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "FA"
+              ]
+            },
+            "2026-10-05": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-08-31": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-10-12": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-10-19": {
+              "team": "devops",
+              "risorse": [
+                "GK",
+                "JA"
+              ],
+              "milestone": true
+            },
+            "2026-09-14": {
+              "team": "dev",
+              "risorse": [
+                "KT",
+                "GH"
+              ]
+            },
+            "2026-10-05": {
+              "team": "parc",
+              "risorse": [
+                "BU"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Certification Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-10-05": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "CK"
+              ]
+            },
+            "2026-09-28": {
+              "team": "devops",
+              "risorse": [
+                "JA"
+              ]
+            },
+            "2026-09-21": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Production Rollout",
+          "concluso": false,
+          "settimane": {
+            "2026-10-19": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "BT"
+              ],
+              "milestone": true
+            },
+            "2026-10-05": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ]
+            },
+            "2026-08-31": {
+              "team": "parc",
+              "risorse": [
+                "AK",
+                "BU"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Hardware Integration",
+          "concluso": false,
+          "settimane": {
+            "2026-10-19": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "DK"
+              ],
+              "milestone": true
+            },
+            "2026-09-14": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "RP"
+              ]
+            },
+            "2026-08-24": {
+              "team": "parc",
+              "risorse": [
+                "GS"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Localization",
+          "concluso": false,
+          "settimane": {
+            "2026-10-19": {
+              "team": "vv",
+              "risorse": [
+                "BL"
+              ],
+              "milestone": true
+            },
+            "2026-08-24": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "KB"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Technical Documentation",
+          "concluso": false,
+          "settimane": {
+            "2026-09-07": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "RP"
+              ]
+            },
+            "2026-09-28": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "AC"
+              ]
+            },
+            "2026-08-31": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "MH"
+              ]
+            },
+            "2026-08-24": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "MH"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Data Migration",
+          "concluso": true,
+          "settimane": {
+            "2026-10-05": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "AL"
+              ]
+            },
+            "2026-08-31": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

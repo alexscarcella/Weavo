@@ -1,0 +1,535 @@
+{
+  "nome": "GRAPHIC DESIGN INSTITUTE LMS",
+  "team": "Team GRAPHIC DESIGN INSTITUTE LMS (Jez Humble / Jesse Robbins)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Penetration Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-03-23": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "JR"
+              ]
+            },
+            "2026-03-09": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
+            },
+            "2026-03-16": {
+              "team": "dev",
+              "risorse": [
+                "GH"
+              ]
+            },
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Regression Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-03-09": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "JA"
+              ]
+            },
+            "2026-03-30": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "MH"
+              ],
+              "milestone": true
+            },
+            "2026-02-16": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KB"
+              ]
+            },
+            "2026-02-23": {
+              "team": "vv",
+              "risorse": [
+                "CK"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Deployment to Staging",
+          "concluso": true,
+          "settimane": {
+            "2026-02-02": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-03-02": {
+              "team": "devops",
+              "risorse": [
+                "GK"
+              ]
+            },
+            "2026-02-23": {
+              "team": "vv",
+              "risorse": [
+                "BL"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Backend Integration",
+          "concluso": false,
+          "settimane": {
+            "2026-02-23": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ]
+            },
+            "2026-02-02": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Performance Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-03-16": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ]
+            },
+            "2026-03-30": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "DK"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Change Request Analysis",
+          "concluso": false,
+          "settimane": {
+            "2026-03-09": {
+              "team": "devops",
+              "risorse": [
+                "JA",
+                "MN"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-02": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "GK"
+              ]
+            },
+            "2026-02-23": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-03-09": {
+              "team": "build",
+              "risorse": [
+                "JH"
+              ]
+            },
+            "2026-02-16": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "AC"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Refactoring",
+          "concluso": true,
+          "settimane": {
+            "2026-03-30": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "RP"
+              ],
+              "milestone": true
+            },
+            "2026-02-16": {
+              "team": "devops",
+              "risorse": [
+                "MN",
+                "PD"
+              ]
+            },
+            "2026-02-02": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "BL"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Frontend Implementation",
+          "concluso": true,
+          "settimane": {
+            "2026-02-02": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "GH"
+              ]
+            },
+            "2026-03-23": {
+              "team": "dev",
+              "risorse": [
+                "DK"
+              ]
+            },
+            "2026-03-30": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Certification Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-06-01": {
+              "team": "dev",
+              "risorse": [
+                "KT",
+                "AL"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Requirements Analysis",
+          "concluso": false,
+          "settimane": {
+            "2026-05-18": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ]
+            },
+            "2026-05-25": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "MF"
+              ]
+            },
+            "2026-05-04": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-05-11": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "RP"
+              ]
+            },
+            "2026-06-22": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "MF"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Penetration Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-05-25": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-06-15": {
+              "team": "parc",
+              "risorse": [
+                "CT",
+                "BT"
+              ]
+            },
+            "2026-05-04": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "GK"
+              ]
+            },
+            "2026-05-18": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KB"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Security Audit",
+          "concluso": true,
+          "settimane": {
+            "2026-06-01": {
+              "team": "build",
+              "risorse": [
+                "KB"
+              ]
+            },
+            "2026-06-08": {
+              "team": "build",
+              "risorse": [
+                "MF",
+                "KK"
+              ]
+            },
+            "2026-05-11": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "GH"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Bug Fixing",
+          "concluso": true,
+          "settimane": {
+            "2026-05-18": {
+              "team": "devops",
+              "risorse": [
+                "MN"
+              ]
+            },
+            "2026-06-15": {
+              "team": "dev",
+              "risorse": [
+                "AL"
+              ]
+            },
+            "2026-05-25": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "DK"
+              ]
+            },
+            "2026-04-27": {
+              "team": "parc",
+              "risorse": [
+                "GS"
+              ]
+            },
+            "2026-06-22": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": true,
+          "settimane": {
+            "2026-09-07": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "KK"
+              ]
+            },
+            "2026-08-31": {
+              "team": "build",
+              "risorse": [
+                "KB",
+                "KK"
+              ]
+            },
+            "2026-08-24": {
+              "team": "devops",
+              "risorse": [
+                "PD"
+              ]
+            },
+            "2026-08-03": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Legacy System Decommissioning",
+          "concluso": false,
+          "settimane": {
+            "2026-07-20": {
+              "team": "vv",
+              "risorse": [
+                "WH",
+                "BL"
+              ]
+            },
+            "2026-07-27": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-09-14": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ],
+              "milestone": true
+            },
+            "2026-08-31": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Performance Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-08-17": {
+              "team": "dev",
+              "risorse": [
+                "MH",
+                "AL"
+              ]
+            },
+            "2026-09-07": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-08-10": {
+              "team": "build",
+              "risorse": [
+                "MF",
+                "KB"
+              ]
+            },
+            "2026-08-31": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-09-14": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

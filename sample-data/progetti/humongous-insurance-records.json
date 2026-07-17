@@ -1,0 +1,499 @@
+{
+  "nome": "HUMONGOUS INSURANCE RECORDS",
+  "team": "Team HUMONGOUS INSURANCE RECORDS (Grace Hopper / Kent Beck)",
+  "archiviato": false,
+  "baseline": [
+    {
+      "versione": "1.0",
+      "task": [
+        {
+          "nome": "Production Rollout",
+          "concluso": false,
+          "settimane": {
+            "2026-01-19": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "MF"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Backend Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-02": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "RP"
+              ]
+            },
+            "2026-03-02": {
+              "team": "build",
+              "risorse": [
+                "JH",
+                "KK"
+              ]
+            },
+            "2026-01-26": {
+              "team": "vv",
+              "risorse": [
+                "CK",
+                "WH"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "System Architecture Design",
+          "concluso": false,
+          "settimane": {
+            "2026-02-09": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "AC"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Certification Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-02": {
+              "team": "parc",
+              "risorse": [
+                "BU",
+                "AK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Database Schema Migration",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "vv",
+              "risorse": [
+                "BL",
+                "FA"
+              ]
+            },
+            "2026-02-09": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "MN"
+              ]
+            },
+            "2026-01-19": {
+              "team": "parc",
+              "risorse": [
+                "CT",
+                "LT"
+              ]
+            },
+            "2026-01-26": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "DR"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Unit Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-26": {
+              "team": "dev",
+              "risorse": [
+                "GH",
+                "DR"
+              ]
+            },
+            "2026-03-02": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Field Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "CK"
+              ]
+            },
+            "2026-01-26": {
+              "team": "vv",
+              "risorse": [
+                "RP"
+              ]
+            },
+            "2026-02-02": {
+              "team": "parc",
+              "risorse": [
+                "CT",
+                "BU"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Accessibility Compliance",
+          "concluso": true,
+          "settimane": {
+            "2026-02-16": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Load Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-01-19": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-02-09": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-02-02": {
+              "team": "vv",
+              "risorse": [
+                "RP",
+                "WH"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Integration Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-01-12": {
+              "team": "dev",
+              "risorse": [
+                "MH"
+              ]
+            },
+            "2026-01-26": {
+              "team": "devops",
+              "risorse": [
+                "PD",
+                "GK"
+              ]
+            },
+            "2026-03-09": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "2.0",
+      "task": [
+        {
+          "nome": "Certification Testing",
+          "concluso": true,
+          "settimane": {
+            "2026-05-04": {
+              "team": "run",
+              "risorse": [
+                "WV",
+                "JR"
+              ]
+            },
+            "2026-06-08": {
+              "team": "build",
+              "risorse": [
+                "KB"
+              ]
+            },
+            "2026-04-27": {
+              "team": "build",
+              "risorse": [
+                "JH"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Hardware Integration",
+          "concluso": true,
+          "settimane": {
+            "2026-06-01": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            },
+            "2026-05-04": {
+              "team": "parc",
+              "risorse": [
+                "GS"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Server Provisioning",
+          "concluso": true,
+          "settimane": {
+            "2026-06-08": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-05-25": {
+              "team": "parc",
+              "risorse": [
+                "LT",
+                "BT"
+              ]
+            },
+            "2026-04-20": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-06-15": {
+              "team": "parc",
+              "risorse": [
+                "BT"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Code Review",
+          "concluso": true,
+          "settimane": {
+            "2026-06-15": {
+              "team": "parc",
+              "risorse": [
+                "LT"
+              ],
+              "milestone": true
+            },
+            "2026-05-25": {
+              "team": "build",
+              "risorse": [
+                "MF",
+                "KB"
+              ]
+            },
+            "2026-05-11": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "versione": "3.0",
+      "task": [
+        {
+          "nome": "CI/CD Pipeline Setup",
+          "concluso": false,
+          "settimane": {
+            "2026-08-31": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-09-07": {
+              "team": "run",
+              "risorse": [
+                "AC",
+                "WV"
+              ]
+            },
+            "2026-10-05": {
+              "team": "run",
+              "risorse": [
+                "JR",
+                "WV"
+              ]
+            },
+            "2026-08-24": {
+              "team": "build",
+              "risorse": [
+                "KK",
+                "JH"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Penetration Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-09-21": {
+              "team": "dev",
+              "risorse": [
+                "DR",
+                "DK"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Frontend Implementation",
+          "concluso": false,
+          "settimane": {
+            "2026-08-31": {
+              "team": "dev",
+              "risorse": [
+                "DK"
+              ]
+            },
+            "2026-09-07": {
+              "team": "vv",
+              "risorse": [
+                "FA"
+              ]
+            },
+            "2026-10-12": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-10-19": {
+              "team": "run",
+              "risorse": [
+                "AC"
+              ],
+              "milestone": true
+            }
+          }
+        },
+        {
+          "nome": "Field Testing",
+          "concluso": false,
+          "settimane": {
+            "2026-10-19": {
+              "team": "dev",
+              "risorse": [
+                "AL",
+                "DK"
+              ],
+              "milestone": true
+            },
+            "2026-10-05": {
+              "team": "parc",
+              "risorse": [
+                "CT"
+              ]
+            },
+            "2026-10-12": {
+              "team": "dev",
+              "risorse": [
+                "DK",
+                "DR"
+              ]
+            },
+            "2026-09-28": {
+              "team": "vv",
+              "risorse": [
+                "FA",
+                "CK"
+              ]
+            }
+          }
+        },
+        {
+          "nome": "Real-Time Event Streaming",
+          "concluso": false,
+          "settimane": {
+            "2026-10-12": {
+              "team": "vv",
+              "risorse": [
+                "WH"
+              ]
+            },
+            "2026-09-07": {
+              "team": "dev",
+              "risorse": [
+                "DR"
+              ]
+            },
+            "2026-10-19": {
+              "milestone": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
