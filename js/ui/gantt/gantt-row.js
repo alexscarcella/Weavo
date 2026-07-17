@@ -25,7 +25,7 @@
     return div;
   }
 
-  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved }) {
+  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved, lastEdited }) {
     const cells = [];
 
     const col1 = fixedCell(showProgetto ? progetto.nome : '', 'col-1');
@@ -108,6 +108,7 @@
           state,
           file,
           onCellSaved,
+          lastEdited,
         });
         cells.push(cell);
         weekCells.push({ settimana, div: cell });

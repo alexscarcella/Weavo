@@ -5,11 +5,15 @@
 (function (MP) {
   'use strict';
 
-  function renderWeekCell({ task, settimana, teamMap, sigleValide, siglaTeamMap, allocationIndex, state, file, onCellSaved }) {
+  function renderWeekCell({ task, settimana, teamMap, sigleValide, siglaTeamMap, allocationIndex, state, file, onCellSaved, lastEdited }) {
     const entry = (task.settimane || {})[settimana];
     const div = document.createElement('div');
     div.className = 'gantt-cell week-cell editable-cell';
     const titleParts = [];
+
+    if (lastEdited && lastEdited.task === task && lastEdited.weeks.has(settimana)) {
+      div.classList.add('cell-just-edited');
+    }
 
     if (task.concluso) {
       div.style.background = '#d9d9d9';

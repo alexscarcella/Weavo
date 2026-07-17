@@ -24,6 +24,17 @@
 
   function render() {
     const state = getState();
+
+    // Ogni azione (anche il salvataggio di una singola cella) passa da un
+    // MP.store.setState() che qui rifà l'intero albero DOM da zero: senza
+    // questo salva/ripristina, lo scroll orizzontale/verticale della griglia
+    // (.gantt-scroll, condivisa da gantt e carico-risorse) tornerebbe sempre
+    // a 0,0 a ogni edit, facendo "sparire" dalla vista la cella appena
+    // modificata anche quando l'utente era scrollato altrove.
+    const prevScroll = appEl.querySelector('.gantt-scroll');
+    const scrollLeft = prevScroll ? prevScroll.scrollLeft : 0;
+    const scrollTop = prevScroll ? prevScroll.scrollTop : 0;
+
     appEl.innerHTML = '';
 
     const renderers = {
@@ -36,6 +47,12 @@
 
     const renderFn = renderers[state.status];
     if (renderFn) appEl.appendChild(renderFn(state));
+
+    const nextScroll = appEl.querySelector('.gantt-scroll');
+    if (nextScroll) {
+      nextScroll.scrollLeft = scrollLeft;
+      nextScroll.scrollTop = scrollTop;
+    }
   }
 
   function renderUnsupported() {
@@ -96,7 +113,7 @@
     const topBar = document.createElement('div');
     topBar.className = 'top-bar';
     topBar.appendChild(MP.toolbar.renderHamburgerMenu(state));
-    topBar.appendChild(MP.weekControls.renderWeekControls(state));
+    topBar.appendChild(MP.toolbar.renderPageTitle(state));
     wrapper.appendChild(topBar);
     const viewRenderers = {
       'carico-risorse': MP.resourceLoadView.renderResourceLoadView,

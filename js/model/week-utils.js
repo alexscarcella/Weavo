@@ -42,6 +42,16 @@
     return `${day}/${month}`;
   }
 
+  // Lunedì (formato ISO) della settimana in cui cade la data odierna — usato per
+  // evidenziare la colonna corrente nel gantt e nel carico risorse.
+  function getCurrentWeekIso() {
+    const now = new Date();
+    const todayIso = toIso(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())));
+    const dow = toDate(todayIso).getUTCDay();
+    const diffFromMonday = dow === 0 ? 6 : dow - 1;
+    return addDays(todayIso, -diffFromMonday);
+  }
+
   // Elenco (progetto/baseline/task/settimana) di ogni allocazione non vuota che
   // cade in uno degli iso presenti in weekIsoSet — usato per avvisare prima di
   // eliminare settimane in coda (§6.3 della spec).
@@ -69,6 +79,7 @@
     addWeeks,
     getWeeksInRange,
     formatWeekLabel,
+    getCurrentWeekIso,
     findAllocationsInWeeks,
   };
 })(window.MP = window.MP || {});

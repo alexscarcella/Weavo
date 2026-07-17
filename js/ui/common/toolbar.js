@@ -5,7 +5,7 @@
   'use strict';
 
   const VIEWS = [
-    { id: 'gantt', label: 'Gantt' },
+    { id: 'gantt', label: 'Master Plan' },
     { id: 'carico-risorse', label: 'Carico risorse' },
     { id: 'team-risorse', label: 'Team e risorse' },
   ];
@@ -45,5 +45,14 @@
     }
   }
 
-  MP.toolbar = { renderHamburgerMenu };
+  // Nome della pagina corrente accanto al menu ☰ — stessa etichetta usata nel menu.
+  function renderPageTitle(state) {
+    const span = document.createElement('span');
+    span.className = 'page-title';
+    const view = VIEWS.find((v) => v.id === state.ui.vistaCorrente);
+    span.textContent = view ? view.label : '';
+    return span;
+  }
+
+  MP.toolbar = { renderHamburgerMenu, renderPageTitle };
 })(window.MP = window.MP || {});

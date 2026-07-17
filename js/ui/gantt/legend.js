@@ -52,15 +52,6 @@
     div.appendChild(badgeItem('', '?', 'Team non definito'));
     div.appendChild(badgeItem('badge-orfano-risorsa', '!', 'Sigla non in anagrafica'));
 
-    const manageBtn = document.createElement('button');
-    manageBtn.type = 'button';
-    manageBtn.className = 'btn-nuovo-tipo';
-    manageBtn.textContent = 'Gestisci team e risorse →';
-    manageBtn.addEventListener('click', () => {
-      MP.store.setState((s) => ({ ui: { ...s.ui, vistaCorrente: 'team-risorse' } }));
-    });
-    div.appendChild(manageBtn);
-
     return div;
   }
 

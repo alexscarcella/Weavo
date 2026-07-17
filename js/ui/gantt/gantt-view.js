@@ -5,8 +5,27 @@
 
   const { getWeeksInRange, formatWeekLabel } = MP.weekUtils;
   const { renderTaskRow } = MP.ganttRow;
-  const { renderLegend } = MP.legend;
   const { findOrphanTeam, findOrphanRisorse, findTeamMismatches } = MP.validation;
+
+  // Tiene traccia dell'ultima cella (o range) salvata per poterla rievidenziare
+  // dopo il re-render completo che segue ogni salvataggio (vedi app.js: l'intero
+  // albero DOM viene rifatto da zero, quindi qualunque highlight applicato agli
+  // elementi precedenti andrebbe perso senza questo stato). Riferimento diretto
+  // all'oggetto `task` (stabile in memoria per tutta la sessione, non serializzato
+  // con un id) invece di un identificatore derivato. Un timer svanisce
+  // l'evidenziazione dopo una pausa, per non lasciarla marcata per sempre.
+  let lastEdited = null;
+  let lastEditedTimer = null;
+
+  function markLastEdited(task, weeks) {
+    if (lastEditedTimer) clearTimeout(lastEditedTimer);
+    lastEdited = { task, weeks: new Set(weeks) };
+    lastEditedTimer = setTimeout(() => {
+      lastEdited = null;
+      lastEditedTimer = null;
+      MP.store.setState({});
+    }, 2500);
+  }
 
   // Un progetto senza baseline, o una baseline senza task (visibili — vedi
   // mostraConclusi), non deve sparire dal gantt: senza una riga non ci
@@ -59,6 +78,7 @@
     }
     try {
       await MP.saveCoordinator.saveProject(state, file);
+      markLastEdited(task, [settimana]);
       MP.store.setState({}); // dataset mutato in place: basta ri-notificare i subscriber
     } catch (e) {
       window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);
@@ -77,15 +97,16 @@
     }
     try {
       await MP.saveCoordinator.saveProject(state, file);
+      markLastEdited(task, weeksRange);
       MP.store.setState({});
     } catch (e) {
       window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);
     }
   }
 
-  function headerCell(text, colClass, title) {
+  function headerCell(text, colClass, title, extraClass) {
     const div = document.createElement('div');
-    div.className = `gantt-cell header ${colClass ? 'col-fixed ' + colClass : 'week-cell'}`;
+    div.className = `gantt-cell header ${colClass ? 'col-fixed ' + colClass : 'week-cell'}${extraClass ? ' ' + extraClass : ''}`;
     div.textContent = text;
     if (title) div.title = title;
     return div;
@@ -117,38 +138,34 @@
     const siglaTeamMap = new Map(risorseFlat.map((r) => [r.sigla, r.teamCodice]));
     const allocationIndex = MP.overallocation.buildAllocationIndex(dataset);
     const rows = buildRows(dataset, state.ui.mostraArchiviati, state.ui.mostraConclusi);
+    const currentWeek = MP.weekUtils.getCurrentWeekIso();
+    const currentWeekIndex = weeks.indexOf(currentWeek);
 
     const page = document.createElement('div');
     page.className = 'gantt-page';
 
-    const toolbar = document.createElement('div');
-    toolbar.className = 'gantt-toolbar';
-    toolbar.innerHTML = `
-      <span class="dataset-info">${dataset.manifest.settimane.prima} → ${dataset.manifest.settimane.ultima}
-        — ${rows.length} righe task — ${dataset.progetti.size} progetti</span>
-      <span class="toolbar-actions">
-        <button type="button" class="btn-nuovo-progetto">+ Nuovo progetto</button>
-        <label class="toggle-archiviati">
-          <input type="checkbox" id="chk-archiviati" ${state.ui.mostraArchiviati ? 'checked' : ''}>
-          Mostra archiviati
-        </label>
-        <label class="toggle-conclusi">
-          <input type="checkbox" id="chk-conclusi" ${state.ui.mostraConclusi ? 'checked' : ''}>
-          Mostra conclusi
-        </label>
-      </span>`;
-    toolbar.querySelector('#chk-archiviati').addEventListener('change', (e) => {
+    const toolbarActions = document.createElement('span');
+    toolbarActions.className = 'toolbar-actions';
+    toolbarActions.innerHTML = `
+      <button type="button" class="btn-nuovo-progetto">+ Nuovo progetto</button>
+      <label class="toggle-archiviati">
+        <input type="checkbox" id="chk-archiviati" ${state.ui.mostraArchiviati ? 'checked' : ''}>
+        Mostra archiviati
+      </label>
+      <label class="toggle-conclusi">
+        <input type="checkbox" id="chk-conclusi" ${state.ui.mostraConclusi ? 'checked' : ''}>
+        Mostra conclusi
+      </label>`;
+    toolbarActions.querySelector('#chk-archiviati').addEventListener('change', (e) => {
       MP.store.setState((s) => ({ ui: { ...s.ui, mostraArchiviati: e.target.checked } }));
     });
-    toolbar.querySelector('#chk-conclusi').addEventListener('change', (e) => {
+    toolbarActions.querySelector('#chk-conclusi').addEventListener('change', (e) => {
       MP.store.setState((s) => ({ ui: { ...s.ui, mostraConclusi: e.target.checked } }));
     });
-    toolbar.querySelector('.btn-nuovo-progetto').addEventListener('click', () => {
+    toolbarActions.querySelector('.btn-nuovo-progetto').addEventListener('click', () => {
       MP.projectCrud.createProject(state);
     });
-    page.appendChild(toolbar);
-
-    page.appendChild(renderLegend(state));
+    page.appendChild(MP.datasetHeader.renderDatasetHeader(state, toolbarActions));
 
     const warnings = renderWarnings(dataset);
     if (warnings) page.appendChild(warnings);
@@ -164,15 +181,51 @@
     const scroll = document.createElement('div');
     scroll.className = 'gantt-scroll';
     const grid = document.createElement('div');
-    grid.className = 'gantt-grid';
-    grid.style.gridTemplateColumns = `170px 90px 200px repeat(${weeks.length}, 46px)`;
+    grid.className = 'gantt-grid has-week-edge-row';
+    // Due colonne extra (stesse dimensioni di una settimana) dedicate a "-" e
+    // "+": non sono una settimana reale, si scrollano insieme alla griglia
+    // delle settimane invece di restare bloccate. `renderTaskRow`/`gantt-row.js`
+    // non sanno nulla di queste 2 colonne (restituiscono sempre 3+weeks.length
+    // celle): sono `gantt-view.js` a inserire i filler prima/dopo, riga per riga.
+    grid.style.gridTemplateColumns = `170px 90px 200px repeat(${weeks.length + 2}, 46px)`;
+
+    // Riga pulsanti "a bordo tabella" in stile Excel, sopra le etichette di
+    // colonna: sacrifica un'intera riga di altezza (24px, come le altre)
+    // invece di colonne di larghezza, per non sottrarre spazio orizzontale
+    // alle settimane visibili. L'angolo sopra le 3 colonne bloccate resta
+    // vuoto (frozen, come l'intestazione sottostante) — i pulsanti vivono
+    // esclusivamente nella griglia delle settimane: "-" nella colonna
+    // dedicata subito prima della prima settimana (si scrolla via appena si
+    // scrolla orizzontalmente, non essendo bloccata), "+" nella colonna
+    // dedicata subito dopo l'ultima settimana (entra in vista solo scrollando
+    // fino in fondo).
+    ['col-1', 'col-2', 'col-3'].forEach((colClass) => {
+      const corner = document.createElement('div');
+      corner.className = `gantt-cell week-edge-row col-fixed ${colClass}`;
+      grid.appendChild(corner);
+    });
+    const edgeLeft = document.createElement('div');
+    edgeLeft.className = 'gantt-cell week-edge-row';
+    edgeLeft.appendChild(MP.weekControls.renderRemoveWeekButton(state));
+    grid.appendChild(edgeLeft);
+    for (let i = 0; i < weeks.length; i++) {
+      const filler = document.createElement('div');
+      filler.className = 'gantt-cell week-edge-row';
+      grid.appendChild(filler);
+    }
+    const edgeRight = document.createElement('div');
+    edgeRight.className = 'gantt-cell week-edge-row';
+    edgeRight.appendChild(MP.weekControls.renderAddWeekButton(state));
+    grid.appendChild(edgeRight);
 
     grid.appendChild(headerCell('Attività / Team', 'col-1'));
     grid.appendChild(headerCell('Baseline', 'col-2'));
     grid.appendChild(headerCell('Task', 'col-3'));
+    grid.appendChild(headerCell('', null));
     for (const settimana of weeks) {
-      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana));
+      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
     }
+    grid.appendChild(headerCell('', null));
 
     for (const row of rows) {
       const cells = renderTaskRow({
@@ -185,8 +238,22 @@
         allocationIndex,
         onCellSaved: handleCellSaved,
         onBulkCellsSaved: handleBulkCellsSaved,
+        lastEdited,
       });
-      cells.forEach((cell) => grid.appendChild(cell));
+      if (currentWeekIndex !== -1) cells[3 + currentWeekIndex].classList.add('current-week-line');
+
+      const rowFillerClass = row.showProgetto ? ' row-project-start' : row.showBaseline ? ' row-baseline-start' : '';
+      const altClass = row.baselineIndex % 2 === 1 ? ' row-baseline-alt' : '';
+      const rowFiller = () => {
+        const div = document.createElement('div');
+        div.className = `gantt-cell week-cell${rowFillerClass}${altClass}`;
+        return div;
+      };
+
+      cells.slice(0, 3).forEach((cell) => grid.appendChild(cell));
+      grid.appendChild(rowFiller());
+      cells.slice(3).forEach((cell) => grid.appendChild(cell));
+      grid.appendChild(rowFiller());
     }
 
     scroll.appendChild(grid);
@@ -195,5 +262,5 @@
     return page;
   }
 
-  MP.ganttView = { renderGanttView };
+  MP.ganttView = { renderGanttView, buildRows };
 })(window.MP = window.MP || {});

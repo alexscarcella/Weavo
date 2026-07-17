@@ -71,7 +71,7 @@
         },
         {
           "nome": "Change Request Analysis",
-          "concluso": true,
+          "concluso": false,
           "settimane": {
             "2026-02-09": {
               "team": "parc",
@@ -117,7 +117,7 @@
         },
         {
           "nome": "Frontend Implementation",
-          "concluso": true,
+          "concluso": false,
           "settimane": {
             "2026-01-05": {
               "team": "parc",
@@ -514,6 +514,12 @@
             },
             "2026-10-26": {
               "milestone": true
+            },
+            "2026-07-20": {
+              "team": "run",
+              "risorse": [
+                "JR"
+              ]
             }
           }
         },
@@ -570,6 +576,30 @@
                 "JR"
               ],
               "milestone": true
+            },
+            "2026-07-27": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-08-03": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-08-10": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
+            },
+            "2026-08-17": {
+              "team": "build",
+              "risorse": [
+                "KK"
+              ]
             }
           }
         },

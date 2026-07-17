@@ -1,16 +1,21 @@
 // Vista carico risorse: per ciascuna risorsa, conteggio task per settimana
-// (sostituisce le formule COUNTIF del foglio Excel originale), evidenziando la
-// sovrallocazione (conteggio > 1). Sola lettura: il CRUD di team e risorse è
-// centralizzato nella pagina dedicata (js/ui/team-risorse/team-risorse-view.js).
+// (sostituisce le formule COUNTIF del foglio Excel originale). Header (range
+// settimane + conteggio task/progetti + legenda colori team) condiviso con la
+// vista gantt via MP.datasetHeader — vedi js/ui/common/dataset-header.js.
+// Le risorse sono raggruppate per team di appartenenza (colore del team come
+// intestazione di gruppo e come barra sulla colonna sigla), con una legenda
+// separata per il grado di allocazione (verde = 1, giallo = 2, rosso > 2).
+// Sola lettura: il CRUD di team e risorse è centralizzato nella pagina
+// dedicata (js/ui/team-risorse/team-risorse-view.js).
 (function (MP) {
   'use strict';
 
-  const { getWeeksInRange, formatWeekLabel } = MP.weekUtils;
+  const { getWeeksInRange, formatWeekLabel, getCurrentWeekIso } = MP.weekUtils;
   const { buildAllocationIndex, findAllocations } = MP.overallocation;
 
-  function headerCell(text, colClass, title) {
+  function headerCell(text, colClass, title, extraClass) {
     const div = document.createElement('div');
-    div.className = `gantt-cell header ${colClass ? 'col-fixed ' + colClass : 'week-cell'}`;
+    div.className = `gantt-cell header ${colClass ? 'col-fixed ' + colClass : 'week-cell'}${extraClass ? ' ' + extraClass : ''}`;
     div.textContent = text;
     if (title) div.title = title;
     return div;
@@ -27,32 +32,70 @@
     return div;
   }
 
+  function loadClass(count) {
+    if (count === 1) return 'load-1';
+    if (count === 2) return 'load-2';
+    if (count > 2) return 'load-3plus';
+    return null;
+  }
+
+  // Riga separatrice piena larghezza che apre un gruppo team: colonne sigla+nome
+  // sticky con nome team e swatch colore, il resto della riga come banda tinteggiata.
+  function teamHeaderRow(team, weeksCount, currentWeekIndex) {
+    const cells = [];
+    const header = document.createElement('div');
+    header.className = 'gantt-cell col-fixed team-group-header';
+    header.style.gridColumn = '1 / span 2';
+    const swatch = document.createElement('span');
+    swatch.className = 'team-swatch';
+    swatch.style.background = team.colore;
+    header.appendChild(swatch);
+    const label = document.createElement('span');
+    label.className = 'cell-text';
+    label.textContent = team.nome;
+    header.appendChild(label);
+    cells.push(header);
+
+    for (let i = 0; i < weeksCount; i++) {
+      const band = document.createElement('div');
+      band.className = 'gantt-cell week-cell team-group-header-band';
+      if (i === currentWeekIndex) band.classList.add('current-week-line');
+      cells.push(band);
+    }
+    return cells;
+  }
+
   function renderResourceLoadView(state) {
     const { dataset } = state;
     const weeks = getWeeksInRange(dataset.manifest.settimane.prima, dataset.manifest.settimane.ultima);
     const index = buildAllocationIndex(dataset);
+    const currentWeek = getCurrentWeekIso();
+    const currentWeekIndex = weeks.indexOf(currentWeek);
 
     const page = document.createElement('div');
     page.className = 'gantt-page';
 
-    const toolbar = document.createElement('div');
-    toolbar.className = 'gantt-toolbar';
-    const info = document.createElement('span');
-    info.className = 'dataset-info';
-    info.textContent = 'Carico risorse per settimana — evidenziato quando una risorsa è allocata su più di un task nella stessa settimana (i task conclusi non contano)';
-    toolbar.appendChild(info);
-    const manageBtn = document.createElement('button');
-    manageBtn.type = 'button';
-    manageBtn.className = 'btn-nuova-risorsa';
-    manageBtn.textContent = 'Gestisci team e risorse →';
-    manageBtn.addEventListener('click', () => {
-      MP.store.setState((s) => ({ ui: { ...s.ui, vistaCorrente: 'team-risorse' } }));
-    });
-    toolbar.appendChild(manageBtn);
-    page.appendChild(toolbar);
+    page.appendChild(MP.datasetHeader.renderDatasetHeader(state));
 
-    const risorse = MP.schema.flattenRisorse(dataset.teamRisorsa);
-    if (risorse.length === 0) {
+    const heatLegend = document.createElement('div');
+    heatLegend.className = 'legend';
+    [
+      ['load-1', '1 allocazione'],
+      ['load-2', '2 allocazioni'],
+      ['load-3plus', '> 2 allocazioni'],
+    ].forEach(([cls, testo]) => {
+      const item = document.createElement('span');
+      item.className = 'legend-item';
+      const sw = document.createElement('span');
+      sw.className = `legend-swatch ${cls}`;
+      item.appendChild(sw);
+      item.appendChild(document.createTextNode(testo));
+      heatLegend.appendChild(item);
+    });
+    page.appendChild(heatLegend);
+
+    const teams = dataset.teamRisorsa.team.filter((t) => (t.risorse || []).length > 0);
+    if (teams.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
       empty.textContent = 'Nessuna risorsa in team-risorse.json.';
@@ -69,23 +112,31 @@
     grid.appendChild(headerCell('Sigla', 'col-1'));
     grid.appendChild(headerCell('Nome', 'col-2'));
     for (const settimana of weeks) {
-      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana));
+      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
     }
 
-    for (const risorsa of risorse) {
-      grid.appendChild(fixedCell(risorsa.sigla, 'col-1'));
-      grid.appendChild(fixedCell(risorsa.nome, 'col-2'));
+    for (const team of teams) {
+      teamHeaderRow(team, weeks.length, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
 
-      for (const settimana of weeks) {
-        const refs = findAllocations(index, risorsa.sigla, settimana);
-        const cell = document.createElement('div');
-        cell.className = 'gantt-cell week-cell load-cell';
-        if (refs.length > 0) {
-          cell.textContent = String(refs.length);
-          cell.title = refs.map((r) => `${r.progettoNome} / BL ${r.baselineVersione} / ${r.taskNome}`).join('\n');
-        }
-        if (refs.length > 1) cell.classList.add('overallocated');
-        grid.appendChild(cell);
+      for (const risorsa of team.risorse) {
+        const col1 = fixedCell(risorsa.sigla, 'col-1');
+        col1.classList.add('team-color-bar');
+        col1.style.setProperty('--team-bar-color', team.colore);
+        grid.appendChild(col1);
+        grid.appendChild(fixedCell(risorsa.nome, 'col-2'));
+
+        weeks.forEach((settimana, i) => {
+          const refs = findAllocations(index, risorsa.sigla, settimana);
+          const cell = document.createElement('div');
+          cell.className = 'gantt-cell week-cell load-cell';
+          if (refs.length > 0) {
+            cell.textContent = String(refs.length);
+            cell.title = refs.map((r) => `${r.progettoNome} / BL ${r.baselineVersione} / ${r.taskNome}`).join('\n');
+            cell.classList.add(loadClass(refs.length));
+          }
+          if (i === currentWeekIndex) cell.classList.add('current-week-line');
+          grid.appendChild(cell);
+        });
       }
     }
 

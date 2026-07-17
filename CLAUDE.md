@@ -127,7 +127,9 @@ resources are nested inside their team in `team-risorse.json`, never listed inde
   (`js/ui/crud/team-crud.js` + `js/ui/crud/resource-crud.js`). The gantt legend
   ([js/ui/gantt/legend.js](js/ui/gantt/legend.js)) and the resource-load view
   ([js/ui/resource-load/resource-load-view.js](js/ui/resource-load/resource-load-view.js)) are
-  **read-only** and link to that page — don't add editing affordances back there.
+  **read-only** — don't add editing affordances back there. Navigation to the team/risorse page
+  is via the hamburger menu ([js/ui/common/toolbar.js](js/ui/common/toolbar.js)) only; neither
+  view duplicates it with its own "manage" button (removed as redundant).
 - A team can have zero resources; deleting a team with resources still assigned is **blocked**
   (`MP.teamCrud.deleteTeam`) — the user must move or delete its resources first.
 - Moving a resource to a different team (`MP.resourceCrud.moveResource`) only rewrites
@@ -192,16 +194,28 @@ inserted at the right point in that list. Layers, low → high:
    plus `*Meta` entries used by save-coordinator for conflict checks. `state.ui.vistaCorrente`
    (`gantt | carico-risorse | team-risorse`) picks the page `js/app.js` renders below the top bar.
 3. **`js/model/`** — pure derivations over an in-memory dataset, no I/O, no DOM:
-   `week-utils.js` (ISO week arithmetic, Monday-based), `overallocation.js` (cross-project
-   sigla×week allocation index, used both by the cell popover warning and the gantt/resource-load
-   highlighting), `validation.js` (orphan `team`/`sigla` detection, plus `findTeamMismatches` for
+   `week-utils.js` (ISO week arithmetic, Monday-based; `getCurrentWeekIso()` returns the Monday of
+   the real-world current week — used by both the gantt and resource-load views to highlight
+   today's column header, class `current-week`, and to draw a bold left-border "today" line down
+   the whole column, class `current-week-line`, computed from the browser's local clock so it's
+   never persisted/stored), `overallocation.js` (cross-project sigla×week allocation index, used
+   both by the cell popover warning and the gantt/resource-load highlighting), `validation.js`
+   (orphan `team`/`sigla` detection, plus `findTeamMismatches` for
    resources allocated under a team they no longer belong to).
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs, used
      only for save conflicts), `toast.js` (non-blocking notifications), `context-menu.js` (the
-     "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu, the
-     single entry point for view switching / backup — reuses `context-menu` rather than
-     duplicating open/close logic), `app-header.js` (static brand header — logo, "Weavo" title,
+     "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu — the
+     single entry point for view switching / backup, reuses `context-menu` rather than
+     duplicating open/close logic — plus `renderPageTitle`, a small label next to the hamburger
+     showing the current view's name, sourced from the same `VIEWS` list used to build the menu
+     so the two never drift apart: `gantt` → "Master Plan", `carico-risorse` → "Carico risorse",
+     `team-risorse` → "Team e risorse"), `dataset-header.js` (the header shared by the gantt and
+     resource-load pages: a `.gantt-toolbar` info line — week range + task-row count + project
+     count, computed via `MP.ganttView.buildRows` so both pages report the exact same numbers —
+     plus the team-color legend from `legend.js`; takes an optional extra element to append to
+     the info line, used by the gantt page only for its "+ Nuovo progetto" button and
+     archiviati/conclusi toggles), `app-header.js` (static brand header — logo, "Weavo" title,
      version, copyright — rendered once into `#app-header` from `app.js`'s `bootstrap()`,
      outside the `state.status` render cycle since its content never changes; present on every
      screen including `not-connected`/`unsupported`/`error`, not just the `ready` views).
@@ -211,7 +225,9 @@ inserted at the right point in that list. Layers, low → high:
      dataset, persisted via `MP.saveCoordinator`/`MP.repository`, then triggers re-render.
    - `gantt/`: the main view. `gantt-view.js` builds the compact grid (CSS Grid + `position:
      sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
-     gantt library, per spec §9); `gantt-row.js` renders one task row; `gantt-cell.js` renders one
+     gantt library, per spec §9) and exports `buildRows` (dataset → visible task rows, honoring
+     `mostraArchiviati`/`mostraConclusi`) so `dataset-header.js` can compute the same row count
+     shown in both pages; `gantt-row.js` renders one task row; `gantt-cell.js` renders one
      week×task cell (double click opens `cell-popover.js` for that single cell, resetting any
      pending range selection first); `cell-popover.js` is the editing popover (team-first, then
      multi-select resources restricted to that team, then milestone flag — milestone only in
@@ -222,19 +238,63 @@ inserted at the right point in that list. Layers, low → high:
      from the last plain-clicked cell ("anchor") and immediately opens `cell-popover.js` in bulk
      mode (`weeksRange`), which applies the same team+resources to every selected week in one
      save (no milestone in bulk mode — see `requirements/backlog.md` on why milestone stays a
-     single-cell/single-baseline concept); `legend.js` renders the color legend dynamically from
-     `team-risorse.json`, read-only (links to the dedicated team/risorse page for editing).
+     single-cell/single-baseline concept); after a successful save (single-cell or bulk),
+     `gantt-view.js` records the saved task+week(s) in a module-level `lastEdited` (with a
+     timer that clears it after ~2.5s, triggering one more re-render to fade it out) and threads
+     it down through `renderTaskRow`/`renderWeekCell` so the just-saved cell(s) get a
+     `cell-just-edited` CSS highlight after the full re-render — needed because `js/app.js`'s
+     `render()` rebuilds the entire DOM tree from scratch on every `MP.store.setState()`, which
+     would otherwise silently drop any highlight applied to the old (now-discarded) elements;
+     `legend.js` renders the color legend dynamically from
+     `team-risorse.json`, read-only, no navigation affordance of its own — reaching the
+     team/risorse page is via the `toolbar.js` hamburger menu only, on every page, not a
+     per-view "manage" button.
    - `resource-load/resource-load-view.js`: per-resource per-week allocation count (replaces the
-     original spreadsheet's `COUNTIF` formulas), highlighting overallocation — read-only, links
-     to the dedicated team/risorse page for editing.
+     original spreadsheet's `COUNTIF` formulas), header shared with the gantt page (see
+     `dataset-header.js` above). Resources are grouped by team (a full-width group-header row per
+     team, plus a team-colored bar on the sigla column — colors always read from
+     `team-risorse.json`, nothing hardcoded), and each week cell is heat-colored by allocation
+     count (green = 1, yellow = 2, red > 2) via the `load-1`/`load-2`/`load-3plus` CSS classes —
+     its own separate legend, appended after the shared header — read-only, no navigation
+     affordance of its own.
    - `team-risorse/team-risorse-view.js`: the dedicated CRUD page for teams and their resources
      (create/rename/recolor/delete team; create/rename/move/delete resource within a team) — the
      only place in the UI where `team-risorse.json` is edited.
-   - `weeks/week-controls.js`: append-only week range extension/trimming (trim only from the
-     tail, with a confirmation if active allocations exist in the weeks being removed).
+   - `weeks/week-controls.js`: exports two standalone edge-button renderers (no combined control
+     bar, no count input). `gantt-view.js` places them **inside the weeks grid itself**, in an
+     extra row above the column-label row (`.gantt-cell.week-edge-row`, class `has-week-edge-row`
+     on the grid shifts the real header row's sticky `top` down by one row-height to make room) —
+     Excel-style table-resize handles that cost one row of *vertical* space rather than any
+     *horizontal* space, so the visible week count in the scrollable area is never reduced. The
+     grid gains **two extra 46px tracks** beyond the real `weeks.length` ones
+     (`repeat(weeks.length + 2, 46px)`), one immediately before the first week and one immediately
+     after the last — dedicated to these buttons, never overlapping a real week column.
+     `gantt-row.js`/`gantt-cell.js` know nothing about this: they still return exactly
+     `3 + weeks.length` cells per row; `gantt-view.js` alone inserts a blank filler cell before and
+     after each row's real cells (mirroring that row's `row-project-start`/`row-baseline-start`/
+     `row-baseline-alt` classes for a clean border) to keep every row's cell count matching the
+     grid's column count. `renderRemoveWeekButton` sits in the dedicated track right before the
+     first week — **not** sticky-left, so it scrolls away with the rest of the weeks track as soon
+     as the user scrolls right, unlike the 3 real frozen columns to its left (whose row-1 corner
+     cells are blank filler, frozen on both axes like the header row's corner, never containing a
+     button); it removes `manifest.settimane.prima` (head, past) after an always-shown explicit
+     `window.confirm`, with allocation detail in the message when the week being removed isn't
+     empty. `renderAddWeekButton` sits in the dedicated track right after the last week — also not
+     sticky, so it only scrolls into view once the user has scrolled all the way past the real
+     last week — and extends `manifest.settimane.ultima` by one week (tail, future) with no
+     confirmation needed. Always exactly one week per click; never trims from the tail or adds at
+     the head.
 5. **`js/app.js`** — entry point. Subscribes to the store, maps `state.status` to a render
    function, and owns the initial directory-picker flow (`connectToDirectory`). No persistence of
    the picked handle across sessions is possible (see Hard Constraints above) — this is expected.
+   Because `render()` does `appEl.innerHTML = ''` and rebuilds the whole tree on every state
+   change, it explicitly saves the `.gantt-scroll` container's `scrollLeft`/`scrollTop` (a class
+   shared by the gantt and carico-risorse pages) before clearing and restores it on the freshly
+   rendered element afterward — otherwise every cell edit (which calls `setState({})` to
+   re-notify subscribers after mutating the in-memory dataset) would snap the grid back to
+   scroll position 0,0, hiding whatever cell the user just edited if they were scrolled away from
+   the top-left. See also the `lastEdited` highlight mechanism in `gantt-view.js` above, which
+   solves the companion problem of visually losing track of the edited cell.
 
 ### Where to make common changes
 

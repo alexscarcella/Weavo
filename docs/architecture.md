@@ -46,7 +46,7 @@ flowchart TB
         validation["validation.js"]
     end
     subgraph ui["js/ui — rendering + events"]
-        common["common/\nmodal, toast, context-menu, toolbar, app-header"]
+        common["common/\nmodal, toast, context-menu, toolbar, dataset-header, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
         gantt["gantt/\nmain view, cell popover, legend"]
         other["resource-load/, team-risorse/, weeks/"]
@@ -73,9 +73,12 @@ flowchart TB
    cross-project overallocation index, and non-blocking validation (orphan references, team
    mismatches). No I/O, no DOM access, so these are trivially unit-testable in isolation.
 4. **`js/ui/`** — rendering and event wiring, split by concern rather than by component
-   framework conventions: `common/` (modal, toast, context menu, toolbar, app-header), `crud/`
-   (one file per entity), `gantt/` (the main grid view), plus one folder per secondary view
-   (resource load, team/resource management, week-range controls).
+   framework conventions: `common/` (modal, toast, context menu, toolbar — including the current
+   page's title next to the hamburger button — dataset-header, app-header), `crud/` (one file per
+   entity), `gantt/` (the main grid view), plus one folder per secondary view (resource load,
+   team/resource management, week-range controls). The gantt and resource-load pages share a
+   header (week range, task/project counts, color legend) via `common/dataset-header.js`, so the
+   two views always report identical numbers.
 5. **`js/app.js`** — the entry point. Subscribes to the store, maps `state.status` to a render
    function, and owns the initial directory-picker flow. Also renders the static brand header
    (`MP.appHeader`) once at startup into `#app-header`, a sibling of `#app` — it sits outside the
@@ -116,6 +119,13 @@ lifecycle to track.
 Event handlers attached during rendering call into `js/ui/crud/*.js`, which mutate the in-memory
 dataset, persist the change via `MP.saveCoordinator`, and then call `setState(...)` to trigger a
 re-render — a one-way data flow (state → render → user action → mutation → persist → state).
+
+Since the full rebuild replaces every DOM node, anything not part of `state` would otherwise be
+lost on each re-render — notably scroll position. `js/app.js`'s `render()` explicitly saves and
+restores the scroll offset of the gantt/resource-load grid's scroll container across a rebuild,
+and the gantt view separately tracks which cell was last saved so it can be briefly
+re-highlighted after the rebuild, so that editing a week cell doesn't visually "jump" the grid
+away from the cell just edited.
 
 ## Where to look for a given change
 

@@ -81,7 +81,7 @@
         },
         {
           "nome": "Bug Fixing",
-          "concluso": true,
+          "concluso": false,
           "settimane": {
             "2026-03-23": {
               "team": "run",
@@ -155,7 +155,7 @@
         },
         {
           "nome": "Database Schema Migration",
-          "concluso": true,
+          "concluso": false,
           "settimane": {
             "2026-02-23": {
               "team": "devops",
@@ -288,7 +288,7 @@
         },
         {
           "nome": "Disaster Recovery Plan",
-          "concluso": true,
+          "concluso": false,
           "settimane": {
             "2026-06-08": {
               "team": "devops",
@@ -356,7 +356,7 @@
         },
         {
           "nome": "Security Audit",
-          "concluso": true,
+          "concluso": false,
           "settimane": {
             "2026-05-04": {
               "team": "build",
