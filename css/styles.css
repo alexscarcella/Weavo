@@ -321,6 +321,12 @@ code {
   width: 100%; font: inherit; padding: 0.5rem; border: 1px solid #bbb; border-radius: 4px;
   resize: vertical;
 }
+.modal-color-row { display: flex; align-items: center; gap: 0.6rem; }
+.modal-color-swatch {
+  width: 2.4rem; height: 2.4rem; padding: 0; border: 1px solid #bbb; border-radius: 4px;
+  cursor: pointer; flex: none;
+}
+.modal-color-hex { flex: 1; font-family: monospace; text-transform: uppercase; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1rem; }
 .modal-btn-overwrite, .modal-btn-save { background: #2E86FF; color: #fff; border-color: #2E86FF; }
 .modal-conflict .modal-btn-overwrite { background: #b00020; border-color: #b00020; }

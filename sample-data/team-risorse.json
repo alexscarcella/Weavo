@@ -61,7 +61,7 @@
     {
       "codice": "devops",
       "nome": "DevOps",
-      "colore": "#2E86FF",
+      "colore": "#8ab0e5",
       "risorse": [
         {
           "sigla": "JA",
@@ -126,7 +126,7 @@
     {
       "codice": "parc",
       "nome": "Xerox PARC",
-      "colore": "#2FBBFF",
+      "colore": "#dc54de",
       "risorse": [
         {
           "sigla": "AK",

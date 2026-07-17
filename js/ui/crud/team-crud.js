@@ -31,7 +31,7 @@
     }
     const nome = nomeInput !== undefined ? nomeInput : window.prompt('Nome leggibile del team:');
     if (!nome || !nome.trim()) return;
-    const colore = coloreInput !== undefined ? coloreInput : window.prompt('Colore esadecimale (es. #2E86FF):', '#2E86FF');
+    const colore = coloreInput !== undefined ? coloreInput : await MP.modal.promptColor({ title: 'Colore del nuovo team', value: '#2E86FF' });
     if (!colore || !colore.trim()) return;
     state.dataset.teamRisorsa.team.push({ codice: codiceTrim, nome: nome.trim(), colore: colore.trim(), risorse: [] });
     await persist(state);
@@ -49,7 +49,7 @@
   async function recolorTeam(state, codice, nuovoColoreInput) {
     const team = MP.schema.findTeamByCodice(state.dataset.teamRisorsa, codice);
     if (!team) return;
-    const nuovoColore = nuovoColoreInput !== undefined ? nuovoColoreInput : window.prompt('Nuovo colore esadecimale:', team.colore);
+    const nuovoColore = nuovoColoreInput !== undefined ? nuovoColoreInput : await MP.modal.promptColor({ title: `Colore del team "${team.nome}"`, value: team.colore });
     if (!nuovoColore || !nuovoColore.trim()) return;
     team.colore = nuovoColore.trim();
     await persist(state);

@@ -82,5 +82,60 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText };
+  const HEX_RE = /^#[0-9a-fA-F]{6}$/;
+
+  // Selezione colore via color-picker nativo (input type="color"), con campo
+  // testo esadecimale sincronizzato per chi vuole incollare/leggere il valore
+  // esatto. Risolve con l'esadecimale scelto, o null se annullato.
+  function promptColor({ title, value = '#2E86FF' } = {}) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      const box = document.createElement('div');
+      box.className = 'modal-box';
+      const initial = HEX_RE.test(value) ? value : '#2E86FF';
+      box.innerHTML = `
+        <h2>${title}</h2>
+        <div class="modal-color-row">
+          <input type="color" class="modal-color-swatch" value="${initial}">
+          <input type="text" class="modal-input modal-color-hex" value="${initial}" maxlength="7">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Annulla</button>
+          <button type="button" class="modal-btn-save">Salva</button>
+        </div>`;
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      const swatchInput = box.querySelector('.modal-color-swatch');
+      const hexInput = box.querySelector('.modal-color-hex');
+
+      swatchInput.addEventListener('input', () => {
+        hexInput.value = swatchInput.value;
+      });
+      hexInput.addEventListener('input', () => {
+        if (HEX_RE.test(hexInput.value)) swatchInput.value = hexInput.value;
+      });
+      hexInput.focus();
+      hexInput.select();
+
+      const close = (result) => {
+        overlay.remove();
+        resolve(result);
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
+      box.querySelector('.modal-btn-save').addEventListener('click', () => {
+        close(HEX_RE.test(hexInput.value) ? hexInput.value : swatchInput.value);
+      });
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close(null);
+      });
+      hexInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close(null);
+        else if (e.key === 'Enter') close(HEX_RE.test(hexInput.value) ? hexInput.value : swatchInput.value);
+      });
+    });
+  }
+
+  MP.modal = { confirmConflict, promptText, promptColor };
 })(window.MP = window.MP || {});
