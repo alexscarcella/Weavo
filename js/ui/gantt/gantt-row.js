@@ -39,8 +39,8 @@
         { label: 'Team di progetto…', onClick: () => MP.projectCrud.editTeam(state, file) },
         { label: progetto.archiviato ? 'Riattiva progetto' : 'Archivia progetto', onClick: () => MP.projectCrud.toggleArchivio(state, file) },
         { label: '+ Nuova baseline', onClick: () => MP.baselineCrud.createBaseline(state, file) },
-        { label: 'Sposta su', onClick: () => MP.projectCrud.moveProject(state, file, -1) },
-        { label: 'Sposta giù', onClick: () => MP.projectCrud.moveProject(state, file, 1) },
+        { label: '↑', title: 'Sposta su', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, -1) },
+        { label: '↓', title: 'Sposta giù', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, 1) },
         { label: 'Elimina progetto', danger: true, onClick: () => MP.projectCrud.deleteProject(state, file) },
       ]));
     }
@@ -51,8 +51,8 @@
       col2.appendChild(menuButton([
         { label: 'Rinomina baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
         { label: '+ Nuovo task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },
-        { label: 'Sposta su', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, -1) },
-        { label: 'Sposta giù', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, 1) },
+        { label: '↑', title: 'Sposta su', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, -1) },
+        { label: '↓', title: 'Sposta giù', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, 1) },
         { label: 'Elimina baseline', danger: true, onClick: () => MP.baselineCrud.deleteBaseline(state, file, baseline) },
       ]));
     }
@@ -78,8 +78,8 @@
 
       col3.appendChild(menuButton([
         { label: 'Rinomina task', onClick: () => MP.taskCrud.renameTask(state, file, task) },
-        { label: 'Sposta su', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, -1) },
-        { label: 'Sposta giù', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, 1) },
+        { label: '↑', title: 'Sposta su (attraversa le baseline)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, -1) },
+        { label: '↓', title: 'Sposta giù (attraversa le baseline)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, 1) },
         { label: 'Elimina task', danger: true, onClick: () => MP.taskCrud.deleteTask(state, file, baseline, task) },
       ]));
     } else if (baseline) {

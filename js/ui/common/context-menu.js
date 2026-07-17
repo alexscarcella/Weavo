@@ -28,6 +28,7 @@
       btn.type = 'button';
       btn.className = action.danger ? 'context-menu-item danger' : 'context-menu-item';
       if (action.className) btn.classList.add(action.className);
+      if (action.title) btn.title = action.title;
       btn.textContent = action.label;
       btn.addEventListener('click', () => {
         closeExisting();

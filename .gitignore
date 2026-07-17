@@ -12,3 +12,9 @@ sample-data/backup/
 
 # Node (scripts/import-excel is a dev-time-only tool with its own deps)
 node_modules/
+
+# One-shot Excel import output: may contain a full real copy of project data — never version-controlled
+import-output/
+
+# Real sigla->team mapping used to resolve the Excel import's color-inference gaps — real personnel data
+scripts/import-excel/team-overrides.json

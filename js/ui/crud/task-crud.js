@@ -35,12 +35,29 @@
     await persistProject(state, file);
   }
 
+  // Sposta un task su/giù nella sua baseline; se il task è già in cima/fondo,
+  // attraversa il confine verso la baseline precedente/successiva dello
+  // stesso progetto (append in fondo se si sale, in testa se si scende, così
+  // il task si posiziona subito accanto al confine attraversato). Nessun-op
+  // se non c'è una baseline adiacente in quella direzione.
   async function moveTask(state, file, baseline, task, direction) {
     const arr = baseline.task;
     const idx = arr.indexOf(task);
+    if (idx < 0) return;
     const swapWith = idx + direction;
-    if (idx < 0 || swapWith < 0 || swapWith >= arr.length) return;
-    [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
+    if (swapWith >= 0 && swapWith < arr.length) {
+      [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
+      await persistProject(state, file);
+      return;
+    }
+    const progetto = state.dataset.progetti.get(file).data;
+    const baselineIdx = progetto.baseline.indexOf(baseline);
+    const targetBaselineIdx = baselineIdx + direction;
+    if (targetBaselineIdx < 0 || targetBaselineIdx >= progetto.baseline.length) return;
+    const targetBaseline = progetto.baseline[targetBaselineIdx];
+    arr.splice(idx, 1);
+    if (direction < 0) targetBaseline.task.push(task);
+    else targetBaseline.task.unshift(task);
     await persistProject(state, file);
   }
 

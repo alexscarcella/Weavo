@@ -341,6 +341,33 @@
           }
         },
         {
+          "nome": "Checkout Module Development",
+          "concluso": true,
+          "settimane": {
+            "2026-05-04": {
+              "team": "vv",
+              "risorse": [
+                "BL"
+              ]
+            },
+            "2026-06-08": {
+              "team": "dev",
+              "risorse": [
+                "GH"
+              ]
+            },
+            "2026-05-18": {
+              "team": "run",
+              "risorse": [
+                "WV"
+              ]
+            },
+            "2026-06-15": {
+              "milestone": true
+            }
+          }
+        },
+        {
           "nome": "Backend Integration",
           "concluso": false,
           "settimane": {
@@ -361,33 +388,6 @@
               "risorse": [
                 "FA",
                 "BL"
-              ]
-            },
-            "2026-06-15": {
-              "milestone": true
-            }
-          }
-        },
-        {
-          "nome": "Checkout Module Development",
-          "concluso": true,
-          "settimane": {
-            "2026-05-04": {
-              "team": "vv",
-              "risorse": [
-                "BL"
-              ]
-            },
-            "2026-06-08": {
-              "team": "dev",
-              "risorse": [
-                "GH"
-              ]
-            },
-            "2026-05-18": {
-              "team": "run",
-              "risorse": [
-                "WV"
               ]
             },
             "2026-06-15": {
@@ -418,7 +418,7 @@
         },
         {
           "nome": "Code Review",
-          "concluso": false,
+          "concluso": true,
           "settimane": {
             "2026-10-12": {
               "team": "vv",
@@ -483,7 +483,7 @@
         },
         {
           "nome": "CI/CD Pipeline Setup",
-          "concluso": false,
+          "concluso": true,
           "settimane": {
             "2026-09-07": {
               "team": "devops",

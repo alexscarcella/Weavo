@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "settimane": {
     "prima": "2025-12-08",
-    "ultima": "2027-01-11"
+    "ultima": "2027-01-18"
   },
   "progetti": [
     {
@@ -14,12 +14,12 @@
       "nome": "FABRIKAM PAYMENTS PLATFORM"
     },
     {
-      "file": "progetti/northwind-traders-checkout.json",
-      "nome": "NORTHWIND TRADERS CHECKOUT"
-    },
-    {
       "file": "progetti/adventure-works-booking.json",
       "nome": "ADVENTURE WORKS BOOKING"
+    },
+    {
+      "file": "progetti/northwind-traders-checkout.json",
+      "nome": "NORTHWIND TRADERS CHECKOUT"
     },
     {
       "file": "progetti/woodgrove-bank-portal.json",
