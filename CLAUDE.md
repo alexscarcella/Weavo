@@ -78,6 +78,20 @@ style path (`/tmp/...`) resolves incorrectly — always use a native Windows pat
 app) for manually checking whether File System Access API directory permissions survive a
 browser/PC restart on a real network/OneDrive folder — unrelated to the main app's code path.
 
+### Versioned release packaging (GitHub Actions)
+
+[.github/workflows/release.yml](.github/workflows/release.yml) publishes a downloadable, versioned
+zip for end users who just want to run the app (not clone the repo): pushing a git tag `vX.Y`
+triggers the workflow, which (1) fails the build if `APP_VERSION` in
+[js/ui/common/app-header.js](js/ui/common/app-header.js) doesn't match the pushed tag, (2) builds
+`weavo-vX.Y.zip` via `git archive` scoped to `index.html css js sample-data` (so untracked/gitignored
+content like `sample-data/backup/` can never end up in it), and (3) creates a GitHub Release with
+that zip attached via `softprops/action-gh-release`. `docs/`, `README.md`, `requirements/`,
+`scripts/`, and `spike-fsa/` are deliberately excluded from the zip — they're dev-facing, not
+needed to run the app. Per-release steps are manual and undocumented in code: bump `APP_VERSION`,
+commit, then `git tag -a vX.Y -m vX.Y && git push origin vX.Y`. Never reuse/force-push an existing
+tag to fix a bad release — delete it (local + remote) and the GitHub Release, then re-tag.
+
 ### Excel import script (dev-time only, not part of the app runtime)
 
 [scripts/import-excel/](scripts/import-excel/) is a one-shot Node script (uses `exceljs`, needs

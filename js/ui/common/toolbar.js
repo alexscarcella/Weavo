@@ -30,7 +30,10 @@
       label: state.ui.vistaCorrente === v.id ? `✓ ${v.label}` : v.label,
       onClick: () => MP.store.setState((s) => ({ ui: { ...s.ui, vistaCorrente: v.id } })),
     }));
-    return [...viewActions, { label: 'Backup', onClick: () => runBackup(state) }];
+    return [
+      ...viewActions,
+      { label: '💾 Backup', onClick: () => runBackup(state), className: 'context-menu-item-action', separator: true },
+    ];
   }
 
   async function runBackup(state) {

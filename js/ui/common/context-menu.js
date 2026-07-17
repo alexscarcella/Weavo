@@ -19,9 +19,15 @@
     const menu = document.createElement('div');
     menu.className = 'context-menu';
     actions.forEach((action) => {
+      if (action.separator) {
+        const sep = document.createElement('div');
+        sep.className = 'context-menu-separator';
+        menu.appendChild(sep);
+      }
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = action.danger ? 'context-menu-item danger' : 'context-menu-item';
+      if (action.className) btn.classList.add(action.className);
       btn.textContent = action.label;
       btn.addEventListener('click', () => {
         closeExisting();

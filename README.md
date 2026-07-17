@@ -36,6 +36,13 @@ edited from within the app and rendered dynamically everywhere (legend, popovers
 
 ## Getting started
 
+**Just want to run it?** Download the latest `weavo-vX.Y.zip` from the
+[Releases page](https://github.com/alexscarcella/Weavo/releases), unzip it, and open
+`index.html`. It already includes a `sample-data/` folder so you can try the app immediately.
+(The repo is private, so this only works for accounts that already have access to it.)
+
+Prefer working from source (e.g. to track `main` or contribute)?
+
 1. Clone this repository.
 2. Open `index.html` directly in Chrome or Edge — no server, no install step.
 3. When prompted, pick a data folder. To try the app without setting up your own data, point it

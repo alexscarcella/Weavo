@@ -362,6 +362,9 @@ code {
 .context-menu-item:hover { background: #eef1f5; }
 .context-menu-item.danger { color: #b00020; }
 .context-menu-item.danger:hover { background: #fdecea; }
+.context-menu-separator { border-top: 1px solid #e0e0e0; margin: 0.25rem 0; }
+.context-menu-item-action { font-weight: 600; color: #2E86FF; }
+.context-menu-item-action:hover { background: #e8f1ff; }
 
 /* --- Pagina "Team e risorse" --- */
 .team-risorse-page { max-width: 640px; }

@@ -22,6 +22,12 @@ same place:
    Google Drive, etc.) all work, since the app only needs regular filesystem read/write access to
    it, nothing cloud-provider-specific.
 
+Each tagged version (`vX.Y`) also publishes a ready-made zip as a
+[GitHub Release](https://github.com/alexscarcella/Weavo/releases) asset (`weavo-vX.Y.zip`),
+containing exactly `index.html`, `css/`, `js/`, and `sample-data/` — the same static files
+described above, just pre-packaged for someone who doesn't want to clone the repository.
+There's still nothing to build: unzip it and open `index.html`.
+
 Nothing about the app cares whether it's opened via a `file://` path or served over `http(s)://`
 by a plain static file server — both work identically, as long as the browser is Chromium-based
 (see [security.md](security.md#browser-requirement)).
