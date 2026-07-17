@@ -36,6 +36,33 @@ resolves when the page is opened from a `file://` origin (verified, not assumed)
 `file://`-only distribution model entirely (e.g. running a local dev server), which is a real
 scope change, not a bug fix.
 
+`js/data/fs-access.js`'s `pickDirectory()` passes a stable `id` to `showDirectoryPicker()`,
+which per spec should make Chrome/Edge remember, per browser profile, the last folder chosen
+with that `id` and reopen the native dialog already navigated there. **Verified empirically
+(July 2026) that this does not happen under `file://`** — even reloading the page within the
+same browser session (no restart needed) is enough to reset the dialog to its default location.
+Same likely root cause as the IndexedDB failure above: `file://` pages don't get a stable,
+persistent storage origin. The option is left in place (harmless, spec-correct, might start
+working if the app were ever served from a non-`file://` origin) but must not be presented to
+the user as reducing clicks — it doesn't, today.
+
+The one mitigation that *does* work: `js/app.js` saves the *name* of the last successfully
+connected folder (a plain string, not the handle) to `localStorage` and shows it as a "last
+used" hint next to the picker button — purely informational, to help recognize the right folder
+among similarly-named ones. It doesn't save any clicks either, but at least reduces the chance
+of picking the wrong folder. It also can't be shared team-wide: each user's OneDrive/network
+path can differ, so this only ever helps one user on one machine, not a cross-user "recent
+folders" list. The hint can only ever show the folder's own name (`handle.name`), never its
+absolute filesystem path — the File System Access API never exposes that, by platform design
+(sandboxing), regardless of `file://` vs. a served origin. There's no way around this from JS.
+
+Bottom line: there is currently **no way to reduce the number of clicks** in the folder-picker
+flow while staying on pure `file://` distribution. Actually cutting clicks (e.g. real
+cross-session handle persistence via IndexedDB, or a working `id`-remembered location) would
+require serving the app from a real origin (`http(s)://`, even a trivial local static server)
+instead of opening `index.html` directly — an explicit scope change per `CLAUDE.md`, not
+something to assume.
+
 ## Backups
 
 Backups are **manual, not automatic**: the toolbar exposes an action that snapshots

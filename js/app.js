@@ -5,7 +5,13 @@
 // file:// (indexedDB.open() resta bloccato, nessun evento success/error) e
 // localStorage non può contenere un FileSystemDirectoryHandle. L'utente
 // seleziona la cartella dati a ogni apertura dell'app (comportamento noto e
-// accettato dalla spec, §5).
+// accettato dalla spec, §5). L'opzione `id` passata a showDirectoryPicker in
+// fs-access.js, che in teoria dovrebbe far riaprire il dialogo già navigato
+// sull'ultima cartella scelta, verificato che NON funziona sotto file:// (vedi
+// commento in fs-access.js) — non riduce i click, non promettere il contrario
+// a schermo. L'unica vera mitigazione è il nome dell'ultima cartella connessa
+// con successo, salvato in localStorage (solo il nome, mai l'handle) e
+// mostrato come promemoria per riconoscere la cartella giusta.
 (function (MP) {
   'use strict';
 
@@ -14,6 +20,7 @@
   const { getState, setState, subscribe } = MP.store;
 
   const appEl = document.getElementById('app');
+  const LAST_FOLDER_KEY = 'mp.lastFolderName';
 
   function render() {
     const state = getState();
@@ -44,14 +51,29 @@
   function renderNotConnected() {
     const div = document.createElement('div');
     div.className = 'connect-panel';
+    // Solo il nome della cartella (handle.name), mai il percorso assoluto: la File
+    // System Access API non lo espone mai (sandboxing di piattaforma, non un
+    // limite di questa app) — niente `.path` su FileSystemHandle, per nessun
+    // motivo aggirabile lato JS.
+    const lastFolderName = localStorage.getItem(LAST_FOLDER_KEY);
+    const lastFolderHint = lastFolderName
+      ? `<p class="hint">Ultima cartella usata su questo PC: <strong>${escapeHtml(lastFolderName)}</strong></p>`
+      : '';
     div.innerHTML = `
-      <h1>Master Plan</h1>
+      <h1>Connetti la cartella dati</h1>
       <p>Seleziona la cartella dati (es. <code>/masterplan-data/</code>) condivisa per iniziare.</p>
       <p class="hint">Il browser richiede di riselezionare la cartella a ogni apertura dell'app:
       è un limite noto della tecnologia usata, non un errore.</p>
+      ${lastFolderHint}
       <button id="btn-connect">Seleziona cartella dati</button>`;
     div.querySelector('#btn-connect').addEventListener('click', connectToDirectory);
     return div;
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   function renderMessage(text) {
@@ -90,6 +112,7 @@
     try {
       const handle = await fsAccess.pickDirectory();
       const dataset = await loadDataset(handle);
+      localStorage.setItem(LAST_FOLDER_KEY, handle.name);
       setState({ status: 'ready', dirHandle: handle, dataset });
     } catch (e) {
       if (e.name === 'AbortError') {
@@ -101,6 +124,7 @@
   }
 
   function bootstrap() {
+    document.getElementById('app-header').appendChild(MP.appHeader.renderHeader());
     if (!fsAccess.isSupported()) {
       setState({ status: 'unsupported' });
       return;

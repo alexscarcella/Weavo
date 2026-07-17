@@ -155,7 +155,14 @@ inserted at the right point in that list. Layers, low → high:
 1. **`js/data/`** — persistence primitives and dataset shape.
    - `schema.js`: canonical shape of every JSON file + factory/validity helpers (no I/O).
    - `fs-access.js`: thin wrapper over the browser File System Access API (permissions,
-     read/write text file, list dir) — no application logic.
+     read/write text file, list dir) — no application logic. `pickDirectory()` passes a stable
+     `id` to `showDirectoryPicker()`; per spec this should make Chrome/Edge reopen the dialog at
+     the last-used folder, but **verified empirically that it does not under `file://`** (fails
+     even on a same-session page reload, no browser restart needed) — same likely cause as the
+     IndexedDB limitation below (no stable storage origin for `file://` pages). Left in place as
+     harmless/spec-correct but must not be presented to the user as reducing clicks. See
+     docs/deployment.md "No persisted connection" for the full writeup and why a real
+     cross-session/cross-user "recent folders" feature is still out of scope.
    - `repository.js`: composes `fs-access` into whole-dataset load (`loadDataset`) and raw
      per-file save/backup operations, with no conflict checking of its own.
    - `save-coordinator.js`: the **only** place that should perform a write in response to a user
@@ -180,7 +187,10 @@ inserted at the right point in that list. Layers, low → high:
      only for save conflicts), `toast.js` (non-blocking notifications), `context-menu.js` (the
      "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu, the
      single entry point for view switching / backup — reuses `context-menu` rather than
-     duplicating open/close logic).
+     duplicating open/close logic), `app-header.js` (static brand header — logo, "Weavo" title,
+     version, copyright — rendered once into `#app-header` from `app.js`'s `bootstrap()`,
+     outside the `state.status` render cycle since its content never changes; present on every
+     screen including `not-connected`/`unsupported`/`error`, not just the `ready` views).
    - `crud/`: one file per entity (`project-crud.js`, `baseline-crud.js`, `task-crud.js`,
      `resource-crud.js`, `team-crud.js`). Each is create/rename/delete/reorder (+ `toggleConcluso`
      for tasks, `recolorTeam`/`moveResource` for team/risorse) directly against the in-memory

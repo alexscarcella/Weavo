@@ -7,8 +7,18 @@
     return 'showDirectoryPicker' in window;
   }
 
+  // `id` dovrebbe far sì che Chrome/Edge ricordino, per profilo browser,
+  // l'ultima cartella scelta con questo stesso id e riaprano il dialogo già
+  // navigato lì. Verificato empiricamente (luglio 2026) che sotto file:// NON
+  // funziona: anche solo ricaricando la pagina nella stessa sessione, senza
+  // chiudere il browser, il dialogo riparte dalla posizione di default —
+  // stessa causa probabile dell'origine opaca/non persistente che blocca
+  // IndexedDB (vedi Hard constraints in CLAUDE.md). Lasciato perché innocuo e
+  // conforme a spec (potrebbe iniziare a funzionare se l'app venisse mai
+  // servita da un'origine non-file://), ma non va presentato all'utente come
+  // una riduzione di click. Vedi docs/deployment.md "No persisted connection".
   async function pickDirectory() {
-    return window.showDirectoryPicker({ mode: 'readwrite' });
+    return window.showDirectoryPicker({ mode: 'readwrite', id: 'masterplan-dati' });
   }
 
   async function queryPermissionSilently(handle, mode = 'readwrite') {

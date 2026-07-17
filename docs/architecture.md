@@ -46,7 +46,7 @@ flowchart TB
         validation["validation.js"]
     end
     subgraph ui["js/ui — rendering + events"]
-        common["common/\nmodal, toast, context-menu, toolbar"]
+        common["common/\nmodal, toast, context-menu, toolbar, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
         gantt["gantt/\nmain view, cell popover, legend"]
         other["resource-load/, team-risorse/, weeks/"]
@@ -73,11 +73,14 @@ flowchart TB
    cross-project overallocation index, and non-blocking validation (orphan references, team
    mismatches). No I/O, no DOM access, so these are trivially unit-testable in isolation.
 4. **`js/ui/`** — rendering and event wiring, split by concern rather than by component
-   framework conventions: `common/` (modal, toast, context menu, toolbar), `crud/` (one file per
-   entity), `gantt/` (the main grid view), plus one folder per secondary view (resource load,
-   team/resource management, week-range controls).
+   framework conventions: `common/` (modal, toast, context menu, toolbar, app-header), `crud/`
+   (one file per entity), `gantt/` (the main grid view), plus one folder per secondary view
+   (resource load, team/resource management, week-range controls).
 5. **`js/app.js`** — the entry point. Subscribes to the store, maps `state.status` to a render
-   function, and owns the initial directory-picker flow.
+   function, and owns the initial directory-picker flow. Also renders the static brand header
+   (`MP.appHeader`) once at startup into `#app-header`, a sibling of `#app` — it sits outside the
+   `state.status` render cycle since its content (logo, product name, version, copyright) never
+   changes, and is therefore present on every screen, including `unsupported`/`not-connected`.
 
 ## Application state machine
 
