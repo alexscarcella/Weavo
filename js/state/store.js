@@ -2,6 +2,8 @@
 (function (MP) {
   'use strict';
 
+  const AUTO_BACKUP_KEY = 'mp.autoBackupOnExit';
+
   let state = {
     status: 'init', // init | unsupported | not-connected | loading | ready | error
     dirHandle: null,
@@ -11,6 +13,7 @@
       vistaCorrente: 'gantt', // gantt | carico-risorse | milestones | team-risorse
       mostraArchiviati: false,
       mostraConclusi: false,
+      autoBackupOnExit: localStorage.getItem(AUTO_BACKUP_KEY) === 'true',
     },
   };
 
@@ -31,5 +34,12 @@
     return () => listeners.delete(listener);
   }
 
-  MP.store = { getState, setState, subscribe };
+  // Unico punto che scrive mp.autoBackupOnExit: evita che il valore in localStorage
+  // e state.ui.autoBackupOnExit possano andare fuori sincrono.
+  function setAutoBackupOnExit(value) {
+    localStorage.setItem(AUTO_BACKUP_KEY, String(value));
+    setState((s) => ({ ui: { ...s.ui, autoBackupOnExit: value } }));
+  }
+
+  MP.store = { getState, setState, subscribe, setAutoBackupOnExit };
 })(window.MP = window.MP || {});

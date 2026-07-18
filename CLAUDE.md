@@ -260,7 +260,12 @@ inserted at the right point in that list. Layers, low → high:
    `ready`) holds `{ manifest, teamRisorsa, progetti: Map<file, {data, rawText}>, warnings }`
    plus `*Meta` entries used by save-coordinator for conflict checks. `state.ui.vistaCorrente`
    (`gantt | carico-risorse | milestones | team-risorse`) picks the page `js/app.js` renders below
-   the top bar.
+   the top bar. `state.ui.autoBackupOnExit` (default `false`) is the only `ui.*` flag persisted
+   across sessions — seeded from and written through `localStorage['mp.autoBackupOnExit']` via the
+   store's own `setAutoBackupOnExit(value)` (not `setState` directly, so the flag and its
+   `localStorage` copy can't drift), read once at module load since `store.js` loads before every
+   other script that touches it. Toggled from `toolbar.js`'s hamburger menu; consumed by
+   `app.js`'s `pagehide` listener — see below.
 3. **`js/model/`** — pure derivations over an in-memory dataset, no I/O, no DOM:
    `week-utils.js` (ISO week arithmetic, Monday-based; `getCurrentWeekIso()` returns the Monday of
    the real-world current week — used by both the gantt and resource-load views to highlight
@@ -290,7 +295,12 @@ inserted at the right point in that list. Layers, low → high:
      multi-field use case so far), `toast.js` (non-blocking notifications), `context-menu.js` (the
      "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu — the
      single entry point for view switching / backup / "+ New project" / "Change data folder…",
-     reuses `context-menu` rather than duplicating open/close logic; project creation is reachable
+     reuses `context-menu` rather than duplicating open/close logic; next to "💾 Backup" sits a
+     "Backup on exit" toggle (`state.ui.autoBackupOnExit`, same ✓-prefix convention as the
+     view-switch rows above it) that, when on, makes `app.js`'s `pagehide` listener call
+     `MP.repository.createBackup` automatically on tab/window close — best-effort only, since a
+     browser doesn't guarantee async work finishes once a page is actually unloading, see
+     docs/deployment.md "Backups"; project creation is reachable
      from every page, not just the gantt one, so after a successful create it switches
      `state.ui.vistaCorrente` to `gantt` so the result is visible; "Change data folder…" (after a
      `window.confirm`) resets `state` to `{ status: 'not-connected', dirHandle: null, dataset: null }`
@@ -423,6 +433,12 @@ inserted at the right point in that list. Layers, low → high:
 5. **`js/app.js`** — entry point. Subscribes to the store, maps `state.status` to a render
    function, and owns the initial directory-picker flow (`connectToDirectory`). No persistence of
    the picked handle across sessions is possible (see Hard Constraints above) — this is expected.
+   Also registers a single module-level `pagehide` listener (not inside `render()`, so it's
+   attached once): when `state.ui.autoBackupOnExit` is on and the app is `ready` with a connected
+   `dirHandle`, it fires `MP.repository.createBackup` fire-and-forget — the listener can't `await`
+   it, since nothing can delay the browser tearing down the page, so this is best-effort only (see
+   docs/deployment.md "Backups"). A module-level `backupOnExitInFlight` flag guards against
+   `pagehide` firing again (e.g. bfcache entry) while a backup from the same exit is still running.
    Because `render()` does `appEl.innerHTML = ''` and rebuilds the whole tree on every state
    change, it explicitly saves the `.gantt-scroll` container's `scrollLeft`/`scrollTop` (a class
    shared by the gantt, carico-risorse, and milestones pages) before clearing and restores it on

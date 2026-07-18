@@ -79,21 +79,26 @@
   // direttamente dal disco (non solo dal dataset in memoria), così il backup
   // riflette esattamente lo stato reale della cartella dati, incluse eventuali
   // modifiche manuali esterne all'app. Nessuna trasformazione dei dati.
+  // Scritture in parallelo (nessuna dipendenza d'ordine tra i file): riduce la
+  // finestra di rischio per il backup automatico su pagehide (vedi app.js), che
+  // non può attendere il completamento prima che la pagina venga scaricata.
   async function createBackup(dirHandle, now) {
     const timestamp = backupTimestamp(now || new Date());
     const backupRoot = await MP.fsAccess.ensureSubfolder(dirHandle, PATHS.backupDir);
     const backupFolder = await MP.fsAccess.ensureSubfolder(backupRoot, timestamp);
 
-    for (const name of [PATHS.manifest, PATHS.teamRisorsa]) {
-      const text = await MP.fsAccess.readTextFile(dirHandle, name);
-      await MP.fsAccess.writeTextFile(backupFolder, name, text);
-    }
-
     const progettiFiles = await MP.fsAccess.listJsonFiles(dirHandle, PATHS.progettiDir);
-    for (const { name } of progettiFiles) {
-      const text = await MP.fsAccess.readTextFile(dirHandle, `${PATHS.progettiDir}/${name}`);
-      await MP.fsAccess.writeTextFile(backupFolder, `${PATHS.progettiDir}/${name}`, text);
-    }
+
+    await Promise.all([
+      ...[PATHS.manifest, PATHS.teamRisorsa].map(async (name) => {
+        const text = await MP.fsAccess.readTextFile(dirHandle, name);
+        await MP.fsAccess.writeTextFile(backupFolder, name, text);
+      }),
+      ...progettiFiles.map(async ({ name }) => {
+        const text = await MP.fsAccess.readTextFile(dirHandle, `${PATHS.progettiDir}/${name}`);
+        await MP.fsAccess.writeTextFile(backupFolder, `${PATHS.progettiDir}/${name}`, text);
+      }),
+    ]);
 
     return { folder: `${PATHS.backupDir}/${timestamp}`, fileCount: 2 + progettiFiles.length };
   }

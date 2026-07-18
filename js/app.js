@@ -151,6 +151,23 @@
     setState({ status: 'not-connected' });
   }
 
+  let backupOnExitInFlight = false;
+
+  // pagehide scatta anche solo per ingresso in bfcache, non solo per chiusura reale:
+  // il flag evita un secondo backup se scattasse di nuovo mentre il precedente è
+  // ancora in corso. Fire-and-forget: l'handler non può attendere l'operazione async
+  // prima che la pagina venga scaricata, quindi su una chiusura reale la scrittura
+  // multi-file può restare incompleta — accettato, vedi docs/deployment.md "Backups".
+  window.addEventListener('pagehide', () => {
+    const state = getState();
+    if (backupOnExitInFlight) return;
+    if (!state.ui.autoBackupOnExit || state.status !== 'ready' || !state.dirHandle) return;
+    backupOnExitInFlight = true;
+    MP.repository.createBackup(state.dirHandle)
+      .catch(() => {})
+      .finally(() => { backupOnExitInFlight = false; });
+  });
+
   subscribe(render);
   bootstrap();
 })(window.MP = window.MP || {});

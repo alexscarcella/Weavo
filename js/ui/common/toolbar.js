@@ -36,6 +36,10 @@
       { label: '+ New project', onClick: () => createProject(state) },
       ...viewActions,
       { label: '💾 Backup', onClick: () => runBackup(state), className: 'context-menu-item-action', separator: true },
+      {
+        label: state.ui.autoBackupOnExit ? '✓ Backup on exit' : 'Backup on exit',
+        onClick: () => MP.store.setAutoBackupOnExit(!state.ui.autoBackupOnExit),
+      },
       { label: 'Change data folder…', onClick: () => changeDataFolder(state), separator: true },
     ];
   }

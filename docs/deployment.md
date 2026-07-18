@@ -71,11 +71,19 @@ something to assume.
 
 ## Backups
 
-Backups are **manual, not automatic**: the toolbar exposes an action that snapshots
-`manifest.json`, `team-risorse.json`, and every file under `progetti/` into a timestamped
-`backup/<YYYYMMDD>_<HHMMSS>/` subfolder of the data folder (`MP.repository.createBackup`). There
-is no scheduled or on-every-write backup — if you want one before a risky bulk edit, trigger it
-from the menu first.
+The toolbar exposes a manual "💾 Backup" action that snapshots `manifest.json`,
+`team-risorse.json`, and every file under `progetti/` into a timestamped
+`backup/<YYYYMMDD>_<HHMMSS>/` subfolder of the data folder (`MP.repository.createBackup`). If you
+want one before a risky bulk edit, trigger it from the menu first.
+
+Next to it, an opt-in **"Backup on exit"** toggle (off by default, preference remembered
+per-browser via `localStorage`) additionally runs the same backup automatically when the app's tab
+or window is closed (on the `pagehide` event). This is **best-effort, not guaranteed**: browsers
+do not wait for pending asynchronous work to finish once a page is actually being torn down, so on
+a real close there's no hard guarantee the multi-file write completes before the page is gone —
+unlike a mere tab-switch (which doesn't trigger it at all, so it never fires needlessly while the
+app stays open in the background). Treat it as a convenience safety net, not a substitute for
+triggering a manual backup before a risky bulk edit.
 
 ## Environments
 
