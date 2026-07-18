@@ -498,6 +498,34 @@ inserted at the right point in that list. Layers, low → high:
      once, reinforcing that shift and bulk-allocate remain unrelated features that happen to share
      the same grid.
 
+     **Task drag&drop** (reposition a task, including across baselines of the same project):
+     `js/ui/gantt/task-drag.js`, a module-singleton drag controller (same pattern as
+     `cell-selection.js`/`cell-shift-selection.js` — private state outside the store, since no
+     `setState` fires mid-drag so the DOM is never rebuilt out from under an in-progress gesture).
+     There is no DOM element representing "a row" (the grid is one flat sequence of sibling
+     `.gantt-cell`s, see `gantt-view.js`'s row-cell-appending loop and the per-cell
+     `row-project-start`/`row-baseline-start` classes above), so the drag handle (`⠿`,
+     `.task-drag-handle`, hover-reveal like `.row-menu-btn`) lives inside `col3`
+     (`gantt-row.js`), and the drop-insertion indicator (`.drag-target-before`/
+     `.drag-target-after`, an inset box-shadow border) is applied to that row's 3 fixed columns
+     only — always present (including on a baseline's empty "— no task —" placeholder row, a
+     valid drop target) and sticky-left, so visible regardless of horizontal scroll, without
+     needing a registry of every cell in a row. Native HTML5 drag events
+     (`dragstart`/`dragover`/`dragleave`/`drop`/`dragend`) — no library, per the no-build-step
+     constraint. `handleDragOver` compares the hovered row's `file` against the dragged task's
+     source `file` and sets `dropEffect = 'none'` (no indicator) when they differ, so a task can
+     never be dropped into a different project — only across baselines of the *same* project, or
+     reordered within one. The mutation is `MP.taskCrud.moveTaskToPosition(state, file,
+     sourceBaseline, task, targetBaseline, targetIndex)` — a general splice-remove-then-insert
+     (unlike `moveTask`'s adjacent-swap-or-append used by the "⋮" menu's ↑/↓ actions, which is
+     unchanged and still the keyboard/no-drag fallback), reusing the same `persistProject` →
+     `MP.saveCoordinator.saveProject` + `MP.store.setState({})` path as every other task mutation.
+     If the dragged task's week carried `milestone: true`, it is **not** resynced against the
+     destination baseline's milestone (same non-auto-correction principle as elsewhere) — any
+     resulting disagreement is only surfaced passively via `MP.milestones.computeBaselineMilestones`'s
+     existing `inconsistent` marker on the Milestones page, and self-heals the next time a
+     milestone in that baseline is touched through `cell-popover.js`.
+
      `legend.js` renders the color legend dynamically from
      `team-resources.json`, read-only, no navigation affordance of its own — reaching the
      team/resources page is via the `toolbar.js` hamburger menu only, on every page, not a

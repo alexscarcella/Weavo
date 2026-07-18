@@ -51,7 +51,7 @@ flowchart TB
     subgraph ui["js/ui — rendering + events"]
         common["common/\nmodal, toast, context-menu, toolbar, dataset-header, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
-        gantt["gantt/\nmain view, cell popover, shift, legend"]
+        gantt["gantt/\nmain view, cell popover, shift, task drag&amp;drop, legend"]
         other["resource-load/, team-resources/, milestones/, weeks/"]
     end
     app["js/app.js — entry point"]

@@ -153,6 +153,9 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 - **Add a baseline/release to a project:** click the "⋮" icon on the project's row →
   *"+ New baseline"*.
 - **Add a task to a baseline:** same "⋮" menu on the baseline's row → *"+ New task"*.
+- **Reorder a task, or move it to a different baseline:** drag it by the handle (⠿) next to its
+  name and drop it on another row — above or below to position it there, including a row that
+  belongs to a different baseline of the same project.
 - **Allocate a resource to a task for a given week:** double-click the corresponding cell in the
   grid. A popup opens: pick the team first, then the resources belonging to that team, and
   optionally check *"Delivery milestone"* if that week is the baseline's release date. The popup

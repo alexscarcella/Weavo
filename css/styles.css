@@ -306,6 +306,14 @@ code {
   outline: 2px solid #2fa84f; outline-offset: -2px; box-shadow: inset 0 0 0 1px #2fa84f;
 }
 
+/* --- Drag&drop del task (vedi task-drag.js): riga sorgente attenuata durante
+   il trascinamento, indicatore di inserimento sopra/sotto sulla riga target
+   (solo le 3 colonne fisse, sempre presenti e sticky-left — non esiste un
+   elemento DOM "riga" su cui applicare l'indicatore per l'intera larghezza). --- */
+.gantt-cell.dragging { opacity: 0.4; }
+.gantt-cell.drag-target-before { box-shadow: inset 0 2px 0 0 #2E86FF; }
+.gantt-cell.drag-target-after { box-shadow: inset 0 -2px 0 0 #2E86FF; }
+
 /* --- Popover di editing cella --- */
 
 .cell-popover {
@@ -462,6 +470,16 @@ code {
 }
 .gantt-cell.col-fixed:hover .row-menu-btn { opacity: 1; }
 .row-menu-btn:hover { color: #2E86FF; }
+
+.task-drag-handle {
+  flex: none;
+  margin-right: 0.3rem;
+  color: #666;
+  cursor: grab;
+  opacity: 0.35;
+}
+.gantt-cell.col-fixed:hover .task-drag-handle { opacity: 1; }
+.task-drag-handle:hover { color: #2E86FF; }
 
 .task-completed-checkbox { flex: none; margin-right: 0.3rem; cursor: pointer; }
 .hint-text { color: #999; font-style: italic; }

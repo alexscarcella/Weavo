@@ -66,5 +66,23 @@
     await persistProject(state, file);
   }
 
-  MP.taskCrud = { createTask, renameTask, deleteTask, moveTask, toggleCompleted };
+  // Sposta un task in una posizione esatta (usato dal drag&drop, vedi
+  // task-drag.js): a differenza di moveTask non è limitato a uno scambio con
+  // l'adiacente, e la baseline di destinazione può essere una qualsiasi
+  // baseline dello stesso progetto (anche la stessa in cui si trova già il
+  // task, per un riordino interno). targetIndex è l'indice nell'array della
+  // baseline di destinazione *dopo* la rimozione del task da quello di
+  // partenza.
+  async function moveTaskToPosition(state, file, sourceBaseline, task, targetBaseline, targetIndex) {
+    const sourceArr = sourceBaseline.task;
+    const idx = sourceArr.indexOf(task);
+    if (idx < 0) return;
+    sourceArr.splice(idx, 1);
+    let insertAt = targetIndex;
+    if (sourceBaseline === targetBaseline && idx < targetIndex) insertAt -= 1;
+    targetBaseline.task.splice(insertAt, 0, task);
+    await persistProject(state, file);
+  }
+
+  MP.taskCrud = { createTask, renameTask, deleteTask, moveTask, moveTaskToPosition, toggleCompleted };
 })(window.MP = window.MP || {});

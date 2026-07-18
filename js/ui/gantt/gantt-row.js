@@ -90,6 +90,15 @@
     const col3 = document.createElement('div');
     col3.className = `gantt-cell col-fixed col-3${task && task.completed ? ' task-completed' : ''}`;
     if (task) {
+      const dragHandle = document.createElement('span');
+      dragHandle.className = 'task-drag-handle';
+      dragHandle.textContent = '⠿';
+      dragHandle.title = 'Drag to move (also across baselines of this project)';
+      dragHandle.draggable = true;
+      dragHandle.addEventListener('dragstart', (e) => MP.taskDrag.handleDragStart(e, { state, file, sourceBaseline: baseline, task, cells: [col1, col2, col3] }));
+      dragHandle.addEventListener('dragend', (e) => MP.taskDrag.handleDragEnd(e));
+      col3.appendChild(dragHandle);
+
       const chk = document.createElement('input');
       chk.type = 'checkbox';
       chk.className = 'task-completed-checkbox';
@@ -123,6 +132,19 @@
       col3.appendChild(placeholder);
     }
     cells.push(col3);
+
+    // Bersaglio di drop del drag&drop task (vedi task-drag.js): qualunque riga
+    // con una baseline reale, compresa la riga segnaposto "— no task —" di una
+    // baseline vuota. La riga segnaposto "— no baseline —" (baseline null) non
+    // riceve alcun listener: non c'è un array `task` in cui inserire.
+    if (baseline) {
+      const dragCells = [col1, col2, col3];
+      dragCells.forEach((cell) => {
+        cell.addEventListener('dragover', (e) => MP.taskDrag.handleDragOver(e, { file, baseline, task, cells: dragCells }));
+        cell.addEventListener('dragleave', (e) => MP.taskDrag.handleDragLeave(e, { cells: dragCells }));
+        cell.addEventListener('drop', (e) => MP.taskDrag.handleDrop(e, { file, baseline, task, cells: dragCells }));
+      });
+    }
 
     const weekCells = [];
     for (const settimana of weeks) {
