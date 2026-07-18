@@ -56,6 +56,12 @@ renders. If this app is ever exposed to a less-trusted set of editors, escaping 
 (or switching them to DOM-building calls) should be done before that change in trust model, not
 after.
 
+`js/ui/common/modal.js`'s project-team form/card (`promptProjectForm`, `showProjectCard`) are the
+one exception: they do escape every user-supplied string (project name, PM/PE/note text, resolved
+resource names) via a local `escapeHtml` helper before interpolating into `innerHTML`, since
+`note` is free multi-line text most likely to contain characters that look like markup. New
+`innerHTML`-based UI should follow that pattern rather than the older unescaped one above.
+
 ## What's explicitly out of scope
 
 - Multi-user real-time collaboration/locking — see [database.md](database.md#conflict-detection)

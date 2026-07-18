@@ -1,6 +1,12 @@
 {
   "nome": "GRAPHIC DESIGN INSTITUTE LMS",
-  "team": "Team GRAPHIC DESIGN INSTITUTE LMS (Jez Humble / Jesse Robbins)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team GRAPHIC DESIGN INSTITUTE LMS (Jez Humble / Jesse Robbins)"
+  },
   "archiviato": false,
   "baseline": [
     {

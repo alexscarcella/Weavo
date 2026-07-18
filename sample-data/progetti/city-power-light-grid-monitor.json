@@ -1,6 +1,12 @@
 {
   "nome": "CITY POWER & LIGHT GRID MONITOR",
-  "team": "Team CITY POWER & LIGHT GRID MONITOR (Alan Kay / Jesse Robbins)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team CITY POWER & LIGHT GRID MONITOR (Alan Kay / Jesse Robbins)"
+  },
   "archiviato": false,
   "baseline": [
     {

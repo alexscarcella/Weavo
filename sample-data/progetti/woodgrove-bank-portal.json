@@ -1,6 +1,12 @@
 {
   "nome": "WOODGROVE BANK PORTAL",
-  "team": "Team WOODGROVE BANK PORTAL (Cem Kaner / Margaret Hamilton)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team WOODGROVE BANK PORTAL (Cem Kaner / Margaret Hamilton)"
+  },
   "archiviato": false,
   "baseline": [
     {

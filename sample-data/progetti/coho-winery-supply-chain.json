@@ -1,6 +1,12 @@
 {
   "nome": "COHO WINERY SUPPLY CHAIN",
-  "team": "Team COHO WINERY SUPPLY CHAIN (Barbara Liskov / Jez Humble)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team COHO WINERY SUPPLY CHAIN (Barbara Liskov / Jez Humble)"
+  },
   "archiviato": false,
   "baseline": [
     {

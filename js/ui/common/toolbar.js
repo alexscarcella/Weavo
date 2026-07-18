@@ -27,14 +27,23 @@
   }
 
   function buildActions(state) {
-    const viewActions = VIEWS.map((v) => ({
+    const viewActions = VIEWS.map((v, i) => ({
       label: state.ui.vistaCorrente === v.id ? `✓ ${v.label}` : v.label,
       onClick: () => MP.store.setState((s) => ({ ui: { ...s.ui, vistaCorrente: v.id } })),
+      separator: i === 0,
     }));
     return [
+      { label: '+ Nuovo progetto', onClick: () => createProject(state) },
       ...viewActions,
       { label: '💾 Backup', onClick: () => runBackup(state), className: 'context-menu-item-action', separator: true },
     ];
+  }
+
+  // Raggiungibile da qualunque pagina (il menu ☰ è globale): dopo la creazione porta l'utente
+  // sulla vista gantt, dove il nuovo progetto è visibile.
+  async function createProject(state) {
+    const file = await MP.projectCrud.createProject(state);
+    if (file) MP.store.setState((s) => ({ ui: { ...s.ui, vistaCorrente: 'gantt' } }));
   }
 
   async function runBackup(state) {

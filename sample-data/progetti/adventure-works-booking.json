@@ -1,6 +1,12 @@
 {
   "nome": "ADVENTURE WORKS BOOKING",
-  "team": "Team ADVENTURE WORKS BOOKING (Werner Vogels / Ken Thompson)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team ADVENTURE WORKS BOOKING (Werner Vogels / Ken Thompson)"
+  },
   "archiviato": false,
   "baseline": [
     {

@@ -1,6 +1,12 @@
 {
   "nome": "TFL LONDON UNDERGROUND",
-  "team": "Team TFL LONDON UNDERGROUND (Cem Kaner / Margaret Hamilton)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team TFL LONDON UNDERGROUND (Cem Kaner / Margaret Hamilton)"
+  },
   "archiviato": false,
   "baseline": [
     {

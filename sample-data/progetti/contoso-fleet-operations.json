@@ -1,6 +1,12 @@
 {
   "nome": "CONTOSO FLEET OPERATIONS",
-  "team": "Team CONTOSO FLEET OPERATIONS (Larry Tesler / Frances Allen)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team CONTOSO FLEET OPERATIONS (Larry Tesler / Frances Allen)"
+  },
   "archiviato": false,
   "baseline": [
     {

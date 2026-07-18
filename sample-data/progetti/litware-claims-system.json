@@ -1,6 +1,12 @@
 {
   "nome": "LITWARE CLAIMS SYSTEM",
-  "team": "Team LITWARE CLAIMS SYSTEM (Margaret Hamilton / Werner Vogels)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team LITWARE CLAIMS SYSTEM (Margaret Hamilton / Werner Vogels)"
+  },
   "archiviato": false,
   "baseline": [
     {

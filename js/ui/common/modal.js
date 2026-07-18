@@ -82,6 +82,153 @@
     });
   }
 
+  function escapeHtml(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
+  }
+
+  // Form strutturato per i referenti/team di progetto (§ CLAUDE.md "Data model" > progetti).
+  // Se `nome` è una stringa (anche vuota) mostra in cima un campo nome obbligatorio (caso
+  // creazione progetto); se `nome` è null il form modifica solo i campi team di un progetto
+  // esistente. Risolve con `{ nome?, team: {...} } | null` (null se annullato).
+  function promptProjectForm({ title, nome = null, team, teamRisorsa }) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      const box = document.createElement('div');
+      box.className = 'modal-box modal-box-wide';
+
+      const resourceOptions = () => {
+        const groups = teamRisorsa.team.map((t) => {
+          const opts = (t.risorse || [])
+            .map((r) => `<option value="${escapeHtml(r.sigla)}">${escapeHtml(r.sigla)} — ${escapeHtml(r.nome)}</option>`)
+            .join('');
+          return opts ? `<optgroup label="${escapeHtml(t.nome)}">${opts}</optgroup>` : '';
+        }).join('');
+        return `<option value="">— Nessuno —</option>${groups}`;
+      };
+
+      box.innerHTML = `
+        <h2>${escapeHtml(title)}</h2>
+        ${nome !== null ? `
+        <label class="modal-field-label" for="mpf-nome">Nome progetto</label>
+        <input type="text" id="mpf-nome" class="modal-input" required>` : ''}
+        <label class="modal-field-label" for="mpf-pm">Project manager</label>
+        <input type="text" id="mpf-pm" class="modal-input">
+        <label class="modal-field-label" for="mpf-pe">Project Engineer</label>
+        <input type="text" id="mpf-pe" class="modal-input">
+        <label class="modal-field-label" for="mpf-sa">Solution analyst reference</label>
+        <select id="mpf-sa" class="modal-select">${resourceOptions()}</select>
+        <label class="modal-field-label" for="mpf-vv">V&amp;V reference</label>
+        <select id="mpf-vv" class="modal-select">${resourceOptions()}</select>
+        <label class="modal-field-label" for="mpf-note">Note</label>
+        <textarea id="mpf-note" class="modal-textarea" rows="3"></textarea>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Annulla</button>
+          <button type="button" class="modal-btn-save">Salva</button>
+        </div>`;
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      const nomeField = nome !== null ? box.querySelector('#mpf-nome') : null;
+      const pmField = box.querySelector('#mpf-pm');
+      const peField = box.querySelector('#mpf-pe');
+      const saField = box.querySelector('#mpf-sa');
+      const vvField = box.querySelector('#mpf-vv');
+      const noteField = box.querySelector('#mpf-note');
+
+      if (nomeField) nomeField.value = nome;
+      pmField.value = team.projectManager || '';
+      peField.value = team.projectEngineer || '';
+      saField.value = team.solutionAnalyst || '';
+      vvField.value = team.vvReference || '';
+      noteField.value = team.note || '';
+      (nomeField || pmField).focus();
+
+      const close = (result) => {
+        overlay.remove();
+        resolve(result);
+      };
+      const save = () => {
+        if (nomeField && !nomeField.value.trim()) {
+          nomeField.reportValidity();
+          return;
+        }
+        const result = {
+          team: MP.schema.createProjectTeamInfo({
+            projectManager: pmField.value.trim(),
+            projectEngineer: peField.value.trim(),
+            solutionAnalyst: saField.value,
+            vvReference: vvField.value,
+            note: noteField.value.trim(),
+          }),
+        };
+        if (nomeField) result.nome = nomeField.value.trim();
+        close(result);
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
+      box.querySelector('.modal-btn-save').addEventListener('click', save);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close(null);
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close(null);
+      });
+    });
+  }
+
+  // Scheda di sola lettura con i dati completi di un progetto (icona "i" nella riga Gantt).
+  // Per modificare si usa "Team di progetto…" nel menu ⋮ (promptProjectForm) — nessun bottone
+  // "Modifica" qui, per non duplicare l'azione di scrittura in due punti.
+  function showProjectCard({ progetto, teamRisorsa }) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      const box = document.createElement('div');
+      box.className = 'modal-box modal-box-wide project-card';
+
+      const resolveRef = (sigla) => {
+        if (!sigla) return '—';
+        const found = MP.schema.findResourceEntry(teamRisorsa, sigla);
+        return found
+          ? `${escapeHtml(sigla)} — ${escapeHtml(found.risorsa.nome)}`
+          : `${escapeHtml(sigla)} <span class="project-card-orphan" title="Risorsa non trovata in team-risorse.json">(non trovata)</span>`;
+      };
+      const totTask = progetto.baseline.reduce((sum, b) => sum + b.task.length, 0);
+      const team = progetto.team || {};
+      const row = (label, valueHtml) =>
+        `<div class="project-card-row"><span class="project-card-label">${escapeHtml(label)}</span><span class="project-card-value">${valueHtml || '—'}</span></div>`;
+
+      box.innerHTML = `
+        <h2>${escapeHtml(progetto.nome)}</h2>
+        ${row('Stato', progetto.archiviato ? 'Archiviato' : 'Attivo')}
+        ${row('Baseline', `${progetto.baseline.length} (${totTask} task totali)`)}
+        ${row('Project manager', escapeHtml(team.projectManager))}
+        ${row('Project Engineer', escapeHtml(team.projectEngineer))}
+        ${row('Solution analyst reference', resolveRef(team.solutionAnalyst))}
+        ${row('V&V reference', resolveRef(team.vvReference))}
+        ${row('Note', team.note ? escapeHtml(team.note).replace(/\n/g, '<br>') : '')}
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Chiudi</button>
+        </div>`;
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      const close = () => {
+        overlay.remove();
+        resolve();
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', close);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+    });
+  }
+
   const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 
   // Selezione colore via color-picker nativo (input type="color"), con campo
@@ -137,5 +284,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptColor };
+  MP.modal = { confirmConflict, promptText, promptColor, promptProjectForm, showProjectCard };
 })(window.MP = window.MP || {});

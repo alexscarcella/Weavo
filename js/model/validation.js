@@ -68,5 +68,27 @@
     return mismatch;
   }
 
-  MP.validation = { findOrphanTeam, findOrphanRisorse, findTeamMismatches };
+  // Sigle orfane nei riferimenti risorsa di progetto (solutionAnalyst/vvReference in
+  // progetto.team), stesso principio di findOrphanRisorse ma sul livello progetto invece che
+  // sulle week entry.
+  function findOrphanProjectRiferimenti(dataset) {
+    const sigleValide = MP.schema.existingSigle(dataset.teamRisorsa);
+    const CAMPI = [
+      ['solutionAnalyst', 'Solution analyst reference'],
+      ['vvReference', 'V&V reference'],
+    ];
+    const orfani = [];
+    for (const [, { data: progetto }] of dataset.progetti) {
+      const team = progetto.team || {};
+      for (const [chiave, etichetta] of CAMPI) {
+        const sigla = team[chiave];
+        if (sigla && !sigleValide.has(sigla)) {
+          orfani.push({ progetto: progetto.nome, campo: etichetta, valore: sigla });
+        }
+      }
+    }
+    return orfani;
+  }
+
+  MP.validation = { findOrphanTeam, findOrphanRisorse, findTeamMismatches, findOrphanProjectRiferimenti };
 })(window.MP = window.MP || {});

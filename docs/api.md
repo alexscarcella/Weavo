@@ -21,7 +21,7 @@ the closest thing this app has to an "API," and it's what a new UI file or a new
 
 | Namespace | File | Responsibility |
 |---|---|---|
-| `MP.schema` | `js/data/schema.js` | Canonical shapes, factories (`createProject`, `createBaseline`, `createTask`, `createWeekEntry`), lookup helpers (`findTeamByCodice`, `findResourceEntry`, `flattenRisorse`, `existingSigle`) |
+| `MP.schema` | `js/data/schema.js` | Canonical shapes, factories (`createProject`, `createProjectTeamInfo`, `createBaseline`, `createTask`, `createWeekEntry`), the legacy-data migration `normalizeProjectTeam`, lookup helpers (`findTeamByCodice`, `findResourceEntry`, `flattenRisorse`, `existingSigle`) |
 | `MP.fsAccess` | `js/data/fs-access.js` | Low-level File System Access API wrapper: pick a directory, check/request permission, read/write/list/remove files |
 | `MP.repository` | `js/data/repository.js` | `loadDataset(dirHandle)`, raw `saveProject`/`saveManifest`/`saveTeamRisorsa`, `createBackup` |
 | `MP.saveCoordinator` | `js/data/save-coordinator.js` | `saveProject`/`saveManifest`/`saveTeamRisorsa` with reread-before-write conflict detection — the only entry point user-triggered writes should use |
@@ -29,8 +29,8 @@ the closest thing this app has to an "API," and it's what a new UI file or a new
 | `MP.store` | `js/state/store.js` | `getState`, `setState`, `subscribe` |
 | `MP.weekUtils` | `js/model/week-utils.js` | Monday-based ISO week arithmetic: `toIso`, `addWeeks`, `getWeeksInRange`, `formatWeekLabel`, `getCurrentWeekIso`, `findAllocationsInWeeks` |
 | `MP.overallocation` | `js/model/overallocation.js` | `buildAllocationIndex`, `findAllocations`, `findOverallocatedKeys` — cross-project sigla×week index |
-| `MP.validation` | `js/model/validation.js` | `findOrphanTeam`, `findOrphanRisorse`, `findTeamMismatches` — non-blocking data-consistency warnings |
-| `MP.modal`, `MP.toast`, `MP.contextMenu`, `MP.toolbar`, `MP.datasetHeader` | `js/ui/common/*.js` | Generic UI building blocks shared across views — `MP.datasetHeader.renderDatasetHeader` is the info-line + color-legend header shared by the gantt and resource-load pages |
+| `MP.validation` | `js/model/validation.js` | `findOrphanTeam`, `findOrphanRisorse`, `findTeamMismatches`, `findOrphanProjectRiferimenti` — non-blocking data-consistency warnings |
+| `MP.modal`, `MP.toast`, `MP.contextMenu`, `MP.toolbar`, `MP.datasetHeader` | `js/ui/common/*.js` | Generic UI building blocks shared across views — `MP.datasetHeader.renderDatasetHeader` is the info-line + color-legend header shared by the gantt and resource-load pages; `MP.modal.promptProjectForm`/`showProjectCard` are the project-team edit form and read-only info card; `MP.toolbar` also hosts the "+ Nuovo progetto" menu action |
 | `MP.projectCrud`, `MP.baselineCrud`, `MP.taskCrud`, `MP.resourceCrud`, `MP.teamCrud` | `js/ui/crud/*.js` | Create/rename/delete/reorder operations against the in-memory dataset, persisted via `MP.saveCoordinator` |
 | `MP.ganttView`, `MP.ganttRow`, `MP.ganttCell`, `MP.cellPopover`, `MP.cellSelection`, `MP.legend` | `js/ui/gantt/*.js` | The main grid view |
 | `MP.resourceLoadView`, `MP.teamRisorsaView`, `MP.weekControls` | `js/ui/*/*.js` | Secondary views |

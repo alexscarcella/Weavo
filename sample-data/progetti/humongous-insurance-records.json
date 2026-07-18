@@ -1,6 +1,12 @@
 {
   "nome": "HUMONGOUS INSURANCE RECORDS",
-  "team": "Team HUMONGOUS INSURANCE RECORDS (Grace Hopper / Kent Beck)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team HUMONGOUS INSURANCE RECORDS (Grace Hopper / Kent Beck)"
+  },
   "archiviato": false,
   "baseline": [
     {

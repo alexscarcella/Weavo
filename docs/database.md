@@ -64,7 +64,13 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
 ```json
 {
   "nome": "Example Project",
-  "team": "",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": ""
+  },
   "archiviato": false,
   "baseline": [
     {
@@ -85,6 +91,15 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
 ```
 
 - A **project** has one or more **baselines** (releases/versions); a baseline has **tasks**.
+- `project.team` holds the project's referents/team info: `projectManager` and
+  `projectEngineer` are free text; `solutionAnalyst`/`vvReference` hold a resource `sigla` (or
+  `''` if unassigned) picked from any team in `team-risorse.json`, resolved to a name on demand
+  rather than denormalized; `note` is free multi-line text. Edited as a whole via a dedicated
+  form (project row's "⋮" menu → "Team di progetto…"); a read-only summary card (project row's
+  "i" icon) shows the resolved values alongside the project's baseline/task counts and archived
+  status. A resource `sigla` referenced here that no longer exists in `team-risorse.json` is an
+  **orphan reference**, flagged the same non-blocking way as the orphan team/resource references
+  below.
 - Allocation is **boolean**, per task per week — a resource is either on a task that week, or it
   isn't. There's no percentage/fractional-effort field anywhere in the schema.
 - A week entry (`task.settimane[iso]`) is only meaningful with `team` + non-empty `risorse`
@@ -120,15 +135,20 @@ overwrite or to cancel and reconcile by hand.
 ## No migrations
 
 `schemaVersion` exists in `manifest.json` for forward compatibility, but there is currently only
-one version and no migration tooling. A schema change today means updating
-`js/data/schema.js` and every reader of the changed shape in the same pass — there's no automatic
-upgrade path for existing data files yet.
+one version and no formal migration tooling. A schema change today means updating
+`js/data/schema.js` and every reader of the changed shape in the same pass. The one exception is
+`project.team`: `MP.schema.normalizeProjectTeam`, called from `repository.loadDataset`, upgrades
+a legacy free-text `team` string in memory on load (the old text becomes `team.note`) — a lazy
+"self-heal on touch" that rewrites the file to the new shape the next time that project is saved,
+not a batch migration run over the data folder.
 
 ## Referential integrity is advisory, not enforced
 
 `team` codes and resource `sigla` values referenced by a task but missing from
 `team-risorse.json` are **orphan references**; a resource allocated under a `team` different from
 the one it currently belongs to is a **team mismatch** (see
-[glossary.md](glossary.md#orphan-reference) and [glossary.md](glossary.md#team-mismatch)). Both
-are detected by `js/model/validation.js` and surfaced as non-blocking warnings — never silently
-dropped or auto-corrected, and never treated as fatal errors.
+[glossary.md](glossary.md#orphan-reference) and [glossary.md](glossary.md#team-mismatch)). The
+same orphan-reference treatment applies to a project's `team.solutionAnalyst`/`team.vvReference`
+sigla if the resource it points to no longer exists. All of these are detected by
+`js/model/validation.js` and surfaced as non-blocking warnings — never silently dropped or
+auto-corrected, and never treated as fatal errors.

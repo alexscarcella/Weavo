@@ -1,6 +1,12 @@
 {
   "nome": "RATP PARIS METRO",
-  "team": "Team RATP PARIS METRO (Werner Vogels / Ken Thompson)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team RATP PARIS METRO (Werner Vogels / Ken Thompson)"
+  },
   "archiviato": false,
   "baseline": [
     {

@@ -1,6 +1,12 @@
 {
   "nome": "WIDE WORLD IMPORTERS LEGACY ERP",
-  "team": "Team WIDE WORLD IMPORTERS LEGACY ERP (Barbara Liskov / Kohsuke Kawaguchi)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team WIDE WORLD IMPORTERS LEGACY ERP (Barbara Liskov / Kohsuke Kawaguchi)"
+  },
   "archiviato": true,
   "baseline": [
     {

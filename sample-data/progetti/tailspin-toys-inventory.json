@@ -1,6 +1,12 @@
 {
   "nome": "TAILSPIN TOYS INVENTORY",
-  "team": "Team TAILSPIN TOYS INVENTORY (Chuck Thacker / Ada Lovelace)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team TAILSPIN TOYS INVENTORY (Chuck Thacker / Ada Lovelace)"
+  },
   "archiviato": false,
   "baseline": [
     {

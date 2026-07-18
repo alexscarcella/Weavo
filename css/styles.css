@@ -426,7 +426,6 @@ code {
 
 /* --- CRUD: righe con testo troncato + azioni --- */
 .toolbar-actions { display: flex; align-items: center; gap: 0.75rem; }
-.btn-nuovo-progetto { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
 
 .gantt-cell.col-fixed .cell-text {
   flex: 1;
@@ -461,11 +460,13 @@ code {
   background: #fff; border-radius: 8px; padding: 1.25rem 1.5rem; max-width: 480px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
+.modal-box-wide { max-width: 560px; max-height: 85vh; overflow-y: auto; }
 .modal-box h2 { margin-top: 0; font-size: 1.1rem; }
 .modal-conflict h2 { color: #b00020; }
 .modal-box p { font-size: 0.9rem; line-height: 1.4; }
-.modal-field-label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 0.3rem; }
-.modal-input, .modal-textarea {
+.modal-field-label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 0.3rem; margin-top: 0.7rem; }
+.modal-field-label:first-of-type { margin-top: 0; }
+.modal-input, .modal-textarea, .modal-select {
   width: 100%; font: inherit; padding: 0.5rem; border: 1px solid #bbb; border-radius: 4px;
   resize: vertical;
 }
@@ -478,6 +479,22 @@ code {
 .modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1rem; }
 .modal-btn-overwrite, .modal-btn-save { background: #2E86FF; color: #fff; border-color: #2E86FF; }
 .modal-conflict .modal-btn-overwrite { background: #b00020; border-color: #b00020; }
+
+.project-card-row {
+  display: flex; gap: 0.6rem; padding: 0.35rem 0; border-bottom: 1px solid #eee; font-size: 0.9rem;
+}
+.project-card-row:last-of-type { border-bottom: none; }
+.project-card-label { flex: 0 0 11rem; color: #555; }
+.project-card-value { flex: 1; white-space: pre-line; }
+.project-card-orphan { color: #b00020; font-size: 0.8rem; }
+
+.project-info-btn {
+  flex: none; width: 1.2rem; height: 1.2rem; margin-right: 0.3rem; padding: 0;
+  border: 1px solid #999; border-radius: 50%; background: #fff; color: #666;
+  font-size: 0.7rem; font-style: italic; font-family: Georgia, serif; line-height: 1;
+  cursor: pointer;
+}
+.project-info-btn:hover { color: #2E86FF; border-color: #2E86FF; }
 
 /* --- Toast --- */
 .toast-container {

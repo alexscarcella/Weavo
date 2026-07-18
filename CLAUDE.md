@@ -170,6 +170,41 @@ predates the team/risorse merge and still describes the old two-file `risorse.js
   detection (its weeks no longer count as active commitment) but its data is not deleted or
   auto-corrected — closed tasks are never touched by team/resource changes.
 
+### Project team/referents
+
+Each project's `team` field (`progetti/<slug>.json`) is a structured object, not free text:
+
+```json
+{ "projectManager": "", "projectEngineer": "", "solutionAnalyst": "", "vvReference": "", "note": "" }
+```
+
+- `projectManager`/`projectEngineer`/`note` are free text (`note` multi-line). `solutionAnalyst`/
+  `vvReference` hold a resource **sigla** (or `''`), selectable from any resource of any team in
+  `team-risorse.json` — no role/team restriction — and resolved to a display name on demand via
+  `MP.schema.findResourceEntry`, never denormalized into the stored value.
+- Built via `MP.schema.createProjectTeamInfo(...)`. Edited as a whole (not field-by-field) through
+  `MP.modal.promptProjectForm`, a dedicated multi-field modal (text/textarea/`<select>` with
+  per-team `<optgroup>`s) — used both for project creation (`MP.projectCrud.createProject`, which
+  now opens this form for the name *and* all team fields in one step, since the button that used
+  to live in the gantt toolbar moved into the hamburger menu — see `toolbar.js` below) and for the
+  existing "Team di progetto…" row-menu edit action (`MP.projectCrud.editTeam`, `project-crud.js`).
+- Read-only view: the "i" icon rendered by `gantt-row.js` immediately before the project name
+  (only on the row where the name itself is shown) opens `MP.modal.showProjectCard`, listing name,
+  archived status, baseline/task counts, and all 5 team fields with the two sigla references
+  resolved to a name. No "Modifica" action inside it by design — editing stays solely in the "Team
+  di progetto…" row-menu entry, so there's exactly one write path for this field.
+- A `solutionAnalyst`/`vvReference` sigla that no longer exists in `team-risorse.json` is an
+  **orphan reference**, same non-blocking-warning treatment as the task-level ones —
+  `MP.validation.findOrphanProjectRiferimenti`, surfaced in the gantt warnings panel.
+- Legacy data: before this field was structured, `team` was a free-text string. Loading a project
+  whose `team` is still a string (`repository.loadDataset`, via `MP.schema.normalizeProjectTeam`)
+  migrates it in memory — the old text becomes `team.note`, the other 4 fields start empty — and
+  the file is rewritten in the new shape the next time that project is saved (lazy "self-heal on
+  touch", same principle as the baseline-milestone self-heal above; no batch migration script).
+  The Excel import script (`scripts/import-excel/import.js`) always writes the new shape with all
+  5 fields empty — it no longer captures the old free-text referents from column A; those are
+  filled in by hand in the app after import.
+
 ## Architecture
 
 Load order in [index.html](index.html) reflects the dependency chain; a new file must be
@@ -216,11 +251,16 @@ inserted at the right point in that list. Layers, low → high:
    derivation, not the write-side sync in `gantt-view.js`; flags a baseline `inconsistent` if its
    tasks disagree on the week, without correcting the underlying data — feeds the milestones page).
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
-   - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs, used
-     only for save conflicts), `toast.js` (non-blocking notifications), `context-menu.js` (the
+   - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs:
+     `confirmConflict` for save conflicts, `promptText`/`promptColor` single-field prompts, plus
+     the project-team form/card pair described above — `promptProjectForm` and `showProjectCard`
+     — kept as bespoke functions rather than a generic form-builder since they're the only
+     multi-field use case so far), `toast.js` (non-blocking notifications), `context-menu.js` (the
      "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu — the
-     single entry point for view switching / backup, reuses `context-menu` rather than
-     duplicating open/close logic — plus `renderPageTitle`, a small label next to the hamburger
+     single entry point for view switching / backup / "+ Nuovo progetto", reuses `context-menu`
+     rather than duplicating open/close logic; project creation is reachable from every page, not
+     just the gantt one, so after a successful create it switches `state.ui.vistaCorrente` to
+     `gantt` so the result is visible — plus `renderPageTitle`, a small label next to the hamburger
      showing the current view's name, sourced from the same `VIEWS` list used to build the menu
      so the two never drift apart: `gantt` → "Master Plan", `carico-risorse` → "Carico risorse",
      `milestones` → "Milestone", `team-risorse` → "Team e risorse"; `.page-title`'s font-size is
@@ -233,7 +273,8 @@ inserted at the right point in that list. Layers, low → high:
      count, computed via `MP.ganttView.buildRows` so all pages report the exact same numbers —
      plus the team-color legend from `legend.js`; takes
      an optional extra element to append to the info line, used by the gantt page for its
-     "+ Nuovo progetto" button and archiviati/conclusi toggles, and by the milestones page for its
+     archiviati/conclusi toggles (the "+ Nuovo progetto" button that used to live here moved to
+     the hamburger menu, see `toolbar.js` above), and by the milestones page for its
      "Totale rilasci nel periodo" counter), `app-header.js` (static brand header — logo, "Weavo" title,
      version, copyright — rendered once into `#app-header` from `app.js`'s `bootstrap()`,
      outside the `state.status` render cycle since its content never changes; present on every
@@ -242,6 +283,9 @@ inserted at the right point in that list. Layers, low → high:
      `resource-crud.js`, `team-crud.js`). Each is create/rename/delete/reorder (+ `toggleConcluso`
      for tasks, `recolorTeam`/`moveResource` for team/risorse) directly against the in-memory
      dataset, persisted via `MP.saveCoordinator`/`MP.repository`, then triggers re-render.
+     `project-crud.js`'s `createProject`/`editTeam` open `MP.modal.promptProjectForm` themselves
+     when not given a preset value (same "modal call lives inside the CRUD function" pattern as
+     the rest of this file), see "Project team/referents" above for the field shape.
    - `gantt/`: the main view. `gantt-view.js` builds the compact grid (CSS Grid + `position:
      sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
      gantt library, per spec §9) and exports `buildRows` (dataset → visible task rows, honoring

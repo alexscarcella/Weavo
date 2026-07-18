@@ -24,15 +24,22 @@
     }
   }
 
-  async function createProject(state, nomeInput) {
-    const nome = (nomeInput !== undefined ? nomeInput : window.prompt('Nome del nuovo progetto:'));
-    if (!nome || !nome.trim()) return null;
-    const manifest = state.dataset.manifest;
-    const slug = uniqueSlug(slugify(nome.trim()), existingSlugs(manifest));
-    const file = `progetti/${slug}.json`;
-    const data = MP.schema.createProject(nome.trim());
+  async function createProject(state, preset) {
+    const result = preset !== undefined ? preset : await MP.modal.promptProjectForm({
+      title: 'Nuovo progetto',
+      nome: '',
+      team: MP.schema.createProjectTeamInfo(),
+      teamRisorsa: state.dataset.teamRisorsa,
+    });
+    if (!result || !result.nome || !result.nome.trim()) return null;
+    const nome = result.nome.trim();
 
-    manifest.progetti.push({ file, nome: nome.trim() });
+    const manifest = state.dataset.manifest;
+    const slug = uniqueSlug(slugify(nome), existingSlugs(manifest));
+    const file = `progetti/${slug}.json`;
+    const data = MP.schema.createProject(nome, result.team);
+
+    manifest.progetti.push({ file, nome });
     state.dataset.progetti.set(file, { data, rawText: '' });
 
     try {
@@ -58,16 +65,16 @@
 
   async function editTeam(state, file, teamInput) {
     const entry = state.dataset.progetti.get(file);
-    const nuovoTeam = teamInput !== undefined
-      ? teamInput
-      : await MP.modal.promptText({
+    const result = teamInput !== undefined
+      ? { team: teamInput }
+      : await MP.modal.promptProjectForm({
           title: 'Team di progetto',
-          label: 'Riferimenti/team di progetto (referenti, note libere):',
-          value: entry.data.team || '',
-          multiline: true,
+          nome: null,
+          team: entry.data.team,
+          teamRisorsa: state.dataset.teamRisorsa,
         });
-    if (nuovoTeam === null) return;
-    entry.data.team = nuovoTeam.trim();
+    if (!result) return;
+    entry.data.team = result.team;
     await persist(state, { manifest: false, projectFiles: [file] });
   }
 

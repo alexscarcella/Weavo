@@ -21,7 +21,9 @@
     for (const voce of manifest.progetti) {
       try {
         const rawText = await MP.fsAccess.readTextFile(dirHandle, voce.file);
-        progetti.set(voce.file, { data: JSON.parse(rawText), rawText });
+        const data = JSON.parse(rawText);
+        data.team = MP.schema.normalizeProjectTeam(data.team);
+        progetti.set(voce.file, { data, rawText });
       } catch (e) {
         warnings.push(`Impossibile caricare "${voce.file}" (${voce.nome}): ${e.message}`);
       }

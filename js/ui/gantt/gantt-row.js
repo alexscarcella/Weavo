@@ -14,6 +14,20 @@
   // all'ordine dei progetti nel manifest, non legati ai colori dei team.
   const PROJECT_BAR_COLORS = ['#5b8def', '#e0965a', '#6fb37c', '#b073c9', '#d4886e', '#4fb0b0', '#c9a227', '#e07e97'];
 
+  // Riepilogo breve dei referenti di progetto per il tooltip nativo sul nome (la scheda
+  // completa, con i riferimenti risorsa risolti a nome, è dietro l'icona "i" — vedi sotto).
+  function formatTeamTooltip(team) {
+    if (!team) return '';
+    const righe = [
+      team.projectManager && `PM: ${team.projectManager}`,
+      team.projectEngineer && `PE: ${team.projectEngineer}`,
+      team.solutionAnalyst && `Solution analyst: ${team.solutionAnalyst}`,
+      team.vvReference && `V&V: ${team.vvReference}`,
+      team.note && `Note: ${team.note}`,
+    ].filter(Boolean);
+    return righe.join('\n');
+  }
+
   function fixedCell(text, colClass, extraClass) {
     const div = document.createElement('div');
     div.className = `gantt-cell col-fixed ${colClass}${extraClass ? ' ' + extraClass : ''}`;
@@ -33,7 +47,21 @@
     col1.style.setProperty('--project-bar-color', PROJECT_BAR_COLORS[projectIndex % PROJECT_BAR_COLORS.length]);
     if (showProgetto) {
       const nomeSpan = col1.querySelector('.cell-text');
-      if (nomeSpan) nomeSpan.title = progetto.team ? `${progetto.nome}\n${progetto.team}` : progetto.nome;
+      const teamTooltip = formatTeamTooltip(progetto.team);
+      if (nomeSpan) nomeSpan.title = teamTooltip ? `${progetto.nome}\n${teamTooltip}` : progetto.nome;
+
+      const infoBtn = document.createElement('button');
+      infoBtn.type = 'button';
+      infoBtn.className = 'project-info-btn';
+      infoBtn.textContent = 'i';
+      infoBtn.title = 'Info progetto';
+      infoBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        MP.modal.showProjectCard({ progetto, teamRisorsa: state.dataset.teamRisorsa });
+      });
+      if (nomeSpan) col1.insertBefore(infoBtn, nomeSpan);
+      else col1.appendChild(infoBtn);
+
       col1.appendChild(menuButton([
         { label: 'Rinomina progetto', onClick: () => MP.projectCrud.renameProject(state, file) },
         { label: 'Team di progetto…', onClick: () => MP.projectCrud.editTeam(state, file) },

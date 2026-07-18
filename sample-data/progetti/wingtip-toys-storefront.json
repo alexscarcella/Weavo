@@ -1,6 +1,12 @@
 {
   "nome": "WINGTIP TOYS STOREFRONT",
-  "team": "Team WINGTIP TOYS STOREFRONT (Grace Hopper / Adrian Cockcroft)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team WINGTIP TOYS STOREFRONT (Grace Hopper / Adrian Cockcroft)"
+  },
   "archiviato": false,
   "baseline": [
     {

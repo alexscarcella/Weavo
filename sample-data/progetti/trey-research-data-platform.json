@@ -1,6 +1,12 @@
 {
   "nome": "TREY RESEARCH DATA PLATFORM",
-  "team": "Team TREY RESEARCH DATA PLATFORM (Gene Kim / Werner Vogels)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team TREY RESEARCH DATA PLATFORM (Gene Kim / Werner Vogels)"
+  },
   "archiviato": false,
   "baseline": [
     {

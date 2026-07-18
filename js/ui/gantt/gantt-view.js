@@ -5,7 +5,7 @@
 
   const { getWeeksInRange, formatWeekLabel } = MP.weekUtils;
   const { renderTaskRow } = MP.ganttRow;
-  const { findOrphanTeam, findOrphanRisorse, findTeamMismatches } = MP.validation;
+  const { findOrphanTeam, findOrphanRisorse, findTeamMismatches, findOrphanProjectRiferimenti } = MP.validation;
 
   // Tiene traccia dell'ultima cella (o range) salvata per poterla rievidenziare
   // dopo il re-render completo che segue ogni salvataggio (vedi app.js: l'intero
@@ -171,11 +171,13 @@
     const orfaniTeam = findOrphanTeam(dataset);
     const orfaniRisorsa = findOrphanRisorse(dataset);
     const mismatch = findTeamMismatches(dataset);
+    const orfaniRiferimenti = findOrphanProjectRiferimenti(dataset);
     const righe = [
       ...dataset.warnings,
       ...orfaniTeam.map((o) => `Team "${o.valore}" non definito — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
       ...orfaniRisorsa.map((o) => `Sigla "${o.valore}" non in team-risorse.json — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
       ...mismatch.map((m) => `Risorsa "${m.sigla}" è del team "${m.teamAssegnato}" ma qui allocata come "${m.teamCella}" — da regolarizzare — ${m.progetto} / BL ${m.baseline} / ${m.task} / ${m.settimana}`),
+      ...orfaniRiferimenti.map((o) => `Sigla "${o.valore}" (${o.campo}) non in team-risorse.json — referente progetto ${o.progetto}`),
     ];
     if (!righe.length) return null;
     const div = document.createElement('div');
@@ -202,7 +204,6 @@
     const toolbarActions = document.createElement('span');
     toolbarActions.className = 'toolbar-actions';
     toolbarActions.innerHTML = `
-      <button type="button" class="btn-nuovo-progetto">+ Nuovo progetto</button>
       <label class="toggle-archiviati">
         <input type="checkbox" id="chk-archiviati" ${state.ui.mostraArchiviati ? 'checked' : ''}>
         Mostra archiviati
@@ -216,9 +217,6 @@
     });
     toolbarActions.querySelector('#chk-conclusi').addEventListener('change', (e) => {
       MP.store.setState((s) => ({ ui: { ...s.ui, mostraConclusi: e.target.checked } }));
-    });
-    toolbarActions.querySelector('.btn-nuovo-progetto').addEventListener('click', () => {
-      MP.projectCrud.createProject(state);
     });
     page.appendChild(MP.datasetHeader.renderDatasetHeader(state, toolbarActions));
 

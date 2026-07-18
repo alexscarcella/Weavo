@@ -1,6 +1,12 @@
 {
   "nome": "FABRIKAM PAYMENTS PLATFORM",
-  "team": "Team FABRIKAM PAYMENTS PLATFORM (Bob Taylor / Gene Kim)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team FABRIKAM PAYMENTS PLATFORM (Bob Taylor / Gene Kim)"
+  },
   "archiviato": false,
   "baseline": [
     {

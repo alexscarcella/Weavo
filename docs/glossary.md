@@ -50,10 +50,11 @@ the same baseline (same week), and only one milestone week exists per baseline a
 [database.md](database.md).
 
 ### Orphan reference
-A `team` code or resource `sigla` used in a task's week entry that no longer exists in
-`team-risorse.json` — typically left behind after a team or resource was renamed or deleted.
-Detected by `MP.validation.findOrphanTeam`/`findOrphanRisorse` and surfaced as a non-blocking
-warning, never auto-corrected.
+A `team` code or resource `sigla` used in a task's week entry, or in a project's
+`team.solutionAnalyst`/`team.vvReference`, that no longer exists in `team-risorse.json` —
+typically left behind after a team or resource was renamed or deleted. Detected by
+`MP.validation.findOrphanTeam`/`findOrphanRisorse`/`findOrphanProjectRiferimenti` and surfaced as
+a non-blocking warning, never auto-corrected.
 
 ### Overallocation
 The situation where the same resource (`sigla`) is allocated to more than one task in the same

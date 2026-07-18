@@ -1,6 +1,12 @@
 {
   "nome": "NORTHWIND TRADERS CHECKOUT",
-  "team": "Team NORTHWIND TRADERS CHECKOUT (Kohsuke Kawaguchi / Werner Vogels)",
+  "team": {
+    "projectManager": "",
+    "projectEngineer": "",
+    "solutionAnalyst": "",
+    "vvReference": "",
+    "note": "Team NORTHWIND TRADERS CHECKOUT (Kohsuke Kawaguchi / Werner Vogels)"
+  },
   "archiviato": false,
   "baseline": [
     {
