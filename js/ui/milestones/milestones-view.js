@@ -1,10 +1,10 @@
 // Vista milestone: densità delle scadenze di rilascio baseline sul calendario.
-// Stesse settimane di gantt/carico-risorse (MP.weekUtils.getWeeksInRange) e
+// Stesse settimane di gantt/resource-load (MP.weekUtils.getWeeksInRange) e
 // stesso header condiviso (MP.datasetHeader), ma righe ridotte a una per
 // baseline (colonne fisse "Project" + "Baseline", niente Task/Team) — il dato
 // mostrato è la settimana di rilascio derivata da MP.milestones (vedi
 // js/model/milestones.js) leggendo i task della baseline, mai un editing
-// affordance: sola lettura, come carico-risorse. In fondo alla griglia una
+// affordance: sola lettura, come resource-load. In fondo alla griglia una
 // riga di conteggio per settimana e, sotto la griglia (stesso .gantt-scroll,
 // per restare allineati durante lo scroll orizzontale), un istogramma a barre
 // con lo stesso conteggio.
@@ -35,10 +35,10 @@
 
   function renderMilestonesView(state) {
     const { dataset } = state;
-    const weeks = getWeeksInRange(dataset.manifest.settimane.prima, dataset.manifest.settimane.ultima);
+    const weeks = getWeeksInRange(dataset.manifest.weeks.first, dataset.manifest.weeks.last);
     const currentWeek = getCurrentWeekIso();
     const currentWeekIndex = weeks.indexOf(currentWeek);
-    const rows = computeBaselineMilestones(dataset, state.ui.mostraArchiviati);
+    const rows = computeBaselineMilestones(dataset, state.ui.showArchived);
 
     const weekCounts = new Map();
     let totalRilasci = 0;
@@ -82,16 +82,16 @@
         (row.baselineIndex % 2 === 1 ? ' row-baseline-alt' : '') +
         (row.inconsistent ? ' row-inconsistent' : '');
 
-      grid.appendChild(fixedCell(row.showProgetto ? row.progetto.nome : '', 'col-1', rowClass));
-      grid.appendChild(fixedCell(row.baseline.versione, 'col-2', rowClass));
+      grid.appendChild(fixedCell(row.showProgetto ? row.progetto.name : '', 'col-1', rowClass));
+      grid.appendChild(fixedCell(row.baseline.version, 'col-2', rowClass));
 
       weeks.forEach((iso, i) => {
         const cell = document.createElement('div');
         cell.className = `gantt-cell week-cell${rowClass}`;
         if (row.settimana === iso) {
           cell.classList.add('milestone');
-          const parts = [`${row.progetto.nome} — Baseline ${row.baseline.versione}`];
-          if (row.taskNome) parts.push(row.taskNome);
+          const parts = [`${row.progetto.name} — Baseline ${row.baseline.version}`];
+          if (row.taskName) parts.push(row.taskName);
           parts.push(`release ${iso}`);
           if (row.inconsistent) parts.push('inconsistent dates across the baseline\'s tasks, needs normalizing');
           cell.title = parts.join(' — ');

@@ -25,10 +25,10 @@
     return addDays(iso, weeks * 7);
   }
 
-  function getWeeksInRange(prima, ultima) {
+  function getWeeksInRange(first, last) {
     const weeks = [];
-    let current = prima;
-    while (current <= ultima) {
+    let current = first;
+    while (current <= last) {
       weeks.push(current);
       current = addWeeks(current, 1);
     }
@@ -63,12 +63,12 @@
   // eliminare settimane in coda (§6.3 della spec).
   function findAllocationsInWeeks(dataset, weekIsoSet) {
     const risultati = [];
-    for (const [, { data: progetto }] of dataset.progetti) {
+    for (const [, { data: progetto }] of dataset.projects) {
       progetto.baseline.forEach((baseline) => {
         baseline.task.forEach((task) => {
-          for (const [settimana, entry] of Object.entries(task.settimane || {})) {
+          for (const [settimana, entry] of Object.entries(task.weeks || {})) {
             if (weekIsoSet.has(settimana) && entry && (entry.team || entry.milestone)) {
-              risultati.push({ progetto: progetto.nome, baseline: baseline.versione, task: task.nome, settimana });
+              risultati.push({ progetto: progetto.name, baseline: baseline.version, task: task.name, settimana });
             }
           }
         });

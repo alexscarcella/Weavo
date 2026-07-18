@@ -1,37 +1,38 @@
 {
-  "nome": "WIDE WORLD IMPORTERS LEGACY ERP",
-  "team": {
+  "name": "WIDE WORLD IMPORTERS LEGACY ERP",
+  "referents": {
     "projectManager": "",
     "projectEngineer": "",
     "solutionAnalyst": "",
     "vvReference": "",
     "note": "Team WIDE WORLD IMPORTERS LEGACY ERP (Barbara Liskov / Kohsuke Kawaguchi)"
   },
-  "archiviato": true,
+  "archived": true,
   "baseline": [
     {
-      "versione": "1.0",
+      "version": "1.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Unit Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Unit Testing",
+          "completed": true,
+          "weeks": {
             "2025-12-08": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "WV"
               ]
             },
             "2025-12-15": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
             "2026-01-26": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT"
               ],
               "milestone": true
@@ -39,12 +40,12 @@
           }
         },
         {
-          "nome": "Load Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Load Testing",
+          "completed": true,
+          "weeks": {
             "2025-12-29": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
@@ -54,12 +55,12 @@
           }
         },
         {
-          "nome": "System Architecture Design",
-          "concluso": true,
-          "settimane": {
+          "name": "System Architecture Design",
+          "completed": true,
+          "weeks": {
             "2026-01-19": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "MH",
                 "GH"
               ]
@@ -70,26 +71,26 @@
           }
         },
         {
-          "nome": "Legacy System Decommissioning",
-          "concluso": true,
-          "settimane": {
+          "name": "Legacy System Decommissioning",
+          "completed": true,
+          "weeks": {
             "2025-12-15": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KK",
                 "MF"
               ]
             },
             "2025-12-29": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "GK",
                 "PD"
               ]
             },
             "2025-12-08": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB"
               ]
             },
@@ -101,28 +102,29 @@
       ]
     },
     {
-      "versione": "2.0",
+      "version": "2.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Disaster Recovery Plan",
-          "concluso": true,
-          "settimane": {
+          "name": "Disaster Recovery Plan",
+          "completed": true,
+          "weeks": {
             "2026-01-12": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             },
             "2026-01-19": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "JH",
                 "MF"
               ]
             },
             "2026-02-02": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
@@ -132,18 +134,18 @@
           }
         },
         {
-          "nome": "Load Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Load Testing",
+          "completed": true,
+          "weeks": {
             "2026-01-19": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH"
               ]
             },
             "2026-01-12": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK"
               ]
             },
@@ -153,12 +155,12 @@
           }
         },
         {
-          "nome": "Accessibility Compliance",
-          "concluso": true,
-          "settimane": {
+          "name": "Accessibility Compliance",
+          "completed": true,
+          "weeks": {
             "2026-03-02": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV",
                 "JR"
               ]
@@ -169,25 +171,25 @@
           }
         },
         {
-          "nome": "Payment Gateway Integration",
-          "concluso": true,
-          "settimane": {
+          "name": "Payment Gateway Integration",
+          "completed": true,
+          "weeks": {
             "2026-02-16": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DK"
               ]
             },
             "2026-02-02": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "JH",
                 "KK"
               ]
             },
             "2026-01-26": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH",
                 "BL"
               ]
@@ -198,26 +200,26 @@
           }
         },
         {
-          "nome": "Performance Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Performance Testing",
+          "completed": true,
+          "weeks": {
             "2026-02-16": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "AL",
                 "MH"
               ]
             },
             "2026-01-19": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB",
                 "JH"
               ]
             },
             "2026-02-02": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "RP"
               ]
             },
@@ -229,15 +231,16 @@
       ]
     },
     {
-      "versione": "3.0",
+      "version": "3.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Change Request Analysis",
-          "concluso": true,
-          "settimane": {
+          "name": "Change Request Analysis",
+          "completed": true,
+          "weeks": {
             "2026-03-16": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA",
                 "RP"
               ]
@@ -248,24 +251,24 @@
           }
         },
         {
-          "nome": "Code Review",
-          "concluso": true,
-          "settimane": {
+          "name": "Code Review",
+          "completed": true,
+          "weeks": {
             "2026-03-23": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             },
             "2026-02-23": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT"
               ]
             },
             "2026-03-09": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN",
                 "JA"
               ]
@@ -276,24 +279,24 @@
           }
         },
         {
-          "nome": "Third-Party API Integration",
-          "concluso": true,
-          "settimane": {
+          "name": "Third-Party API Integration",
+          "completed": true,
+          "weeks": {
             "2026-02-23": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "MF"
               ]
             },
             "2026-03-02": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN"
               ]
             },
             "2026-02-09": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR",
                 "DK"
               ]

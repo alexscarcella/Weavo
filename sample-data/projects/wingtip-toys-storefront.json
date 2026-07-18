@@ -1,50 +1,51 @@
 {
-  "nome": "WINGTIP TOYS STOREFRONT",
-  "team": {
+  "name": "WINGTIP TOYS STOREFRONT",
+  "referents": {
     "projectManager": "",
     "projectEngineer": "",
     "solutionAnalyst": "",
     "vvReference": "",
     "note": "Team WINGTIP TOYS STOREFRONT (Grace Hopper / Adrian Cockcroft)"
   },
-  "archiviato": false,
+  "archived": false,
   "baseline": [
     {
-      "versione": "1.0",
+      "version": "1.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Third-Party Data Feed Import",
-          "concluso": true,
-          "settimane": {
+          "name": "Third-Party Data Feed Import",
+          "completed": true,
+          "weeks": {
             "2026-03-09": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT"
               ],
               "milestone": true
             },
             "2026-01-19": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL"
               ]
             }
           }
         },
         {
-          "nome": "System Architecture Design",
-          "concluso": true,
-          "settimane": {
+          "name": "System Architecture Design",
+          "completed": true,
+          "weeks": {
             "2026-03-02": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK",
                 "BT"
               ]
             },
             "2026-02-09": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
@@ -54,12 +55,12 @@
           }
         },
         {
-          "nome": "Production Rollout",
-          "concluso": true,
-          "settimane": {
+          "name": "Production Rollout",
+          "completed": true,
+          "weeks": {
             "2026-02-02": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA"
               ]
             },
@@ -69,25 +70,25 @@
           }
         },
         {
-          "nome": "Training & Handover",
-          "concluso": true,
-          "settimane": {
+          "name": "Training & Handover",
+          "completed": true,
+          "weeks": {
             "2026-02-09": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV",
                 "AC"
               ]
             },
             "2026-01-19": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA"
               ]
             },
             "2026-03-09": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT"
               ],
               "milestone": true
@@ -95,12 +96,12 @@
           }
         },
         {
-          "nome": "Integration Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Integration Testing",
+          "completed": true,
+          "weeks": {
             "2026-02-16": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK",
                 "BL"
               ]
@@ -111,12 +112,12 @@
           }
         },
         {
-          "nome": "Technical Documentation",
-          "concluso": true,
-          "settimane": {
+          "name": "Technical Documentation",
+          "completed": true,
+          "weeks": {
             "2026-03-09": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA",
                 "PD"
               ],
@@ -124,32 +125,32 @@
             },
             "2026-01-26": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT"
               ]
             }
           }
         },
         {
-          "nome": "Field Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Field Testing",
+          "completed": true,
+          "weeks": {
             "2026-01-26": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
             "2026-02-09": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN",
                 "PD"
               ]
             },
             "2026-01-12": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
@@ -159,25 +160,25 @@
           }
         },
         {
-          "nome": "Requirements Analysis",
-          "concluso": true,
-          "settimane": {
+          "name": "Requirements Analysis",
+          "completed": true,
+          "weeks": {
             "2026-01-19": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "AL",
                 "KT"
               ]
             },
             "2026-02-02": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB"
               ]
             },
             "2026-02-23": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "KT",
                 "DK"
               ]
@@ -188,24 +189,24 @@
           }
         },
         {
-          "nome": "Payment Gateway Integration",
-          "concluso": false,
-          "settimane": {
+          "name": "Payment Gateway Integration",
+          "completed": false,
+          "weeks": {
             "2026-01-12": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA"
               ]
             },
             "2026-03-02": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT"
               ]
             },
             "2026-01-19": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KK"
               ]
             },
@@ -217,35 +218,36 @@
       ]
     },
     {
-      "versione": "2.0",
+      "version": "2.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Database Schema Migration",
-          "concluso": false,
-          "settimane": {
+          "name": "Database Schema Migration",
+          "completed": false,
+          "weeks": {
             "2026-07-06": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "AC"
               ]
             },
             "2026-06-22": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN",
                 "PD"
               ]
             },
             "2026-07-13": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
             "2026-06-01": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "GS",
                 "AK"
               ]
@@ -256,12 +258,12 @@
           }
         },
         {
-          "nome": "Load Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Load Testing",
+          "completed": true,
+          "weeks": {
             "2026-07-06": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL",
                 "CK"
               ]
@@ -272,32 +274,32 @@
           }
         },
         {
-          "nome": "Legacy System Decommissioning",
-          "concluso": true,
-          "settimane": {
+          "name": "Legacy System Decommissioning",
+          "completed": true,
+          "weeks": {
             "2026-06-08": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KK"
               ]
             },
             "2026-06-01": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC",
                 "WV"
               ]
             },
             "2026-06-15": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN",
                 "PD"
               ]
             },
             "2026-07-20": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN",
                 "JA"
               ]
@@ -308,26 +310,26 @@
           }
         },
         {
-          "nome": "Accessibility Compliance",
-          "concluso": true,
-          "settimane": {
+          "name": "Accessibility Compliance",
+          "completed": true,
+          "weeks": {
             "2026-07-27": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "JH"
               ],
               "milestone": true
             },
             "2026-06-22": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH",
                 "RP"
               ]
             },
             "2026-06-08": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL",
                 "FA"
               ]
@@ -335,12 +337,12 @@
           }
         },
         {
-          "nome": "Data Migration",
-          "concluso": true,
-          "settimane": {
+          "name": "Data Migration",
+          "completed": true,
+          "weeks": {
             "2026-07-27": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "GK",
                 "JA"
               ],
@@ -351,34 +353,35 @@
       ]
     },
     {
-      "versione": "3.0",
+      "version": "3.0",
+      "archived": false,
       "task": [
         {
-          "nome": "User Acceptance Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "User Acceptance Testing",
+          "completed": false,
+          "weeks": {
             "2026-07-27": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "GS"
               ]
             },
             "2026-08-24": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV"
               ]
             },
             "2026-07-20": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN",
                 "JA"
               ]
             },
             "2026-08-03": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA",
                 "MN"
               ]
@@ -389,57 +392,57 @@
           }
         },
         {
-          "nome": "Load Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "Load Testing",
+          "completed": false,
+          "weeks": {
             "2026-07-20": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB"
               ]
             },
             "2026-09-14": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ],
               "milestone": true
             },
             "2026-08-10": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
             "2026-09-07": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA"
               ]
             }
           }
         },
         {
-          "nome": "Regression Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "Regression Testing",
+          "completed": false,
+          "weeks": {
             "2026-07-27": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH",
                 "DK"
               ]
             },
             "2026-07-20": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DK",
                 "KT"
               ]
             },
             "2026-08-10": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB"
               ]
             },

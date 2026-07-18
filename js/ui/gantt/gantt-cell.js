@@ -31,8 +31,8 @@
     return perSettimana ? perSettimana.get(settimana) : undefined;
   }
 
-  function renderWeekCell({ task, baseline, settimana, teamMap, sigleValide, siglaTeamMap, allocationIndex, state, file, onCellSaved, onOpenShiftMenu, lastEdited }) {
-    const entry = (task.settimane || {})[settimana];
+  function renderWeekCell({ task, baseline, settimana, teamMap, validInitials, initialsTeamMap, allocationIndex, state, file, onCellSaved, onOpenShiftMenu, lastEdited }) {
+    const entry = (task.weeks || {})[settimana];
     const div = document.createElement('div');
     div.className = 'gantt-cell week-cell editable-cell';
     const titleParts = [];
@@ -41,17 +41,17 @@
       div.classList.add('cell-just-edited');
     }
 
-    if (task.concluso) {
+    if (task.completed) {
       div.style.background = '#d9d9d9';
     } else if (entry && entry.team) {
       const teamInfo = teamMap.get(entry.team);
       if (teamInfo) {
-        div.style.background = teamInfo.colore;
+        div.style.background = teamInfo.color;
       } else {
         div.classList.add('orphan-team');
-        titleParts.push(`Team "${entry.team}" not defined in team-risorse.json`);
+        titleParts.push(`Team "${entry.team}" not defined in team-resources.json`);
         const badge = document.createElement('span');
-        badge.className = 'badge-orfano';
+        badge.className = 'badge-orphan';
         badge.textContent = '?';
         div.appendChild(badge);
       }
@@ -62,25 +62,25 @@
       titleParts.push('Delivery milestone');
     }
 
-    if (entry && Array.isArray(entry.risorse) && entry.risorse.length) {
+    if (entry && Array.isArray(entry.resources) && entry.resources.length) {
       const testo = document.createElement('span');
       testo.className = 'cell-text';
-      testo.textContent = entry.risorse.join(', ');
+      testo.textContent = entry.resources.join(', ');
       div.appendChild(testo);
-      titleParts.push(entry.risorse.join(', '));
+      titleParts.push(entry.resources.join(', '));
 
-      const orfane = entry.risorse.filter((s) => !sigleValide.has(s));
+      const orfane = entry.resources.filter((s) => !validInitials.has(s));
       if (orfane.length) {
-        div.classList.add('orphan-risorsa');
-        titleParts.push(`Sigla not in team-risorse.json: ${orfane.join(', ')}`);
+        div.classList.add('orphan-resource');
+        titleParts.push(`Initials not in team-resources.json: ${orfane.join(', ')}`);
         const badge = document.createElement('span');
-        badge.className = 'badge-orfano badge-orfano-risorsa';
+        badge.className = 'badge-orphan badge-orphan-resource';
         badge.textContent = '!';
         div.appendChild(badge);
       }
 
-      if (!task.concluso) {
-        const sovrallocate = entry.risorse.filter(
+      if (!task.completed) {
+        const sovrallocate = entry.resources.filter(
           (s) => MP.overallocation.findAllocations(allocationIndex, s, settimana).length > 1
         );
         if (sovrallocate.length) {
@@ -89,7 +89,7 @@
             const altri = MP.overallocation
               .findAllocations(allocationIndex, s, settimana)
               .filter((r) => r.taskRef !== task)
-              .map((r) => `${r.progettoNome} / BL ${r.baselineVersione} / ${r.taskNome}`)
+              .map((r) => `${r.projectName} / BL ${r.baselineVersion} / ${r.taskName}`)
               .join('; ');
             return `${s} → ${altri}`;
           });
@@ -97,13 +97,13 @@
         }
 
         const daRegolarizzare = entry.team
-          ? entry.risorse.filter((s) => siglaTeamMap.has(s) && siglaTeamMap.get(s) !== entry.team)
+          ? entry.resources.filter((s) => initialsTeamMap.has(s) && initialsTeamMap.get(s) !== entry.team)
           : [];
         if (daRegolarizzare.length) {
           div.classList.add('team-mismatch');
           titleParts.push(`Team to regularize: ${daRegolarizzare.join(', ')} no longer belongs to team "${entry.team}"`);
           const badge = document.createElement('span');
-          badge.className = 'badge-orfano badge-mismatch';
+          badge.className = 'badge-orphan badge-mismatch';
           badge.textContent = '⚠';
           div.appendChild(badge);
         }

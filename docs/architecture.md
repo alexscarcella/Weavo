@@ -33,6 +33,7 @@ flowchart TB
     subgraph data["js/data — persistence"]
         schema["schema.js\nshapes + factories"]
         fsaccess["fs-access.js\nFile System Access wrapper"]
+        legacymig["legacy-migration.js\none-time legacy schema upgrade"]
         repository["repository.js\nload dataset, raw save/backup"]
         savecoord["save-coordinator.js\nreread-before-write conflict check"]
         slug["slug.js\nfilename slugs"]
@@ -51,7 +52,7 @@ flowchart TB
         common["common/\nmodal, toast, context-menu, toolbar, dataset-header, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
         gantt["gantt/\nmain view, cell popover, shift, legend"]
-        other["resource-load/, team-risorse/, milestones/, weeks/"]
+        other["resource-load/, team-resources/, milestones/, weeks/"]
     end
     app["js/app.js — entry point"]
 
@@ -64,9 +65,11 @@ flowchart TB
 ```
 
 1. **`js/data/`** — the only layer that touches disk. `fs-access.js` wraps the browser API with
-   no application logic; `repository.js` composes it into whole-dataset load and raw per-file
-   save/backup; `save-coordinator.js` is the *only* place a user-triggered write should go
-   through, because it adds reread-before-write conflict detection (see
+   no application logic; `legacy-migration.js` runs once per folder connect to upgrade data still
+   on an older `schemaVersion` (see [database.md](database.md#legacy-data-migration));
+   `repository.js` composes these into whole-dataset load and raw per-file save/backup;
+   `save-coordinator.js` is the *only* place a user-triggered write should go through, because it
+   adds reread-before-write conflict detection (see
    [database.md](database.md#conflict-detection)).
 2. **`js/state/store.js`** — a state container in the classic sense: one object, `getState`,
    `setState`, `subscribe`. No framework, no virtual DOM, no reducers. `setState` shallow-merges a
@@ -110,8 +113,8 @@ stateDiagram-v2
     ready --> not-connected: user picks "Change data folder…" from the ☰ menu
 ```
 
-`state.dataset` (present only in `ready`) holds `{ manifest, teamRisorsa, progetti, warnings }`
-plus per-file `*Meta` entries used by the save coordinator. `state.ui.vistaCorrente` picks which
+`state.dataset` (present only in `ready`) holds `{ manifest, teamResources, projects, warnings }`
+plus per-file `*Meta` entries used by the save coordinator. `state.ui.currentView` picks which
 top-level view renders inside the `ready` state: the gantt grid, the resource-load view, the
 milestones density report, or the team/resource management page.
 

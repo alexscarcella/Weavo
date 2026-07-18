@@ -57,19 +57,27 @@ user, never assume it.
 All user-facing text (button/menu labels, headings, tooltips, `window.alert`/`confirm`/`prompt`
 messages, placeholder/hint text) is **English** — the app targets an English-speaking user. This
 was a deliberate one-time sweep (July 2026) of every string rendered to the screen; new UI text
-must be written in English too. This does **not** extend to: JSON field names in the data model
-(`sigla`, `nome`, `settimane`, `codice`, `versione`, `progetti`, etc. — kept in Italian for
-historical reasons, see [docs/glossary.md](docs/glossary.md)), internal state/variable identifiers
-(`state.ui.vistaCorrente`, `mostraArchiviati`, `carico-risorse`, …), or code comments (this
-codebase's comments stay in Italian, written by/for the maintainer). Only what a user actually
-reads on screen needs to be English.
+must be written in English too.
+
+A later refactoring pass extended this to the data model itself: every persisted JSON field name
+(`initials`, `name`, `weeks`, `code`, `version`, `projects`, `archived`, `completed`, etc. — see
+[docs/glossary.md](docs/glossary.md)) and every internal identifier that directly mirrors one
+(`state.ui.currentView`, `showArchived`, the view code `'resource-load'`, exported function names
+like `findOrphanResources`, …) is English too — there's no carve-out left for Italian anywhere in
+the persisted data or in the code paths that construct/read it. The only remaining exceptions are
+**code comments** (this codebase's comments stay in Italian, written by/for the maintainer) and
+**local scratch variables that don't literally mirror a data-model field** (e.g. `progetto`,
+`righe`, `cartella`, `dettagli` as loop/local names) — same treatment as comments, not part of
+"what a user reads on screen" nor of the persisted schema. Data written before this pass used the
+old Italian field names and file/directory names (`team-risorse.json`, `progetti/`); see "Legacy
+data migration" below for how it's upgraded automatically.
 
 ## Running / testing
 
 There is no build, dev server, or automated test suite in this repo. To run the app: open
 [index.html](index.html) directly in Chrome or Edge (`file://` path). Sample data for manual
 testing lives in [sample-data/](sample-data/) (a full dataset: `manifest.json`,
-`team-risorse.json`, `progetti/*.json`) — point the app's folder picker at that directory.
+`team-resources.json`, `projects/*.json`) — point the app's folder picker at that directory.
 
 For quick non-interactive checks (no real directory handle available headlessly, since
 `showDirectoryPicker()` needs a user gesture), load the plain-script modules into a Node `vm`
@@ -108,127 +116,170 @@ tag to fix a bad release — delete it (local + remote) and the GitHub Release, 
 
 [scripts/import-excel/](scripts/import-excel/) is a one-shot Node script (uses `exceljs`, needs
 `npm install`) that converts the "Master Plan" sheet of `requirements/Master plan software.xlsx`
-into the `manifest.json` / `team-risorse.json` / `progetti/*.json` structure (current team/risorse
-model — see below). Run with `--dry-run` first and review the report before writing real output.
-See [scripts/import-excel/README.md](scripts/import-excel/README.md) for the full set of parsing
-heuristics (column layout, baseline carry-over, color→team mapping, milestone detection, valid
-sigla format, never-allocated-resource exclusion) — these were reverse-engineered from the real
-spreadsheet, not assumed, so re-derive from the actual file rather than guessing if the heuristics
-need adjusting. Since the sheet has no explicit sigla→team column, each resource's team is inferred
-by majority vote over the colors of the cells it appears in; sigle that tie or have no color signal
-at all make the script stop **without writing anything** until resolved via a local, gitignored
-`team-overrides.json` (real personnel data, never committed — see the README for its shape). A
-companion script, `scripts/import-excel/analyze-output.js`, re-runs `js/model/validation.js`'s
-orphan/mismatch checks against an already-written data folder (via a Node `vm` sandbox, no browser
-needed) — useful after any import or hand-edit, not just right after running `import.js`. The
-script's own default output folder, `import-output/` at repo root, is gitignored (may contain a
-full real copy of project data).
+into the `manifest.json` / `team-resources.json` / `projects/*.json` structure (current
+team/resources model — see below). Run with `--dry-run` first and review the report before
+writing real output. See [scripts/import-excel/README.md](scripts/import-excel/README.md) for the
+full set of parsing heuristics (column layout, baseline carry-over, color→team mapping, milestone
+detection, valid initials format, never-allocated-resource exclusion) — these were
+reverse-engineered from the real spreadsheet, not assumed, so re-derive from the actual file
+rather than guessing if the heuristics need adjusting. Since the sheet has no explicit
+initials→team column, each resource's team is inferred by majority vote over the colors of the
+cells it appears in; initials that tie or have no color signal at all make the script stop
+**without writing anything** until resolved via a local, gitignored `team-overrides.json` (real
+personnel data, never committed — see the README for its shape; this override file deliberately
+keeps the old Italian field names `codice`/`nome`/`colore`, since it's an external, unversioned
+input the import script translates internally, not part of the app's own persisted data — see the
+README's "Come viene assegnato il team a ogni risorsa" for the reasoning). A companion script,
+`scripts/import-excel/analyze-output.js`, re-runs `js/model/validation.js`'s orphan/mismatch
+checks against an already-written data folder (via a Node `vm` sandbox, no browser needed) —
+useful after any import or hand-edit, not just right after running `import.js`. The script's own
+default output folder, `import-output/` at repo root, is gitignored (may contain a full real copy
+of project data).
 
 ## Data model
 
-One JSON file per project under `progetti/`, plus two shared files at the data folder root:
-`manifest.json` (project index + global week range `settimane.prima`/`settimane.ultima`) and
-`team-risorse.json` (the team/resource anagraphics, see below).
+One JSON file per project under `projects/`, plus two shared files at the data folder root:
+`manifest.json` (project index + global week range `weeks.first`/`weeks.last`) and
+`team-resources.json` (the team/resource anagraphics, see below).
 
-### Team/risorse model
+### Team/resources model
 
 A **team** (`dev`/`vv`/`devops`/`run`/`build`/... — dynamic, not an enum in code) is the only
-grouping entity, with a color and a name. A **resource** (sigla + full name) always belongs to
+grouping entity, with a color and a name. A **resource** (initials + full name) always belongs to
 exactly **one** team — this is a real 1-team-to-N-resources relationship, not a loose tag:
-resources are nested inside their team in `team-risorse.json`, never listed independently.
+resources are nested inside their team in `team-resources.json`, never listed independently.
 
 ```json
-{ "team": [ { "codice": "dev", "nome": "Development", "colore": "#00B050", "risorse": [ { "sigla": "LC", "nome": "Luca Cozzi" } ] } ] }
+{ "teams": [ { "code": "dev", "name": "Development", "color": "#00B050", "resources": [ { "initials": "LC", "name": "Luca Cozzi" } ] } ] }
 ```
 
 - All CRUD for teams and resources is centralized in the dedicated page
-  [js/ui/team-risorse/team-risorse-view.js](js/ui/team-risorse/team-risorse-view.js)
+  [js/ui/team-resources/team-resources-view.js](js/ui/team-resources/team-resources-view.js)
   (`js/ui/crud/team-crud.js` + `js/ui/crud/resource-crud.js`). The gantt legend
   ([js/ui/gantt/legend.js](js/ui/gantt/legend.js)) and the resource-load view
   ([js/ui/resource-load/resource-load-view.js](js/ui/resource-load/resource-load-view.js)) are
-  **read-only** — don't add editing affordances back there. Navigation to the team/risorse page
+  **read-only** — don't add editing affordances back there. Navigation to the team/resources page
   is via the hamburger menu ([js/ui/common/toolbar.js](js/ui/common/toolbar.js)) only; neither
   view duplicates it with its own "manage" button (removed as redundant).
 - A team can have zero resources; deleting a team with resources still assigned is **blocked**
   (`MP.teamCrud.deleteTeam`) — the user must move or delete its resources first.
 - Moving a resource to a different team (`MP.resourceCrud.moveResource`) does **assisted bulk
-  regularization**: before persisting, it scans every non-`concluso` week entry referencing the
+  regularization**: before persisting, it scans every non-`completed` week entry referencing the
   resource (`MP.validation.findResourceAllocations`) and, for cells where the move leaves every
-  allocated sigla belonging to a single team ("unambiguous"), rewrites that cell's `team` to
+  allocated resource belonging to a single team ("unambiguous"), rewrites that cell's `team` to
   match — after a confirmation showing how many cells will be updated — so the cell's rendered
   color (driven by `entry.team`, see `gantt-cell.js`) follows the resource automatically. Cells
   where the move leaves resources spanning more than one team ("ambiguous", e.g. a cell with two
   resources independently moved to different teams) are left untouched and keep being surfaced
   by `MP.validation.findTeamMismatches` (see below) for manual fix-up in the cell popover.
   Deleting a resource (`MP.resourceCrud.deleteResource`) similarly cascades: it removes the
-  sigla from every non-`concluso` week entry's `risorse` (clearing `team` too if `risorse`
-  becomes empty, preserving `milestone: true` if set) before removing the resource from
-  `team-risorse.json`, showing a copyable plain-text summary of the affected allocations first
-  and requiring explicit confirmation. `concluso` task allocations are never touched by either
-  flow (see below) and become orphan references once the resource is gone. Project-level
-  `solutionAnalyst`/`vvReference` sigla references are never touched by either flow either — see
-  "Project team/referents" below.
-- A week entry's `team` field must match the team of every sigla in its `risorse` array in
+  resource's initials from every non-`completed` week entry's `resources` (clearing `team` too if
+  `resources` becomes empty, preserving `milestone: true` if set) before removing the resource
+  from `team-resources.json`, showing a copyable plain-text summary of the affected allocations
+  first and requiring explicit confirmation. `completed` task allocations are never touched by
+  either flow (see below) and become orphan references once the resource is gone. Project-level
+  `solutionAnalyst`/`vvReference` initials references are never touched by either flow either —
+  see "Project team/referents" below.
+- A week entry's `team` field must match the team of every resource in its `resources` array in
   principle, but this isn't enforced at write time for pre-existing data — only flagged. The
   cell popover ([js/ui/gantt/cell-popover.js](js/ui/gantt/cell-popover.js)) enforces it going
   forward: you pick a team first, then only resources belonging to that team are selectable.
 
 Key rules (see [js/data/schema.js](js/data/schema.js) and spec §4 for full detail — note the spec
-predates the team/risorse merge and still describes the old two-file `risorse.json` +
-`tipi-risorsa.json` split; trust the code over §4.5/§4.7 there):
+predates the team/resources merge and still describes the old two-file `risorse.json` +
+`tipi-risorsa.json` split, plus the old Italian field names throughout; trust the code over
+§4.5/§4.7 there):
 - **Nothing about teams/colors is hardcoded in app code** — everything renders dynamically from
-  `team-risorse.json` (legend, popover options). `SEED_TEAM` in `schema.js` is only a proposed
+  `team-resources.json` (legend, popover options). `SEED_TEAM` in `schema.js` is only a proposed
   starting point for a brand-new empty dataset, not a constraint.
 - Allocation model is **boolean** — a resource is either allocated to a task in a given week or
   not; no percentages/fractions.
-- A week entry (`task.settimane[iso]`) is only meaningful if `team` + non-empty `risorse` are
+- A week entry (`task.weeks[iso]`) is only meaningful if `team` + non-empty `resources` are
   both present together, or if `milestone: true` is set — never a partial state like
-  `{team: "dev", risorse: []}`. Always construct these via `MP.schema.createWeekEntry(...)`.
-- `team` codes and resource `sigla`s referenced by a task but missing from `team-risorse.json`
-  are **orphan references** (`MP.validation.findOrphanTeam`/`findOrphanRisorse`); a resource
-  allocated under a `team` different from the one it currently belongs to is a **mismatch**
-  (`MP.validation.findTeamMismatches`, non-concluso tasks only). Both are surfaced as
+  `{team: "dev", resources: []}`. Always construct these via `MP.schema.createWeekEntry(...)`.
+- `team` codes and resource `initials` referenced by a task but missing from
+  `team-resources.json` are **orphan references**
+  (`MP.validation.findOrphanTeam`/`findOrphanResources`); a resource allocated under a `team`
+  different from the one it currently belongs to is a **mismatch**
+  (`MP.validation.findTeamMismatches`, non-`completed` tasks only). Both are surfaced as
   non-blocking warnings (badge on the cell + line in the warnings panel), never silently
   dropped or auto-corrected.
-- A task marked `concluso: true` is excluded from overallocation counting *and* from mismatch
+- A task marked `completed: true` is excluded from overallocation counting *and* from mismatch
   detection (its weeks no longer count as active commitment) but its data is not deleted or
   auto-corrected — closed tasks are never touched by team/resource changes, including the
   bulk-regularization-on-move and cascade-delete-on-deletion flows described above.
 
 ### Project team/referents
 
-Each project's `team` field (`progetti/<slug>.json`) is a structured object, not free text:
+Each project's `referents` field (`projects/<slug>.json`) is a structured object, not free text:
 
 ```json
 { "projectManager": "", "projectEngineer": "", "solutionAnalyst": "", "vvReference": "", "note": "" }
 ```
 
 - `projectManager`/`projectEngineer`/`note` are free text (`note` multi-line). `solutionAnalyst`/
-  `vvReference` hold a resource **sigla** (or `''`), selectable from any resource of any team in
-  `team-risorse.json` — no role/team restriction — and resolved to a display name on demand via
-  `MP.schema.findResourceEntry`, never denormalized into the stored value.
-- Built via `MP.schema.createProjectTeamInfo(...)`. Edited as a whole (not field-by-field) through
-  `MP.modal.promptProjectForm`, a dedicated multi-field modal (text/textarea/`<select>` with
-  per-team `<optgroup>`s) — used both for project creation (`MP.projectCrud.createProject`, which
-  now opens this form for the name *and* all team fields in one step, since the button that used
-  to live in the gantt toolbar moved into the hamburger menu — see `toolbar.js` below) and for the
-  existing "Project team…" row-menu edit action (`MP.projectCrud.editTeam`, `project-crud.js`).
+  `vvReference` hold a resource **initials** value (or `''`), selectable from any resource of any
+  team in `team-resources.json` — no role/team restriction — and resolved to a display name on
+  demand via `MP.schema.findResourceEntry`, never denormalized into the stored value.
+- Built via `MP.schema.createProjectReferents(...)`. Edited as a whole (not field-by-field)
+  through `MP.modal.promptProjectForm`, a dedicated multi-field modal (text/textarea/`<select>`
+  with per-team `<optgroup>`s) — used both for project creation (`MP.projectCrud.createProject`,
+  which now opens this form for the name *and* all referent fields in one step, since the button
+  that used to live in the gantt toolbar moved into the hamburger menu — see `toolbar.js` below)
+  and for the existing "Project team…" row-menu edit action (`MP.projectCrud.editReferents`,
+  `project-crud.js`).
 - Read-only view: the "i" icon rendered by `gantt-row.js` immediately before the project name
   (only on the row where the name itself is shown) opens `MP.modal.showProjectCard`, listing name,
-  archived status, baseline/task counts, and all 5 team fields with the two sigla references
-  resolved to a name. No "Edit" action inside it by design — editing stays solely in the "Project
-  team…" row-menu entry, so there's exactly one write path for this field.
-- A `solutionAnalyst`/`vvReference` sigla that no longer exists in `team-risorse.json` is an
-  **orphan reference**, same non-blocking-warning treatment as the task-level ones —
-  `MP.validation.findOrphanProjectRiferimenti`, surfaced in the gantt warnings panel.
-- Legacy data: before this field was structured, `team` was a free-text string. Loading a project
-  whose `team` is still a string (`repository.loadDataset`, via `MP.schema.normalizeProjectTeam`)
-  migrates it in memory — the old text becomes `team.note`, the other 4 fields start empty — and
-  the file is rewritten in the new shape the next time that project is saved (lazy "self-heal on
-  touch", same principle as the baseline-milestone self-heal above; no batch migration script).
-  The Excel import script (`scripts/import-excel/import.js`) always writes the new shape with all
-  5 fields empty — it no longer captures the old free-text referents from column A; those are
-  filled in by hand in the app after import.
+  archived status, baseline/task counts, and all 5 referent fields with the two initials
+  references resolved to a name. No "Edit" action inside it by design — editing stays solely in
+  the "Project team…" row-menu entry, so there's exactly one write path for this field.
+- A `solutionAnalyst`/`vvReference` initials value that no longer exists in `team-resources.json`
+  is an **orphan reference**, same non-blocking-warning treatment as the task-level ones —
+  `MP.validation.findOrphanProjectReferents`, surfaced in the gantt warnings panel.
+- Legacy data: before this field was structured, `referents` (then still named `team`) was a
+  free-text string. Loading a project whose `referents` is still a string
+  (`repository.loadDataset`, via `MP.schema.normalizeProjectReferents`) migrates it in memory —
+  the old text becomes `referents.note`, the other 4 fields start empty — and the file is
+  rewritten in the new shape the next time that project is saved (lazy "self-heal on touch", same
+  principle as the baseline-milestone self-heal above; no batch migration script). This self-heal
+  is orthogonal to, and predates, the whole-schema legacy migration described next — it runs
+  regardless of `manifest.schemaVersion`. The Excel import script
+  (`scripts/import-excel/import.js`) always writes the new shape with all 5 fields empty — it no
+  longer captures the old free-text referents from column A; those are filled in by hand in the
+  app after import.
+
+### Legacy data migration
+
+Every field name described above is a deliberate, one-time rename from an earlier Italian-named
+schema (`nome`, `sigla`, `settimane`, `codice`, `versione`, `risorse`, `archiviato`/`archiviata`,
+`concluso`, the file `team-risorse.json`, the directory `progetti/`). Because real data folders on
+a shared OneDrive/network location can't be migrated by hand, `manifest.schemaVersion` (bumped to
+`2` for this rename) gates an automatic, one-time upgrade: `MP.legacyMigration.migrateIfNeeded`
+([js/data/legacy-migration.js](js/data/legacy-migration.js)), called as the first step of
+`repository.loadDataset`, checks the version on every folder connect. If it's missing or below
+`MP.schema.SCHEMA_VERSION`, the folder is legacy: old-shaped files are read (following
+`manifest.progetti`, the old field name, since the manifest itself hasn't been transformed yet),
+transformed in memory to the current shape via the module's pure `transformManifest`/
+`transformTeamResources`/`transformProject` functions, and written under the current names
+(`team-resources.json`, `projects/`) — `manifest.json` is written **last**, so it doubles as the
+commit point: an interrupted migration just retries from scratch on the next connect, no partial
+state to reconcile. The old `team-risorse.json` file and `progetti/` directory are removed only
+after the new files are fully written. A folder already on the current `schemaVersion` is detected
+cheaply (one small JSON parse) and skips migration entirely.
+
+This mechanism deliberately has **no dedicated pre-migration backup and no crash-recovery
+bookkeeping** — data in this app is not treated as irreplaceable: real data can be regenerated via
+the Excel import script, and the app already has its own manual/automatic backup feature
+(`MP.repository.createBackup`, see `docs/deployment.md` "Backups") a user can run before opening
+an old folder with a new app version, or fall back to OneDrive's own version history. Keep the
+migration's own legacy path literals (`'team-risorse.json'`, `'progetti'`) hardcoded, never sourced
+from `MP.schema.PATHS` — after this refactor those constants point at the *new* names, and a
+legacy folder by definition doesn't have those yet.
+
+`scripts/import-excel/`'s own output already targets the current schema directly (it doesn't go
+through the migration module for that) but reuses `legacy-migration.js`'s pure transform functions
+where useful for one-off data conversions (see that script's own history/comments) — the
+orchestration half (`migrateIfNeeded`, the actual disk I/O) is app-only.
 
 ## Architecture
 
@@ -238,16 +289,22 @@ inserted at the right point in that list. Layers, low → high:
 1. **`js/data/`** — persistence primitives and dataset shape.
    - `schema.js`: canonical shape of every JSON file + factory/validity helpers (no I/O).
    - `fs-access.js`: thin wrapper over the browser File System Access API (permissions,
-     read/write text file, list dir) — no application logic. `pickDirectory()` passes a stable
-     `id` to `showDirectoryPicker()`; per spec this should make Chrome/Edge reopen the dialog at
-     the last-used folder, but **verified empirically that it does not under `file://`** (fails
-     even on a same-session page reload, no browser restart needed) — same likely cause as the
-     IndexedDB limitation below (no stable storage origin for `file://` pages). Left in place as
-     harmless/spec-correct but must not be presented to the user as reducing clicks. See
-     docs/deployment.md "No persisted connection" for the full writeup and why a real
-     cross-session/cross-user "recent folders" feature is still out of scope.
-   - `repository.js`: composes `fs-access` into whole-dataset load (`loadDataset`) and raw
-     per-file save/backup operations, with no conflict checking of its own.
+     read/write text file, list/remove files and directories) — no application logic.
+     `pickDirectory()` passes a stable `id` to `showDirectoryPicker()`; per spec this should make
+     Chrome/Edge reopen the dialog at the last-used folder, but **verified empirically that it
+     does not under `file://`** (fails even on a same-session page reload, no browser restart
+     needed) — same likely cause as the IndexedDB limitation below (no stable storage origin for
+     `file://` pages). Left in place as harmless/spec-correct but must not be presented to the
+     user as reducing clicks. See docs/deployment.md "No persisted connection" for the full
+     writeup and why a real cross-session/cross-user "recent folders" feature is still out of
+     scope.
+   - `legacy-migration.js`: one-time, automatic upgrade of a data folder still on an older
+     `schemaVersion` — see "Legacy data migration" above. Split into pure transform functions (no
+     I/O) and an orchestration function (`migrateIfNeeded`, the only I/O, invoked from
+     `repository.loadDataset`).
+   - `repository.js`: composes `fs-access` (and, first, `legacy-migration`) into whole-dataset
+     load (`loadDataset`) and raw per-file save/backup operations, with no conflict checking of
+     its own.
    - `save-coordinator.js`: the **only** place that should perform a write in response to a user
      edit. Wraps `repository` saves with reread-before-write conflict detection (§6.4 of spec):
      rereads the file from disk immediately before writing, and if it differs from the last text
@@ -257,9 +314,9 @@ inserted at the right point in that list. Layers, low → high:
 2. **`js/state/store.js`** — minimal in-memory state container + pub/sub (`getState`/`setState`/
    `subscribe`), no framework. `state.status` drives which top-level view `js/app.js` renders:
    `init | unsupported | not-connected | loading | ready | error`. `state.dataset` (present when
-   `ready`) holds `{ manifest, teamRisorsa, progetti: Map<file, {data, rawText}>, warnings }`
-   plus `*Meta` entries used by save-coordinator for conflict checks. `state.ui.vistaCorrente`
-   (`gantt | carico-risorse | milestones | team-risorse`) picks the page `js/app.js` renders below
+   `ready`) holds `{ manifest, teamResources, projects: Map<file, {data, rawText}>, warnings }`
+   plus `*Meta` entries used by save-coordinator for conflict checks. `state.ui.currentView`
+   (`gantt | resource-load | milestones | team-resources`) picks the page `js/app.js` renders below
    the top bar. `state.ui.autoBackupOnExit` (default `false`) is the only `ui.*` flag persisted
    across sessions — seeded from and written through `localStorage['mp.autoBackupOnExit']` via the
    store's own `setAutoBackupOnExit(value)` (not `setState` directly, so the flag and its
@@ -271,26 +328,26 @@ inserted at the right point in that list. Layers, low → high:
    the real-world current week — used by both the gantt and resource-load views to highlight
    today's column header, class `current-week`, and to draw a bold left-border "today" line down
    the whole column, class `current-week-line`, computed from the browser's local clock so it's
-   never persisted/stored), `overallocation.js` (cross-project sigla×week allocation index, used
-   both by the cell popover warning and the gantt/resource-load highlighting), `validation.js`
-   (orphan `team`/`sigla` detection, plus `findTeamMismatches` for
-   resources allocated under a team they no longer belong to), `milestones.js`
+   never persisted/stored), `overallocation.js` (cross-project initials×week allocation index,
+   used both by the cell popover warning and the gantt/resource-load highlighting),
+   `validation.js` (orphan `team`/`initials` detection, plus `findTeamMismatches` for resources
+   allocated under a team they no longer belong to), `milestones.js`
    (`computeBaselineMilestones`: for each baseline, derives the single "effective" release week
    from the (possibly duplicated/inconsistent) `milestone: true` flags across its tasks — the mode
-   across all tasks that have one set, reading concluso tasks too since this is read-only
+   across all tasks that have one set, reading completed tasks too since this is read-only
    derivation, not the write-side sync in `gantt-view.js`; flags a baseline `inconsistent` if its
    tasks disagree on the week, without correcting the underlying data — feeds the milestones page;
    `countUpcomingBaselines` filters those same rows to `settimana >= getTodayIso()` — a simple ISO
    string compare, valid since both sides are `YYYY-MM-DD` — and feeds the "upcoming baselines"
-   count in the shared `dataset-header.js`, so gantt/carico-risorse users see it without opening
+   count in the shared `dataset-header.js`, so gantt/resource-load users see it without opening
    the Milestones page). `week-utils.js` also exports `getTodayIso()` (today's date, recomputed
    from the browser clock on every call, never persisted) alongside the pre-existing
    `getCurrentWeekIso()` (the Monday of the week containing today) — `countUpcomingBaselines` uses
    the former since a release date is a specific day, not a week-column highlight.
    `week-shift.js` is a small, self-contained pure module for the "shift" feature (see
    `gantt/` below): `canShiftWeeks(dataset, task, weeks, direction)` is the ammissibility
-   predicate (blocks on `task.concluso`, on the shift crossing `manifest.settimane.prima`/
-   `ultima`, or on the one destination week that falls outside the selected block already
+   predicate (blocks on `task.completed`, on the shift crossing `manifest.weeks.first`/
+   `last`, or on the one destination week that falls outside the selected block already
    holding a non-empty entry in *this* task — reused both to enable/disable the shift menu
    items and as a safety re-check before mutating) and `shiftWeeksData(task, weeks, direction)`
    is the mutation, which snapshots every entry in `weeks` before deleting any of them so the
@@ -299,13 +356,13 @@ inserted at the right point in that list. Layers, low → high:
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs:
      `confirmConflict` for save conflicts, `promptText`/`promptColor` single-field prompts, plus
-     the project-team form/card pair described above — `promptProjectForm` and `showProjectCard`
-     — kept as bespoke functions rather than a generic form-builder since they're the only
-     multi-field use case so far; `showHelpGuide` is the odd one out — no promise/result to
-     resolve, just a static read-only panel — opened by the "?" button described below, with a
-     short section-by-section walkthrough of the gantt interactions: single/bulk cell editing,
-     clearing an allocation, the shift feature, milestones, row actions, and the warning badges),
-     `toast.js` (non-blocking notifications), `context-menu.js` (the
+     the project-referents form/card pair described above — `promptProjectForm` and
+     `showProjectCard` — kept as bespoke functions rather than a generic form-builder since
+     they're the only multi-field use case so far; `showHelpGuide` is the odd one out — no
+     promise/result to resolve, just a static read-only panel — opened by the "?" button described
+     below, with a short section-by-section walkthrough of the gantt interactions: single/bulk
+     cell editing, clearing an allocation, the shift feature, milestones, row actions, and the
+     warning badges), `toast.js` (non-blocking notifications), `context-menu.js` (the
      "⋮" action menu used by every CRUD row action — also reused as-is by the shift feature's
      right-click menu, see `gantt/` below; an action entry supports `disabled: true` (+ `title`
      tooltip explaining why, same convention as native disabled controls) to render a non-
@@ -320,21 +377,22 @@ inserted at the right point in that list. Layers, low → high:
      browser doesn't guarantee async work finishes once a page is actually unloading, see
      docs/deployment.md "Backups"; project creation is reachable
      from every page, not just the gantt one, so after a successful create it switches
-     `state.ui.vistaCorrente` to `gantt` so the result is visible; "Change data folder…" (after a
+     `state.ui.currentView` to `gantt` so the result is visible; "Change data folder…" (after a
      `window.confirm`) resets `state` to `{ status: 'not-connected', dirHandle: null, dataset: null }`
      — no dedicated disconnect logic in `app.js`, it just reuses the existing `not-connected` screen
      and its "Select data folder" button/picker flow, since releasing the handle and re-running
      `connectToDirectory` needs no special-casing — plus `renderPageTitle`, a small label next to
      the hamburger showing the current view's name, sourced from the same `VIEWS` list used to
-     build the menu so the two never drift apart: `gantt` → "Master Plan", `carico-risorse` →
-     "Resource load", `milestones` → "Milestones", `team-risorse` → "Team & resources" (internal
-     `state.ui.vistaCorrente` codes stay the original Italian identifiers — only the displayed
-     `label` is English, see "UI language" above); `.page-title`'s font-size is
+     build the menu so the two never drift apart: `gantt` → "Master Plan", `resource-load` →
+     "Resource load", `milestones` → "Milestones", `team-resources` → "Team & resources" (the
+     internal `state.ui.currentView` codes are the same English words as the displayed `label`
+     for every view except `gantt`, which stays a short internal code rather than "Master Plan");
+     `.page-title`'s font-size is
      tuned in CSS to make its box the same height as `.hamburger-btn` next to it, since it has no
      padding/border of its own to match the button's box with; `renderHelpButton` is the round "?"
      button pushed to the far right of the top bar via `margin-left: auto` on `.help-btn` (the only
      item in the flex row that needs it — everything else stays left-aligned), global like the
-     hamburger menu and unrelated to `vistaCorrente` — its one job is `MP.modal.showHelpGuide()`),
+     hamburger menu and unrelated to `currentView` — its one job is `MP.modal.showHelpGuide()`),
      `dataset-header.js` (the
      header shared by the gantt, resource-load, and milestones pages: a `.gantt-toolbar` info
      line — connected folder name (`state.dirHandle.name`; the File System Access API never
@@ -344,58 +402,60 @@ inserted at the right point in that list. Layers, low → high:
      see `milestones.js` above), computed via `MP.ganttView.buildRows` so all pages report the exact
      same numbers — plus the team-color legend from `legend.js`; takes
      an optional extra element to append to the info line, used by the gantt page for its
-     archiviati/conclusi toggles (the "+ New project" button that used to live here moved to
+     archived/completed toggles (the "+ New project" button that used to live here moved to
      the hamburger menu, see `toolbar.js` above), and by the milestones page for its
      "Total releases in period" counter), `app-header.js` (static brand header — logo, "Weavo" title,
      version, copyright — rendered once into `#app-header` from `app.js`'s `bootstrap()`,
      outside the `state.status` render cycle since its content never changes; present on every
      screen including `not-connected`/`unsupported`/`error`, not just the `ready` views).
    - `crud/`: one file per entity (`project-crud.js`, `baseline-crud.js`, `task-crud.js`,
-     `resource-crud.js`, `team-crud.js`). Each is create/rename/delete/reorder (+ `toggleConcluso`
-     for tasks, `recolorTeam`/`moveResource` for team/risorse) directly against the in-memory
-     dataset, persisted via `MP.saveCoordinator`/`MP.repository`, then triggers re-render.
-     `project-crud.js`'s `createProject`/`editTeam` open `MP.modal.promptProjectForm` themselves
-     when not given a preset value (same "modal call lives inside the CRUD function" pattern as
-     the rest of this file), see "Project team/referents" above for the field shape.
+     `resource-crud.js`, `team-crud.js`). Each is create/rename/delete/reorder (+ `toggleCompleted`
+     for tasks, `toggleArchived` for projects/baselines, `recolorTeam`/`moveResource` for
+     team/resources) directly against the in-memory dataset, persisted via
+     `MP.saveCoordinator`/`MP.repository`, then triggers re-render. `project-crud.js`'s
+     `createProject`/`editReferents` open `MP.modal.promptProjectForm` themselves when not given a
+     preset value (same "modal call lives inside the CRUD function" pattern as the rest of this
+     file), see "Project team/referents" above for the field shape.
    - `gantt/`: the main view. `gantt-view.js` builds the compact grid (CSS Grid + `position:
      sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
      gantt library, per spec §9) and exports `buildRows` (dataset → visible task rows, honoring
-     `mostraArchiviati`/`mostraConclusi`) so `dataset-header.js` can compute the same row count
+     `showArchived`/`showCompleted`) so `dataset-header.js` can compute the same row count
      shown in both pages. Archiving isn't only project-level: a baseline can independently be
-     archived too (`baseline.archiviata`, toggled via the same "⋮" menu on the baseline row,
-     `MP.baselineCrud.toggleArchivio`) — `buildRows` filters `progetto.baseline` down to
-     non-archived ones (unless `mostraArchiviati` is on) *before* deciding whether the project
+     archived too (`baseline.archived`, toggled via the same "⋮" menu on the baseline row,
+     `MP.baselineCrud.toggleArchived`) — `buildRows` filters `progetto.baseline` down to
+     non-archived ones (unless `showArchived` is on) *before* deciding whether the project
      needs a "— no baseline —" placeholder row, so a project whose only baselines are all
      archived still gets a reachable placeholder row instead of disappearing entirely. A
-     project's own `archiviato` still wins first — an archived project hides regardless of its
+     project's own `archived` still wins first — an archived project hides regardless of its
      baselines' individual flags. `MP.milestones.computeBaselineMilestones` applies the same
-     per-baseline filter (same `mostraArchiviati` flag, no separate toggle), so an archived
+     per-baseline filter (same `showArchived` flag, no separate toggle), so an archived
      baseline's release also drops out of the milestones page and the header's "upcoming
      baselines" count. Archiving a baseline never touches its tasks/data — same
-     no-destructive-auto-correction principle as project archiving and task `concluso`.
+     no-destructive-auto-correction principle as project archiving and task `completed`.
      `gantt-row.js` renders one task row; `gantt-cell.js` renders one
      week×task cell (double click opens `cell-popover.js` for that single cell, resetting any
      pending range selection first; a cell whose resource(s) are overallocated gets a native
-     `title` tooltip built from `MP.overallocation.findAllocations`, listing per sigla the other
-     project/baseline/task it's allocated to that same week — same `progettoNome`/`baselineVersione`/
-     `taskNome` shape the carico-risorse heat cells already use in `resource-load-view.js`, so the
-     wording matches across both views); `cell-popover.js` is the editing popover (team-first, then
-     multi-select resources restricted to that team, then milestone flag — milestone only in
-     single-cell mode, see below — autosave on close, non-blocking double-allocation warning);
-     a task admits only **one** milestone week, and all tasks of the same baseline share a single
-     milestone: `gantt-view.js`'s `handleCellSaved` calls `syncBaselineMilestone` when a saved
-     entry has `milestone: true` — it clears the flag from every other week of every non-`concluso`
-     task in `baseline.task` (including the edited task itself) and sets it on the new week for
-     all of them, preserving any existing `team`/`risorse` on that week rather than overwriting it;
-     unchecking the milestone (`clearBaselineMilestone`) is symmetric, removing it from the other
-     tasks that had inherited it too — otherwise the "shared deadline" invariant would silently
-     drift. `concluso` tasks are skipped in both directions (same "closed tasks are never
-     auto-touched" principle as team-mismatch handling above). This still uses the existing
-     per-cell `cell-popover.js` as the only UI — no dedicated baseline-deadline popover — and the
-     field stays duplicated on each `task.settimane[iso]` rather than moving to `baseline` itself;
-     pre-existing datasets with inconsistent milestones across a baseline's tasks are **not**
-     migrated automatically — they self-heal only the next time any task in that baseline has its
-     milestone touched via the popover. This resolves the "Milestone unica per baseline" item in
+     `title` tooltip built from `MP.overallocation.findAllocations`, listing per resource the
+     other project/baseline/task it's allocated to that same week — same
+     `projectName`/`baselineVersion`/`taskName` shape the resource-load heat cells already use in
+     `resource-load-view.js`, so the wording matches across both views); `cell-popover.js` is the
+     editing popover (team-first, then multi-select resources restricted to that team, then
+     milestone flag — milestone only in single-cell mode, see below — autosave on close,
+     non-blocking double-allocation warning); a task admits only **one** milestone week, and all
+     tasks of the same baseline share a single milestone: `gantt-view.js`'s `handleCellSaved`
+     calls `syncBaselineMilestone` when a saved entry has `milestone: true` — it clears the flag
+     from every other week of every non-`completed` task in `baseline.task` (including the edited
+     task itself) and sets it on the new week for all of them, preserving any existing
+     `team`/`resources` on that week rather than overwriting it; unchecking the milestone
+     (`clearBaselineMilestone`) is symmetric, removing it from the other tasks that had inherited
+     it too — otherwise the "shared deadline" invariant would silently drift. `completed` tasks
+     are skipped in both directions (same "closed tasks are never auto-touched" principle as
+     team-mismatch handling above). This still uses the existing per-cell `cell-popover.js` as the
+     only UI — no dedicated baseline-deadline popover — and the field stays duplicated on each
+     `task.weeks[iso]` rather than moving to `baseline` itself; pre-existing datasets with
+     inconsistent milestones across a baseline's tasks are **not** migrated automatically — they
+     self-heal only the next time any task in that baseline has its milestone touched via the
+     popover. This resolves the "Milestone unica per baseline" item in
      `requirements/backlog.md`, which should be removed/marked done there.
      `cell-selection.js` is the click/shift-click range-selection controller, confined to one
      task row at a time (module-singleton state, highlighted via a CSS class rather than the app
@@ -439,26 +499,26 @@ inserted at the right point in that list. Layers, low → high:
      the same grid.
 
      `legend.js` renders the color legend dynamically from
-     `team-risorse.json`, read-only, no navigation affordance of its own — reaching the
-     team/risorse page is via the `toolbar.js` hamburger menu only, on every page, not a
+     `team-resources.json`, read-only, no navigation affordance of its own — reaching the
+     team/resources page is via the `toolbar.js` hamburger menu only, on every page, not a
      per-view "manage" button.
    - `resource-load/resource-load-view.js`: per-resource per-week allocation count (replaces the
      original spreadsheet's `COUNTIF` formulas), header shared with the gantt page (see
      `dataset-header.js` above). Resources are grouped by team (a full-width group-header row per
-     team, plus a team-colored bar on the sigla column — colors always read from
-     `team-risorse.json`, nothing hardcoded), and each week cell is heat-colored by allocation
+     team, plus a team-colored bar on the initials column — colors always read from
+     `team-resources.json`, nothing hardcoded), and each week cell is heat-colored by allocation
      count (green = 1, yellow = 2, red > 2) via the `load-1`/`load-2`/`load-3plus` CSS classes —
      its own separate legend, appended after the shared header — read-only, no navigation
      affordance of its own.
-   - `team-risorse/team-risorse-view.js`: the dedicated CRUD page for teams and their resources
-     (create/rename/recolor/delete team; create/rename/move/delete resource within a team) — the
-     only place in the UI where `team-risorse.json` is edited.
+   - `team-resources/team-resources-view.js`: the dedicated CRUD page for teams and their
+     resources (create/rename/recolor/delete team; create/rename/move/delete resource within a
+     team) — the only place in the UI where `team-resources.json` is edited.
    - `milestones/milestones-view.js`: read-only report on the density of baseline release
      milestones across the calendar, one row per baseline (fixed columns "Project"/"Baseline"
      only — no per-task row, since `MP.milestones.computeBaselineMilestones` already collapses
      each baseline to its single effective release week) instead of the gantt's per-task rows;
-     same week columns/range as gantt and carico-risorse (`MP.weekUtils.getWeeksInRange`) and the
-     same shared `dataset-header.js`, filtered by the same `state.ui.mostraArchiviati` flag (no
+     same week columns/range as gantt and resource-load (`MP.weekUtils.getWeeksInRange`) and the
+     same shared `dataset-header.js`, filtered by the same `state.ui.showArchived` flag (no
      dedicated toggle on this page, so its row set always matches the project count shown in the
      shared header). A row whose baseline has inconsistent milestone dates across its tasks gets a
      `row-inconsistent` amber marker (never auto-corrected, same non-blocking-warning principle as
@@ -485,11 +545,11 @@ inserted at the right point in that list. Layers, low → high:
      first week — **not** sticky-left, so it scrolls away with the rest of the weeks track as soon
      as the user scrolls right, unlike the 3 real frozen columns to its left (whose row-1 corner
      cells are blank filler, frozen on both axes like the header row's corner, never containing a
-     button); it removes `manifest.settimane.prima` (head, past) after an always-shown explicit
+     button); it removes `manifest.weeks.first` (head, past) after an always-shown explicit
      `window.confirm`, with allocation detail in the message when the week being removed isn't
      empty. `renderAddWeekButton` sits in the dedicated track right after the last week — also not
      sticky, so it only scrolls into view once the user has scrolled all the way past the real
-     last week — and extends `manifest.settimane.ultima` by one week (tail, future) with no
+     last week — and extends `manifest.weeks.last` by one week (tail, future) with no
      confirmation needed. Always exactly one week per click; never trims from the tail or adds at
      the head.
 5. **`js/app.js`** — entry point. Subscribes to the store, maps `state.status` to a render
@@ -503,7 +563,7 @@ inserted at the right point in that list. Layers, low → high:
    `pagehide` firing again (e.g. bfcache entry) while a backup from the same exit is still running.
    Because `render()` does `appEl.innerHTML = ''` and rebuilds the whole tree on every state
    change, it explicitly saves the `.gantt-scroll` container's `scrollLeft`/`scrollTop` (a class
-   shared by the gantt, carico-risorse, and milestones pages) before clearing and restores it on
+   shared by the gantt, resource-load, and milestones pages) before clearing and restores it on
    the freshly
    rendered element afterward — otherwise every cell edit (which calls `setState({})` to
    re-notify subscribers after mutating the in-memory dataset) would snap the grid back to
@@ -514,7 +574,7 @@ inserted at the right point in that list. Layers, low → high:
    **Single-scrollbar page layout** (css/styles.css): `html body` is a `height: 100%` flex column
    with `overflow: hidden`, so the outer document itself never scrolls. `#app` (flex: 1 1 auto,
    `min-height: 0`) is the fallback scroll container for non-grid content (`.connect-panel`,
-   `.error-panel`, `.team-risorse-page`, etc. — these just overflow `#app` normally if too tall).
+   `.error-panel`, `.team-resources-page`, etc. — these just overflow `#app` normally if too tall).
    For the three grid pages, `.app-ready` (the wrapper `app.js`'s `renderReady` builds around
    `top-bar` + the page) and `.gantt-page` are themselves `flex: 1 1 auto; min-height: 0` flex
    columns, so they're stretched to fill `#app` exactly rather than growing with their content;
@@ -525,12 +585,13 @@ inserted at the right point in that list. Layers, low → high:
 
 ### Where to make common changes
 
-- New team, new color: **do not touch code** — it's user-editable data in `team-risorse.json`,
-  managed through the dedicated team/risorse page. If a task references how the app *renders*
-  teams, check it reads from `dataset.teamRisorsa` rather than assuming a fixed list.
+- New team, new color: **do not touch code** — it's user-editable data in `team-resources.json`,
+  managed through the dedicated team/resources page. If a task references how the app *renders*
+  teams, check it reads from `dataset.teamResources` rather than assuming a fixed list.
 - New field on the week-entry / task / project shape: start in `js/data/schema.js` (factories +
   `isWeekEntryEmpty`), then thread through `repository.js` save/load, then the relevant `ui/`
-  renderer(s).
-- Any code path that writes a project/manifest/team-risorse file in response to a user action
+  renderer(s). If the change is itself a rename of an existing field, also update
+  `js/data/legacy-migration.js`'s transform functions and bump `SCHEMA_VERSION`.
+- Any code path that writes a project/manifest/team-resources file in response to a user action
   must go through `MP.saveCoordinator`, not call `MP.repository.save*` directly — that's what
   gives conflict detection.

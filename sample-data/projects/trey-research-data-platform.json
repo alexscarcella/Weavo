@@ -1,45 +1,46 @@
 {
-  "nome": "TREY RESEARCH DATA PLATFORM",
-  "team": {
+  "name": "TREY RESEARCH DATA PLATFORM",
+  "referents": {
     "projectManager": "",
     "projectEngineer": "",
     "solutionAnalyst": "",
     "vvReference": "",
     "note": "Team TREY RESEARCH DATA PLATFORM (Gene Kim / Werner Vogels)"
   },
-  "archiviato": false,
+  "archived": false,
   "baseline": [
     {
-      "versione": "1.0",
+      "version": "1.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Code Review",
-          "concluso": true,
-          "settimane": {
+          "name": "Code Review",
+          "completed": true,
+          "weeks": {
             "2026-03-02": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "AC"
               ]
             },
             "2026-02-02": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BU",
                 "AK"
               ]
             },
             "2026-01-26": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK",
                 "BU"
               ]
             },
             "2026-02-23": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR",
                 "GH"
               ]
@@ -50,25 +51,25 @@
           }
         },
         {
-          "nome": "System Architecture Design",
-          "concluso": false,
-          "settimane": {
+          "name": "System Architecture Design",
+          "completed": false,
+          "weeks": {
             "2026-03-09": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL",
                 "FA"
               ]
             },
             "2026-02-23": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN"
               ]
             },
             "2026-03-16": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV"
               ],
               "milestone": true
@@ -76,25 +77,25 @@
           }
         },
         {
-          "nome": "Accessibility Compliance",
-          "concluso": true,
-          "settimane": {
+          "name": "Accessibility Compliance",
+          "completed": true,
+          "weeks": {
             "2026-01-26": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB",
                 "KK"
               ]
             },
             "2026-02-16": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT"
               ]
             },
             "2026-03-16": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "PD",
                 "GK"
               ],
@@ -102,25 +103,25 @@
             },
             "2026-02-02": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT"
               ]
             }
           }
         },
         {
-          "nome": "Penetration Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Penetration Testing",
+          "completed": true,
+          "weeks": {
             "2026-03-02": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT"
               ]
             },
             "2026-02-09": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN"
               ]
             },
@@ -132,35 +133,36 @@
       ]
     },
     {
-      "versione": "2.0",
+      "version": "2.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Backend Integration",
-          "concluso": true,
-          "settimane": {
+          "name": "Backend Integration",
+          "completed": true,
+          "weeks": {
             "2026-06-22": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT"
               ],
               "milestone": true
             },
             "2026-06-01": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR"
               ]
             },
             "2026-06-08": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN",
                 "GK"
               ]
             },
             "2026-05-11": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV",
                 "JR"
               ]
@@ -168,12 +170,12 @@
           }
         },
         {
-          "nome": "CI/CD Pipeline Setup",
-          "concluso": true,
-          "settimane": {
+          "name": "CI/CD Pipeline Setup",
+          "completed": true,
+          "weeks": {
             "2026-04-27": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
@@ -183,59 +185,59 @@
           }
         },
         {
-          "nome": "Checkout Module Development",
-          "concluso": true,
-          "settimane": {
+          "name": "Checkout Module Development",
+          "completed": true,
+          "weeks": {
             "2026-06-22": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK"
               ],
               "milestone": true
             },
             "2026-06-08": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK",
                 "BL"
               ]
             },
             "2026-04-27": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "MF"
               ]
             }
           }
         },
         {
-          "nome": "Performance Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Performance Testing",
+          "completed": true,
+          "weeks": {
             "2026-06-01": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC",
                 "JR"
               ]
             },
             "2026-05-04": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "PD",
                 "JA"
               ]
             },
             "2026-05-18": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB",
                 "JH"
               ]
             },
             "2026-06-08": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR",
                 "MH"
               ]
@@ -246,24 +248,24 @@
           }
         },
         {
-          "nome": "Localization",
-          "concluso": true,
-          "settimane": {
+          "name": "Localization",
+          "completed": true,
+          "weeks": {
             "2026-05-18": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
             "2026-05-04": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK"
               ]
             },
             "2026-06-01": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "PD"
               ]
             },
@@ -273,12 +275,12 @@
           }
         },
         {
-          "nome": "Change Request Analysis",
-          "concluso": true,
-          "settimane": {
+          "name": "Change Request Analysis",
+          "completed": true,
+          "weeks": {
             "2026-04-27": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
@@ -290,36 +292,37 @@
       ]
     },
     {
-      "versione": "3.0",
+      "version": "3.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Training & Handover",
-          "concluso": false,
-          "settimane": {
+          "name": "Training & Handover",
+          "completed": false,
+          "weeks": {
             "2026-08-10": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BU",
                 "GS"
               ]
             },
             "2026-09-21": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA",
                 "PD"
               ]
             },
             "2026-08-17": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "AC"
               ]
             },
             "2026-10-05": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH",
                 "AL"
               ],
@@ -328,24 +331,24 @@
           }
         },
         {
-          "nome": "Technical Documentation",
-          "concluso": false,
-          "settimane": {
+          "name": "Technical Documentation",
+          "completed": false,
+          "weeks": {
             "2026-09-21": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK"
               ]
             },
             "2026-08-10": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR"
               ]
             },
             "2026-08-24": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA",
                 "WH"
               ]
@@ -356,12 +359,12 @@
           }
         },
         {
-          "nome": "Performance Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Performance Testing",
+          "completed": true,
+          "weeks": {
             "2026-09-14": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR"
               ]
             },
@@ -371,12 +374,12 @@
           }
         },
         {
-          "nome": "Integration Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "Integration Testing",
+          "completed": false,
+          "weeks": {
             "2026-08-24": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC",
                 "JR"
               ]

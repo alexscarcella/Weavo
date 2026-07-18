@@ -1,37 +1,38 @@
 {
-  "nome": "NORTHWIND TRADERS CHECKOUT",
-  "team": {
+  "name": "NORTHWIND TRADERS CHECKOUT",
+  "referents": {
     "projectManager": "",
     "projectEngineer": "",
     "solutionAnalyst": "",
     "vvReference": "",
     "note": "Team NORTHWIND TRADERS CHECKOUT (Kohsuke Kawaguchi / Werner Vogels)"
   },
-  "archiviato": false,
+  "archived": false,
   "baseline": [
     {
-      "versione": "1.0",
+      "version": "1.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Penetration Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Penetration Testing",
+          "completed": true,
+          "weeks": {
             "2026-03-16": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BU",
                 "GS"
               ]
             },
             "2026-02-16": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA"
               ]
             },
             "2026-02-09": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT",
                 "BT"
               ]
@@ -42,19 +43,19 @@
           }
         },
         {
-          "nome": "Load Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Load Testing",
+          "completed": true,
+          "weeks": {
             "2026-01-26": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA",
                 "PD"
               ]
             },
             "2026-03-02": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             },
@@ -64,24 +65,24 @@
           }
         },
         {
-          "nome": "CI/CD Pipeline Setup",
-          "concluso": true,
-          "settimane": {
+          "name": "CI/CD Pipeline Setup",
+          "completed": true,
+          "weeks": {
             "2026-03-09": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN"
               ]
             },
             "2026-01-26": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA"
               ]
             },
             "2026-03-23": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA"
               ],
               "milestone": true
@@ -89,25 +90,25 @@
           }
         },
         {
-          "nome": "User Acceptance Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "User Acceptance Testing",
+          "completed": true,
+          "weeks": {
             "2026-02-09": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK"
               ]
             },
             "2026-03-09": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "WV"
               ]
             },
             "2026-02-23": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "WV"
               ]
@@ -118,12 +119,12 @@
           }
         },
         {
-          "nome": "Localization",
-          "concluso": true,
-          "settimane": {
+          "name": "Localization",
+          "completed": true,
+          "weeks": {
             "2026-03-23": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB",
                 "JH"
               ],
@@ -131,7 +132,7 @@
             },
             "2026-02-02": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "GK",
                 "PD"
               ]
@@ -141,15 +142,16 @@
       ]
     },
     {
-      "versione": "2.0",
+      "version": "2.0",
+      "archived": false,
       "task": [
         {
-          "nome": "User Acceptance Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "User Acceptance Testing",
+          "completed": true,
+          "weeks": {
             "2026-06-08": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR",
                 "GH"
               ]
@@ -160,12 +162,12 @@
           }
         },
         {
-          "nome": "Backend Integration",
-          "concluso": true,
-          "settimane": {
+          "name": "Backend Integration",
+          "completed": true,
+          "weeks": {
             "2026-07-27": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA",
                 "MN"
               ],
@@ -173,38 +175,38 @@
             },
             "2026-06-29": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA"
               ]
             },
             "2026-06-15": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "RP"
               ]
             },
             "2026-07-20": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "JH"
               ]
             }
           }
         },
         {
-          "nome": "Data Migration",
-          "concluso": true,
-          "settimane": {
+          "name": "Data Migration",
+          "completed": true,
+          "weeks": {
             "2026-07-20": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL",
                 "RP"
               ]
             },
             "2026-06-15": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT"
               ]
             },
@@ -216,15 +218,16 @@
       ]
     },
     {
-      "versione": "3.0",
+      "version": "3.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Accessibility Compliance",
-          "concluso": true,
-          "settimane": {
+          "name": "Accessibility Compliance",
+          "completed": true,
+          "weeks": {
             "2026-09-14": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
@@ -234,12 +237,12 @@
           }
         },
         {
-          "nome": "Checkout Module Development",
-          "concluso": false,
-          "settimane": {
+          "name": "Checkout Module Development",
+          "completed": false,
+          "weeks": {
             "2026-09-07": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "GS",
                 "CT"
               ]
@@ -250,25 +253,25 @@
           }
         },
         {
-          "nome": "Sprint Planning",
-          "concluso": false,
-          "settimane": {
+          "name": "Sprint Planning",
+          "completed": false,
+          "weeks": {
             "2026-08-17": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
             "2026-08-10": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT",
                 "BU"
               ]
             },
             "2026-09-21": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "RP",
                 "WH"
               ],
@@ -276,125 +279,125 @@
             },
             "2026-09-07": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             }
           }
         },
         {
-          "nome": "Hardware Integration",
-          "concluso": false,
-          "settimane": {
+          "name": "Hardware Integration",
+          "completed": false,
+          "weeks": {
             "2026-09-07": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "GS",
                 "CT"
               ]
             },
             "2026-09-21": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA"
               ],
               "milestone": true
             },
             "2026-08-03": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA"
               ]
             },
             "2025-12-15": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "GK",
                 "PD"
               ]
             },
             "2026-05-25": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "MH"
               ]
             },
             "2026-06-01": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "MH"
               ]
             },
             "2026-06-08": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "MH"
               ]
             },
             "2026-06-15": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "MH"
               ]
             }
           }
         },
         {
-          "nome": "Payment Gateway Integration",
-          "concluso": false,
-          "settimane": {
+          "name": "Payment Gateway Integration",
+          "completed": false,
+          "weeks": {
             "2026-09-21": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ],
               "milestone": true
             },
             "2026-08-31": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH"
               ]
             },
             "2026-08-10": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             },
             "2026-06-01": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "AL"
               ]
             },
             "2026-06-08": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "AL"
               ]
             },
             "2026-06-15": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "AL"
               ]
             },
             "2026-06-22": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "AL"
               ]
             }
           }
         },
         {
-          "nome": "Change Request Analysis",
-          "concluso": false,
-          "settimane": {
+          "name": "Change Request Analysis",
+          "completed": false,
+          "weeks": {
             "2026-07-27": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT"
               ]
             },
@@ -403,50 +406,50 @@
             },
             "2026-06-08": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
             "2026-06-15": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
             "2026-06-22": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
             "2026-06-29": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             }
           }
         },
         {
-          "nome": "Integration Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "Integration Testing",
+          "completed": false,
+          "weeks": {
             "2026-08-24": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DK",
                 "AL"
               ]
             },
             "2026-09-14": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV"
               ]
             },
             "2026-08-10": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA"
               ]
             },
@@ -455,43 +458,43 @@
             },
             "2026-06-15": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK"
               ]
             },
             "2026-06-22": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK"
               ]
             },
             "2026-06-29": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK"
               ]
             }
           }
         },
         {
-          "nome": "Training & Handover",
-          "concluso": false,
-          "settimane": {
+          "name": "Training & Handover",
+          "completed": false,
+          "weeks": {
             "2026-08-03": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "PD"
               ]
             },
             "2026-08-10": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DK"
               ]
             },
             "2026-08-31": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH",
                 "RP"
               ]
@@ -501,44 +504,44 @@
             },
             "2026-06-08": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
             "2026-06-15": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             },
             "2026-06-22": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "GH"
               ]
             }
           }
         },
         {
-          "nome": "Real-Time Event Streaming",
-          "concluso": false,
-          "settimane": {
+          "name": "Real-Time Event Streaming",
+          "completed": false,
+          "weeks": {
             "2026-08-17": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK",
                 "RP"
               ]
             },
             "2026-08-03": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK"
               ]
             },
             "2026-07-27": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT",
                 "GS"
               ]
@@ -548,39 +551,39 @@
             },
             "2026-06-08": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "KT"
               ]
             }
           }
         },
         {
-          "nome": "Mobile App Development",
-          "concluso": false,
-          "settimane": {
+          "name": "Mobile App Development",
+          "completed": false,
+          "weeks": {
             "2026-08-10": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH"
               ]
             },
             "2026-09-21": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ],
               "milestone": true
             },
             "2026-08-31": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL",
                 "RP"
               ]
             },
             "2026-07-27": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT",
                 "LT"
               ]

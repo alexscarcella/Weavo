@@ -3,10 +3,10 @@
 // settimane + conteggio task/progetti + legenda colori team) condiviso con la
 // vista gantt via MP.datasetHeader — vedi js/ui/common/dataset-header.js.
 // Le risorse sono raggruppate per team di appartenenza (colore del team come
-// intestazione di gruppo e come barra sulla colonna sigla), con una legenda
+// intestazione di gruppo e come barra sulla colonna initials), con una legenda
 // separata per il grado di allocazione (verde = 1, giallo = 2, rosso > 2).
 // Sola lettura: il CRUD di team e risorse è centralizzato nella pagina
-// dedicata (js/ui/team-risorse/team-risorse-view.js).
+// dedicata (js/ui/team-resources/team-resources-view.js).
 (function (MP) {
   'use strict';
 
@@ -39,7 +39,7 @@
     return null;
   }
 
-  // Riga separatrice piena larghezza che apre un gruppo team: colonne sigla+nome
+  // Riga separatrice piena larghezza che apre un gruppo team: colonne initials+nome
   // sticky con nome team e swatch colore, il resto della riga come banda tinteggiata.
   function teamHeaderRow(team, weeksCount, currentWeekIndex) {
     const cells = [];
@@ -48,11 +48,11 @@
     header.style.gridColumn = '1 / span 2';
     const swatch = document.createElement('span');
     swatch.className = 'team-swatch';
-    swatch.style.background = team.colore;
+    swatch.style.background = team.color;
     header.appendChild(swatch);
     const label = document.createElement('span');
     label.className = 'cell-text';
-    label.textContent = team.nome;
+    label.textContent = team.name;
     header.appendChild(label);
     cells.push(header);
 
@@ -67,7 +67,7 @@
 
   function renderResourceLoadView(state) {
     const { dataset } = state;
-    const weeks = getWeeksInRange(dataset.manifest.settimane.prima, dataset.manifest.settimane.ultima);
+    const weeks = getWeeksInRange(dataset.manifest.weeks.first, dataset.manifest.weeks.last);
     const index = buildAllocationIndex(dataset);
     const currentWeek = getCurrentWeekIso();
     const currentWeekIndex = weeks.indexOf(currentWeek);
@@ -94,11 +94,11 @@
     });
     page.appendChild(heatLegend);
 
-    const teams = dataset.teamRisorsa.team.filter((t) => (t.risorse || []).length > 0);
+    const teams = dataset.teamResources.teams.filter((t) => (t.resources || []).length > 0);
     if (teams.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'No resources in team-risorse.json.';
+      empty.textContent = 'No resources in team-resources.json.';
       page.appendChild(empty);
       return page;
     }
@@ -109,7 +109,7 @@
     grid.className = 'gantt-grid';
     grid.style.gridTemplateColumns = `70px 170px repeat(${weeks.length}, 46px)`;
 
-    grid.appendChild(headerCell('Sigla', 'col-1'));
+    grid.appendChild(headerCell('Initials', 'col-1'));
     grid.appendChild(headerCell('Name', 'col-2'));
     for (const settimana of weeks) {
       grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
@@ -118,20 +118,20 @@
     for (const team of teams) {
       teamHeaderRow(team, weeks.length, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
 
-      for (const risorsa of team.risorse) {
-        const col1 = fixedCell(risorsa.sigla, 'col-1');
+      for (const risorsa of team.resources) {
+        const col1 = fixedCell(risorsa.initials, 'col-1');
         col1.classList.add('team-color-bar');
-        col1.style.setProperty('--team-bar-color', team.colore);
+        col1.style.setProperty('--team-bar-color', team.color);
         grid.appendChild(col1);
-        grid.appendChild(fixedCell(risorsa.nome, 'col-2'));
+        grid.appendChild(fixedCell(risorsa.name, 'col-2'));
 
         weeks.forEach((settimana, i) => {
-          const refs = findAllocations(index, risorsa.sigla, settimana);
+          const refs = findAllocations(index, risorsa.initials, settimana);
           const cell = document.createElement('div');
           cell.className = 'gantt-cell week-cell load-cell';
           if (refs.length > 0) {
             cell.textContent = String(refs.length);
-            cell.title = refs.map((r) => `${r.progettoNome} / BL ${r.baselineVersione} / ${r.taskNome}`).join('\n');
+            cell.title = refs.map((r) => `${r.projectName} / BL ${r.baselineVersion} / ${r.taskName}`).join('\n');
             cell.classList.add(loadClass(refs.length));
           }
           if (i === currentWeekIndex) cell.classList.add('current-week-line');

@@ -107,22 +107,22 @@ Create an empty shared folder containing:
 
   ```json
   {
-    "schemaVersion": 1,
-    "settimane": { "prima": "2026-01-05", "ultima": "2026-12-28" },
-    "progetti": []
+    "schemaVersion": 2,
+    "weeks": { "first": "2026-01-05", "last": "2026-12-28" },
+    "projects": []
   }
   ```
 
-  (`prima`/`ultima` are two Monday dates that bound the planning date range; you can extend it
+  (`first`/`last` are two Monday dates that bound the planning date range; you can extend it
   later from within the app itself, using the buttons at the edges of the grid, without ever
   touching this file by hand again)
-- a `team-risorse.json` file with this minimal content:
+- a `team-resources.json` file with this minimal content:
 
   ```json
-  { "team": [] }
+  { "teams": [] }
   ```
 
-- an empty subfolder called `progetti`
+- an empty subfolder called `projects`
 
 From there on, teams, resources and projects are all created from within the app — no more
 hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the full file structure.
@@ -186,12 +186,12 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 - Backups are **not automatic**: you have to trigger one by hand from ☰ menu → **💾 Backup**.
 - Each backup creates a new `backup/YYYYMMDD_HHMMSS/` subfolder (backup date and time) inside the
   same data folder, containing a copy of every file at that moment (`manifest.json`,
-  `team-risorse.json`, and every project).
+  `team-resources.json`, and every project).
 - **Tip:** run a backup before any large or risky change — e.g. before moving many resources
   between teams, before a data import, or simply before a long working session.
 - **Restoring a backup is a manual operation:** the app has no "Restore" button. You need to copy
   the files from the chosen backup subfolder (`backup/YYYYMMDD_HHMMSS/`) over the current files in
-  the data folder (`manifest.json`, `team-risorse.json`, the contents of `progetti/`), overwriting
+  the data folder (`manifest.json`, `team-resources.json`, the contents of `projects/`), overwriting
   them. Do this with the app closed for every user, to avoid write conflicts during the copy.
 - If the data folder lives on OneDrive, you likely also have an additional, independent safety
   net beyond these manual backups (OneDrive's per-file "Version history") — but don't rely on
@@ -216,9 +216,9 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 
 ```
 <data-folder>/
-  manifest.json        # project index + global week range
-  team-risorse.json    # teams and the resources that belong to each one
-  progetti/
+  manifest.json         # project index + global week range
+  team-resources.json   # teams and the resources that belong to each one
+  projects/
     <project-slug>.json
 ```
 

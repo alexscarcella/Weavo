@@ -16,14 +16,14 @@
 
   // Riepilogo breve dei referenti di progetto per il tooltip nativo sul nome (la scheda
   // completa, con i riferimenti risorsa risolti a nome, è dietro l'icona "i" — vedi sotto).
-  function formatTeamTooltip(team) {
-    if (!team) return '';
+  function formatTeamTooltip(referents) {
+    if (!referents) return '';
     const righe = [
-      team.projectManager && `PM: ${team.projectManager}`,
-      team.projectEngineer && `PE: ${team.projectEngineer}`,
-      team.solutionAnalyst && `Solution analyst: ${team.solutionAnalyst}`,
-      team.vvReference && `V&V: ${team.vvReference}`,
-      team.note && `Notes: ${team.note}`,
+      referents.projectManager && `PM: ${referents.projectManager}`,
+      referents.projectEngineer && `PE: ${referents.projectEngineer}`,
+      referents.solutionAnalyst && `Solution analyst: ${referents.solutionAnalyst}`,
+      referents.vvReference && `V&V: ${referents.vvReference}`,
+      referents.note && `Notes: ${referents.note}`,
     ].filter(Boolean);
     return righe.join('\n');
   }
@@ -39,16 +39,16 @@
     return div;
   }
 
-  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved, onOpenShiftMenu, lastEdited }) {
+  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, validInitials, initialsTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved, onOpenShiftMenu, lastEdited }) {
     const cells = [];
 
-    const col1 = fixedCell(showProgetto ? progetto.nome : '', 'col-1');
+    const col1 = fixedCell(showProgetto ? progetto.name : '', 'col-1');
     col1.classList.add('project-color-bar');
     col1.style.setProperty('--project-bar-color', PROJECT_BAR_COLORS[projectIndex % PROJECT_BAR_COLORS.length]);
     if (showProgetto) {
       const nomeSpan = col1.querySelector('.cell-text');
-      const teamTooltip = formatTeamTooltip(progetto.team);
-      if (nomeSpan) nomeSpan.title = teamTooltip ? `${progetto.nome}\n${teamTooltip}` : progetto.nome;
+      const teamTooltip = formatTeamTooltip(progetto.referents);
+      if (nomeSpan) nomeSpan.title = teamTooltip ? `${progetto.name}\n${teamTooltip}` : progetto.name;
 
       const infoBtn = document.createElement('button');
       infoBtn.type = 'button';
@@ -57,15 +57,15 @@
       infoBtn.title = 'Project info';
       infoBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        MP.modal.showProjectCard({ progetto, teamRisorsa: state.dataset.teamRisorsa });
+        MP.modal.showProjectCard({ progetto, teamResources: state.dataset.teamResources });
       });
       if (nomeSpan) col1.insertBefore(infoBtn, nomeSpan);
       else col1.appendChild(infoBtn);
 
       col1.appendChild(menuButton([
         { label: 'Rename project', onClick: () => MP.projectCrud.renameProject(state, file) },
-        { label: 'Project team…', onClick: () => MP.projectCrud.editTeam(state, file) },
-        { label: progetto.archiviato ? 'Reactivate project' : 'Archive project', onClick: () => MP.projectCrud.toggleArchivio(state, file) },
+        { label: 'Project team…', onClick: () => MP.projectCrud.editReferents(state, file) },
+        { label: progetto.archived ? 'Reactivate project' : 'Archive project', onClick: () => MP.projectCrud.toggleArchived(state, file) },
         { label: '+ New baseline', onClick: () => MP.baselineCrud.createBaseline(state, file) },
         { label: '↑', title: 'Move up', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, -1) },
         { label: '↓', title: 'Move down', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, 1) },
@@ -74,11 +74,11 @@
     }
     cells.push(col1);
 
-    const col2 = fixedCell(showBaseline && baseline ? baseline.versione : '', 'col-2');
+    const col2 = fixedCell(showBaseline && baseline ? baseline.version : '', 'col-2');
     if (showBaseline && baseline) {
       col2.appendChild(menuButton([
         { label: 'Rename baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
-        { label: baseline.archiviata ? 'Reactivate baseline' : 'Archive baseline', onClick: () => MP.baselineCrud.toggleArchivio(state, file, baseline) },
+        { label: baseline.archived ? 'Reactivate baseline' : 'Archive baseline', onClick: () => MP.baselineCrud.toggleArchived(state, file, baseline) },
         { label: '+ New task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },
         { label: '↑', title: 'Move up', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, -1) },
         { label: '↓', title: 'Move down', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, 1) },
@@ -88,21 +88,21 @@
     cells.push(col2);
 
     const col3 = document.createElement('div');
-    col3.className = `gantt-cell col-fixed col-3${task && task.concluso ? ' task-concluso' : ''}`;
+    col3.className = `gantt-cell col-fixed col-3${task && task.completed ? ' task-completed' : ''}`;
     if (task) {
       const chk = document.createElement('input');
       chk.type = 'checkbox';
-      chk.className = 'task-concluso-checkbox';
-      chk.checked = task.concluso;
+      chk.className = 'task-completed-checkbox';
+      chk.checked = task.completed;
       chk.title = 'Mark as completed';
       chk.addEventListener('click', (e) => e.stopPropagation());
-      chk.addEventListener('change', () => MP.taskCrud.toggleConcluso(state, file, task));
+      chk.addEventListener('change', () => MP.taskCrud.toggleCompleted(state, file, task));
       col3.appendChild(chk);
 
       const taskText = document.createElement('span');
       taskText.className = 'cell-text';
-      taskText.textContent = task.nome;
-      taskText.title = task.nome;
+      taskText.textContent = task.name;
+      taskText.title = task.name;
       col3.appendChild(taskText);
 
       col3.appendChild(menuButton([
@@ -132,8 +132,8 @@
           baseline,
           settimana,
           teamMap,
-          sigleValide,
-          siglaTeamMap,
+          validInitials,
+          initialsTeamMap,
           allocationIndex,
           state,
           file,

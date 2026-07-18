@@ -84,6 +84,32 @@
     return files;
   }
 
+  // Rimozione ricorsiva di una sottocartella. Usata dalla migrazione legacy
+  // (js/data/legacy-migration.js) per eliminare la vecchia cartella progetti
+  // dopo aver scritto quella nuova — non esiste un "rename" nella File System
+  // Access API, solo create-nuovo + copia + delete-vecchio.
+  async function removeDirectory(rootHandle, name) {
+    await rootHandle.removeEntry(name, { recursive: true });
+  }
+
+  async function directoryExists(rootHandle, name) {
+    try {
+      await rootHandle.getDirectoryHandle(name, { create: false });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function fileExists(rootHandle, relativePath) {
+    try {
+      await getFileHandle(rootHandle, relativePath);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   MP.fsAccess = {
     isSupported,
     pickDirectory,
@@ -95,5 +121,8 @@
     ensureSubfolder,
     listJsonFiles,
     removeFile,
+    removeDirectory,
+    directoryExists,
+    fileExists,
   };
 })(window.MP = window.MP || {});

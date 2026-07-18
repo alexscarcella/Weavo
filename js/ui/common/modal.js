@@ -170,11 +170,11 @@
     }[c]));
   }
 
-  // Form strutturato per i referenti/team di progetto (§ CLAUDE.md "Data model" > progetti).
-  // Se `nome` è una stringa (anche vuota) mostra in cima un campo nome obbligatorio (caso
-  // creazione progetto); se `nome` è null il form modifica solo i campi team di un progetto
-  // esistente. Risolve con `{ nome?, team: {...} } | null` (null se annullato).
-  function promptProjectForm({ title, nome = null, team, teamRisorsa }) {
+  // Form strutturato per i referenti di progetto (§ CLAUDE.md "Data model" > projects).
+  // Se `name` è una stringa (anche vuota) mostra in cima un campo nome obbligatorio (caso
+  // creazione progetto); se `name` è null il form modifica solo i referenti di un progetto
+  // esistente. Risolve con `{ name?, referents: {...} } | null` (null se annullato).
+  function promptProjectForm({ title, name = null, referents, teamResources }) {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
@@ -182,20 +182,20 @@
       box.className = 'modal-box modal-box-wide';
 
       const resourceOptions = () => {
-        const groups = teamRisorsa.team.map((t) => {
-          const opts = (t.risorse || [])
-            .map((r) => `<option value="${escapeHtml(r.sigla)}">${escapeHtml(r.sigla)} — ${escapeHtml(r.nome)}</option>`)
+        const groups = teamResources.teams.map((t) => {
+          const opts = (t.resources || [])
+            .map((r) => `<option value="${escapeHtml(r.initials)}">${escapeHtml(r.initials)} — ${escapeHtml(r.name)}</option>`)
             .join('');
-          return opts ? `<optgroup label="${escapeHtml(t.nome)}">${opts}</optgroup>` : '';
+          return opts ? `<optgroup label="${escapeHtml(t.name)}">${opts}</optgroup>` : '';
         }).join('');
         return `<option value="">— None —</option>${groups}`;
       };
 
       box.innerHTML = `
         <h2>${escapeHtml(title)}</h2>
-        ${nome !== null ? `
-        <label class="modal-field-label" for="mpf-nome">Project name</label>
-        <input type="text" id="mpf-nome" class="modal-input" required>` : ''}
+        ${name !== null ? `
+        <label class="modal-field-label" for="mpf-name">Project name</label>
+        <input type="text" id="mpf-name" class="modal-input" required>` : ''}
         <label class="modal-field-label" for="mpf-pm">Project manager</label>
         <input type="text" id="mpf-pm" class="modal-input">
         <label class="modal-field-label" for="mpf-pe">Project Engineer</label>
@@ -213,32 +213,32 @@
       overlay.appendChild(box);
       document.body.appendChild(overlay);
 
-      const nomeField = nome !== null ? box.querySelector('#mpf-nome') : null;
+      const nameField = name !== null ? box.querySelector('#mpf-name') : null;
       const pmField = box.querySelector('#mpf-pm');
       const peField = box.querySelector('#mpf-pe');
       const saField = box.querySelector('#mpf-sa');
       const vvField = box.querySelector('#mpf-vv');
       const noteField = box.querySelector('#mpf-note');
 
-      if (nomeField) nomeField.value = nome;
-      pmField.value = team.projectManager || '';
-      peField.value = team.projectEngineer || '';
-      saField.value = team.solutionAnalyst || '';
-      vvField.value = team.vvReference || '';
-      noteField.value = team.note || '';
-      (nomeField || pmField).focus();
+      if (nameField) nameField.value = name;
+      pmField.value = referents.projectManager || '';
+      peField.value = referents.projectEngineer || '';
+      saField.value = referents.solutionAnalyst || '';
+      vvField.value = referents.vvReference || '';
+      noteField.value = referents.note || '';
+      (nameField || pmField).focus();
 
       const close = (result) => {
         overlay.remove();
         resolve(result);
       };
       const save = () => {
-        if (nomeField && !nomeField.value.trim()) {
-          nomeField.reportValidity();
+        if (nameField && !nameField.value.trim()) {
+          nameField.reportValidity();
           return;
         }
         const result = {
-          team: MP.schema.createProjectTeamInfo({
+          referents: MP.schema.createProjectReferents({
             projectManager: pmField.value.trim(),
             projectEngineer: peField.value.trim(),
             solutionAnalyst: saField.value,
@@ -246,7 +246,7 @@
             note: noteField.value.trim(),
           }),
         };
-        if (nomeField) result.nome = nomeField.value.trim();
+        if (nameField) result.name = nameField.value.trim();
         close(result);
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
@@ -263,34 +263,34 @@
   // Scheda di sola lettura con i dati completi di un progetto (icona "i" nella riga Gantt).
   // Per modificare si usa "Team di progetto…" nel menu ⋮ (promptProjectForm) — nessun bottone
   // "Modifica" qui, per non duplicare l'azione di scrittura in due punti.
-  function showProjectCard({ progetto, teamRisorsa }) {
+  function showProjectCard({ progetto, teamResources }) {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
       const box = document.createElement('div');
       box.className = 'modal-box modal-box-wide project-card';
 
-      const resolveRef = (sigla) => {
-        if (!sigla) return '—';
-        const found = MP.schema.findResourceEntry(teamRisorsa, sigla);
+      const resolveRef = (initials) => {
+        if (!initials) return '—';
+        const found = MP.schema.findResourceEntry(teamResources, initials);
         return found
-          ? `${escapeHtml(sigla)} — ${escapeHtml(found.risorsa.nome)}`
-          : `${escapeHtml(sigla)} <span class="project-card-orphan" title="Resource not found in team-risorse.json">(not found)</span>`;
+          ? `${escapeHtml(initials)} — ${escapeHtml(found.resource.name)}`
+          : `${escapeHtml(initials)} <span class="project-card-orphan" title="Resource not found in team-resources.json">(not found)</span>`;
       };
       const totTask = progetto.baseline.reduce((sum, b) => sum + b.task.length, 0);
-      const team = progetto.team || {};
+      const referents = progetto.referents || {};
       const row = (label, valueHtml) =>
         `<div class="project-card-row"><span class="project-card-label">${escapeHtml(label)}</span><span class="project-card-value">${valueHtml || '—'}</span></div>`;
 
       box.innerHTML = `
-        <h2>${escapeHtml(progetto.nome)}</h2>
-        ${row('Status', progetto.archiviato ? 'Archived' : 'Active')}
+        <h2>${escapeHtml(progetto.name)}</h2>
+        ${row('Status', progetto.archived ? 'Archived' : 'Active')}
         ${row('Baseline', `${progetto.baseline.length} (${totTask} tasks total)`)}
-        ${row('Project manager', escapeHtml(team.projectManager))}
-        ${row('Project Engineer', escapeHtml(team.projectEngineer))}
-        ${row('Solution analyst reference', resolveRef(team.solutionAnalyst))}
-        ${row('V&V reference', resolveRef(team.vvReference))}
-        ${row('Notes', team.note ? escapeHtml(team.note).replace(/\n/g, '<br>') : '')}
+        ${row('Project manager', escapeHtml(referents.projectManager))}
+        ${row('Project Engineer', escapeHtml(referents.projectEngineer))}
+        ${row('Solution analyst reference', resolveRef(referents.solutionAnalyst))}
+        ${row('V&V reference', resolveRef(referents.vvReference))}
+        ${row('Notes', referents.note ? escapeHtml(referents.note).replace(/\n/g, '<br>') : '')}
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Close</button>
         </div>`;

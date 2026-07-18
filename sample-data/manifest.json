@@ -1,69 +1,69 @@
 {
-  "schemaVersion": 1,
-  "settimane": {
-    "prima": "2025-12-08",
-    "ultima": "2027-01-18"
+  "schemaVersion": 2,
+  "weeks": {
+    "first": "2025-12-08",
+    "last": "2027-01-18"
   },
-  "progetti": [
+  "projects": [
     {
-      "file": "progetti/contoso-fleet-operations.json",
-      "nome": "CONTOSO FLEET OPERATIONS"
+      "file": "projects/contoso-fleet-operations.json",
+      "name": "CONTOSO FLEET OPERATIONS"
     },
     {
-      "file": "progetti/fabrikam-payments-platform.json",
-      "nome": "FABRIKAM PAYMENTS PLATFORM"
+      "file": "projects/fabrikam-payments-platform.json",
+      "name": "FABRIKAM PAYMENTS PLATFORM"
     },
     {
-      "file": "progetti/adventure-works-booking.json",
-      "nome": "ADVENTURE WORKS BOOKING"
+      "file": "projects/adventure-works-booking.json",
+      "name": "ADVENTURE WORKS BOOKING"
     },
     {
-      "file": "progetti/northwind-traders-checkout.json",
-      "nome": "NORTHWIND TRADERS CHECKOUT"
+      "file": "projects/northwind-traders-checkout.json",
+      "name": "NORTHWIND TRADERS CHECKOUT"
     },
     {
-      "file": "progetti/woodgrove-bank-portal.json",
-      "nome": "WOODGROVE BANK PORTAL"
+      "file": "projects/woodgrove-bank-portal.json",
+      "name": "WOODGROVE BANK PORTAL"
     },
     {
-      "file": "progetti/litware-claims-system.json",
-      "nome": "LITWARE CLAIMS SYSTEM"
+      "file": "projects/litware-claims-system.json",
+      "name": "LITWARE CLAIMS SYSTEM"
     },
     {
-      "file": "progetti/humongous-insurance-records.json",
-      "nome": "HUMONGOUS INSURANCE RECORDS"
+      "file": "projects/humongous-insurance-records.json",
+      "name": "HUMONGOUS INSURANCE RECORDS"
     },
     {
-      "file": "progetti/tailspin-toys-inventory.json",
-      "nome": "TAILSPIN TOYS INVENTORY"
+      "file": "projects/tailspin-toys-inventory.json",
+      "name": "TAILSPIN TOYS INVENTORY"
     },
     {
-      "file": "progetti/wingtip-toys-storefront.json",
-      "nome": "WINGTIP TOYS STOREFRONT"
+      "file": "projects/wingtip-toys-storefront.json",
+      "name": "WINGTIP TOYS STOREFRONT"
     },
     {
-      "file": "progetti/proseware-media-streaming.json",
-      "nome": "PROSEWARE MEDIA STREAMING"
+      "file": "projects/proseware-media-streaming.json",
+      "name": "PROSEWARE MEDIA STREAMING"
     },
     {
-      "file": "progetti/trey-research-data-platform.json",
-      "nome": "TREY RESEARCH DATA PLATFORM"
+      "file": "projects/trey-research-data-platform.json",
+      "name": "TREY RESEARCH DATA PLATFORM"
     },
     {
-      "file": "progetti/city-power-light-grid-monitor.json",
-      "nome": "CITY POWER & LIGHT GRID MONITOR"
+      "file": "projects/city-power-light-grid-monitor.json",
+      "name": "CITY POWER & LIGHT GRID MONITOR"
     },
     {
-      "file": "progetti/coho-winery-supply-chain.json",
-      "nome": "COHO WINERY SUPPLY CHAIN"
+      "file": "projects/coho-winery-supply-chain.json",
+      "name": "COHO WINERY SUPPLY CHAIN"
     },
     {
-      "file": "progetti/graphic-design-institute-lms.json",
-      "nome": "GRAPHIC DESIGN INSTITUTE LMS"
+      "file": "projects/graphic-design-institute-lms.json",
+      "name": "GRAPHIC DESIGN INSTITUTE LMS"
     },
     {
-      "file": "progetti/wide-world-importers-legacy-erp.json",
-      "nome": "WIDE WORLD IMPORTERS LEGACY ERP"
+      "file": "projects/wide-world-importers-legacy-erp.json",
+      "name": "WIDE WORLD IMPORTERS LEGACY ERP"
     }
   ]
 }

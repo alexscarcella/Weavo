@@ -2,7 +2,7 @@
 // selezionato sulla stessa riga (vedi cell-selection.js): prima si sceglie il
 // team, poi si selezionano multiple risorse (solo tra quelle di quel team),
 // poi l'eventuale flag milestone (solo modalità singola cella — un range
-// applica solo team+risorse, la milestone resta un concetto per singola
+// applica solo team+resources, la milestone resta un concetto per singola
 // settimana). Salvataggio automatico alla chiusura (nessun bottone "salva"
 // separato), con avviso non bloccante su doppia allocazione.
 (function (MP) {
@@ -62,9 +62,9 @@
     const isBulk = weeks.length > 1;
     const anchorWeek = weeks[0];
 
-    const entry = (task.settimane || {})[anchorWeek] || {};
+    const entry = (task.weeks || {})[anchorWeek] || {};
     let selectedTeam = entry.team || '';
-    const selectedRisorse = new Set(entry.risorse || []);
+    const selectedResources = new Set(entry.resources || []);
     let selectedMilestone = entry.milestone === true;
 
     const index = buildAllocationIndex(dataset);
@@ -72,15 +72,15 @@
     const pop = document.createElement('div');
     pop.className = 'cell-popover';
 
-    const teamOptions = dataset.teamRisorsa.team
-      .map((t) => `<option value="${t.codice}" ${t.codice === selectedTeam ? 'selected' : ''}>${t.nome}</option>`)
+    const teamOptions = dataset.teamResources.teams
+      .map((t) => `<option value="${t.code}" ${t.code === selectedTeam ? 'selected' : ''}>${t.name}</option>`)
       .join('');
 
     const altreDiverse = isBulk
       ? weeks.slice(1).filter((w) => {
-          const e = (task.settimane || {})[w];
-          const vuota = !e || (!e.team && !(e.risorse || []).length && !e.milestone);
-          return !vuota && JSON.stringify({ team: e.team, risorse: e.risorse || [] }) !== JSON.stringify({ team: entry.team, risorse: entry.risorse || [] });
+          const e = (task.weeks || {})[w];
+          const vuota = !e || (!e.team && !(e.resources || []).length && !e.milestone);
+          return !vuota && JSON.stringify({ team: e.team, resources: e.resources || [] }) !== JSON.stringify({ team: entry.team, resources: entry.resources || [] });
         }).length
       : 0;
 
@@ -96,7 +96,7 @@
       </div>
       <div class="popover-field">
         <label>Resources</label>
-        <div class="popover-risorse-list"></div>
+        <div class="popover-resources-list"></div>
       </div>
       ${isBulk ? '' : `<div class="popover-field popover-milestone-field">
         <label><input type="checkbox" class="popover-milestone" ${selectedMilestone ? 'checked' : ''}> Delivery milestone</label>
@@ -108,17 +108,17 @@
     document.body.appendChild(pop);
     positionPopover(pop, anchorEl);
 
-    const risorseListEl = pop.querySelector('.popover-risorse-list');
+    const resourcesListEl = pop.querySelector('.popover-resources-list');
     const conflictsEl = pop.querySelector('.popover-conflicts');
 
     function refreshConflicts() {
       const righe = [];
-      for (const sigla of selectedRisorse) {
+      for (const initials of selectedResources) {
         for (const w of weeks) {
-          const refs = findAllocations(index, sigla, w).filter((r) => r.taskRef !== task);
+          const refs = findAllocations(index, initials, w).filter((r) => r.taskRef !== task);
           for (const ref of refs) {
             const settimanaLabel = isBulk ? ` (${formatWeekLabel(w)})` : '';
-            righe.push(`<strong>${sigla}</strong>${settimanaLabel} already allocated to ${ref.progettoNome} / BL ${ref.baselineVersione} / ${ref.taskNome}`);
+            righe.push(`<strong>${initials}</strong>${settimanaLabel} already allocated to ${ref.projectName} / BL ${ref.baselineVersion} / ${ref.taskName}`);
           }
         }
       }
@@ -131,26 +131,26 @@
     // risorse dello stesso team (§ una risorsa appartiene a un solo team).
     // Cambiando team, le risorse già selezionate che non appartengono più al
     // team scelto vengono deselezionate.
-    function renderRisorseList() {
-      const team = MP.schema.findTeamByCodice(dataset.teamRisorsa, selectedTeam);
+    function renderResourcesList() {
+      const team = MP.schema.findTeamByCode(dataset.teamResources, selectedTeam);
       if (!team) {
-        risorseListEl.innerHTML = '<span class="hint">Select a team to choose resources.</span>';
+        resourcesListEl.innerHTML = '<span class="hint">Select a team to choose resources.</span>';
         return;
       }
-      for (const sigla of [...selectedRisorse]) {
-        if (!team.risorse.some((r) => r.sigla === sigla)) selectedRisorse.delete(sigla);
+      for (const initials of [...selectedResources]) {
+        if (!team.resources.some((r) => r.initials === initials)) selectedResources.delete(initials);
       }
-      risorseListEl.innerHTML = team.risorse.length
-        ? team.risorse.map((r) => `
-            <label class="popover-risorsa">
-              <input type="checkbox" value="${r.sigla}" ${selectedRisorse.has(r.sigla) ? 'checked' : ''}>
-              <span>${r.sigla} — ${r.nome}</span>
+      resourcesListEl.innerHTML = team.resources.length
+        ? team.resources.map((r) => `
+            <label class="popover-resource">
+              <input type="checkbox" value="${r.initials}" ${selectedResources.has(r.initials) ? 'checked' : ''}>
+              <span>${r.initials} — ${r.name}</span>
             </label>`).join('')
         : '<span class="hint">No resources in this team.</span>';
-      risorseListEl.querySelectorAll('.popover-risorsa input').forEach((cb) => {
+      resourcesListEl.querySelectorAll('.popover-resource input').forEach((cb) => {
         cb.addEventListener('change', (e) => {
-          if (e.target.checked) selectedRisorse.add(e.target.value);
-          else selectedRisorse.delete(e.target.value);
+          if (e.target.checked) selectedResources.add(e.target.value);
+          else selectedResources.delete(e.target.value);
           refreshConflicts();
         });
       });
@@ -158,7 +158,7 @@
 
     pop.querySelector('.popover-team').addEventListener('change', (e) => {
       selectedTeam = e.target.value;
-      renderRisorseList();
+      renderResourcesList();
       refreshConflicts();
     });
     const milestoneCheckbox = pop.querySelector('.popover-milestone');
@@ -168,14 +168,14 @@
       });
     }
 
-    renderRisorseList();
+    renderResourcesList();
     refreshConflicts();
 
     activeContext = {
       save() {
         const newEntry = createWeekEntry({
           team: selectedTeam,
-          risorse: [...selectedRisorse],
+          resources: [...selectedResources],
           milestone: isBulk ? false : selectedMilestone,
         });
         onSave(newEntry);

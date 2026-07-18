@@ -20,8 +20,8 @@ body {
 }
 
 /* Unica barra di scorrimento "di pagina": se il contenuto di una vista non è
-   una griglia con scroll proprio (es. team-risorse-page), scrolla qui. Le
-   viste a griglia (gantt/carico-risorse/milestones) riempiono invece
+   una griglia con scroll proprio (es. team-resources-page), scrolla qui. Le
+   viste a griglia (gantt/resource-load/milestones) riempiono invece
    esattamente questo spazio (.app-ready/.gantt-page sotto sono flex a
    riempimento) e delegano lo scroll solo a .gantt-scroll, cosicché non
    compaia mai una seconda barra fuori dalla griglia. */
@@ -142,7 +142,7 @@ code {
 .legend-badge { position: static !important; display: inline-flex !important; }
 .legend-menu-btn { opacity: 0.35; }
 .legend-item:hover .legend-menu-btn { opacity: 1; }
-.btn-nuovo-tipo, .btn-nuova-risorsa { padding: 0.3rem 0.6rem; font-size: 0.78rem; margin-left: 0.25rem; }
+.btn-new-team, .btn-new-resource { padding: 0.3rem 0.6rem; font-size: 0.78rem; margin-left: 0.25rem; }
 
 .gantt-page {
   display: flex;
@@ -192,7 +192,7 @@ code {
 .gantt-cell.col-1 { left: 0; width: 170px; }
 .gantt-cell.col-2 { left: 170px; width: 90px; color: #555; }
 .gantt-cell.col-3 { left: 260px; width: 300px; font-weight: 400; }
-.gantt-cell.task-concluso { color: #888; }
+.gantt-cell.task-completed { color: #888; }
 
 .gantt-cell.header {
   position: sticky;
@@ -264,7 +264,7 @@ code {
   background: var(--project-bar-color, transparent);
 }
 
-.badge-orfano {
+.badge-orphan {
   position: absolute;
   top: 1px;
   right: 1px;
@@ -280,9 +280,9 @@ code {
   justify-content: center;
   line-height: 1;
 }
-.badge-orfano-risorsa { background: #ff8a65; color: #4a1c00; }
+.badge-orphan-resource { background: #ff8a65; color: #4a1c00; }
 
-.toggle-archiviati, .toggle-conclusi { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+.toggle-archived, .toggle-completed { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
 
 .gantt-cell.editable-cell { cursor: pointer; }
 .gantt-cell.editable-cell:hover { outline: 2px solid #2E86FF; outline-offset: -2px; }
@@ -323,10 +323,10 @@ code {
 .popover-field select {
   width: 100%; padding: 0.3rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid #aaa;
 }
-.popover-risorse-list {
+.popover-resources-list {
   max-height: 160px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 4px; padding: 0.3rem;
 }
-.popover-risorsa {
+.popover-resource {
   display: flex; align-items: center; gap: 0.4rem; font-weight: 400 !important;
   padding: 0.15rem 0; cursor: pointer;
 }
@@ -350,7 +350,7 @@ code {
 .legend-swatch.legend-mismatch { background: #fff; outline: 2px dashed #7b1fa2; outline-offset: -2px; }
 .badge-mismatch { background: #ce93d8; color: #3c0a4d; top: auto; bottom: 1px; }
 
-/* --- Vista carico risorse --- */
+/* --- Vista resource load --- */
 .load-cell { font-weight: 600; color: #555; }
 .load-cell.load-1 { background: #c8e6c9; color: #1b5e20; }
 .load-cell.load-2 { background: #fff9c4; color: #8a6d00; }
@@ -463,7 +463,7 @@ code {
 .gantt-cell.col-fixed:hover .row-menu-btn { opacity: 1; }
 .row-menu-btn:hover { color: #2E86FF; }
 
-.task-concluso-checkbox { flex: none; margin-right: 0.3rem; cursor: pointer; }
+.task-completed-checkbox { flex: none; margin-right: 0.3rem; cursor: pointer; }
 .hint-text { color: #999; font-style: italic; }
 
 /* --- Modal bloccante (conflitto di salvataggio) --- */
@@ -572,18 +572,18 @@ code {
 .context-menu-item-action:hover { background: #e8f1ff; }
 
 /* --- Pagina "Team e risorse" --- */
-.team-risorse-page { max-width: 640px; }
+.team-resources-page { max-width: 640px; }
 .team-list { display: flex; flex-direction: column; gap: 0.75rem; }
 .team-card {
   border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem 0.9rem; background: #fafafa;
 }
 .team-card-header { display: flex; align-items: center; gap: 0.5rem; }
 .team-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.15); flex: none; }
-.team-titolo { font-weight: 600; flex: 1; }
+.team-title { font-weight: 600; flex: 1; }
 .team-resources { margin: 0.6rem 0; display: flex; flex-direction: column; gap: 0.15rem; }
 .resource-row {
   display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.4rem; border-radius: 4px; font-size: 0.85rem;
 }
 .resource-row:hover { background: #eef1f5; }
-.resource-sigla { font-weight: 600; width: 2.5rem; flex: none; }
-.resource-nome { flex: 1; color: #444; }
+.resource-initials { font-weight: 600; width: 2.5rem; flex: none; }
+.resource-name { flex: 1; color: #444; }

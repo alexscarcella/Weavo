@@ -18,21 +18,21 @@
 
   async function handleAddWeek(state) {
     const manifest = state.dataset.manifest;
-    manifest.settimane.ultima = addWeeks(manifest.settimane.ultima, 1);
+    manifest.weeks.last = addWeeks(manifest.weeks.last, 1);
     await persistManifest(state);
   }
 
   async function handleRemoveWeek(state) {
     const { dataset } = state;
     const manifest = dataset.manifest;
-    const weeks = getWeeksInRange(manifest.settimane.prima, manifest.settimane.ultima);
+    const weeks = getWeeksInRange(manifest.weeks.first, manifest.weeks.last);
 
     if (weeks.length < 2) {
       window.alert('Cannot remove: at least one week must remain in the gantt.');
       return;
     }
 
-    const settimanaDaRimuovere = manifest.settimane.prima;
+    const settimanaDaRimuovere = manifest.weeks.first;
     const weeksToRemove = new Set([settimanaDaRimuovere]);
     const allocazioni = findAllocationsInWeeks(dataset, weeksToRemove);
     const etichetta = formatWeekLabel(settimanaDaRimuovere);
@@ -49,12 +49,12 @@
     if (!window.confirm(messaggio)) return;
 
     const fileDaSalvare = [];
-    for (const [file, { data: progetto }] of dataset.progetti) {
+    for (const [file, { data: progetto }] of dataset.projects) {
       let modificato = false;
       progetto.baseline.forEach((baseline) => {
         baseline.task.forEach((task) => {
-          if (task.settimane && settimanaDaRimuovere in task.settimane) {
-            delete task.settimane[settimanaDaRimuovere];
+          if (task.weeks && settimanaDaRimuovere in task.weeks) {
+            delete task.weeks[settimanaDaRimuovere];
             modificato = true;
           }
         });
@@ -62,7 +62,7 @@
       if (modificato) fileDaSalvare.push(file);
     }
 
-    manifest.settimane.prima = addWeeks(settimanaDaRimuovere, 1);
+    manifest.weeks.first = addWeeks(settimanaDaRimuovere, 1);
 
     try {
       await MP.saveCoordinator.saveManifest(state);

@@ -1,12 +1,12 @@
-// Riferimento unico per lo schema dati (manifest/team-risorse/progetti).
+// Riferimento unico per lo schema dati (manifest/team-resources/projects).
 // Usato sia dall'app runtime sia, in futuro, dallo script di import Excel.
 // Nessun elenco qui rappresenta un vincolo "hardcoded" per l'app: SEED_TEAM
 // è solo un contenuto proposto alla creazione di un dataset vuoto, liberamente
-// modificabile dall'utente in team-risorse.json subito dopo.
+// modificabile dall'utente in team-resources.json subito dopo.
 //
 // Un "team" è l'unica anagrafica di raggruppamento: ogni risorsa appartiene
 // a esattamente un team (relazione 1 team -> N risorse), annidata dentro il
-// team stesso in team-risorse.json. Non esiste più un'anagrafica risorse
+// team stesso in team-resources.json. Non esiste più un'anagrafica risorse
 // indipendente dal team.
 //
 // Niente `import`/`export`: caricato come script classico (namespace globale
@@ -16,176 +16,176 @@
 (function (MP) {
   'use strict';
 
-  const SCHEMA_VERSION = 1;
+  const SCHEMA_VERSION = 2;
 
   const PATHS = {
     manifest: 'manifest.json',
-    teamRisorsa: 'team-risorse.json',
-    progettiDir: 'progetti',
+    teamResources: 'team-resources.json',
+    projectsDir: 'projects',
     backupDir: 'backup',
   };
 
   const SEED_TEAM = [
-    { codice: 'dev', nome: 'Development', colore: '#00B050' },
-    { codice: 'vv', nome: 'V&V', colore: '#FFC000' },
-    { codice: 'devops', nome: 'DevOps', colore: '#2E86FF' },
-    { codice: 'run', nome: 'Run Team', colore: '#8E44AD' },
-    { codice: 'build', nome: 'Build Team', colore: '#D4AC0D' },
+    { code: 'dev', name: 'Development', color: '#00B050' },
+    { code: 'vv', name: 'V&V', color: '#FFC000' },
+    { code: 'devops', name: 'DevOps', color: '#2E86FF' },
+    { code: 'run', name: 'Run Team', color: '#8E44AD' },
+    { code: 'build', name: 'Build Team', color: '#D4AC0D' },
   ];
 
   /**
    * Crea la forma vuota di manifest.json per un dataset nuovo: nessun progetto,
-   * range settimane collassato su un'unica settimana di partenza (prima === ultima).
-   * @param {string} primaSettimana - ISO date (lunedì) della prima/unica settimana.
-   * @returns {{schemaVersion: number, settimane: {prima: string, ultima: string}, progetti: Array}}
+   * range settimane collassato su un'unica settimana di partenza (first === last).
+   * @param {string} firstWeek - ISO date (lunedì) della prima/unica settimana.
+   * @returns {{schemaVersion: number, weeks: {first: string, last: string}, projects: Array}}
    */
-  function createEmptyManifest(primaSettimana) {
+  function createEmptyManifest(firstWeek) {
     return {
       schemaVersion: SCHEMA_VERSION,
-      settimane: { prima: primaSettimana, ultima: primaSettimana },
-      progetti: [],
+      weeks: { first: firstWeek, last: firstWeek },
+      projects: [],
     };
   }
 
   /**
-   * Crea la forma vuota di team-risorse.json per un dataset nuovo.
+   * Crea la forma vuota di team-resources.json per un dataset nuovo.
    * @param {boolean} [withSeed=true] - se true, precompila con SEED_TEAM (team senza
    *   risorse) come punto di partenza suggerito; l'utente resta libero di modificarlo
    *   subito dopo nella pagina team/risorse. Se false, parte da nessun team.
-   * @returns {{team: Array}}
+   * @returns {{teams: Array}}
    */
-  function createEmptyTeamRisorsa(withSeed = true) {
-    return { team: withSeed ? SEED_TEAM.map((t) => ({ ...t, risorse: [] })) : [] };
+  function createEmptyTeamResources(withSeed = true) {
+    return { teams: withSeed ? SEED_TEAM.map((t) => ({ ...t, resources: [] })) : [] };
   }
 
   /**
-   * Cerca una risorsa per sigla in tutti i team (le sigle sono uniche a
+   * Cerca una risorsa per initials in tutti i team (le initials sono uniche a
    * livello globale, non solo all'interno del team).
-   * @param {{team: Array}} teamRisorsa - dataset team-risorse.json.
-   * @param {string} sigla - sigla della risorsa da cercare.
-   * @returns {{team: Object, risorsa: Object}|null} il team e la risorsa trovati,
-   *   o null se la sigla non esiste in nessun team.
+   * @param {{teams: Array}} teamResources - dataset team-resources.json.
+   * @param {string} initials - initials della risorsa da cercare.
+   * @returns {{team: Object, resource: Object}|null} il team e la risorsa trovati,
+   *   o null se le initials non esistono in nessun team.
    */
-  function findResourceEntry(teamRisorsa, sigla) {
-    for (const team of teamRisorsa.team) {
-      const risorsa = (team.risorse || []).find((r) => r.sigla === sigla);
-      if (risorsa) return { team, risorsa };
+  function findResourceEntry(teamResources, initials) {
+    for (const team of teamResources.teams) {
+      const resource = (team.resources || []).find((r) => r.initials === initials);
+      if (resource) return { team, resource };
     }
     return null;
   }
 
   /**
-   * Cerca un team per codice.
-   * @param {{team: Array}} teamRisorsa - dataset team-risorse.json.
-   * @param {string} codice - codice del team (es. "dev", "vv"); non è un enum
-   *   fisso nel codice, è definito dinamicamente dal contenuto di team-risorse.json.
-   * @returns {Object|undefined} il team trovato, o undefined se nessun team ha quel codice.
+   * Cerca un team per code.
+   * @param {{teams: Array}} teamResources - dataset team-resources.json.
+   * @param {string} code - code del team (es. "dev", "vv"); non è un enum
+   *   fisso nel codice, è definito dinamicamente dal contenuto di team-resources.json.
+   * @returns {Object|undefined} il team trovato, o undefined se nessun team ha quel code.
    */
-  function findTeamByCodice(teamRisorsa, codice) {
-    return teamRisorsa.team.find((t) => t.codice === codice);
+  function findTeamByCode(teamResources, code) {
+    return teamResources.teams.find((t) => t.code === code);
   }
 
   /**
    * Lista piatta di tutte le risorse di tutti i team, con il team di
    * appartenenza denormalizzato su ogni riga: comoda per le viste che non
-   * ragionano per team (vista carico risorse, insiemi di sigle valide).
-   * @param {{team: Array}} teamRisorsa - dataset team-risorse.json.
-   * @returns {Array<{sigla: string, nome: string, teamCodice: string}>}
+   * ragionano per team (vista carico risorse, insiemi di initials valide).
+   * @param {{teams: Array}} teamResources - dataset team-resources.json.
+   * @returns {Array<{initials: string, name: string, teamCode: string}>}
    */
-  function flattenRisorse(teamRisorsa) {
+  function flattenResources(teamResources) {
     const result = [];
-    for (const team of teamRisorsa.team) {
-      for (const risorsa of team.risorse || []) {
-        result.push({ sigla: risorsa.sigla, nome: risorsa.nome, teamCodice: team.codice });
+    for (const team of teamResources.teams) {
+      for (const resource of team.resources || []) {
+        result.push({ initials: resource.initials, name: resource.name, teamCode: team.code });
       }
     }
     return result;
   }
 
   /**
-   * Insieme di tutte le sigle esistenti in team-risorse.json, a prescindere dal team.
-   * Usato per distinguere una sigla valida da un riferimento orfano nei task.
-   * @param {{team: Array}} teamRisorsa - dataset team-risorse.json.
+   * Insieme di tutte le initials esistenti in team-resources.json, a prescindere dal team.
+   * Usato per distinguere delle initials valide da un riferimento orfano nei task.
+   * @param {{teams: Array}} teamResources - dataset team-resources.json.
    * @returns {Set<string>}
    */
-  function existingSigle(teamRisorsa) {
-    return new Set(flattenRisorse(teamRisorsa).map((r) => r.sigla));
+  function existingInitials(teamResources) {
+    return new Set(flattenResources(teamResources).map((r) => r.initials));
   }
 
   /**
-   * Crea la struttura dei referenti/team di un progetto. `solutionAnalyst`/`vvReference`
-   * contengono la `sigla` di una risorsa di team-risorse.json (o '' se non assegnato) — mai un
-   * oggetto denormalizzato, il nome si risolve al volo via `findResourceEntry`.
+   * Crea la struttura dei referenti di un progetto. `solutionAnalyst`/`vvReference`
+   * contengono le `initials` di una risorsa di team-resources.json (o '' se non assegnato) — mai
+   * un oggetto denormalizzato, il nome si risolve al volo via `findResourceEntry`.
    * @param {Object} [options]
    * @param {string} [options.projectManager='']
    * @param {string} [options.projectEngineer='']
-   * @param {string} [options.solutionAnalyst=''] - sigla risorsa.
-   * @param {string} [options.vvReference=''] - sigla risorsa.
+   * @param {string} [options.solutionAnalyst=''] - initials risorsa.
+   * @param {string} [options.vvReference=''] - initials risorsa.
    * @param {string} [options.note='']
    * @returns {{projectManager: string, projectEngineer: string, solutionAnalyst: string, vvReference: string, note: string}}
    */
-  function createProjectTeamInfo({ projectManager = '', projectEngineer = '', solutionAnalyst = '', vvReference = '', note = '' } = {}) {
+  function createProjectReferents({ projectManager = '', projectEngineer = '', solutionAnalyst = '', vvReference = '', note = '' } = {}) {
     return { projectManager, projectEngineer, solutionAnalyst, vvReference, note };
   }
 
   /**
-   * Normalizza il campo `team` di un progetto letto da disco: i dati legacy (stringa libera,
-   * formato pre-struttura) vengono migrati in `note`; un oggetto già nel nuovo formato viene
-   * ripassato per completare eventuali chiavi mancanti. Usato in `repository.loadDataset` come
-   * migrazione lazy "self-heal on touch" (si riscrive nel nuovo formato al primo salvataggio).
-   * @param {string|Object|null|undefined} team - valore letto da progetti/*.json.
+   * Normalizza il campo `referents` di un progetto letto da disco: i dati legacy (stringa
+   * libera, formato pre-struttura) vengono migrati in `note`; un oggetto già nel nuovo formato
+   * viene ripassato per completare eventuali chiavi mancanti. Usato in `repository.loadDataset`
+   * come migrazione lazy "self-heal on touch" (si riscrive nel nuovo formato al primo salvataggio).
+   * @param {string|Object|null|undefined} referents - valore letto da projects/*.json.
    * @returns {{projectManager: string, projectEngineer: string, solutionAnalyst: string, vvReference: string, note: string}}
    */
-  function normalizeProjectTeam(team) {
-    if (typeof team === 'string') return createProjectTeamInfo({ note: team });
-    return createProjectTeamInfo(team || {});
+  function normalizeProjectReferents(referents) {
+    if (typeof referents === 'string') return createProjectReferents({ note: referents });
+    return createProjectReferents(referents || {});
   }
 
   /**
    * Crea un nuovo progetto vuoto (nessuna baseline).
-   * @param {string} nome - nome del progetto.
-   * @param {Object} [team] - referenti/team di progetto, vedi `createProjectTeamInfo`.
-   * @returns {{nome: string, team: Object, archiviato: boolean, baseline: Array}}
+   * @param {string} name - nome del progetto.
+   * @param {Object} [referents] - referenti di progetto, vedi `createProjectReferents`.
+   * @returns {{name: string, referents: Object, archived: boolean, baseline: Array}}
    */
-  function createProject(nome, team = createProjectTeamInfo()) {
-    return { nome, team, archiviato: false, baseline: [] };
+  function createProject(name, referents = createProjectReferents()) {
+    return { name, referents, archived: false, baseline: [] };
   }
 
   /**
    * Crea una nuova baseline/release vuota (nessun task).
-   * @param {string} versione - identificativo/versione della baseline.
-   * @returns {{versione: string, archiviata: boolean, task: Array}}
+   * @param {string} version - identificativo/versione della baseline.
+   * @returns {{version: string, archived: boolean, task: Array}}
    */
-  function createBaseline(versione) {
-    return { versione, archiviata: false, task: [] };
+  function createBaseline(version) {
+    return { version, archived: false, task: [] };
   }
 
   /**
-   * Crea un nuovo task vuoto (nessuna settimana allocata), non concluso.
-   * @param {string} nome - nome del task.
-   * @returns {{nome: string, concluso: boolean, settimane: Object}}
+   * Crea un nuovo task vuoto (nessuna settimana allocata), non completed.
+   * @param {string} name - nome del task.
+   * @returns {{name: string, completed: boolean, weeks: Object}}
    */
-  function createTask(nome) {
-    return { nome, concluso: false, settimane: {} };
+  function createTask(name) {
+    return { name, completed: false, weeks: {} };
   }
 
   /**
-   * Costruisce una week entry (task.settimane[iso]) applicando la regola di
-   * coerenza decisa per il popover di editing: un'allocazione (team + risorse)
+   * Costruisce una week entry (task.weeks[iso]) applicando la regola di
+   * coerenza decisa per il popover di editing: un'allocazione (team + resources)
    * è valida solo se entrambe le parti sono presenti; altrimenti resta solo
-   * l'eventuale flag milestone (mai uno stato parziale tipo {team:"dev", risorse:[]}).
+   * l'eventuale flag milestone (mai uno stato parziale tipo {team:"dev", resources:[]}).
    * Va sempre usata al posto di costruire l'oggetto a mano.
    * @param {Object} [options]
-   * @param {string} [options.team] - codice team dell'allocazione.
-   * @param {string[]} [options.risorse] - sigle delle risorse allocate.
+   * @param {string} [options.team] - code team dell'allocazione.
+   * @param {string[]} [options.resources] - initials delle risorse allocate.
    * @param {boolean} [options.milestone] - flag di rilascio baseline su questa settimana.
-   * @returns {{team?: string, risorse?: string[], milestone?: boolean}}
+   * @returns {{team?: string, resources?: string[], milestone?: boolean}}
    */
-  function createWeekEntry({ team, risorse, milestone } = {}) {
+  function createWeekEntry({ team, resources, milestone } = {}) {
     const entry = {};
-    if (team && Array.isArray(risorse) && risorse.length > 0) {
+    if (team && Array.isArray(resources) && resources.length > 0) {
       entry.team = team;
-      entry.risorse = risorse;
+      entry.resources = resources;
     }
     if (milestone) entry.milestone = true;
     return entry;
@@ -193,15 +193,15 @@
 
   /**
    * Indica se una week entry è vuota, cioè priva sia di un'allocazione
-   * (team + risorse non vuoto) sia del flag milestone.
-   * @param {{team?: string, risorse?: string[], milestone?: boolean}|null|undefined} entry
+   * (team + resources non vuoto) sia del flag milestone.
+   * @param {{team?: string, resources?: string[], milestone?: boolean}|null|undefined} entry
    * @returns {boolean}
    */
   function isWeekEntryEmpty(entry) {
     if (!entry) return true;
-    const hasAllocazione = !!entry.team && Array.isArray(entry.risorse) && entry.risorse.length > 0;
+    const hasAllocation = !!entry.team && Array.isArray(entry.resources) && entry.resources.length > 0;
     const hasMilestone = entry.milestone === true;
-    return !hasAllocazione && !hasMilestone;
+    return !hasAllocation && !hasMilestone;
   }
 
   MP.schema = {
@@ -209,13 +209,13 @@
     PATHS,
     SEED_TEAM,
     createEmptyManifest,
-    createEmptyTeamRisorsa,
+    createEmptyTeamResources,
     findResourceEntry,
-    findTeamByCodice,
-    flattenRisorse,
-    existingSigle,
-    createProjectTeamInfo,
-    normalizeProjectTeam,
+    findTeamByCode,
+    flattenResources,
+    existingInitials,
+    createProjectReferents,
+    normalizeProjectReferents,
     createProject,
     createBaseline,
     createTask,

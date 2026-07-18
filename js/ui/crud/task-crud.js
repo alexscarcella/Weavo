@@ -1,5 +1,5 @@
 // CRUD task all'interno di una baseline: crea, rinomina, elimina, riordina,
-// toggle "concluso" (azione diretta, senza riaprire il popover della cella).
+// toggle "completed" (azione diretta, senza riaprire il popover della cella).
 (function (MP) {
   'use strict';
 
@@ -12,23 +12,23 @@
     }
   }
 
-  async function createTask(state, file, baseline, nomeInput) {
-    const nome = nomeInput !== undefined ? nomeInput : window.prompt('Name of the new task:');
-    if (!nome || !nome.trim()) return;
-    baseline.task.push(MP.schema.createTask(nome.trim()));
+  async function createTask(state, file, baseline, nameInput) {
+    const name = nameInput !== undefined ? nameInput : window.prompt('Name of the new task:');
+    if (!name || !name.trim()) return;
+    baseline.task.push(MP.schema.createTask(name.trim()));
     await persistProject(state, file);
   }
 
   async function renameTask(state, file, task, nuovoInput) {
-    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('New task name:', task.nome);
+    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('New task name:', task.name);
     if (!nuovo || !nuovo.trim()) return;
-    task.nome = nuovo.trim();
+    task.name = nuovo.trim();
     await persistProject(state, file);
   }
 
   async function deleteTask(state, file, baseline, task, skipConfirm) {
     const confermato = skipConfirm || window.confirm(
-      `Delete the task "${task.nome}" and all its allocations? This cannot be undone.`
+      `Delete the task "${task.name}" and all its allocations? This cannot be undone.`
     );
     if (!confermato) return;
     baseline.task = baseline.task.filter((t) => t !== task);
@@ -50,7 +50,7 @@
       await persistProject(state, file);
       return;
     }
-    const progetto = state.dataset.progetti.get(file).data;
+    const progetto = state.dataset.projects.get(file).data;
     const baselineIdx = progetto.baseline.indexOf(baseline);
     const targetBaselineIdx = baselineIdx + direction;
     if (targetBaselineIdx < 0 || targetBaselineIdx >= progetto.baseline.length) return;
@@ -61,10 +61,10 @@
     await persistProject(state, file);
   }
 
-  async function toggleConcluso(state, file, task) {
-    task.concluso = !task.concluso;
+  async function toggleCompleted(state, file, task) {
+    task.completed = !task.completed;
     await persistProject(state, file);
   }
 
-  MP.taskCrud = { createTask, renameTask, deleteTask, moveTask, toggleConcluso };
+  MP.taskCrud = { createTask, renameTask, deleteTask, moveTask, toggleCompleted };
 })(window.MP = window.MP || {});

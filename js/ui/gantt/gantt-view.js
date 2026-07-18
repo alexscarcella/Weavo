@@ -5,7 +5,7 @@
 
   const { getWeeksInRange, formatWeekLabel } = MP.weekUtils;
   const { renderTaskRow } = MP.ganttRow;
-  const { findOrphanTeam, findOrphanRisorse, findTeamMismatches, findOrphanProjectRiferimenti } = MP.validation;
+  const { findOrphanTeam, findOrphanResources, findTeamMismatches, findOrphanProjectReferents } = MP.validation;
 
   // Tiene traccia dell'ultima cella (o range) salvata per poterla rievidenziare
   // dopo il re-render completo che segue ogni salvataggio (vedi app.js: l'intero
@@ -31,28 +31,28 @@
   }
 
   // Un progetto senza baseline, o una baseline senza task (visibili — vedi
-  // mostraConclusi), non deve sparire dal gantt: senza una riga non ci
+  // showCompleted), non deve sparire dal gantt: senza una riga non ci
   // sarebbe modo di raggiungerne il menu "⋮" per aggiungere la prima
   // baseline/task (righe segnaposto con baseline/task null).
-  function buildRows(dataset, mostraArchiviati, mostraConclusi) {
+  function buildRows(dataset, showArchived, showCompleted) {
     const rows = [];
     let projectIndex = 0;
-    for (const voce of dataset.manifest.progetti) {
-      const entry = dataset.progetti.get(voce.file);
+    for (const voce of dataset.manifest.projects) {
+      const entry = dataset.projects.get(voce.file);
       if (!entry) continue;
       const progetto = entry.data;
-      if (progetto.archiviato && !mostraArchiviati) continue;
+      if (progetto.archived && !showArchived) continue;
 
       const pIdx = projectIndex++;
 
-      const baselineVisibili = progetto.baseline.filter((b) => mostraArchiviati || !b.archiviata);
+      const baselineVisibili = progetto.baseline.filter((b) => showArchived || !b.archived);
       if (baselineVisibili.length === 0) {
         rows.push({ progetto, baseline: null, task: null, file: voce.file, showProgetto: true, showBaseline: false, projectIndex: pIdx, baselineIndex: 0 });
         continue;
       }
 
       baselineVisibili.forEach((baseline, bi) => {
-        const taskVisibili = baseline.task.filter((t) => mostraConclusi || !t.concluso);
+        const taskVisibili = baseline.task.filter((t) => showCompleted || !t.completed);
         if (taskVisibili.length === 0) {
           rows.push({ progetto, baseline, task: null, file: voce.file, showProgetto: bi === 0, showBaseline: true, projectIndex: pIdx, baselineIndex: bi });
           return;
@@ -78,27 +78,27 @@
   // settimana, l'eventuale flag su un'altra settimana dello stesso task va rimosso
   // (l'ultima impostata sovrascrive la precedente, mai due milestone residue).
   function clearOtherMilestones(task, settimana) {
-    for (const [iso, entry] of Object.entries(task.settimane || {})) {
+    for (const [iso, entry] of Object.entries(task.weeks || {})) {
       if (iso === settimana || !entry.milestone) continue;
       delete entry.milestone;
-      if (MP.schema.isWeekEntryEmpty(entry)) delete task.settimane[iso];
+      if (MP.schema.isWeekEntryEmpty(entry)) delete task.weeks[iso];
     }
   }
 
   // Tutti i task di una stessa baseline condividono un'unica scadenza: impostando
   // la milestone su un task, viene ereditata (stessa settimana) da tutti gli
-  // altri task non conclusi della baseline, applicando anche a loro la regola
+  // altri task non completed della baseline, applicando anche a loro la regola
   // "una sola milestone per task" — mai due scadenze diverse nella stessa
-  // baseline. I task già conclusi non vengono toccati automaticamente (stesso
+  // baseline. I task già completed non vengono toccati automaticamente (stesso
   // principio del team-mismatch: dati chiusi mai auto-corretti, vedi CLAUDE.md).
   function syncBaselineMilestone(baseline, task, settimana) {
     clearOtherMilestones(task, settimana);
     const affected = [task];
     for (const t of baseline.task) {
-      if (t === task || t.concluso) continue;
+      if (t === task || t.completed) continue;
       clearOtherMilestones(t, settimana);
-      const existing = t.settimane[settimana];
-      t.settimane[settimana] = existing ? { ...existing, milestone: true } : { milestone: true };
+      const existing = t.weeks[settimana];
+      t.weeks[settimana] = existing ? { ...existing, milestone: true } : { milestone: true };
       affected.push(t);
     }
     return affected;
@@ -111,26 +111,26 @@
   function clearBaselineMilestone(baseline, task, settimana) {
     const affected = [task];
     for (const t of baseline.task) {
-      if (t === task || t.concluso) continue;
-      const entry = (t.settimane || {})[settimana];
+      if (t === task || t.completed) continue;
+      const entry = (t.weeks || {})[settimana];
       if (!entry || !entry.milestone) continue;
       delete entry.milestone;
-      if (MP.schema.isWeekEntryEmpty(entry)) delete t.settimane[settimana];
+      if (MP.schema.isWeekEntryEmpty(entry)) delete t.weeks[settimana];
       affected.push(t);
     }
     return affected;
   }
 
   async function handleCellSaved({ state, file, task, baseline, settimana, newEntry }) {
-    const wasMilestone = ((task.settimane || {})[settimana] || {}).milestone === true;
+    const wasMilestone = ((task.weeks || {})[settimana] || {}).milestone === true;
     const isMilestone = newEntry.milestone === true;
     let affectedTasks = [task];
     if (baseline && isMilestone) affectedTasks = syncBaselineMilestone(baseline, task, settimana);
     else if (baseline && wasMilestone) affectedTasks = clearBaselineMilestone(baseline, task, settimana);
     if (MP.schema.isWeekEntryEmpty(newEntry)) {
-      delete task.settimane[settimana];
+      delete task.weeks[settimana];
     } else {
-      task.settimane[settimana] = newEntry;
+      task.weeks[settimana] = newEntry;
     }
     try {
       await MP.saveCoordinator.saveProject(state, file);
@@ -141,14 +141,14 @@
     }
   }
 
-  // Applica la stessa allocazione (team+risorse) a tutte le settimane del
+  // Applica la stessa allocazione (team+resources) a tutte le settimane del
   // range selezionato (vedi cell-selection.js), con un solo salvataggio.
   async function handleBulkCellsSaved({ state, file, task, weeksRange, newEntry }) {
     for (const settimana of weeksRange) {
       if (MP.schema.isWeekEntryEmpty(newEntry)) {
-        delete task.settimane[settimana];
+        delete task.weeks[settimana];
       } else {
-        task.settimane[settimana] = newEntry;
+        task.weeks[settimana] = newEntry;
       }
     }
     try {
@@ -204,7 +204,7 @@
     const check = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, direction);
     if (!check.allowed) return; // la voce di menu è già disabilitata in questo caso
 
-    const milestoneWeeks = weeks.filter((w) => ((task.settimane || {})[w] || {}).milestone === true);
+    const milestoneWeeks = weeks.filter((w) => ((task.weeks || {})[w] || {}).milestone === true);
     MP.weekShift.shiftWeeksData(task, weeks, direction);
 
     const targets = weeks.map((w) => MP.weekUtils.addWeeks(w, direction));
@@ -234,15 +234,15 @@
 
   function renderWarnings(dataset) {
     const orfaniTeam = findOrphanTeam(dataset);
-    const orfaniRisorsa = findOrphanRisorse(dataset);
+    const orfaniRisorsa = findOrphanResources(dataset);
     const mismatch = findTeamMismatches(dataset);
-    const orfaniRiferimenti = findOrphanProjectRiferimenti(dataset);
+    const orfaniRiferimenti = findOrphanProjectReferents(dataset);
     const righe = [
       ...dataset.warnings,
       ...orfaniTeam.map((o) => `Team "${o.valore}" not defined — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
-      ...orfaniRisorsa.map((o) => `Sigla "${o.valore}" not in team-risorse.json — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
+      ...orfaniRisorsa.map((o) => `Initials "${o.valore}" not in team-resources.json — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
       ...mismatch.map((m) => `Resource "${m.sigla}" belongs to team "${m.teamAssegnato}" but is allocated here as "${m.teamCella}" — needs regularizing — ${m.progetto} / BL ${m.baseline} / ${m.task} / ${m.settimana}`),
-      ...orfaniRiferimenti.map((o) => `Sigla "${o.valore}" (${o.campo}) not in team-risorse.json — project reference ${o.progetto}`),
+      ...orfaniRiferimenti.map((o) => `Initials "${o.valore}" (${o.campo}) not in team-resources.json — project reference ${o.progetto}`),
     ];
     if (!righe.length) return null;
     const div = document.createElement('div');
@@ -253,13 +253,13 @@
 
   function renderGanttView(state) {
     const { dataset } = state;
-    const weeks = getWeeksInRange(dataset.manifest.settimane.prima, dataset.manifest.settimane.ultima);
-    const teamMap = new Map(dataset.teamRisorsa.team.map((t) => [t.codice, t]));
-    const risorseFlat = MP.schema.flattenRisorse(dataset.teamRisorsa);
-    const sigleValide = new Set(risorseFlat.map((r) => r.sigla));
-    const siglaTeamMap = new Map(risorseFlat.map((r) => [r.sigla, r.teamCodice]));
+    const weeks = getWeeksInRange(dataset.manifest.weeks.first, dataset.manifest.weeks.last);
+    const teamMap = new Map(dataset.teamResources.teams.map((t) => [t.code, t]));
+    const resourcesFlat = MP.schema.flattenResources(dataset.teamResources);
+    const validInitials = new Set(resourcesFlat.map((r) => r.initials));
+    const initialsTeamMap = new Map(resourcesFlat.map((r) => [r.initials, r.teamCode]));
     const allocationIndex = MP.overallocation.buildAllocationIndex(dataset);
-    const rows = buildRows(dataset, state.ui.mostraArchiviati, state.ui.mostraConclusi);
+    const rows = buildRows(dataset, state.ui.showArchived, state.ui.showCompleted);
     const currentWeek = MP.weekUtils.getCurrentWeekIso();
     const currentWeekIndex = weeks.indexOf(currentWeek);
 
@@ -269,19 +269,19 @@
     const toolbarActions = document.createElement('span');
     toolbarActions.className = 'toolbar-actions';
     toolbarActions.innerHTML = `
-      <label class="toggle-archiviati">
-        <input type="checkbox" id="chk-archiviati" ${state.ui.mostraArchiviati ? 'checked' : ''}>
+      <label class="toggle-archived">
+        <input type="checkbox" id="chk-archived" ${state.ui.showArchived ? 'checked' : ''}>
         Show archived
       </label>
-      <label class="toggle-conclusi">
-        <input type="checkbox" id="chk-conclusi" ${state.ui.mostraConclusi ? 'checked' : ''}>
+      <label class="toggle-completed">
+        <input type="checkbox" id="chk-completed" ${state.ui.showCompleted ? 'checked' : ''}>
         Show completed
       </label>`;
-    toolbarActions.querySelector('#chk-archiviati').addEventListener('change', (e) => {
-      MP.store.setState((s) => ({ ui: { ...s.ui, mostraArchiviati: e.target.checked } }));
+    toolbarActions.querySelector('#chk-archived').addEventListener('change', (e) => {
+      MP.store.setState((s) => ({ ui: { ...s.ui, showArchived: e.target.checked } }));
     });
-    toolbarActions.querySelector('#chk-conclusi').addEventListener('change', (e) => {
-      MP.store.setState((s) => ({ ui: { ...s.ui, mostraConclusi: e.target.checked } }));
+    toolbarActions.querySelector('#chk-completed').addEventListener('change', (e) => {
+      MP.store.setState((s) => ({ ui: { ...s.ui, showCompleted: e.target.checked } }));
     });
     page.appendChild(MP.datasetHeader.renderDatasetHeader(state, toolbarActions));
 
@@ -351,8 +351,8 @@
         state,
         weeks,
         teamMap,
-        sigleValide,
-        siglaTeamMap,
+        validInitials,
+        initialsTeamMap,
         allocationIndex,
         onCellSaved: handleCellSaved,
         onBulkCellsSaved: handleBulkCellsSaved,

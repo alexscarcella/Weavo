@@ -1,31 +1,32 @@
 {
-  "nome": "WOODGROVE BANK PORTAL",
-  "team": {
+  "name": "WOODGROVE BANK PORTAL",
+  "referents": {
     "projectManager": "",
     "projectEngineer": "",
     "solutionAnalyst": "",
     "vvReference": "",
     "note": "Team WOODGROVE BANK PORTAL (Cem Kaner / Margaret Hamilton)"
   },
-  "archiviato": false,
+  "archived": false,
   "baseline": [
     {
-      "versione": "1.0",
+      "version": "1.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Monitoring & Alerting Setup",
-          "concluso": true,
-          "settimane": {
+          "name": "Monitoring & Alerting Setup",
+          "completed": true,
+          "weeks": {
             "2026-03-16": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL",
                 "WH"
               ]
             },
             "2026-04-06": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT",
                 "GS"
               ],
@@ -33,39 +34,39 @@
             },
             "2026-03-09": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR"
               ]
             }
           }
         },
         {
-          "nome": "Real-Time Event Streaming",
-          "concluso": true,
-          "settimane": {
+          "name": "Real-Time Event Streaming",
+          "completed": true,
+          "weeks": {
             "2026-03-23": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KK",
                 "JH"
               ]
             },
             "2026-03-02": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "PD",
                 "JA"
               ]
             },
             "2026-03-30": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "GK"
               ]
             },
             "2026-02-09": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "JA"
               ]
             },
@@ -77,28 +78,29 @@
       ]
     },
     {
-      "versione": "2.0",
+      "version": "2.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Regression Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Regression Testing",
+          "completed": true,
+          "weeks": {
             "2026-06-15": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB"
               ]
             },
             "2026-06-29": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK",
                 "CT"
               ]
             },
             "2026-06-08": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK"
               ]
             },
@@ -108,19 +110,19 @@
           }
         },
         {
-          "nome": "Penetration Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Penetration Testing",
+          "completed": true,
+          "weeks": {
             "2026-07-06": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "AC"
               ]
             },
             "2026-06-22": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             },
@@ -130,18 +132,18 @@
           }
         },
         {
-          "nome": "Real-Time Event Streaming",
-          "concluso": false,
-          "settimane": {
+          "name": "Real-Time Event Streaming",
+          "completed": false,
+          "weeks": {
             "2026-06-01": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK"
               ]
             },
             "2026-07-20": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT",
                 "GS"
               ],
@@ -149,7 +151,7 @@
             },
             "2026-07-13": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             }
@@ -158,21 +160,22 @@
       ]
     },
     {
-      "versione": "3.0",
+      "version": "3.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Real-Time Event Streaming",
-          "concluso": false,
-          "settimane": {
+          "name": "Real-Time Event Streaming",
+          "completed": false,
+          "weeks": {
             "2026-08-03": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KK"
               ]
             },
             "2026-09-07": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "RP",
                 "BL"
               ]
@@ -183,18 +186,18 @@
           }
         },
         {
-          "nome": "Legacy System Decommissioning",
-          "concluso": false,
-          "settimane": {
+          "name": "Legacy System Decommissioning",
+          "completed": false,
+          "weeks": {
             "2026-09-07": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT"
               ]
             },
             "2026-08-03": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR"
               ]
             },
@@ -204,19 +207,19 @@
           }
         },
         {
-          "nome": "Load Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "Load Testing",
+          "completed": false,
+          "weeks": {
             "2026-09-14": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT",
                 "GS"
               ]
             },
             "2026-08-31": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "AC"
               ]
@@ -227,19 +230,19 @@
           }
         },
         {
-          "nome": "Performance Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "Performance Testing",
+          "completed": false,
+          "weeks": {
             "2026-08-03": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KK",
                 "JH"
               ]
             },
             "2026-08-17": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "MH",
                 "DR"
               ]
@@ -250,12 +253,12 @@
           }
         },
         {
-          "nome": "Mobile App Development",
-          "concluso": false,
-          "settimane": {
+          "name": "Mobile App Development",
+          "completed": false,
+          "weeks": {
             "2026-07-20": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "WV"
               ]
@@ -266,12 +269,12 @@
           }
         },
         {
-          "nome": "Code Review",
-          "concluso": false,
-          "settimane": {
+          "name": "Code Review",
+          "completed": false,
+          "weeks": {
             "2026-07-20": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR"
               ]
             },

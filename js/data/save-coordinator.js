@@ -24,13 +24,13 @@
   }
 
   function saveProject(state, file) {
-    const entry = state.dataset.progetti.get(file);
+    const entry = state.dataset.projects.get(file);
     return withConflictCheck({
       dirHandle: state.dirHandle,
       path: file,
       dataRef: entry,
       writeFn: () => MP.repository.saveProject(state.dirHandle, file, entry.data),
-      label: `project "${entry.data.nome}"`,
+      label: `project "${entry.data.name}"`,
     });
   }
 
@@ -45,16 +45,16 @@
     });
   }
 
-  function saveTeamRisorsa(state) {
-    const dataRef = state.dataset.teamRisorsaMeta;
+  function saveTeamResources(state) {
+    const dataRef = state.dataset.teamResourcesMeta;
     return withConflictCheck({
       dirHandle: state.dirHandle,
-      path: MP.schema.PATHS.teamRisorsa,
+      path: MP.schema.PATHS.teamResources,
       dataRef,
-      writeFn: () => MP.repository.saveTeamRisorsa(state.dirHandle, state.dataset.teamRisorsa),
-      label: 'team-risorse.json',
+      writeFn: () => MP.repository.saveTeamResources(state.dirHandle, state.dataset.teamResources),
+      label: 'team-resources.json',
     });
   }
 
-  MP.saveCoordinator = { saveProject, saveManifest, saveTeamRisorsa };
+  MP.saveCoordinator = { saveProject, saveManifest, saveTeamResources };
 })(window.MP = window.MP || {});

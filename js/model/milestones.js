@@ -1,33 +1,33 @@
 // Densità delle milestone di rilascio baseline sul calendario: una baseline ha
 // concettualmente un'unica data di rilascio (vedi syncBaselineMilestone in
-// gantt-view.js, che la propaga a tutti i task non conclusi della baseline),
-// ma il dato resta duplicato su ogni task.settimane[iso].milestone — nessun
+// gantt-view.js, che la propaga a tutti i task non completed della baseline),
+// ma il dato resta duplicato su ogni task.weeks[iso].milestone — nessun
 // campo dedicato su `baseline`. Questo modulo deriva, per ogni baseline, la
 // settimana di rilascio "effettiva" (la più frequente tra i suoi task, letti
-// tutti — anche i conclusi, a differenza della sincronizzazione in scrittura)
+// tutti — anche i completed, a differenza della sincronizzazione in scrittura)
 // senza toccare i dati: se i task sono in disaccordo (dataset non ancora
 // normalizzato da un prossimo edit di milestone su quella baseline), la riga
 // viene segnalata `inconsistent` ma non corretta.
 (function (MP) {
   'use strict';
 
-  function computeBaselineMilestones(dataset, mostraArchiviati) {
+  function computeBaselineMilestones(dataset, showArchived) {
     const rows = [];
-    for (const voce of dataset.manifest.progetti) {
-      const entry = dataset.progetti.get(voce.file);
+    for (const voce of dataset.manifest.projects) {
+      const entry = dataset.projects.get(voce.file);
       if (!entry) continue;
       const progetto = entry.data;
-      if (progetto.archiviato && !mostraArchiviati) continue;
+      if (progetto.archived && !showArchived) continue;
 
-      const baselineVisibili = progetto.baseline.filter((b) => mostraArchiviati || !b.archiviata);
+      const baselineVisibili = progetto.baseline.filter((b) => showArchived || !b.archived);
       baselineVisibili.forEach((baseline, bi) => {
         const counts = new Map();
-        let taskNome = null;
+        let taskName = null;
         for (const task of baseline.task) {
-          for (const [iso, entry] of Object.entries(task.settimane || {})) {
+          for (const [iso, entry] of Object.entries(task.weeks || {})) {
             if (!entry || !entry.milestone) continue;
             counts.set(iso, (counts.get(iso) || 0) + 1);
-            if (taskNome === null) taskNome = task.nome;
+            if (taskName === null) taskName = task.name;
           }
         }
 
@@ -47,7 +47,7 @@
           progetto,
           baseline,
           settimana,
-          taskNome,
+          taskName,
           inconsistent,
           showProgetto: bi === 0,
           baselineIndex: bi,
@@ -58,13 +58,13 @@
   }
 
   // Conteggio delle baseline la cui milestone di rilascio "effettiva" (vedi sopra) cade da
-  // oggi in avanti — usato dall'header condiviso gantt/carico-risorse (dataset-header.js) per
+  // oggi in avanti — usato dall'header condiviso gantt/resource-load (dataset-header.js) per
   // dare visibilità immediata a quante consegne restano da fare, senza dover apre la pagina
   // Milestone. Confronto per stringa ISO (YYYY-MM-DD), valido perché entrambe le date sono
   // nello stesso formato.
-  function countUpcomingBaselines(dataset, mostraArchiviati) {
+  function countUpcomingBaselines(dataset, showArchived) {
     const todayIso = MP.weekUtils.getTodayIso();
-    return computeBaselineMilestones(dataset, mostraArchiviati)
+    return computeBaselineMilestones(dataset, showArchived)
       .filter((row) => row.settimana && row.settimana >= todayIso)
       .length;
   }

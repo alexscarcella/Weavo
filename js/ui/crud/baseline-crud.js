@@ -11,25 +11,25 @@
     }
   }
 
-  async function createBaseline(state, file, versioneInput) {
-    const versione = versioneInput !== undefined ? versioneInput : window.prompt('Name/version of the new baseline:');
-    if (!versione || !versione.trim()) return;
-    const progetto = state.dataset.progetti.get(file).data;
-    progetto.baseline.push(MP.schema.createBaseline(versione.trim()));
+  async function createBaseline(state, file, versionInput) {
+    const version = versionInput !== undefined ? versionInput : window.prompt('Name/version of the new baseline:');
+    if (!version || !version.trim()) return;
+    const progetto = state.dataset.projects.get(file).data;
+    progetto.baseline.push(MP.schema.createBaseline(version.trim()));
     await persistProject(state, file);
   }
 
   async function renameBaseline(state, file, baseline, nuovoInput) {
-    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('New name/version of the baseline:', baseline.versione);
+    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('New name/version of the baseline:', baseline.version);
     if (!nuovo || !nuovo.trim()) return;
-    baseline.versione = nuovo.trim();
+    baseline.version = nuovo.trim();
     await persistProject(state, file);
   }
 
   async function deleteBaseline(state, file, baseline, skipConfirm) {
-    const progetto = state.dataset.progetti.get(file).data;
+    const progetto = state.dataset.projects.get(file).data;
     const confermato = skipConfirm || window.confirm(
-      `Delete the baseline "${baseline.versione}" and all its tasks? This cannot be undone.`
+      `Delete the baseline "${baseline.version}" and all its tasks? This cannot be undone.`
     );
     if (!confermato) return;
     progetto.baseline = progetto.baseline.filter((b) => b !== baseline);
@@ -37,7 +37,7 @@
   }
 
   async function moveBaseline(state, file, baseline, direction) {
-    const progetto = state.dataset.progetti.get(file).data;
+    const progetto = state.dataset.projects.get(file).data;
     const arr = progetto.baseline;
     const idx = arr.indexOf(baseline);
     const swapWith = idx + direction;
@@ -46,10 +46,10 @@
     await persistProject(state, file);
   }
 
-  async function toggleArchivio(state, file, baseline) {
-    baseline.archiviata = !baseline.archiviata;
+  async function toggleArchived(state, file, baseline) {
+    baseline.archived = !baseline.archived;
     await persistProject(state, file);
   }
 
-  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaseline, toggleArchivio };
+  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaseline, toggleArchived };
 })(window.MP = window.MP || {});

@@ -1,6 +1,6 @@
-// Pagina dedicata al CRUD di team e risorse (team-risorse.json): unico punto
+// Pagina dedicata al CRUD di team e risorse (team-resources.json): unico punto
 // dell'app dove si creano/modificano/eliminano team e risorse — la legenda
-// del gantt e la vista carico risorse sono di sola lettura e rimandano qui.
+// del gantt e la vista resource-load sono di sola lettura e rimandano qui.
 // Un team ha 0-N risorse; una risorsa appartiene sempre a esattamente un
 // team (obbligatorio già alla creazione).
 (function (MP) {
@@ -19,20 +19,20 @@
     const row = document.createElement('div');
     row.className = 'resource-row';
 
-    const sigla = document.createElement('span');
-    sigla.className = 'resource-sigla';
-    sigla.textContent = risorsa.sigla;
-    row.appendChild(sigla);
+    const initials = document.createElement('span');
+    initials.className = 'resource-initials';
+    initials.textContent = risorsa.initials;
+    row.appendChild(initials);
 
     const nome = document.createElement('span');
-    nome.className = 'resource-nome';
-    nome.textContent = risorsa.nome;
+    nome.className = 'resource-name';
+    nome.textContent = risorsa.name;
     row.appendChild(nome);
 
     row.appendChild(createMenuButton([
-      { label: 'Rename resource', onClick: () => MP.resourceCrud.renameResource(state, risorsa.sigla) },
-      { label: 'Move to another team', onClick: () => MP.resourceCrud.moveResource(state, risorsa.sigla) },
-      { label: 'Delete resource', danger: true, onClick: () => MP.resourceCrud.deleteResource(state, risorsa.sigla) },
+      { label: 'Rename resource', onClick: () => MP.resourceCrud.renameResource(state, risorsa.initials) },
+      { label: 'Move to another team', onClick: () => MP.resourceCrud.moveResource(state, risorsa.initials) },
+      { label: 'Delete resource', danger: true, onClick: () => MP.resourceCrud.deleteResource(state, risorsa.initials) },
     ]));
 
     return row;
@@ -44,48 +44,48 @@
 
     const header = document.createElement('div');
     header.className = 'team-card-header';
-    header.appendChild(swatch(team.colore));
+    header.appendChild(swatch(team.color));
     const titolo = document.createElement('span');
-    titolo.className = 'team-titolo';
-    titolo.textContent = `${team.nome} (${team.codice})`;
+    titolo.className = 'team-title';
+    titolo.textContent = `${team.name} (${team.code})`;
     header.appendChild(titolo);
     const conteggio = document.createElement('span');
     conteggio.className = 'hint';
-    conteggio.textContent = `${team.risorse.length} resources`;
+    conteggio.textContent = `${team.resources.length} resources`;
     header.appendChild(conteggio);
     header.appendChild(createMenuButton([
-      { label: 'Rename team', onClick: () => MP.teamCrud.renameTeam(state, team.codice) },
-      { label: 'Change color', onClick: () => MP.teamCrud.recolorTeam(state, team.codice) },
-      { label: 'Delete team', danger: true, onClick: () => MP.teamCrud.deleteTeam(state, team.codice) },
+      { label: 'Rename team', onClick: () => MP.teamCrud.renameTeam(state, team.code) },
+      { label: 'Change color', onClick: () => MP.teamCrud.recolorTeam(state, team.code) },
+      { label: 'Delete team', danger: true, onClick: () => MP.teamCrud.deleteTeam(state, team.code) },
     ]));
     card.appendChild(header);
 
     const risorseWrap = document.createElement('div');
     risorseWrap.className = 'team-resources';
-    if (team.risorse.length === 0) {
+    if (team.resources.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
       empty.textContent = 'No resources in this team.';
       risorseWrap.appendChild(empty);
     } else {
-      team.risorse.forEach((risorsa) => risorseWrap.appendChild(renderResourceRow(state, team, risorsa)));
+      team.resources.forEach((risorsa) => risorseWrap.appendChild(renderResourceRow(state, team, risorsa)));
     }
     card.appendChild(risorseWrap);
 
     const addBtn = document.createElement('button');
     addBtn.type = 'button';
-    addBtn.className = 'btn-nuova-risorsa';
+    addBtn.className = 'btn-new-resource';
     addBtn.textContent = '+ New resource';
-    addBtn.addEventListener('click', () => MP.resourceCrud.createResource(state, team.codice));
+    addBtn.addEventListener('click', () => MP.resourceCrud.createResource(state, team.code));
     card.appendChild(addBtn);
 
     return card;
   }
 
-  function renderTeamRisorsaView(state) {
+  function renderTeamResourcesView(state) {
     const { dataset } = state;
     const page = document.createElement('div');
-    page.className = 'team-risorse-page';
+    page.className = 'team-resources-page';
 
     const toolbar = document.createElement('div');
     toolbar.className = 'gantt-toolbar';
@@ -95,27 +95,27 @@
     toolbar.appendChild(info);
     const addTeamBtn = document.createElement('button');
     addTeamBtn.type = 'button';
-    addTeamBtn.className = 'btn-nuovo-tipo';
+    addTeamBtn.className = 'btn-new-team';
     addTeamBtn.textContent = '+ New team';
     addTeamBtn.addEventListener('click', () => MP.teamCrud.createTeam(state));
     toolbar.appendChild(addTeamBtn);
     page.appendChild(toolbar);
 
-    if (dataset.teamRisorsa.team.length === 0) {
+    if (dataset.teamResources.teams.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'No teams in team-risorse.json.';
+      empty.textContent = 'No teams in team-resources.json.';
       page.appendChild(empty);
       return page;
     }
 
     const list = document.createElement('div');
     list.className = 'team-list';
-    dataset.teamRisorsa.team.forEach((team) => list.appendChild(renderTeamCard(state, team)));
+    dataset.teamResources.teams.forEach((team) => list.appendChild(renderTeamCard(state, team)));
     page.appendChild(list);
 
     return page;
   }
 
-  MP.teamRisorsaView = { renderTeamRisorsaView };
+  MP.teamResourcesView = { renderTeamResourcesView };
 })(window.MP = window.MP || {});

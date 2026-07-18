@@ -6,9 +6,9 @@
 
   const VIEWS = [
     { id: 'gantt', label: 'Master Plan' },
-    { id: 'carico-risorse', label: 'Resource load' },
+    { id: 'resource-load', label: 'Resource load' },
     { id: 'milestones', label: 'Milestones' },
-    { id: 'team-risorse', label: 'Team & resources' },
+    { id: 'team-resources', label: 'Team & resources' },
   ];
 
   function renderHamburgerMenu(state) {
@@ -28,8 +28,8 @@
 
   function buildActions(state) {
     const viewActions = VIEWS.map((v, i) => ({
-      label: state.ui.vistaCorrente === v.id ? `✓ ${v.label}` : v.label,
-      onClick: () => MP.store.setState((s) => ({ ui: { ...s.ui, vistaCorrente: v.id } })),
+      label: state.ui.currentView === v.id ? `✓ ${v.label}` : v.label,
+      onClick: () => MP.store.setState((s) => ({ ui: { ...s.ui, currentView: v.id } })),
       separator: i === 0,
     }));
     return [
@@ -48,7 +48,7 @@
   // sulla vista gantt, dove il nuovo progetto è visibile.
   async function createProject(state) {
     const file = await MP.projectCrud.createProject(state);
-    if (file) MP.store.setState((s) => ({ ui: { ...s.ui, vistaCorrente: 'gantt' } }));
+    if (file) MP.store.setState((s) => ({ ui: { ...s.ui, currentView: 'gantt' } }));
   }
 
   async function runBackup(state) {
@@ -75,7 +75,7 @@
   function renderPageTitle(state) {
     const span = document.createElement('span');
     span.className = 'page-title';
-    const view = VIEWS.find((v) => v.id === state.ui.vistaCorrente);
+    const view = VIEWS.find((v) => v.id === state.ui.currentView);
     span.textContent = view ? view.label : '';
     return span;
   }

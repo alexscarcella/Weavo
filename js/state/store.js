@@ -7,12 +7,12 @@
   let state = {
     status: 'init', // init | unsupported | not-connected | loading | ready | error
     dirHandle: null,
-    dataset: null, // { manifest, teamRisorsa, progetti, warnings }
+    dataset: null, // { manifest, teamResources, projects, warnings }
     error: null,
     ui: {
-      vistaCorrente: 'gantt', // gantt | carico-risorse | milestones | team-risorse
-      mostraArchiviati: false,
-      mostraConclusi: false,
+      currentView: 'gantt', // gantt | resource-load | milestones | team-resources
+      showArchived: false,
+      showCompleted: false,
       autoBackupOnExit: localStorage.getItem(AUTO_BACKUP_KEY) === 'true',
     },
   };

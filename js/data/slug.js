@@ -13,7 +13,7 @@
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
-    return base || 'progetto';
+    return base || 'project';
   }
 
   function uniqueSlug(baseSlug, existingSlugsSet) {

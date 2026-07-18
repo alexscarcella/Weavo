@@ -15,8 +15,8 @@ same place:
 1. **App files** — clone or copy `index.html`, `css/`, and `js/` anywhere. Since there's no build
    step, "updating" the app for everyone is just replacing those files (e.g. a `git pull` on a
    shared location, or re-copying them).
-2. **Data folder** — a separate folder containing `manifest.json`, `team-risorse.json`, and
-   `progetti/*.json`. This is what each user points the in-app folder picker at. For a team to
+2. **Data folder** — a separate folder containing `manifest.json`, `team-resources.json`, and
+   `projects/*.json`. This is what each user points the in-app folder picker at. For a team to
    collaborate on the same plan, this folder needs to live somewhere all of them can read and
    write — a network share or a synced folder from any cloud-sync client (OneDrive, Dropbox,
    Google Drive, etc.) all work, since the app only needs regular filesystem read/write access to
@@ -72,7 +72,7 @@ something to assume.
 ## Backups
 
 The toolbar exposes a manual "💾 Backup" action that snapshots `manifest.json`,
-`team-risorse.json`, and every file under `progetti/` into a timestamped
+`team-resources.json`, and every file under `projects/` into a timestamped
 `backup/<YYYYMMDD>_<HHMMSS>/` subfolder of the data folder (`MP.repository.createBackup`). If you
 want one before a risky bulk edit, trigger it from the menu first.
 

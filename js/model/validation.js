@@ -1,4 +1,4 @@
-// Rilevazione di riferimenti orfani (team o sigla risorsa usati in un task ma
+// Rilevazione di riferimenti orfani (team o initials risorsa usati in un task ma
 // assenti dalle rispettive anagrafiche) e di risorse allocate con un team
 // diverso da quello a cui appartengono ora — warning non bloccanti, mai
 // errori fatali.
@@ -6,10 +6,10 @@
   'use strict';
 
   function forEachWeekEntry(dataset, callback) {
-    for (const [file, { data: progetto }] of dataset.progetti) {
+    for (const [file, { data: progetto }] of dataset.projects) {
       for (const baseline of progetto.baseline) {
         for (const task of baseline.task) {
-          for (const [settimana, entry] of Object.entries(task.settimane || {})) {
+          for (const [settimana, entry] of Object.entries(task.weeks || {})) {
             callback({ file, progetto, baseline, task, settimana, entry });
           }
         }
@@ -18,48 +18,48 @@
   }
 
   function findOrphanTeam(dataset) {
-    const teamValidi = new Set(dataset.teamRisorsa.team.map((t) => t.codice));
+    const teamValidi = new Set(dataset.teamResources.teams.map((t) => t.code));
     const orfani = [];
     forEachWeekEntry(dataset, ({ progetto, baseline, task, settimana, entry }) => {
       if (entry.team && !teamValidi.has(entry.team)) {
-        orfani.push({ progetto: progetto.nome, baseline: baseline.versione, task: task.nome, settimana, valore: entry.team });
+        orfani.push({ progetto: progetto.name, baseline: baseline.version, task: task.name, settimana, valore: entry.team });
       }
     });
     return orfani;
   }
 
-  function findOrphanRisorse(dataset) {
-    const sigleValide = MP.schema.existingSigle(dataset.teamRisorsa);
+  function findOrphanResources(dataset) {
+    const initialsValide = MP.schema.existingInitials(dataset.teamResources);
     const orfane = [];
     forEachWeekEntry(dataset, ({ progetto, baseline, task, settimana, entry }) => {
-      for (const sigla of entry.risorse || []) {
-        if (!sigleValide.has(sigla)) {
-          orfane.push({ progetto: progetto.nome, baseline: baseline.versione, task: task.nome, settimana, valore: sigla });
+      for (const initials of entry.resources || []) {
+        if (!initialsValide.has(initials)) {
+          orfane.push({ progetto: progetto.name, baseline: baseline.version, task: task.name, settimana, valore: initials });
         }
       }
     });
     return orfane;
   }
 
-  // Risorse allocate in una settimana di un task non concluso con un `team`
-  // diverso dal team a cui la risorsa appartiene ora in team-risorse.json —
+  // Risorse allocate in una settimana di un task non completed con un `team`
+  // diverso dal team a cui la risorsa appartiene ora in team-resources.json —
   // tipicamente il risultato di uno spostamento di risorsa tra team dopo che
   // l'allocazione era già stata registrata. Segnalato, non corretto in
   // automatico: l'utente regolarizza a mano riaprendo la cella.
   function findTeamMismatches(dataset) {
     const mismatch = [];
     forEachWeekEntry(dataset, ({ progetto, baseline, task, settimana, entry }) => {
-      if (task.concluso || !entry.team) return;
-      for (const sigla of entry.risorse || []) {
-        const found = MP.schema.findResourceEntry(dataset.teamRisorsa, sigla);
-        if (found && found.team.codice !== entry.team) {
+      if (task.completed || !entry.team) return;
+      for (const initials of entry.resources || []) {
+        const found = MP.schema.findResourceEntry(dataset.teamResources, initials);
+        if (found && found.team.code !== entry.team) {
           mismatch.push({
-            progetto: progetto.nome,
-            baseline: baseline.versione,
-            task: task.nome,
+            progetto: progetto.name,
+            baseline: baseline.version,
+            task: task.name,
             settimana,
-            sigla,
-            teamAssegnato: found.team.codice,
+            sigla: initials,
+            teamAssegnato: found.team.code,
             teamCella: entry.team,
           });
         }
@@ -68,38 +68,38 @@
     return mismatch;
   }
 
-  // Tutte le week entry che referenziano una sigla (in entry.risorse), divise tra task attivi
-  // (non conclusi) e conclusi. A differenza dei find* sopra ritorna riferimenti mutabili
+  // Tutte le week entry che referenziano delle initials (in entry.resources), divise tra task
+  // attivi (non completed) e completed. A differenza dei find* sopra ritorna riferimenti mutabili
   // (task, entry, ...) e non stringhe già appiattite: usato sia per decidere quali celle
   // riscrivere dopo uno spostamento di risorsa, sia per il cascade-delete e il riepilogo
   // copiabile alla cancellazione, entrambi in resource-crud.js.
-  function findResourceAllocations(dataset, sigla) {
+  function findResourceAllocations(dataset, initials) {
     const attive = [];
     const concluse = [];
     forEachWeekEntry(dataset, ({ file, progetto, baseline, task, settimana, entry }) => {
-      if (!Array.isArray(entry.risorse) || !entry.risorse.includes(sigla)) return;
+      if (!Array.isArray(entry.resources) || !entry.resources.includes(initials)) return;
       const record = { file, progetto, baseline, task, settimana, entry };
-      (task.concluso ? concluse : attive).push(record);
+      (task.completed ? concluse : attive).push(record);
     });
     return { attive, concluse };
   }
 
-  // Sigle orfane nei riferimenti risorsa di progetto (solutionAnalyst/vvReference in
-  // progetto.team), stesso principio di findOrphanRisorse ma sul livello progetto invece che
-  // sulle week entry.
-  function findOrphanProjectRiferimenti(dataset) {
-    const sigleValide = MP.schema.existingSigle(dataset.teamRisorsa);
+  // Initials orfane nei riferimenti risorsa di progetto (solutionAnalyst/vvReference in
+  // progetto.referents), stesso principio di findOrphanResources ma sul livello progetto invece
+  // che sulle week entry.
+  function findOrphanProjectReferents(dataset) {
+    const initialsValide = MP.schema.existingInitials(dataset.teamResources);
     const CAMPI = [
       ['solutionAnalyst', 'Solution analyst reference'],
       ['vvReference', 'V&V reference'],
     ];
     const orfani = [];
-    for (const [, { data: progetto }] of dataset.progetti) {
-      const team = progetto.team || {};
+    for (const [, { data: progetto }] of dataset.projects) {
+      const referents = progetto.referents || {};
       for (const [chiave, etichetta] of CAMPI) {
-        const sigla = team[chiave];
-        if (sigla && !sigleValide.has(sigla)) {
-          orfani.push({ progetto: progetto.nome, campo: etichetta, valore: sigla });
+        const initials = referents[chiave];
+        if (initials && !initialsValide.has(initials)) {
+          orfani.push({ progetto: progetto.name, campo: etichetta, valore: initials });
         }
       }
     }
@@ -109,9 +109,9 @@
   MP.validation = {
     forEachWeekEntry,
     findOrphanTeam,
-    findOrphanRisorse,
+    findOrphanResources,
     findTeamMismatches,
-    findOrphanProjectRiferimenti,
+    findOrphanProjectReferents,
     findResourceAllocations,
   };
 })(window.MP = window.MP || {});

@@ -13,19 +13,21 @@
   async function loadDataset(dirHandle) {
     const warnings = [];
 
-    const manifestText = await MP.fsAccess.readTextFile(dirHandle, PATHS.manifest);
-    const teamRisorsaText = await MP.fsAccess.readTextFile(dirHandle, PATHS.teamRisorsa);
+    await MP.legacyMigration.migrateIfNeeded(dirHandle);
 
-    const progetti = new Map();
+    const manifestText = await MP.fsAccess.readTextFile(dirHandle, PATHS.manifest);
+    const teamResourcesText = await MP.fsAccess.readTextFile(dirHandle, PATHS.teamResources);
+
+    const projects = new Map();
     const manifest = JSON.parse(manifestText);
-    for (const voce of manifest.progetti) {
+    for (const voce of manifest.projects) {
       try {
         const rawText = await MP.fsAccess.readTextFile(dirHandle, voce.file);
         const data = JSON.parse(rawText);
-        data.team = MP.schema.normalizeProjectTeam(data.team);
-        progetti.set(voce.file, { data, rawText });
+        data.referents = MP.schema.normalizeProjectReferents(data.referents);
+        projects.set(voce.file, { data, rawText });
       } catch (e) {
-        warnings.push(`Unable to load "${voce.file}" (${voce.nome}): ${e.message}`);
+        warnings.push(`Unable to load "${voce.file}" (${voce.name}): ${e.message}`);
       }
     }
 
@@ -35,18 +37,18 @@
     // (reread-before-write).
     return {
       manifest,
-      teamRisorsa: JSON.parse(teamRisorsaText),
-      progetti,
+      teamResources: JSON.parse(teamResourcesText),
+      projects,
       warnings,
       manifestMeta: { rawText: manifestText },
-      teamRisorsaMeta: { rawText: teamRisorsaText },
+      teamResourcesMeta: { rawText: teamResourcesText },
     };
   }
 
   // Scrittura diretta, senza controllo di conflitto: usata da save-coordinator.js
   // (che fa reread-before-write) e da chi non ne ha bisogno (es. backup).
-  async function saveProject(dirHandle, file, progettoData) {
-    const text = JSON.stringify(progettoData, null, 2) + '\n';
+  async function saveProject(dirHandle, file, projectData) {
+    const text = JSON.stringify(projectData, null, 2) + '\n';
     await MP.fsAccess.writeTextFile(dirHandle, file, text);
     return text;
   }
@@ -57,9 +59,9 @@
     return text;
   }
 
-  async function saveTeamRisorsa(dirHandle, teamRisorsa) {
-    const text = JSON.stringify(teamRisorsa, null, 2) + '\n';
-    await MP.fsAccess.writeTextFile(dirHandle, PATHS.teamRisorsa, text);
+  async function saveTeamResources(dirHandle, teamResources) {
+    const text = JSON.stringify(teamResources, null, 2) + '\n';
+    await MP.fsAccess.writeTextFile(dirHandle, PATHS.teamResources, text);
     return text;
   }
 
@@ -74,7 +76,7 @@
     );
   }
 
-  // Copia integrale "punto nel tempo" di manifest/team-risorse/tutti i file
+  // Copia integrale "punto nel tempo" di manifest/team-resources/tutti i file
   // progetto in backup/AAAAMMGG_HHMMSS/ (§7 spec). Enumera i file progetto
   // direttamente dal disco (non solo dal dataset in memoria), così il backup
   // riflette esattamente lo stato reale della cartella dati, incluse eventuali
@@ -87,21 +89,21 @@
     const backupRoot = await MP.fsAccess.ensureSubfolder(dirHandle, PATHS.backupDir);
     const backupFolder = await MP.fsAccess.ensureSubfolder(backupRoot, timestamp);
 
-    const progettiFiles = await MP.fsAccess.listJsonFiles(dirHandle, PATHS.progettiDir);
+    const projectFiles = await MP.fsAccess.listJsonFiles(dirHandle, PATHS.projectsDir);
 
     await Promise.all([
-      ...[PATHS.manifest, PATHS.teamRisorsa].map(async (name) => {
+      ...[PATHS.manifest, PATHS.teamResources].map(async (name) => {
         const text = await MP.fsAccess.readTextFile(dirHandle, name);
         await MP.fsAccess.writeTextFile(backupFolder, name, text);
       }),
-      ...progettiFiles.map(async ({ name }) => {
-        const text = await MP.fsAccess.readTextFile(dirHandle, `${PATHS.progettiDir}/${name}`);
-        await MP.fsAccess.writeTextFile(backupFolder, `${PATHS.progettiDir}/${name}`, text);
+      ...projectFiles.map(async ({ name }) => {
+        const text = await MP.fsAccess.readTextFile(dirHandle, `${PATHS.projectsDir}/${name}`);
+        await MP.fsAccess.writeTextFile(backupFolder, `${PATHS.projectsDir}/${name}`, text);
       }),
     ]);
 
-    return { folder: `${PATHS.backupDir}/${timestamp}`, fileCount: 2 + progettiFiles.length };
+    return { folder: `${PATHS.backupDir}/${timestamp}`, fileCount: 2 + projectFiles.length };
   }
 
-  MP.repository = { loadDataset, saveProject, saveManifest, saveTeamRisorsa, createBackup };
+  MP.repository = { loadDataset, saveProject, saveManifest, saveTeamResources, createBackup };
 })(window.MP = window.MP || {});

@@ -1,6 +1,6 @@
-// Legenda colori costruita dinamicamente da team-risorse.json (nessun colore
+// Legenda colori costruita dinamicamente da team-resources.json (nessun colore
 // hardcoded). Sola lettura: la creazione/modifica di team e risorse è
-// centralizzata nella pagina dedicata (js/ui/team-risorse/team-risorse-view.js).
+// centralizzata nella pagina dedicata (js/ui/team-resources/team-resources-view.js).
 (function (MP) {
   'use strict';
 
@@ -23,7 +23,7 @@
     const item = document.createElement('span');
     item.className = 'legend-item';
     const badge = document.createElement('span');
-    badge.className = `badge-orfano legend-badge${badgeClass ? ' ' + badgeClass : ''}`;
+    badge.className = `badge-orphan legend-badge${badgeClass ? ' ' + badgeClass : ''}`;
     badge.textContent = badgeText;
     item.appendChild(badge);
     item.appendChild(document.createTextNode(testo));
@@ -35,12 +35,12 @@
     const div = document.createElement('div');
     div.className = 'legend';
 
-    dataset.teamRisorsa.team.forEach((t) => {
+    dataset.teamResources.teams.forEach((t) => {
       const item = document.createElement('span');
       item.className = 'legend-item';
-      item.appendChild(swatch('legend-swatch', t.colore));
+      item.appendChild(swatch('legend-swatch', t.color));
       const label = document.createElement('span');
-      label.textContent = t.nome;
+      label.textContent = t.name;
       item.appendChild(label);
       div.appendChild(item);
     });
@@ -50,7 +50,7 @@
     div.appendChild(staticItem(null, 'legend-overallocated', 'Overallocated'));
     div.appendChild(staticItem(null, 'legend-mismatch', 'Team to regularize'));
     div.appendChild(badgeItem('', '?', 'Team not defined'));
-    div.appendChild(badgeItem('badge-orfano-risorsa', '!', 'Sigla not in directory'));
+    div.appendChild(badgeItem('badge-orphan-resource', '!', 'Initials not in directory'));
 
     return div;
   }

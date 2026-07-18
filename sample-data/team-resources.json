@@ -1,0 +1,158 @@
+{
+  "teams": [
+    {
+      "code": "dev",
+      "name": "Development",
+      "color": "#00B050",
+      "resources": [
+        {
+          "initials": "GH",
+          "name": "Grace Hopper"
+        },
+        {
+          "initials": "DR",
+          "name": "Dennis Ritchie"
+        },
+        {
+          "initials": "MH",
+          "name": "Margaret Hamilton"
+        },
+        {
+          "initials": "AL",
+          "name": "Ada Lovelace"
+        },
+        {
+          "initials": "KT",
+          "name": "Ken Thompson"
+        },
+        {
+          "initials": "DK",
+          "name": "Donald Knuth"
+        }
+      ]
+    },
+    {
+      "code": "vv",
+      "name": "Verification & Validation",
+      "color": "#FFC000",
+      "resources": [
+        {
+          "initials": "RP",
+          "name": "Radia Perlman"
+        },
+        {
+          "initials": "BL",
+          "name": "Barbara Liskov"
+        },
+        {
+          "initials": "FA",
+          "name": "Frances Allen"
+        },
+        {
+          "initials": "WH",
+          "name": "Watts Humphrey"
+        },
+        {
+          "initials": "CK",
+          "name": "Cem Kaner"
+        }
+      ]
+    },
+    {
+      "code": "devops",
+      "name": "DevOps",
+      "color": "#8ab0e5",
+      "resources": [
+        {
+          "initials": "JA",
+          "name": "John Allspaw"
+        },
+        {
+          "initials": "PD",
+          "name": "Patrick Debois"
+        },
+        {
+          "initials": "GK",
+          "name": "Gene Kim"
+        },
+        {
+          "initials": "MN",
+          "name": "Mike Nygard"
+        }
+      ]
+    },
+    {
+      "code": "run",
+      "name": "Team Run",
+      "color": "#8E44AD",
+      "resources": [
+        {
+          "initials": "WV",
+          "name": "Werner Vogels"
+        },
+        {
+          "initials": "JR",
+          "name": "Jesse Robbins"
+        },
+        {
+          "initials": "AC",
+          "name": "Adrian Cockcroft"
+        }
+      ]
+    },
+    {
+      "code": "build",
+      "name": "Team Build",
+      "color": "#D4AC0D",
+      "resources": [
+        {
+          "initials": "KB",
+          "name": "Kent Beck"
+        },
+        {
+          "initials": "MF",
+          "name": "Martin Fowler"
+        },
+        {
+          "initials": "JH",
+          "name": "Jez Humble"
+        },
+        {
+          "initials": "KK",
+          "name": "Kohsuke Kawaguchi"
+        }
+      ]
+    },
+    {
+      "code": "parc",
+      "name": "Xerox PARC",
+      "color": "#dc54de",
+      "resources": [
+        {
+          "initials": "AK",
+          "name": "Alan Kay"
+        },
+        {
+          "initials": "CT",
+          "name": "Chuck Thacker"
+        },
+        {
+          "initials": "BT",
+          "name": "Bob Taylor"
+        },
+        {
+          "initials": "GS",
+          "name": "Gary Starkweather"
+        },
+        {
+          "initials": "LT",
+          "name": "Larry Tesler"
+        },
+        {
+          "initials": "BU",
+          "name": "Butler Lampson"
+        }
+      ]
+    }
+  ]
+}

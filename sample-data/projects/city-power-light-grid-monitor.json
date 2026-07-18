@@ -1,24 +1,25 @@
 {
-  "nome": "CITY POWER & LIGHT GRID MONITOR",
-  "team": {
+  "name": "CITY POWER & LIGHT GRID MONITOR",
+  "referents": {
     "projectManager": "",
     "projectEngineer": "",
     "solutionAnalyst": "",
     "vvReference": "",
     "note": "Team CITY POWER & LIGHT GRID MONITOR (Alan Kay / Jesse Robbins)"
   },
-  "archiviato": false,
+  "archived": false,
   "baseline": [
     {
-      "versione": "1.0",
+      "version": "1.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Data Migration",
-          "concluso": true,
-          "settimane": {
+          "name": "Data Migration",
+          "completed": true,
+          "weeks": {
             "2026-02-16": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK",
                 "WH"
               ]
@@ -29,31 +30,31 @@
           }
         },
         {
-          "nome": "Frontend Implementation",
-          "concluso": true,
-          "settimane": {
+          "name": "Frontend Implementation",
+          "completed": true,
+          "weeks": {
             "2026-02-16": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "BT"
               ]
             },
             "2026-01-12": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "AC"
               ]
             },
             "2026-02-02": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB"
               ]
             },
             "2026-02-23": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "WV"
               ]
@@ -64,32 +65,32 @@
           }
         },
         {
-          "nome": "Integration Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Integration Testing",
+          "completed": true,
+          "weeks": {
             "2026-01-12": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV"
               ]
             },
             "2026-01-26": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "MF",
                 "KK"
               ]
             },
             "2026-03-02": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DK",
                 "KT"
               ]
             },
             "2026-02-02": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KB",
                 "JH"
               ]
@@ -100,19 +101,19 @@
           }
         },
         {
-          "nome": "Deployment to Staging",
-          "concluso": true,
-          "settimane": {
+          "name": "Deployment to Staging",
+          "completed": true,
+          "weeks": {
             "2026-02-02": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "PD",
                 "MN"
               ]
             },
             "2026-03-09": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "RP",
                 "CK"
               ],
@@ -121,19 +122,19 @@
           }
         },
         {
-          "nome": "Training & Handover",
-          "concluso": false,
-          "settimane": {
+          "name": "Training & Handover",
+          "completed": false,
+          "weeks": {
             "2026-01-19": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "CT",
                 "AK"
               ]
             },
             "2026-02-02": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "GK"
               ]
             },
@@ -143,18 +144,18 @@
           }
         },
         {
-          "nome": "Localization",
-          "concluso": false,
-          "settimane": {
+          "name": "Localization",
+          "completed": false,
+          "weeks": {
             "2026-01-19": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA"
               ]
             },
             "2026-03-09": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "AK",
                 "CT"
               ],
@@ -162,7 +163,7 @@
             },
             "2026-01-26": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "JH",
                 "KB"
               ]
@@ -170,12 +171,12 @@
           }
         },
         {
-          "nome": "Regression Testing",
-          "concluso": false,
-          "settimane": {
+          "name": "Regression Testing",
+          "completed": false,
+          "weeks": {
             "2026-01-12": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC",
                 "JR"
               ]
@@ -186,12 +187,12 @@
           }
         },
         {
-          "nome": "Unit Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "Unit Testing",
+          "completed": true,
+          "weeks": {
             "2026-01-12": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA",
                 "CK"
               ]
@@ -204,35 +205,36 @@
       ]
     },
     {
-      "versione": "2.0",
+      "version": "2.0",
+      "archived": false,
       "task": [
         {
-          "nome": "User Acceptance Testing",
-          "concluso": true,
-          "settimane": {
+          "name": "User Acceptance Testing",
+          "completed": true,
+          "weeks": {
             "2026-04-27": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "GK",
                 "JA"
               ]
             },
             "2026-05-11": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
             "2026-06-08": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "BL",
                 "RP"
               ]
             },
             "2026-06-01": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "WV"
               ]
             },
@@ -242,12 +244,12 @@
           }
         },
         {
-          "nome": "Deployment to Staging",
-          "concluso": true,
-          "settimane": {
+          "name": "Deployment to Staging",
+          "completed": true,
+          "weeks": {
             "2026-05-25": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH"
               ]
             },
@@ -257,12 +259,12 @@
           }
         },
         {
-          "nome": "Real-Time Event Streaming",
-          "concluso": true,
-          "settimane": {
+          "name": "Real-Time Event Streaming",
+          "completed": true,
+          "weeks": {
             "2026-06-15": {
               "team": "build",
-              "risorse": [
+              "resources": [
                 "KK",
                 "MF"
               ],
@@ -270,13 +272,13 @@
             },
             "2026-06-08": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "FA"
               ]
             },
             "2026-05-18": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "DR",
                 "GH"
               ]
@@ -284,12 +286,12 @@
           }
         },
         {
-          "nome": "Backend Integration",
-          "concluso": true,
-          "settimane": {
+          "name": "Backend Integration",
+          "completed": true,
+          "weeks": {
             "2026-05-25": {
               "team": "devops",
-              "risorse": [
+              "resources": [
                 "MN"
               ]
             },
@@ -301,27 +303,28 @@
       ]
     },
     {
-      "versione": "3.0",
+      "version": "3.0",
+      "archived": false,
       "task": [
         {
-          "nome": "Deployment to Staging",
-          "concluso": false,
-          "settimane": {
+          "name": "Deployment to Staging",
+          "completed": false,
+          "weeks": {
             "2026-08-17": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC"
               ]
             },
             "2026-08-31": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "GS"
               ]
             },
             "2026-09-14": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "CK",
                 "WH"
               ]
@@ -332,19 +335,19 @@
           }
         },
         {
-          "nome": "Third-Party API Integration",
-          "concluso": false,
-          "settimane": {
+          "name": "Third-Party API Integration",
+          "completed": false,
+          "weeks": {
             "2026-08-03": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "JR",
                 "AC"
               ]
             },
             "2026-09-21": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT",
                 "AK"
               ]
@@ -355,12 +358,12 @@
           }
         },
         {
-          "nome": "Bug Fixing",
-          "concluso": false,
-          "settimane": {
+          "name": "Bug Fixing",
+          "completed": false,
+          "weeks": {
             "2026-09-28": {
               "team": "dev",
-              "risorse": [
+              "resources": [
                 "MH",
                 "DR"
               ],
@@ -368,21 +371,21 @@
             },
             "2026-09-07": {
               "team": "run",
-              "risorse": [
+              "resources": [
                 "AC",
                 "JR"
               ]
             },
             "2026-08-03": {
               "team": "parc",
-              "risorse": [
+              "resources": [
                 "LT",
                 "GS"
               ]
             },
             "2026-08-24": {
               "team": "vv",
-              "risorse": [
+              "resources": [
                 "WH",
                 "RP"
               ]
