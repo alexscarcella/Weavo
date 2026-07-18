@@ -57,7 +57,7 @@ jobs:
           # git archive packages exactly what's tracked in the repo at this commit
           # for the given paths — untracked/gitignored content (e.g. sample-data/backup/)
           # can never end up in it, by construction.
-          git archive --format=zip -o "dist/$ZIP_NAME" HEAD -- index.html css js sample-data
+          git archive --format=zip -o "dist/$ZIP_NAME" HEAD -- index.html favicon.svg css js sample-data
           echo "zip_path=dist/$ZIP_NAME" >> "$GITHUB_ENV"
           echo "zip_name=$ZIP_NAME" >> "$GITHUB_ENV"
 

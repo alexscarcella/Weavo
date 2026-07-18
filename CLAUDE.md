@@ -104,7 +104,7 @@ browser/PC restart on a real network/OneDrive folder — unrelated to the main a
 zip for end users who just want to run the app (not clone the repo): pushing a git tag `vX.Y`
 triggers the workflow, which (1) fails the build if `APP_VERSION` in
 [js/ui/common/app-header.js](js/ui/common/app-header.js) doesn't match the pushed tag, (2) builds
-`weavo-vX.Y.zip` via `git archive` scoped to `index.html css js sample-data` (so untracked/gitignored
+`weavo-vX.Y.zip` via `git archive` scoped to `index.html favicon.svg css js sample-data` (so untracked/gitignored
 content like `sample-data/backup/` can never end up in it), and (3) creates a GitHub Release with
 that zip attached via `softprops/action-gh-release`. `docs/`, `README.md`, `requirements/`,
 `scripts/`, and `spike-fsa/` are deliberately excluded from the zip — they're dev-facing, not
