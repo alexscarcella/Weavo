@@ -24,16 +24,29 @@
         sep.className = 'context-menu-separator';
         menu.appendChild(sep);
       }
+      // Riga informativa non cliccabile (es. "3 weeks selected"), non un'azione:
+      // niente bottone/onClick, solo testo.
+      if (action.header) {
+        const label = document.createElement('div');
+        label.className = 'context-menu-header';
+        label.textContent = action.label;
+        menu.appendChild(label);
+        return;
+      }
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = action.danger ? 'context-menu-item danger' : 'context-menu-item';
       if (action.className) btn.classList.add(action.className);
       if (action.title) btn.title = action.title;
       btn.textContent = action.label;
-      btn.addEventListener('click', () => {
-        closeExisting();
-        action.onClick();
-      });
+      if (action.disabled) {
+        btn.disabled = true;
+      } else {
+        btn.addEventListener('click', () => {
+          closeExisting();
+          action.onClick();
+        });
+      }
       menu.appendChild(btn);
     });
     document.body.appendChild(menu);

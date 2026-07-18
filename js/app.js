@@ -115,6 +115,7 @@
     topBar.className = 'top-bar';
     topBar.appendChild(MP.toolbar.renderHamburgerMenu(state));
     topBar.appendChild(MP.toolbar.renderPageTitle(state));
+    topBar.appendChild(MP.toolbar.renderHelpButton());
     wrapper.appendChild(topBar);
     const viewRenderers = {
       'carico-risorse': MP.resourceLoadView.renderResourceLoadView,

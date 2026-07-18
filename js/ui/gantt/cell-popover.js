@@ -5,15 +5,6 @@
 // applica solo team+risorse, la milestone resta un concetto per singola
 // settimana). Salvataggio automatico alla chiusura (nessun bottone "salva"
 // separato), con avviso non bloccante su doppia allocazione.
-//
-// Due frecce (sia in modalità singola sia in modalità range) spostano di una
-// settimana avanti/indietro l'allocazione attualmente salvata (vedi
-// js/model/week-shift.js) — un'azione indipendente dal salvataggio-alla-
-// chiusura: al click chiamano subito `onShift(direction)` e non toccano i
-// campi del form (eventuali modifiche non salvate a team/risorse restano
-// pendenti, non vengono spostate). Disabilitate con tooltip quando il task è
-// concluso, si uscirebbe dal range di settimane esistente, o la cella di
-// destinazione nello stesso task contiene già un'allocazione.
 (function (MP) {
   'use strict';
 
@@ -64,15 +55,12 @@
   // singola `settimana`. In quel caso i valori iniziali vengono presi dalla
   // prima settimana del range ("cella ancora") e propagati identici a tutte
   // le settimane del range al salvataggio — la milestone resta esclusa.
-  function openPopover({ anchorEl, dataset, task, settimana, weeksRange, onSave, onShift }) {
+  function openPopover({ anchorEl, dataset, task, settimana, weeksRange, onSave }) {
     closeExisting();
 
     const weeks = weeksRange && weeksRange.length ? weeksRange : [settimana];
     const isBulk = weeks.length > 1;
     const anchorWeek = weeks[0];
-
-    const leftCheck = onShift ? MP.weekShift.canShiftWeeks(dataset, task, weeks, -1) : { allowed: false };
-    const rightCheck = onShift ? MP.weekShift.canShiftWeeks(dataset, task, weeks, 1) : { allowed: false };
 
     const entry = (task.settimane || {})[anchorWeek] || {};
     let selectedTeam = entry.team || '';
@@ -113,13 +101,6 @@
       ${isBulk ? '' : `<div class="popover-field popover-milestone-field">
         <label><input type="checkbox" class="popover-milestone" ${selectedMilestone ? 'checked' : ''}> Delivery milestone</label>
       </div>`}
-      ${onShift ? `<div class="popover-field popover-shift-field">
-        <label>Shift by one week</label>
-        <div class="popover-shift-buttons">
-          <button type="button" class="popover-shift-left" ${leftCheck.allowed ? '' : `disabled title="${leftCheck.reason}"`}>◀</button>
-          <button type="button" class="popover-shift-right" ${rightCheck.allowed ? '' : `disabled title="${rightCheck.reason}"`}>▶</button>
-        </div>
-      </div>` : ''}
       <div class="popover-conflicts"></div>
       <p class="hint popover-hint">Close (click outside or Esc) to save.</p>
     `;
@@ -186,13 +167,6 @@
         selectedMilestone = e.target.checked;
       });
     }
-    // Lo shift è un'azione immediata e indipendente dal salvataggio-alla-
-    // chiusura: opera sul dato attualmente persistito in task.settimane, non
-    // su eventuali modifiche non salvate ai campi team/risorse del form.
-    const shiftLeftBtn = pop.querySelector('.popover-shift-left');
-    if (shiftLeftBtn) shiftLeftBtn.addEventListener('click', () => onShift(-1));
-    const shiftRightBtn = pop.querySelector('.popover-shift-right');
-    if (shiftRightBtn) shiftRightBtn.addEventListener('click', () => onShift(1));
 
     renderRisorseList();
     refreshConflicts();

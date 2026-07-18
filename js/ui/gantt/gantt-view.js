@@ -159,18 +159,49 @@
     }
   }
 
+  // Apre il menu contestuale di shift (due voci ◀/▶, riuso di MP.contextMenu —
+  // vedi js/ui/common/context-menu.js) per `weeks` (una cella singola o un
+  // range Ctrl-selezionato, vedi cell-shift-selection.js). Azione
+  // completamente indipendente dal popover di allocazione: nessun campo
+  // condiviso, nessun rischio di sovrascrittura incrociata (vedi il piano per
+  // il bug della prima versione, che le mescolava in un'unica UI). `anchorEl`
+  // è opzionale: se assente (riapertura dopo uno shift), viene ritrovato via
+  // `MP.ganttCell.getCellDiv` (popolato ad ogni render).
+  function openShiftMenu({ state, file, task, baseline, weeks, anchorEl }) {
+    const el = anchorEl || MP.ganttCell.getCellDiv(task, weeks[0]);
+    if (!el) return;
+    const leftCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, -1);
+    const rightCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, 1);
+    MP.contextMenu.openMenu({
+      anchorEl: el,
+      actions: [
+        { header: true, label: weeks.length > 1 ? `${weeks.length} weeks selected` : '1 week selected' },
+        {
+          label: '◀ Shift one week back',
+          disabled: !leftCheck.allowed,
+          title: leftCheck.allowed ? undefined : leftCheck.reason,
+          onClick: () => handleCellsShift({ state, file, task, baseline, weeks, direction: -1 }),
+        },
+        {
+          label: '▶ Shift one week forward',
+          disabled: !rightCheck.allowed,
+          title: rightCheck.allowed ? undefined : rightCheck.reason,
+          onClick: () => handleCellsShift({ state, file, task, baseline, weeks, direction: 1 }),
+        },
+      ],
+    });
+  }
+
   // Sposta di una settimana (avanti/indietro) l'allocazione di una cella
-  // singola o dell'intero range selezionato (vedi js/model/week-shift.js per
-  // il predicato di ammissibilità e la mutazione), poi riapre il popover sulla
-  // nuova posizione: `MP.cellPopover` viene appeso a `document.body` (non
-  // dentro `#app`), quindi sopravvive al re-render completo di `app.js`, ma il
-  // suo `anchorEl` no — richiuderlo e riaprirlo sul nuovo div (ritrovato via
-  // `MP.ganttCell.getCellDiv`, popolato ad ogni render) è il modo più semplice
-  // per ottenere l'effetto "resta aperto, riposizionato" senza inseguire
-  // aggiornamenti in-place di un popover che si ricostruisce sempre da zero.
+  // singola o dell'intero range Ctrl-selezionato (vedi js/model/week-shift.js
+  // per il predicato di ammissibilità e la mutazione, che preserva il
+  // contenuto individuale di ciascuna cella). Dopo il salvataggio riapre il
+  // menu di shift sulla nuova posizione (stesso meccanismo già usato per
+  // `lastEdited`: il div va ritrovato dopo il re-render completo del DOM), per
+  // permettere shift ripetuti in sequenza senza dover riselezionare da capo.
   async function handleCellsShift({ state, file, task, baseline, weeks, direction }) {
     const check = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, direction);
-    if (!check.allowed) return; // le frecce sono già disabilitate in questo caso
+    if (!check.allowed) return; // la voce di menu è già disabilitata in questo caso
 
     const milestoneWeeks = weeks.filter((w) => ((task.settimane || {})[w] || {}).milestone === true);
     MP.weekShift.shiftWeeksData(task, weeks, direction);
@@ -185,20 +216,8 @@
       await MP.saveCoordinator.saveProject(state, file);
       markLastEdited(affectedTasks, [...weeks, ...targets]);
       MP.store.setState({});
-      const anchorEl = MP.ganttCell.getCellDiv(task, targets[0]);
-      if (anchorEl) {
-        MP.cellPopover.openPopover({
-          anchorEl,
-          dataset: state.dataset,
-          task,
-          settimana: targets.length === 1 ? targets[0] : undefined,
-          weeksRange: targets.length > 1 ? targets : undefined,
-          onSave: (newEntry) => (targets.length > 1
-            ? handleBulkCellsSaved({ state, file, task, weeksRange: targets, newEntry })
-            : handleCellSaved({ state, file, task, baseline, settimana: targets[0], newEntry })),
-          onShift: (nextDirection) => handleCellsShift({ state, file, task, baseline, weeks: targets, direction: nextDirection }),
-        });
-      }
+      MP.cellShiftSelection.relocate(file, task, targets);
+      openShiftMenu({ state, file, task, baseline, weeks: targets });
     } catch (e) {
       window.alert(`Error saving "${file}": ${e.message}`);
     }
@@ -285,7 +304,7 @@
     // delle settimane invece di restare bloccate. `renderTaskRow`/`gantt-row.js`
     // non sanno nulla di queste 2 colonne (restituiscono sempre 3+weeks.length
     // celle): sono `gantt-view.js` a inserire i filler prima/dopo, riga per riga.
-    grid.style.gridTemplateColumns = `170px 90px 200px repeat(${weeks.length + 2}, 46px)`;
+    grid.style.gridTemplateColumns = `170px 90px 300px repeat(${weeks.length + 2}, 46px)`;
 
     // Riga pulsanti "a bordo tabella" in stile Excel, sopra le etichette di
     // colonna: sacrifica un'intera riga di altezza (24px, come le altre)
@@ -336,7 +355,7 @@
         allocationIndex,
         onCellSaved: handleCellSaved,
         onBulkCellsSaved: handleBulkCellsSaved,
-        onCellsShift: handleCellsShift,
+        onOpenShiftMenu: openShiftMenu,
         lastEdited,
       });
       if (currentWeekIndex !== -1) cells[3 + currentWeekIndex].classList.add('current-week-line');

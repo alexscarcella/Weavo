@@ -2,15 +2,19 @@
 // popover di edit per questa sola cella (resettando un'eventuale selezione
 // multi-cella in corso); il click semplice è gestito da gantt-row.js tramite
 // cell-selection.js, che serve invece alla selezione di un range sulla riga.
+// Il click destro (contextmenu) apre invece il menu di shift (vedi
+// gantt-view.js/cell-shift-selection.js) — un'azione indipendente
+// dall'allocazione, che non condivide mai stato con il popover di edit.
 (function (MP) {
   'use strict';
 
   // Registro task -> (settimana -> div) della cella attualmente renderizzata,
-  // ricostruito ad ogni render. Usato da gantt-view.js dopo uno shift per
-  // ritrovare il div della cella di destinazione (appena ricreato dal
-  // re-render completo del DOM, vedi app.js) e riaprire il popover lì sopra.
-  // WeakMap sul `task` (riferimento stabile in memoria per la sessione) così
-  // le voci di task ormai eliminati non trattengono i div in memoria.
+  // ricostruito ad ogni render. Usato da gantt-view.js/cell-shift-selection.js
+  // dopo uno shift per ritrovare il div della cella di destinazione (appena
+  // ricreato dal re-render completo del DOM, vedi app.js) e riaprire il menu
+  // di shift / ri-evidenziare la selezione lì sopra. WeakMap sul `task`
+  // (riferimento stabile in memoria per la sessione) così le voci di task
+  // ormai eliminati non trattengono i div in memoria.
   const cellRegistry = new WeakMap();
 
   function registerCell(task, settimana, div) {
@@ -27,7 +31,7 @@
     return perSettimana ? perSettimana.get(settimana) : undefined;
   }
 
-  function renderWeekCell({ task, baseline, settimana, teamMap, sigleValide, siglaTeamMap, allocationIndex, state, file, onCellSaved, onCellsShift, lastEdited }) {
+  function renderWeekCell({ task, baseline, settimana, teamMap, sigleValide, siglaTeamMap, allocationIndex, state, file, onCellSaved, onOpenShiftMenu, lastEdited }) {
     const entry = (task.settimane || {})[settimana];
     const div = document.createElement('div');
     div.className = 'gantt-cell week-cell editable-cell';
@@ -116,8 +120,13 @@
         task,
         settimana,
         onSave: (newEntry) => onCellSaved({ state, file, task, baseline, settimana, newEntry }),
-        onShift: (direction) => onCellsShift({ state, file, task, baseline, weeks: [settimana], direction }),
       });
+    });
+
+    div.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const weeks = MP.cellShiftSelection.weeksForShift(file, task, settimana);
+      onOpenShiftMenu({ state, file, task, baseline, weeks, anchorEl: div });
     });
 
     registerCell(task, settimana, div);

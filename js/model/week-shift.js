@@ -1,8 +1,8 @@
 // Logica pura per lo spostamento ("shift") di una settimana o di un range di
 // settimane contiguo di uno stesso task, di una settimana avanti/indietro
-// (usata dal popover di editing cella e da gantt-view.js — vedi CLAUDE.md
-// "Project team/referents"/"gantt" per il contesto del modello dati). Nessun
-// I/O, nessun DOM: solo predicato di ammissibilità + mutazione di
+// (usata dal menu contestuale di shift — vedi gantt-view.js/gantt-cell.js —
+// completamente indipendente dal popover di editing cella, cell-popover.js).
+// Nessun I/O, nessun DOM: solo predicato di ammissibilità + mutazione di
 // `task.settimane`.
 (function (MP) {
   'use strict';

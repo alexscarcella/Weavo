@@ -311,6 +311,94 @@
     });
   }
 
+  // Guida sintetica alle interazioni del gantt (bottone "?" nella top-bar,
+  // vedi toolbar.js) — contenuto statico, nessun dato utente da sanificare.
+  // Non risolve nulla (a differenza degli altri dialoghi): serve solo a
+  // mostrare/nascondere il pannello, niente input da riportare al chiamante.
+  function showHelpGuide() {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    const box = document.createElement('div');
+    box.className = 'modal-box modal-box-wide help-guide';
+    box.innerHTML = `
+      <h2>How to use the Gantt</h2>
+
+      <h3>Editing an allocation</h3>
+      <ul>
+        <li><strong>Double-click</strong> a week cell to open the editor: pick a team,
+        then the resources (only from that team), then — single cell only — the
+        delivery milestone flag.</li>
+        <li>Closing the editor (click outside or <kbd>Esc</kbd>) saves automatically —
+        there's no separate "Save" button.</li>
+      </ul>
+
+      <h3>Editing several weeks at once</h3>
+      <ul>
+        <li><strong>Click</strong> a cell to set a starting point, then
+        <strong>Shift+click</strong> another cell on the same row to select the range
+        between them — the editor applies the same team and resources to every
+        selected week in one go.</li>
+      </ul>
+
+      <h3>Clearing an allocation</h3>
+      <ul>
+        <li>Open the editor and deselect all resources (or set the team back to
+        "— none —"), then close it — the week is cleared.</li>
+      </ul>
+
+      <h3>Shifting an allocation by one week</h3>
+      <ul>
+        <li><strong>Right-click</strong> a cell to shift it one week back or forward —
+        this is a separate action from editing, so it never overwrites what's in
+        the cell.</li>
+        <li>To shift several weeks together while keeping each cell's own content,
+        first <strong>Ctrl+click</strong> two cells on the same row to select the
+        range, then right-click inside it — the menu's top line shows how many
+        weeks are currently selected, useful to confirm the selection went
+        through.</li>
+        <li>Shifting is blocked (with a tooltip explaining why) when the destination
+        already has an allocation, the task is completed, or you'd go past the
+        first/last week of the sheet.</li>
+      </ul>
+
+      <h3>Delivery milestones</h3>
+      <ul>
+        <li>All tasks in the same baseline share one milestone week — setting it on
+        one task's cell applies it to the others automatically.</li>
+      </ul>
+
+      <h3>Rows: rename, reorder, delete…</h3>
+      <ul>
+        <li>The <strong>⋮</strong> menu on a project/baseline/task row name covers
+        renaming, reordering, archiving, and deleting.</li>
+        <li>The checkbox next to a task name marks it as completed — completed tasks
+        are excluded from overallocation checks and are never touched automatically
+        by team/resource changes.</li>
+      </ul>
+
+      <h3>Warnings on cells</h3>
+      <ul>
+        <li>A colored badge or dashed outline on a cell flags an issue — hover it for
+        details: an unknown team/resource, a resource allocated elsewhere the same
+        week, or a resource that changed team since it was allocated here.</li>
+      </ul>
+
+      <div class="modal-actions">
+        <button type="button" class="modal-btn-cancel">Close</button>
+      </div>`;
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    const close = () => overlay.remove();
+    box.querySelector('.modal-btn-cancel').addEventListener('click', close);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close();
+    });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  }
+
   const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 
   // Selezione colore via color-picker nativo (input type="color"), con campo
@@ -366,5 +454,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, confirmWithReport };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, confirmWithReport, showHelpGuide };
 })(window.MP = window.MP || {});

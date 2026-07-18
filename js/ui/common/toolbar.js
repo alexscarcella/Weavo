@@ -80,5 +80,19 @@
     return span;
   }
 
-  MP.toolbar = { renderHamburgerMenu, renderPageTitle };
+  // Apre la guida sintetica alle interazioni del gantt (MP.modal.showHelpGuide)
+  // — spinto in fondo alla top-bar via CSS (margin-left: auto), globale come
+  // il menu ☰, non legato a una vista specifica.
+  function renderHelpButton() {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'help-btn';
+    btn.textContent = '?';
+    btn.title = 'How to use the Gantt';
+    btn.setAttribute('aria-label', 'Help');
+    btn.addEventListener('click', () => MP.modal.showHelpGuide());
+    return btn;
+  }
+
+  MP.toolbar = { renderHamburgerMenu, renderPageTitle, renderHelpButton };
 })(window.MP = window.MP || {});

@@ -191,7 +191,7 @@ code {
 }
 .gantt-cell.col-1 { left: 0; width: 170px; }
 .gantt-cell.col-2 { left: 170px; width: 90px; color: #555; }
-.gantt-cell.col-3 { left: 260px; width: 200px; font-weight: 400; }
+.gantt-cell.col-3 { left: 260px; width: 300px; font-weight: 400; }
 .gantt-cell.task-concluso { color: #888; }
 
 .gantt-cell.header {
@@ -292,6 +292,14 @@ code {
   outline: 2px solid #2E86FF; outline-offset: -2px; background-color: rgba(46, 134, 255, 0.15);
 }
 
+/* --- Selezione range dedicata allo shift (Ctrl+click, vedi
+   cell-shift-selection.js) — tratteggio viola per non confondersi con la
+   selezione di allocazione qui sopra (blu, continua): sono due meccanismi
+   indipendenti, mai attivi insieme sulla stessa interpretazione. --- */
+.gantt-cell.cell-shift-selected {
+  outline: 2px dashed #8e44ad; outline-offset: -2px; background-color: rgba(142, 68, 173, 0.12);
+}
+
 /* --- Cella (o range) appena salvata: evidenziazione temporanea, si spegne da
    sola dopo qualche secondo (vedi markLastEdited in gantt-view.js) --- */
 .gantt-cell.cell-just-edited {
@@ -323,13 +331,6 @@ code {
   padding: 0.15rem 0; cursor: pointer;
 }
 .popover-milestone-field label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; cursor: pointer; }
-.popover-shift-buttons { display: flex; gap: 0.4rem; }
-.popover-shift-buttons button {
-  flex: 1; padding: 0.3rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid #aaa;
-  background: #f4f4f4; cursor: pointer;
-}
-.popover-shift-buttons button:hover:not(:disabled) { background: #e6e6e6; }
-.popover-shift-buttons button:disabled { opacity: 0.4; cursor: not-allowed; }
 .popover-warning {
   background: #fff3e0; border: 1px solid #ffb74d; border-radius: 4px;
   padding: 0.4rem 0.5rem; font-size: 0.78rem; margin-top: 0.3rem;
@@ -423,6 +424,13 @@ code {
 }
 .hamburger-btn:hover { background: #eef1f5; }
 
+.help-btn {
+  width: 30.8px; height: 30.8px; padding: 0; font-size: 1rem; line-height: 1;
+  border: 1px solid #888; border-radius: 50%; background: #f5f5f5; cursor: pointer;
+  margin-bottom: 0.75rem; margin-left: auto;
+}
+.help-btn:hover { background: #eef1f5; }
+
 /* --- Barra superiore --- */
 .top-bar { display: flex; align-items: center; justify-content: flex-start; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.5rem; flex: 0 0 auto; }
 /* font-size scelto per eguagliare l'altezza del box di .hamburger-btn (1rem di
@@ -497,6 +505,16 @@ code {
 .project-card-value { flex: 1; white-space: pre-line; }
 .project-card-orphan { color: #b00020; font-size: 0.8rem; }
 
+/* --- Guida sintetica (bottone "?" in top-bar, vedi toolbar.js) --- */
+.help-guide h3 { font-size: 0.92rem; margin: 1rem 0 0.3rem; }
+.help-guide h3:first-of-type { margin-top: 0.5rem; }
+.help-guide ul { margin: 0; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.45; }
+.help-guide li { margin-bottom: 0.3rem; }
+.help-guide kbd {
+  font-family: monospace; background: #eee; border: 1px solid #ccc; border-radius: 3px;
+  padding: 0.05rem 0.35rem; font-size: 0.8rem;
+}
+
 .project-info-btn {
   flex: none; width: 1.2rem; height: 1.2rem; margin-right: 0.3rem; padding: 0;
   border: 1px solid #999; border-radius: 50%; background: #fff; color: #666;
@@ -540,7 +558,13 @@ code {
   cursor: pointer;
 }
 .context-menu-item:hover { background: #eef1f5; }
+.context-menu-item:disabled { opacity: 0.4; cursor: not-allowed; }
+.context-menu-item:disabled:hover { background: none; }
 .context-menu-item.danger { color: #b00020; }
+.context-menu-header {
+  padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.02em; color: #777;
+}
 .context-menu-item.danger:hover { background: #fdecea; }
 .context-menu-item-icon { text-align: center; font-size: 1rem; line-height: 1; padding: 0.35rem 0.6rem; }
 .context-menu-separator { border-top: 1px solid #e0e0e0; margin: 0.25rem 0; }

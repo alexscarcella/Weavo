@@ -159,6 +159,15 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
   saves itself when closed — there's no "Confirm" button.
 - **Select several weeks at once:** click the first cell, then shift-click the last one on the
   same row, to apply the same allocation to the whole range in a single save.
+- **Shift an allocation by one week:** right-click the cell and pick *"Shift one week back"* or
+  *"Shift one week forward"* — this moves the allocation, it doesn't open the editor, so it never
+  overwrites what's in the cell. To shift several weeks together while keeping each cell's own
+  content, first Ctrl+click two cells on the same row to select the range (the menu's top line
+  confirms how many weeks are selected), then right-click inside it. Shifting is blocked — with a
+  tooltip explaining why — if the destination already has an allocation, the task is marked
+  completed, or you'd go past the first/last week of the sheet.
+- **Need a reminder of how any of this works?** Click the **"?"** button in the top-right corner
+  of the top bar for a short built-in guide covering editing, clearing, and shifting allocations.
 - **Manage teams and resources** (create/rename/recolor a team; create/rename/move/delete a
   resource): ☰ menu → *"Team & resources"*.
 - The **"Resource load"** (who's over-allocated, with traffic-light colors) and **"Milestones"**

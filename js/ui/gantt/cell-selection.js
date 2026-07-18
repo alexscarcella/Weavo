@@ -32,7 +32,7 @@
   // weekCells: elenco ordinato { settimana, div } di tutte le celle della riga
   // (stesso ordine di visualizzazione) — serve per ricavare l'intervallo tra
   // l'ancora e la cella appena cliccata.
-  function handleCellClick({ event, file, task, settimana, div, weekCells, dataset, onApply, onCellsShift }) {
+  function handleCellClick({ event, file, task, settimana, div, weekCells, dataset, onApply }) {
     const sameRowAnchor = event.shiftKey && anchor && anchor.file === file && anchor.task === task;
     if (!sameRowAnchor) {
       setAnchor({ file, task, settimana, div });
@@ -59,10 +59,6 @@
       weeksRange: range.map((c) => c.settimana),
       onSave: (newEntry) => {
         onApply(range.map((c) => c.settimana), newEntry);
-        reset();
-      },
-      onShift: (direction) => {
-        onCellsShift(range.map((c) => c.settimana), direction);
         reset();
       },
     });

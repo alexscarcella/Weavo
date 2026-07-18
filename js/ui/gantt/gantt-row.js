@@ -39,7 +39,7 @@
     return div;
   }
 
-  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved, onCellsShift, lastEdited }) {
+  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved, onOpenShiftMenu, lastEdited }) {
     const cells = [];
 
     const col1 = fixedCell(showProgetto ? progetto.nome : '', 'col-1');
@@ -137,7 +137,7 @@
           state,
           file,
           onCellSaved,
-          onCellsShift,
+          onOpenShiftMenu,
           lastEdited,
         });
         cells.push(cell);
@@ -152,6 +152,10 @@
     if (task) {
       weekCells.forEach(({ settimana, div }) => {
         div.addEventListener('click', (event) => {
+          if (event.ctrlKey || event.metaKey) {
+            MP.cellShiftSelection.handleCtrlClick({ file, task, settimana, div, weekCells });
+            return;
+          }
           MP.cellSelection.handleCellClick({
             event,
             file,
@@ -161,7 +165,6 @@
             weekCells,
             dataset: state.dataset,
             onApply: (weeksRange, newEntry) => onBulkCellsSaved({ state, file, task, weeksRange, newEntry }),
-            onCellsShift: (weeksRange, direction) => onCellsShift({ state, file, task, baseline, weeks: weeksRange, direction }),
           });
         });
       });

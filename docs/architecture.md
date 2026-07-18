@@ -45,11 +45,12 @@ flowchart TB
         overalloc["overallocation.js"]
         validation["validation.js"]
         milestones["milestones.js"]
+        weekshift["week-shift.js"]
     end
     subgraph ui["js/ui — rendering + events"]
         common["common/\nmodal, toast, context-menu, toolbar, dataset-header, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
-        gantt["gantt/\nmain view, cell popover, legend"]
+        gantt["gantt/\nmain view, cell popover, shift, legend"]
         other["resource-load/, team-risorse/, milestones/, weeks/"]
     end
     app["js/app.js — entry point"]
@@ -72,8 +73,10 @@ flowchart TB
    patch and notifies every subscriber synchronously.
 3. **`js/model/`** — pure functions over an in-memory dataset: week arithmetic, the
    cross-project overallocation index, non-blocking validation (orphan references, team
-   mismatches), and baseline-release-milestone derivation (`milestones.js`, used by the
-   milestones page). No I/O, no DOM access, so these are trivially unit-testable in isolation.
+   mismatches), baseline-release-milestone derivation (`milestones.js`, used by the
+   milestones page), and the ammissibility check + mutation behind shifting an allocation one
+   week back/forward (`week-shift.js`, used by the gantt view's shift feature). No I/O, no DOM
+   access, so these are trivially unit-testable in isolation.
 4. **`js/ui/`** — rendering and event wiring, split by concern rather than by component
    framework conventions: `common/` (modal, toast, context menu, toolbar — including the current
    page's title next to the hamburger button — dataset-header, app-header), `crud/` (one file per

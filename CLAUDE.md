@@ -287,13 +287,31 @@ inserted at the right point in that list. Layers, low → high:
    from the browser clock on every call, never persisted) alongside the pre-existing
    `getCurrentWeekIso()` (the Monday of the week containing today) — `countUpcomingBaselines` uses
    the former since a release date is a specific day, not a week-column highlight.
+   `week-shift.js` is a small, self-contained pure module for the "shift" feature (see
+   `gantt/` below): `canShiftWeeks(dataset, task, weeks, direction)` is the ammissibility
+   predicate (blocks on `task.concluso`, on the shift crossing `manifest.settimane.prima`/
+   `ultima`, or on the one destination week that falls outside the selected block already
+   holding a non-empty entry in *this* task — reused both to enable/disable the shift menu
+   items and as a safety re-check before mutating) and `shiftWeeksData(task, weeks, direction)`
+   is the mutation, which snapshots every entry in `weeks` before deleting any of them so the
+   write pass is never order-dependent — this preserves each cell's own content when shifting a
+   multi-week block (a "translate", not a normalize-to-one-value bulk edit, see below).
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs:
      `confirmConflict` for save conflicts, `promptText`/`promptColor` single-field prompts, plus
      the project-team form/card pair described above — `promptProjectForm` and `showProjectCard`
      — kept as bespoke functions rather than a generic form-builder since they're the only
-     multi-field use case so far), `toast.js` (non-blocking notifications), `context-menu.js` (the
-     "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu — the
+     multi-field use case so far; `showHelpGuide` is the odd one out — no promise/result to
+     resolve, just a static read-only panel — opened by the "?" button described below, with a
+     short section-by-section walkthrough of the gantt interactions: single/bulk cell editing,
+     clearing an allocation, the shift feature, milestones, row actions, and the warning badges),
+     `toast.js` (non-blocking notifications), `context-menu.js` (the
+     "⋮" action menu used by every CRUD row action — also reused as-is by the shift feature's
+     right-click menu, see `gantt/` below; an action entry supports `disabled: true` (+ `title`
+     tooltip explaining why, same convention as native disabled controls) to render a non-
+     clickable greyed-out item instead of omitting it, and `header: true` to render a plain
+     non-interactive text row — e.g. "N weeks selected" — instead of a button, both generic
+     additions with no CRUD-menu-specific assumptions baked in), `toolbar.js` (top-bar hamburger menu — the
      single entry point for view switching / backup / "+ New project" / "Change data folder…",
      reuses `context-menu` rather than duplicating open/close logic; next to "💾 Backup" sits a
      "Backup on exit" toggle (`state.ui.autoBackupOnExit`, same ✓-prefix convention as the
@@ -313,7 +331,11 @@ inserted at the right point in that list. Layers, low → high:
      `state.ui.vistaCorrente` codes stay the original Italian identifiers — only the displayed
      `label` is English, see "UI language" above); `.page-title`'s font-size is
      tuned in CSS to make its box the same height as `.hamburger-btn` next to it, since it has no
-     padding/border of its own to match the button's box with), `dataset-header.js` (the
+     padding/border of its own to match the button's box with; `renderHelpButton` is the round "?"
+     button pushed to the far right of the top bar via `margin-left: auto` on `.help-btn` (the only
+     item in the flex row that needs it — everything else stays left-aligned), global like the
+     hamburger menu and unrelated to `vistaCorrente` — its one job is `MP.modal.showHelpGuide()`),
+     `dataset-header.js` (the
      header shared by the gantt, resource-load, and milestones pages: a `.gantt-toolbar` info
      line — connected folder name (`state.dirHandle.name`; the File System Access API never
      exposes an absolute filesystem path, see Hard Constraints/`app.js` — this is the closest
@@ -375,7 +397,35 @@ inserted at the right point in that list. Layers, low → high:
      it down through `renderTaskRow`/`renderWeekCell` so the just-saved cell(s) get a
      `cell-just-edited` CSS highlight after the full re-render — needed because `js/app.js`'s
      `render()` rebuilds the entire DOM tree from scratch on every `MP.store.setState()`, which
-     would otherwise silently drop any highlight applied to the old (now-discarded) elements;
+     would otherwise silently drop any highlight applied to the old (now-discarded) elements.
+
+     **Shift feature** (move an allocation, or a whole selected block of them, one week
+     back/forward): deliberately **not** part of `cell-popover.js` — a first version put shift
+     arrows inside that same popover and reopened it (seeded from the anchor week) after each
+     shift so it could "stay open, repositioned"; closing that reopened popover without touching
+     anything still ran the existing autosave-on-close bulk path, silently overwriting the whole
+     range with the anchor week's single value and destroying the very per-cell heterogeneity the
+     shift had just preserved. The fix was architectural, not a patch: shift now lives entirely
+     outside the allocation popover, with its own selection state, so the two can never touch the
+     same data. Right-click (`contextmenu`, `gantt-cell.js`) on a week cell opens a
+     `MP.contextMenu` menu (reused as-is, see `common/` above) with two actions — "shift one week
+     back/forward" — built by `gantt-view.js`'s `openShiftMenu`, which computes both directions'
+     `MP.weekShift.canShiftWeeks` up front to grey out (with a tooltip reason) whichever direction
+     isn't allowed, and prepends a `header: true` "N weeks selected" line so the user can tell
+     whether the click landed on a lone cell or an active multi-week selection. `handleCellsShift`
+     does the actual mutation (`MP.weekShift.shiftWeeksData`) + baseline-milestone resync (reuses
+     `syncBaselineMilestone` for any shifted week that carried `milestone: true`) + save, then —
+     mirroring the `lastEdited` re-render problem above — re-finds the destination cell's div via
+     `gantt-cell.js`'s `getCellDiv(task, settimana)` (a `WeakMap<task, Map<settimana, div>>`
+     rebuilt on every `renderWeekCell` call) and reopens `openShiftMenu` there, so repeated shifts
+     in the same direction don't require re-right-clicking each time. A **multi-week** shift
+     selection is Ctrl+click (`cell-shift-selection.js`, a module-singleton anchor+range tracker
+     structurally identical to `cell-selection.js` but with completely separate state and its own
+     `cell-shift-selected` highlight class), never the plain click/shift-click of `cell-selection.js`
+     — the two selections are independent on purpose and are never active "for the same reason" at
+     once, reinforcing that shift and bulk-allocate remain unrelated features that happen to share
+     the same grid.
+
      `legend.js` renders the color legend dynamically from
      `team-risorse.json`, read-only, no navigation affordance of its own — reaching the
      team/risorse page is via the `toolbar.js` hamburger menu only, on every page, not a
