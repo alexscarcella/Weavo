@@ -20,13 +20,13 @@
       }
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio: ${e.message}`);
+      window.alert(`Error saving: ${e.message}`);
     }
   }
 
   async function createProject(state, preset) {
     const result = preset !== undefined ? preset : await MP.modal.promptProjectForm({
-      title: 'Nuovo progetto',
+      title: 'New project',
       nome: '',
       team: MP.schema.createProjectTeamInfo(),
       teamRisorsa: state.dataset.teamRisorsa,
@@ -48,14 +48,14 @@
       MP.store.setState({});
       return file;
     } catch (e) {
-      window.alert(`Errore nella creazione del progetto: ${e.message}`);
+      window.alert(`Error creating the project: ${e.message}`);
       return null;
     }
   }
 
   async function renameProject(state, file, nomeInput) {
     const entry = state.dataset.progetti.get(file);
-    const nuovoNome = nomeInput !== undefined ? nomeInput : window.prompt('Nuovo nome del progetto:', entry.data.nome);
+    const nuovoNome = nomeInput !== undefined ? nomeInput : window.prompt('New project name:', entry.data.nome);
     if (!nuovoNome || !nuovoNome.trim()) return;
     entry.data.nome = nuovoNome.trim();
     const manifestVoce = state.dataset.manifest.progetti.find((p) => p.file === file);
@@ -68,7 +68,7 @@
     const result = teamInput !== undefined
       ? { team: teamInput }
       : await MP.modal.promptProjectForm({
-          title: 'Team di progetto',
+          title: 'Project team',
           nome: null,
           team: entry.data.team,
           teamRisorsa: state.dataset.teamRisorsa,
@@ -88,7 +88,7 @@
     const entry = state.dataset.progetti.get(file);
     if (!entry) return;
     const confermato = skipConfirm || window.confirm(
-      `Eliminare definitivamente il progetto "${entry.data.nome}" e il relativo file "${file}"? L'operazione non è reversibile (valuta prima un Backup).`
+      `Permanently delete the project "${entry.data.nome}" and its file "${file}"? This cannot be undone (consider a Backup first).`
     );
     if (!confermato) return;
 
@@ -98,7 +98,7 @@
     try {
       await MP.fsAccess.removeFile(state.dirHandle, file);
     } catch (e) {
-      window.alert(`Il progetto è stato rimosso dall'elenco ma non è stato possibile eliminare il file "${file}": ${e.message}`);
+      window.alert(`The project was removed from the list but the file "${file}" could not be deleted: ${e.message}`);
     }
     await persist(state, { manifest: true, projectFiles: [] });
   }

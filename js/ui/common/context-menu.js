@@ -51,7 +51,7 @@
     btn.type = 'button';
     btn.className = `row-menu-btn${extraClass ? ' ' + extraClass : ''}`;
     btn.textContent = '⋮';
-    btn.title = 'Azioni';
+    btn.title = 'Actions';
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       openMenu({ anchorEl: btn, actions });

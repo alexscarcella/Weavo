@@ -7,12 +7,12 @@
       await MP.saveCoordinator.saveProject(state, file);
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio: ${e.message}`);
+      window.alert(`Error saving: ${e.message}`);
     }
   }
 
   async function createBaseline(state, file, versioneInput) {
-    const versione = versioneInput !== undefined ? versioneInput : window.prompt('Nome/versione della nuova baseline:');
+    const versione = versioneInput !== undefined ? versioneInput : window.prompt('Name/version of the new baseline:');
     if (!versione || !versione.trim()) return;
     const progetto = state.dataset.progetti.get(file).data;
     progetto.baseline.push(MP.schema.createBaseline(versione.trim()));
@@ -20,7 +20,7 @@
   }
 
   async function renameBaseline(state, file, baseline, nuovoInput) {
-    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('Nuovo nome/versione della baseline:', baseline.versione);
+    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('New name/version of the baseline:', baseline.versione);
     if (!nuovo || !nuovo.trim()) return;
     baseline.versione = nuovo.trim();
     await persistProject(state, file);
@@ -29,7 +29,7 @@
   async function deleteBaseline(state, file, baseline, skipConfirm) {
     const progetto = state.dataset.progetti.get(file).data;
     const confermato = skipConfirm || window.confirm(
-      `Eliminare la baseline "${baseline.versione}" e tutti i suoi task? L'operazione non è reversibile.`
+      `Delete the baseline "${baseline.versione}" and all its tasks? This cannot be undone.`
     );
     if (!confermato) return;
     progetto.baseline = progetto.baseline.filter((b) => b !== baseline);

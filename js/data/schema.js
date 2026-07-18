@@ -26,11 +26,11 @@
   };
 
   const SEED_TEAM = [
-    { codice: 'dev', nome: 'Sviluppo', colore: '#00B050' },
+    { codice: 'dev', nome: 'Development', colore: '#00B050' },
     { codice: 'vv', nome: 'V&V', colore: '#FFC000' },
     { codice: 'devops', nome: 'DevOps', colore: '#2E86FF' },
-    { codice: 'run', nome: 'Team Run', colore: '#8E44AD' },
-    { codice: 'build', nome: 'Team Build', colore: '#D4AC0D' },
+    { codice: 'run', nome: 'Run Team', colore: '#8E44AD' },
+    { codice: 'build', nome: 'Build Team', colore: '#D4AC0D' },
   ];
 
   /**

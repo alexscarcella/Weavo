@@ -80,9 +80,9 @@
     const heatLegend = document.createElement('div');
     heatLegend.className = 'legend';
     [
-      ['load-1', '1 allocazione'],
-      ['load-2', '2 allocazioni'],
-      ['load-3plus', '> 2 allocazioni'],
+      ['load-1', '1 allocation'],
+      ['load-2', '2 allocations'],
+      ['load-3plus', '> 2 allocations'],
     ].forEach(([cls, testo]) => {
       const item = document.createElement('span');
       item.className = 'legend-item';
@@ -98,7 +98,7 @@
     if (teams.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'Nessuna risorsa in team-risorse.json.';
+      empty.textContent = 'No resources in team-risorse.json.';
       page.appendChild(empty);
       return page;
     }
@@ -110,7 +110,7 @@
     grid.style.gridTemplateColumns = `70px 170px repeat(${weeks.length}, 46px)`;
 
     grid.appendChild(headerCell('Sigla', 'col-1'));
-    grid.appendChild(headerCell('Nome', 'col-2'));
+    grid.appendChild(headerCell('Name', 'col-2'));
     for (const settimana of weeks) {
       grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
     }

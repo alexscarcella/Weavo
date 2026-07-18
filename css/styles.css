@@ -323,6 +323,13 @@ code {
   padding: 0.15rem 0; cursor: pointer;
 }
 .popover-milestone-field label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; cursor: pointer; }
+.popover-shift-buttons { display: flex; gap: 0.4rem; }
+.popover-shift-buttons button {
+  flex: 1; padding: 0.3rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid #aaa;
+  background: #f4f4f4; cursor: pointer;
+}
+.popover-shift-buttons button:hover:not(:disabled) { background: #e6e6e6; }
+.popover-shift-buttons button:disabled { opacity: 0.4; cursor: not-allowed; }
 .popover-warning {
   background: #fff3e0; border: 1px solid #ffb74d; border-radius: 4px;
   padding: 0.4rem 0.5rem; font-size: 0.78rem; margin-top: 0.3rem;

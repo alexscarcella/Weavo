@@ -136,7 +136,7 @@
       markLastEdited(affectedTasks, [settimana]);
       MP.store.setState({}); // dataset mutato in place: basta ri-notificare i subscriber
     } catch (e) {
-      window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);
+      window.alert(`Error saving "${file}": ${e.message}`);
     }
   }
 
@@ -155,7 +155,52 @@
       markLastEdited([task], weeksRange);
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio di "${file}": ${e.message}`);
+      window.alert(`Error saving "${file}": ${e.message}`);
+    }
+  }
+
+  // Sposta di una settimana (avanti/indietro) l'allocazione di una cella
+  // singola o dell'intero range selezionato (vedi js/model/week-shift.js per
+  // il predicato di ammissibilità e la mutazione), poi riapre il popover sulla
+  // nuova posizione: `MP.cellPopover` viene appeso a `document.body` (non
+  // dentro `#app`), quindi sopravvive al re-render completo di `app.js`, ma il
+  // suo `anchorEl` no — richiuderlo e riaprirlo sul nuovo div (ritrovato via
+  // `MP.ganttCell.getCellDiv`, popolato ad ogni render) è il modo più semplice
+  // per ottenere l'effetto "resta aperto, riposizionato" senza inseguire
+  // aggiornamenti in-place di un popover che si ricostruisce sempre da zero.
+  async function handleCellsShift({ state, file, task, baseline, weeks, direction }) {
+    const check = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, direction);
+    if (!check.allowed) return; // le frecce sono già disabilitate in questo caso
+
+    const milestoneWeeks = weeks.filter((w) => ((task.settimane || {})[w] || {}).milestone === true);
+    MP.weekShift.shiftWeeksData(task, weeks, direction);
+
+    const targets = weeks.map((w) => MP.weekUtils.addWeeks(w, direction));
+    let affectedTasks = [task];
+    for (const w of milestoneWeeks) {
+      if (baseline) affectedTasks = syncBaselineMilestone(baseline, task, MP.weekUtils.addWeeks(w, direction));
+    }
+
+    try {
+      await MP.saveCoordinator.saveProject(state, file);
+      markLastEdited(affectedTasks, [...weeks, ...targets]);
+      MP.store.setState({});
+      const anchorEl = MP.ganttCell.getCellDiv(task, targets[0]);
+      if (anchorEl) {
+        MP.cellPopover.openPopover({
+          anchorEl,
+          dataset: state.dataset,
+          task,
+          settimana: targets.length === 1 ? targets[0] : undefined,
+          weeksRange: targets.length > 1 ? targets : undefined,
+          onSave: (newEntry) => (targets.length > 1
+            ? handleBulkCellsSaved({ state, file, task, weeksRange: targets, newEntry })
+            : handleCellSaved({ state, file, task, baseline, settimana: targets[0], newEntry })),
+          onShift: (nextDirection) => handleCellsShift({ state, file, task, baseline, weeks: targets, direction: nextDirection }),
+        });
+      }
+    } catch (e) {
+      window.alert(`Error saving "${file}": ${e.message}`);
     }
   }
 
@@ -174,15 +219,15 @@
     const orfaniRiferimenti = findOrphanProjectRiferimenti(dataset);
     const righe = [
       ...dataset.warnings,
-      ...orfaniTeam.map((o) => `Team "${o.valore}" non definito — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
-      ...orfaniRisorsa.map((o) => `Sigla "${o.valore}" non in team-risorse.json — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
-      ...mismatch.map((m) => `Risorsa "${m.sigla}" è del team "${m.teamAssegnato}" ma qui allocata come "${m.teamCella}" — da regolarizzare — ${m.progetto} / BL ${m.baseline} / ${m.task} / ${m.settimana}`),
-      ...orfaniRiferimenti.map((o) => `Sigla "${o.valore}" (${o.campo}) non in team-risorse.json — referente progetto ${o.progetto}`),
+      ...orfaniTeam.map((o) => `Team "${o.valore}" not defined — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
+      ...orfaniRisorsa.map((o) => `Sigla "${o.valore}" not in team-risorse.json — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
+      ...mismatch.map((m) => `Resource "${m.sigla}" belongs to team "${m.teamAssegnato}" but is allocated here as "${m.teamCella}" — needs regularizing — ${m.progetto} / BL ${m.baseline} / ${m.task} / ${m.settimana}`),
+      ...orfaniRiferimenti.map((o) => `Sigla "${o.valore}" (${o.campo}) not in team-risorse.json — project reference ${o.progetto}`),
     ];
     if (!righe.length) return null;
     const div = document.createElement('div');
     div.className = 'warnings';
-    div.innerHTML = `<strong>Avvisi (${righe.length}):</strong><ul>${righe.map((r) => `<li>${r}</li>`).join('')}</ul>`;
+    div.innerHTML = `<strong>Warnings (${righe.length}):</strong><ul>${righe.map((r) => `<li>${r}</li>`).join('')}</ul>`;
     return div;
   }
 
@@ -206,11 +251,11 @@
     toolbarActions.innerHTML = `
       <label class="toggle-archiviati">
         <input type="checkbox" id="chk-archiviati" ${state.ui.mostraArchiviati ? 'checked' : ''}>
-        Mostra archiviati
+        Show archived
       </label>
       <label class="toggle-conclusi">
         <input type="checkbox" id="chk-conclusi" ${state.ui.mostraConclusi ? 'checked' : ''}>
-        Mostra conclusi
+        Show completed
       </label>`;
     toolbarActions.querySelector('#chk-archiviati').addEventListener('change', (e) => {
       MP.store.setState((s) => ({ ui: { ...s.ui, mostraArchiviati: e.target.checked } }));
@@ -226,7 +271,7 @@
     if (rows.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'Nessun task da visualizzare (dataset vuoto o tutti i progetti sono archiviati).';
+      empty.textContent = 'No tasks to display (empty dataset or all projects are archived).';
       page.appendChild(empty);
       return page;
     }
@@ -271,7 +316,7 @@
     edgeRight.appendChild(MP.weekControls.renderAddWeekButton(state));
     grid.appendChild(edgeRight);
 
-    grid.appendChild(headerCell('Attività / Team', 'col-1'));
+    grid.appendChild(headerCell('Project / Team', 'col-1'));
     grid.appendChild(headerCell('Baseline', 'col-2'));
     grid.appendChild(headerCell('Task', 'col-3'));
     grid.appendChild(headerCell('', null));
@@ -291,6 +336,7 @@
         allocationIndex,
         onCellSaved: handleCellSaved,
         onBulkCellsSaved: handleBulkCellsSaved,
+        onCellsShift: handleCellsShift,
         lastEdited,
       });
       if (currentWeekIndex !== -1) cells[3 + currentWeekIndex].classList.add('current-week-line');

@@ -8,19 +8,19 @@
       await MP.saveCoordinator.saveProject(state, file);
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio: ${e.message}`);
+      window.alert(`Error saving: ${e.message}`);
     }
   }
 
   async function createTask(state, file, baseline, nomeInput) {
-    const nome = nomeInput !== undefined ? nomeInput : window.prompt('Nome del nuovo task:');
+    const nome = nomeInput !== undefined ? nomeInput : window.prompt('Name of the new task:');
     if (!nome || !nome.trim()) return;
     baseline.task.push(MP.schema.createTask(nome.trim()));
     await persistProject(state, file);
   }
 
   async function renameTask(state, file, task, nuovoInput) {
-    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('Nuovo nome del task:', task.nome);
+    const nuovo = nuovoInput !== undefined ? nuovoInput : window.prompt('New task name:', task.nome);
     if (!nuovo || !nuovo.trim()) return;
     task.nome = nuovo.trim();
     await persistProject(state, file);
@@ -28,7 +28,7 @@
 
   async function deleteTask(state, file, baseline, task, skipConfirm) {
     const confermato = skipConfirm || window.confirm(
-      `Eliminare il task "${task.nome}" e tutte le sue allocazioni? L'operazione non è reversibile.`
+      `Delete the task "${task.nome}" and all its allocations? This cannot be undone.`
     );
     if (!confermato) return;
     baseline.task = baseline.task.filter((t) => t !== task);

@@ -40,7 +40,7 @@
     const renderers = {
       unsupported: renderUnsupported,
       'not-connected': renderNotConnected,
-      loading: () => renderMessage('Caricamento dataset in corso...'),
+      loading: () => renderMessage('Loading dataset...'),
       error: renderError,
       ready: renderReady,
     };
@@ -59,9 +59,9 @@
     const div = document.createElement('div');
     div.className = 'blocking-message';
     div.innerHTML = `
-      <h1>Browser non supportato</h1>
-      <p>Questa applicazione richiede la File System Access API, disponibile solo su
-      <strong>Chrome o Edge aggiornati</strong>. Apri questa pagina in uno di questi browser.</p>`;
+      <h1>Unsupported browser</h1>
+      <p>This application requires the File System Access API, available only on
+      <strong>up-to-date Chrome or Edge</strong>. Open this page in one of these browsers.</p>`;
     return div;
   }
 
@@ -74,15 +74,15 @@
     // motivo aggirabile lato JS.
     const lastFolderName = localStorage.getItem(LAST_FOLDER_KEY);
     const lastFolderHint = lastFolderName
-      ? `<p class="hint">Ultima cartella usata su questo PC: <strong>${escapeHtml(lastFolderName)}</strong></p>`
+      ? `<p class="hint">Last folder used on this PC: <strong>${escapeHtml(lastFolderName)}</strong></p>`
       : '';
     div.innerHTML = `
-      <h1>Connetti la cartella dati</h1>
-      <p>Seleziona la cartella dati (es. <code>/masterplan-data/</code>) condivisa per iniziare.</p>
-      <p class="hint">Il browser richiede di riselezionare la cartella a ogni apertura dell'app:
-      è un limite noto della tecnologia usata, non un errore.</p>
+      <h1>Connect the data folder</h1>
+      <p>Select the shared data folder (e.g. <code>/masterplan-data/</code>) to get started.</p>
+      <p class="hint">The browser requires you to re-select the folder every time the app is opened:
+      this is a known limitation of the technology used, not an error.</p>
       ${lastFolderHint}
-      <button id="btn-connect">Seleziona cartella dati</button>`;
+      <button id="btn-connect">Select data folder</button>`;
     div.querySelector('#btn-connect').addEventListener('click', connectToDirectory);
     return div;
   }
@@ -103,7 +103,7 @@
   function renderError(state) {
     const div = document.createElement('div');
     div.className = 'error-panel';
-    div.innerHTML = `<h1>Errore</h1><p>${state.error}</p><button id="btn-retry">Riprova</button>`;
+    div.innerHTML = `<h1>Error</h1><p>${state.error}</p><button id="btn-retry">Retry</button>`;
     div.querySelector('#btn-retry').addEventListener('click', () => setState({ status: 'not-connected' }));
     return div;
   }

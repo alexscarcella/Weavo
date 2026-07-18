@@ -30,7 +30,7 @@
       path: file,
       dataRef: entry,
       writeFn: () => MP.repository.saveProject(state.dirHandle, file, entry.data),
-      label: `progetto "${entry.data.nome}"`,
+      label: `project "${entry.data.nome}"`,
     });
   }
 

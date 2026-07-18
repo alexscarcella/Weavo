@@ -1,14 +1,14 @@
 // Menu a scomparsa nella top-bar: punto di accesso unico alle funzioni
-// dell'app (cambio vista, backup). Riusa MP.contextMenu per l'apertura/
-// chiusura del pannello invece di duplicarne la logica.
+// dell'app (cambio vista, backup, cambio cartella dati). Riusa MP.contextMenu
+// per l'apertura/chiusura del pannello invece di duplicarne la logica.
 (function (MP) {
   'use strict';
 
   const VIEWS = [
     { id: 'gantt', label: 'Master Plan' },
-    { id: 'carico-risorse', label: 'Carico risorse' },
-    { id: 'milestones', label: 'Milestone' },
-    { id: 'team-risorse', label: 'Team e risorse' },
+    { id: 'carico-risorse', label: 'Resource load' },
+    { id: 'milestones', label: 'Milestones' },
+    { id: 'team-risorse', label: 'Team & resources' },
   ];
 
   function renderHamburgerMenu(state) {
@@ -16,8 +16,8 @@
     btn.type = 'button';
     btn.className = 'hamburger-btn';
     btn.textContent = '☰';
-    btn.title = 'Menu funzioni';
-    btn.setAttribute('aria-label', 'Menu funzioni');
+    btn.title = 'Menu';
+    btn.setAttribute('aria-label', 'Menu');
     btn.setAttribute('aria-haspopup', 'true');
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -33,9 +33,10 @@
       separator: i === 0,
     }));
     return [
-      { label: '+ Nuovo progetto', onClick: () => createProject(state) },
+      { label: '+ New project', onClick: () => createProject(state) },
       ...viewActions,
       { label: '💾 Backup', onClick: () => runBackup(state), className: 'context-menu-item-action', separator: true },
+      { label: 'Change data folder…', onClick: () => changeDataFolder(state), separator: true },
     ];
   }
 
@@ -49,10 +50,21 @@
   async function runBackup(state) {
     try {
       const result = await MP.repository.createBackup(state.dirHandle);
-      MP.toast.showToast(`Backup salvato in ${result.folder} (${result.fileCount} file)`, { kind: 'success' });
+      MP.toast.showToast(`Backup saved to ${result.folder} (${result.fileCount} files)`, { kind: 'success' });
     } catch (e) {
-      MP.toast.showToast(`Errore durante il backup: ${e.message}`, { kind: 'error', duration: 6000 });
+      MP.toast.showToast(`Backup failed: ${e.message}`, { kind: 'error', duration: 6000 });
     }
+  }
+
+  // Rilascia l'handle della cartella dati corrente e riporta l'app alla schermata
+  // "not-connected" (stesso schermo del primo avvio), da cui l'utente sceglie una
+  // cartella diversa col normale pulsante "Select data folder" — nessuna logica di
+  // picker duplicata qui. Nessun dato viene toccato: è solo un cambio di sessione.
+  function changeDataFolder(state) {
+    const nomeCorrente = state.dirHandle ? state.dirHandle.name : 'the current folder';
+    const confermato = window.confirm(`Close "${nomeCorrente}" and choose a different data folder?`);
+    if (!confermato) return;
+    MP.store.setState({ status: 'not-connected', dirHandle: null, dataset: null });
   }
 
   // Nome della pagina corrente accanto al menu ☰ — stessa etichetta usata nel menu.

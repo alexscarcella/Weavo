@@ -48,6 +48,161 @@ Prefer working from source (e.g. to track `main` or contribute)?
 3. When prompted, pick a data folder. To try the app without setting up your own data, point it
    at the bundled [`sample-data/`](sample-data/) folder, which ships with a full example dataset.
 
+## Guide for non-technical users (first install, setup, and daily use)
+
+This section assumes no technical background: it explains how to install the app, set up the
+data folder for the first time, and use it day to day. The app's interface is in English, so the
+on-screen labels quoted below (menu items, buttons) are the exact text you'll see.
+
+### How it works, in short
+
+- It's not a program you install, and there's no server behind it: it's a single web page
+  (`index.html`) that runs in your browser.
+- There's no "database" sitting somewhere on a server: all the data — projects, baselines,
+  tasks, weekly allocations, teams and resources — is stored as plain text files (JSON) inside a
+  folder you choose, typically a shared OneDrive folder or a company network path. **The folder
+  is the database.**
+- On opening, the app asks which folder to use. From then on, every change you make (assigning a
+  resource to a task, creating a project, moving a resource between teams…) is written
+  immediately to one of the files in that folder — there's no separate "Save" button, it saves
+  itself on every edit.
+- Several people can work on the same shared folder (e.g. via OneDrive), but not in real time
+  like an online document: if a colleague saves a change to the same file while you still have it
+  open, the app notices and asks for confirmation before overwriting, so no one's change is ever
+  silently lost.
+
+### 1. Installation
+
+1. Download the latest `weavo-vX.Y.zip` package from the
+   [Releases page](https://github.com/alexscarcella/Weavo/releases) (you need an account with
+   access to the repository, which is private).
+2. Extract the zip into any folder on your PC (e.g. `Documents\Weavo`). This folder contains only
+   the **application**, not your data.
+3. No installer is needed and you don't need administrator rights: it's just a set of
+   HTML/CSS/JavaScript files.
+4. To upgrade to a newer version later, repeat the same steps with the new zip. Your data doesn't
+   live inside this folder, so updating the application never touches your data.
+
+### 2. Requirements
+
+- **Google Chrome or Microsoft Edge**, up to date. The app does not work in Firefox or Safari.
+- A **shared folder** that everyone who needs to collaborate can read and write to — typically a
+  shared OneDrive folder, or a company network path. No server or database to install or
+  configure.
+
+### 3. Set up the data folder (one-time setup)
+
+Pick one of two paths:
+
+**A. Start from the sample data (recommended to get comfortable first)**
+Copy the entire [`sample-data/`](sample-data/) folder, included in the downloaded zip, into the
+shared location you want to use, and rename it as you like. It already contains sample projects,
+teams and resources — handy for exploring the app before putting real data in it, and as a
+starting point to clear out and adapt later.
+
+**B. Start from an empty data folder**
+Create an empty shared folder containing:
+
+- a `manifest.json` file with this minimal content:
+
+  ```json
+  {
+    "schemaVersion": 1,
+    "settimane": { "prima": "2026-01-05", "ultima": "2026-12-28" },
+    "progetti": []
+  }
+  ```
+
+  (`prima`/`ultima` are two Monday dates that bound the planning date range; you can extend it
+  later from within the app itself, using the buttons at the edges of the grid, without ever
+  touching this file by hand again)
+- a `team-risorse.json` file with this minimal content:
+
+  ```json
+  { "team": [] }
+  ```
+
+- an empty subfolder called `progetti`
+
+From there on, teams, resources and projects are all created from within the app — no more
+hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the full file structure.
+
+### 4. Open the app and connect it to the data folder
+
+1. In the folder where you extracted the zip, double-click `index.html`: it opens in your default
+   browser (which must be Chrome or Edge).
+2. On the first screen, click **"Select data folder"** and pick the shared folder you set up in
+   step 3.
+3. The browser may ask you to confirm access to that folder: confirm it.
+4. **Important:** this choice is *not* remembered by the browser between app openings — that's a
+   limitation of the underlying technology (see "Requirements" above), not a flaw in the app.
+   Every time you open `index.html` you'll need to re-select the folder; the app does show the
+   name of the last folder used on that PC as a reminder (technical details in
+   [`docs/deployment.md`](docs/deployment.md#no-persisted-connection)).
+5. Practical tip: create a desktop shortcut to `index.html`, so opening the app only takes a
+   double-click plus the folder selection.
+
+### 5. Daily use
+
+- The **☰** menu in the top-left corner is the entry point for every function: switching pages
+  ("Master Plan" / "Resource load" / "Milestones" / "Team & resources"), creating a new project
+  ("**+ New project**"), running a backup ("**💾 Backup**"), and closing the current data folder to
+  pick another one ("**Change data folder…**").
+- **Create a project:** ☰ menu → *"+ New project"* → fill in the name and, optionally, the
+  project's referents.
+- **Add a baseline/release to a project:** click the "⋮" icon on the project's row →
+  *"+ New baseline"*.
+- **Add a task to a baseline:** same "⋮" menu on the baseline's row → *"+ New task"*.
+- **Allocate a resource to a task for a given week:** double-click the corresponding cell in the
+  grid. A popup opens: pick the team first, then the resources belonging to that team, and
+  optionally check *"Delivery milestone"* if that week is the baseline's release date. The popup
+  saves itself when closed — there's no "Confirm" button.
+- **Select several weeks at once:** click the first cell, then shift-click the last one on the
+  same row, to apply the same allocation to the whole range in a single save.
+- **Manage teams and resources** (create/rename/recolor a team; create/rename/move/delete a
+  resource): ☰ menu → *"Team & resources"*.
+- The **"Resource load"** (who's over-allocated, with traffic-light colors) and **"Milestones"**
+  (release calendar) pages are read-only: they're for checking, not editing. The header shared by
+  every page also shows a running count of upcoming baselines (release milestones due from today
+  onward), so you don't need to open the Milestones page just to see how many are coming up.
+- **Switch to a different data folder:** ☰ menu → *"Change data folder…"* → confirm. This closes
+  the current folder (no data is touched) and takes you back to the folder-selection screen, where
+  you pick a different one with the usual button.
+- Cells showing a warning symbol (`?`, `!`, `⚠`) flag "orphan" references (a team or resource
+  mentioned but no longer present under *"Team & resources"*) or a resource allocated twice in the
+  same week across different projects — these don't block your work, but are worth checking.
+
+### 6. Backups
+
+- Backups are **not automatic**: you have to trigger one by hand from ☰ menu → **💾 Backup**.
+- Each backup creates a new `backup/YYYYMMDD_HHMMSS/` subfolder (backup date and time) inside the
+  same data folder, containing a copy of every file at that moment (`manifest.json`,
+  `team-risorse.json`, and every project).
+- **Tip:** run a backup before any large or risky change — e.g. before moving many resources
+  between teams, before a data import, or simply before a long working session.
+- **Restoring a backup is a manual operation:** the app has no "Restore" button. You need to copy
+  the files from the chosen backup subfolder (`backup/YYYYMMDD_HHMMSS/`) over the current files in
+  the data folder (`manifest.json`, `team-risorse.json`, the contents of `progetti/`), overwriting
+  them. Do this with the app closed for every user, to avoid write conflicts during the copy.
+- If the data folder lives on OneDrive, you likely also have an additional, independent safety
+  net beyond these manual backups (OneDrive's per-file "Version history") — but don't rely on
+  that alone: still use the app's backup function before risky operations, since it restores the
+  whole dataset in one shot rather than file by file.
+
+### 7. FAQ / things to know
+
+- **"I closed and reopened the app and it's asking for the folder again"** — expected, see step
+  4: it's a browser limitation when the app is opened as a plain file, not a malfunction.
+- **"A colleague was working at the same time and the app is warning me about a conflict"** —
+  someone saved a change to the same file after you had it open. Only confirm if you're sure you
+  want to overwrite their change; otherwise cancel, reload the page (re-selecting the folder), and
+  reapply your change on top of the more recent one.
+- **"The app won't open, or errors right away"** — check that you're using an up-to-date Chrome or
+  Edge; Firefox and Safari are not supported.
+- The JSON files inside the data folder are plain, readable text and can even be hand-edited with
+  a text editor in an emergency — but this is discouraged unless necessary: a formatting mistake
+  can make the file unreadable to the app.
+
 ## Data model
 
 ```

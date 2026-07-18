@@ -5,6 +5,15 @@
 // applica solo team+risorse, la milestone resta un concetto per singola
 // settimana). Salvataggio automatico alla chiusura (nessun bottone "salva"
 // separato), con avviso non bloccante su doppia allocazione.
+//
+// Due frecce (sia in modalità singola sia in modalità range) spostano di una
+// settimana avanti/indietro l'allocazione attualmente salvata (vedi
+// js/model/week-shift.js) — un'azione indipendente dal salvataggio-alla-
+// chiusura: al click chiamano subito `onShift(direction)` e non toccano i
+// campi del form (eventuali modifiche non salvate a team/risorse restano
+// pendenti, non vengono spostate). Disabilitate con tooltip quando il task è
+// concluso, si uscirebbe dal range di settimane esistente, o la cella di
+// destinazione nello stesso task contiene già un'allocazione.
 (function (MP) {
   'use strict';
 
@@ -55,12 +64,15 @@
   // singola `settimana`. In quel caso i valori iniziali vengono presi dalla
   // prima settimana del range ("cella ancora") e propagati identici a tutte
   // le settimane del range al salvataggio — la milestone resta esclusa.
-  function openPopover({ anchorEl, dataset, task, settimana, weeksRange, onSave }) {
+  function openPopover({ anchorEl, dataset, task, settimana, weeksRange, onSave, onShift }) {
     closeExisting();
 
     const weeks = weeksRange && weeksRange.length ? weeksRange : [settimana];
     const isBulk = weeks.length > 1;
     const anchorWeek = weeks[0];
+
+    const leftCheck = onShift ? MP.weekShift.canShiftWeeks(dataset, task, weeks, -1) : { allowed: false };
+    const rightCheck = onShift ? MP.weekShift.canShiftWeeks(dataset, task, weeks, 1) : { allowed: false };
 
     const entry = (task.settimane || {})[anchorWeek] || {};
     let selectedTeam = entry.team || '';
@@ -85,24 +97,31 @@
       : 0;
 
     pop.innerHTML = `
-      ${isBulk ? `<p class="popover-bulk-hint">Allocazione su ${weeks.length} settimane, dal ${formatWeekLabel(weeks[0])}
-        al ${formatWeekLabel(weeks[weeks.length - 1])}${altreDiverse ? ` — sovrascrive ${altreDiverse} settimane con dati diversi` : ''}.</p>` : ''}
+      ${isBulk ? `<p class="popover-bulk-hint">Allocation over ${weeks.length} weeks, from ${formatWeekLabel(weeks[0])}
+        to ${formatWeekLabel(weeks[weeks.length - 1])}${altreDiverse ? ` — overwrites ${altreDiverse} weeks with different data` : ''}.</p>` : ''}
       <div class="popover-field">
         <label>Team</label>
         <select class="popover-team">
-          <option value="">— nessuno —</option>
+          <option value="">— none —</option>
           ${teamOptions}
         </select>
       </div>
       <div class="popover-field">
-        <label>Risorse</label>
+        <label>Resources</label>
         <div class="popover-risorse-list"></div>
       </div>
       ${isBulk ? '' : `<div class="popover-field popover-milestone-field">
-        <label><input type="checkbox" class="popover-milestone" ${selectedMilestone ? 'checked' : ''}> Milestone di consegna</label>
+        <label><input type="checkbox" class="popover-milestone" ${selectedMilestone ? 'checked' : ''}> Delivery milestone</label>
       </div>`}
+      ${onShift ? `<div class="popover-field popover-shift-field">
+        <label>Shift by one week</label>
+        <div class="popover-shift-buttons">
+          <button type="button" class="popover-shift-left" ${leftCheck.allowed ? '' : `disabled title="${leftCheck.reason}"`}>◀</button>
+          <button type="button" class="popover-shift-right" ${rightCheck.allowed ? '' : `disabled title="${rightCheck.reason}"`}>▶</button>
+        </div>
+      </div>` : ''}
       <div class="popover-conflicts"></div>
-      <p class="hint popover-hint">Chiudi (clic fuori o Esc) per salvare.</p>
+      <p class="hint popover-hint">Close (click outside or Esc) to save.</p>
     `;
 
     document.body.appendChild(pop);
@@ -118,7 +137,7 @@
           const refs = findAllocations(index, sigla, w).filter((r) => r.taskRef !== task);
           for (const ref of refs) {
             const settimanaLabel = isBulk ? ` (${formatWeekLabel(w)})` : '';
-            righe.push(`<strong>${sigla}</strong>${settimanaLabel} già allocata su ${ref.progettoNome} / BL ${ref.baselineVersione} / ${ref.taskNome}`);
+            righe.push(`<strong>${sigla}</strong>${settimanaLabel} already allocated to ${ref.progettoNome} / BL ${ref.baselineVersione} / ${ref.taskNome}`);
           }
         }
       }
@@ -134,7 +153,7 @@
     function renderRisorseList() {
       const team = MP.schema.findTeamByCodice(dataset.teamRisorsa, selectedTeam);
       if (!team) {
-        risorseListEl.innerHTML = '<span class="hint">Seleziona un team per scegliere le risorse.</span>';
+        risorseListEl.innerHTML = '<span class="hint">Select a team to choose resources.</span>';
         return;
       }
       for (const sigla of [...selectedRisorse]) {
@@ -146,7 +165,7 @@
               <input type="checkbox" value="${r.sigla}" ${selectedRisorse.has(r.sigla) ? 'checked' : ''}>
               <span>${r.sigla} — ${r.nome}</span>
             </label>`).join('')
-        : '<span class="hint">Nessuna risorsa in questo team.</span>';
+        : '<span class="hint">No resources in this team.</span>';
       risorseListEl.querySelectorAll('.popover-risorsa input').forEach((cb) => {
         cb.addEventListener('change', (e) => {
           if (e.target.checked) selectedRisorse.add(e.target.value);
@@ -167,6 +186,13 @@
         selectedMilestone = e.target.checked;
       });
     }
+    // Lo shift è un'azione immediata e indipendente dal salvataggio-alla-
+    // chiusura: opera sul dato attualmente persistito in task.settimane, non
+    // su eventuali modifiche non salvate ai campi team/risorse del form.
+    const shiftLeftBtn = pop.querySelector('.popover-shift-left');
+    if (shiftLeftBtn) shiftLeftBtn.addEventListener('click', () => onShift(-1));
+    const shiftRightBtn = pop.querySelector('.popover-shift-right');
+    if (shiftRightBtn) shiftRightBtn.addEventListener('click', () => onShift(1));
 
     renderRisorseList();
     refreshConflicts();

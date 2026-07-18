@@ -13,7 +13,7 @@
       await MP.saveCoordinator.saveTeamRisorsa(state);
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio di team-risorse.json: ${e.message}`);
+      window.alert(`Error saving team-risorse.json: ${e.message}`);
     }
   }
 
@@ -22,16 +22,16 @@
   }
 
   async function createTeam(state, codiceInput, nomeInput, coloreInput) {
-    const codice = codiceInput !== undefined ? codiceInput : window.prompt('Codice del nuovo team (identificatore tecnico stabile, es. "qa"):');
+    const codice = codiceInput !== undefined ? codiceInput : window.prompt('Code of the new team (stable technical identifier, e.g. "qa"):');
     if (!codice || !codice.trim()) return;
     const codiceTrim = codice.trim();
     if (existingCodici(state.dataset.teamRisorsa).has(codiceTrim)) {
-      window.alert(`Esiste già un team con codice "${codiceTrim}".`);
+      window.alert(`A team with code "${codiceTrim}" already exists.`);
       return;
     }
-    const nome = nomeInput !== undefined ? nomeInput : window.prompt('Nome leggibile del team:');
+    const nome = nomeInput !== undefined ? nomeInput : window.prompt('Readable name of the team:');
     if (!nome || !nome.trim()) return;
-    const colore = coloreInput !== undefined ? coloreInput : await MP.modal.promptColor({ title: 'Colore del nuovo team', value: '#2E86FF' });
+    const colore = coloreInput !== undefined ? coloreInput : await MP.modal.promptColor({ title: 'Color of the new team', value: '#2E86FF' });
     if (!colore || !colore.trim()) return;
     state.dataset.teamRisorsa.team.push({ codice: codiceTrim, nome: nome.trim(), colore: colore.trim(), risorse: [] });
     await persist(state);
@@ -40,7 +40,7 @@
   async function renameTeam(state, codice, nuovoNomeInput) {
     const team = MP.schema.findTeamByCodice(state.dataset.teamRisorsa, codice);
     if (!team) return;
-    const nuovoNome = nuovoNomeInput !== undefined ? nuovoNomeInput : window.prompt('Nuovo nome leggibile:', team.nome);
+    const nuovoNome = nuovoNomeInput !== undefined ? nuovoNomeInput : window.prompt('New readable name:', team.nome);
     if (!nuovoNome || !nuovoNome.trim()) return;
     team.nome = nuovoNome.trim();
     await persist(state);
@@ -49,7 +49,7 @@
   async function recolorTeam(state, codice, nuovoColoreInput) {
     const team = MP.schema.findTeamByCodice(state.dataset.teamRisorsa, codice);
     if (!team) return;
-    const nuovoColore = nuovoColoreInput !== undefined ? nuovoColoreInput : await MP.modal.promptColor({ title: `Colore del team "${team.nome}"`, value: team.colore });
+    const nuovoColore = nuovoColoreInput !== undefined ? nuovoColoreInput : await MP.modal.promptColor({ title: `Color of team "${team.nome}"`, value: team.colore });
     if (!nuovoColore || !nuovoColore.trim()) return;
     team.colore = nuovoColore.trim();
     await persist(state);
@@ -60,12 +60,12 @@
     if (!team) return;
     if ((team.risorse || []).length > 0) {
       window.alert(
-        `Impossibile eliminare il team "${team.nome}": ha ancora ${team.risorse.length} risorse assegnate. Spostale in un altro team o eliminale prima di eliminare il team.`
+        `Cannot delete team "${team.nome}": it still has ${team.risorse.length} resources assigned. Move or delete them before deleting the team.`
       );
       return;
     }
     const confermato = window.confirm(
-      `Eliminare il team "${team.nome}" (${codice})? I task che lo referenziano resteranno con un codice orfano (segnalato come avviso), non vengono modificati automaticamente.`
+      `Delete team "${team.nome}" (${codice})? Tasks referencing it will keep an orphan code (flagged as a warning) and are not modified automatically.`
     );
     if (!confermato) return;
     state.dataset.teamRisorsa.team = state.dataset.teamRisorsa.team.filter((t) => t.codice !== codice);

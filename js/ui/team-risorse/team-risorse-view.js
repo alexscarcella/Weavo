@@ -30,9 +30,9 @@
     row.appendChild(nome);
 
     row.appendChild(createMenuButton([
-      { label: 'Rinomina risorsa', onClick: () => MP.resourceCrud.renameResource(state, risorsa.sigla) },
-      { label: 'Sposta in altro team', onClick: () => MP.resourceCrud.moveResource(state, risorsa.sigla) },
-      { label: 'Elimina risorsa', danger: true, onClick: () => MP.resourceCrud.deleteResource(state, risorsa.sigla) },
+      { label: 'Rename resource', onClick: () => MP.resourceCrud.renameResource(state, risorsa.sigla) },
+      { label: 'Move to another team', onClick: () => MP.resourceCrud.moveResource(state, risorsa.sigla) },
+      { label: 'Delete resource', danger: true, onClick: () => MP.resourceCrud.deleteResource(state, risorsa.sigla) },
     ]));
 
     return row;
@@ -51,12 +51,12 @@
     header.appendChild(titolo);
     const conteggio = document.createElement('span');
     conteggio.className = 'hint';
-    conteggio.textContent = `${team.risorse.length} risorse`;
+    conteggio.textContent = `${team.risorse.length} resources`;
     header.appendChild(conteggio);
     header.appendChild(createMenuButton([
-      { label: 'Rinomina team', onClick: () => MP.teamCrud.renameTeam(state, team.codice) },
-      { label: 'Cambia colore', onClick: () => MP.teamCrud.recolorTeam(state, team.codice) },
-      { label: 'Elimina team', danger: true, onClick: () => MP.teamCrud.deleteTeam(state, team.codice) },
+      { label: 'Rename team', onClick: () => MP.teamCrud.renameTeam(state, team.codice) },
+      { label: 'Change color', onClick: () => MP.teamCrud.recolorTeam(state, team.codice) },
+      { label: 'Delete team', danger: true, onClick: () => MP.teamCrud.deleteTeam(state, team.codice) },
     ]));
     card.appendChild(header);
 
@@ -65,7 +65,7 @@
     if (team.risorse.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'Nessuna risorsa in questo team.';
+      empty.textContent = 'No resources in this team.';
       risorseWrap.appendChild(empty);
     } else {
       team.risorse.forEach((risorsa) => risorseWrap.appendChild(renderResourceRow(state, team, risorsa)));
@@ -75,7 +75,7 @@
     const addBtn = document.createElement('button');
     addBtn.type = 'button';
     addBtn.className = 'btn-nuova-risorsa';
-    addBtn.textContent = '+ Nuova risorsa';
+    addBtn.textContent = '+ New resource';
     addBtn.addEventListener('click', () => MP.resourceCrud.createResource(state, team.codice));
     card.appendChild(addBtn);
 
@@ -91,12 +91,12 @@
     toolbar.className = 'gantt-toolbar';
     const info = document.createElement('span');
     info.className = 'dataset-info';
-    info.textContent = 'Team e risorse — ogni risorsa appartiene a esattamente un team.';
+    info.textContent = 'Team & resources — every resource belongs to exactly one team.';
     toolbar.appendChild(info);
     const addTeamBtn = document.createElement('button');
     addTeamBtn.type = 'button';
     addTeamBtn.className = 'btn-nuovo-tipo';
-    addTeamBtn.textContent = '+ Nuovo team';
+    addTeamBtn.textContent = '+ New team';
     addTeamBtn.addEventListener('click', () => MP.teamCrud.createTeam(state));
     toolbar.appendChild(addTeamBtn);
     page.appendChild(toolbar);
@@ -104,7 +104,7 @@
     if (dataset.teamRisorsa.team.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'Nessun team in team-risorse.json.';
+      empty.textContent = 'No teams in team-risorse.json.';
       page.appendChild(empty);
       return page;
     }

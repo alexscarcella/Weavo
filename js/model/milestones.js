@@ -56,5 +56,17 @@
     return rows;
   }
 
-  MP.milestones = { computeBaselineMilestones };
+  // Conteggio delle baseline la cui milestone di rilascio "effettiva" (vedi sopra) cade da
+  // oggi in avanti — usato dall'header condiviso gantt/carico-risorse (dataset-header.js) per
+  // dare visibilità immediata a quante consegne restano da fare, senza dover apre la pagina
+  // Milestone. Confronto per stringa ISO (YYYY-MM-DD), valido perché entrambe le date sono
+  // nello stesso formato.
+  function countUpcomingBaselines(dataset, mostraArchiviati) {
+    const todayIso = MP.weekUtils.getTodayIso();
+    return computeBaselineMilestones(dataset, mostraArchiviati)
+      .filter((row) => row.settimana && row.settimana >= todayIso)
+      .length;
+  }
+
+  MP.milestones = { computeBaselineMilestones, countUpcomingBaselines };
 })(window.MP = window.MP || {});

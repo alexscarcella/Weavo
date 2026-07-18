@@ -52,6 +52,18 @@ If a future task reconsiders adding a local dev server, these constraints could 
 (real ES modules, IndexedDB) — but treat that as an explicit scope change to confirm with the
 user, never assume it.
 
+## UI language
+
+All user-facing text (button/menu labels, headings, tooltips, `window.alert`/`confirm`/`prompt`
+messages, placeholder/hint text) is **English** — the app targets an English-speaking user. This
+was a deliberate one-time sweep (July 2026) of every string rendered to the screen; new UI text
+must be written in English too. This does **not** extend to: JSON field names in the data model
+(`sigla`, `nome`, `settimane`, `codice`, `versione`, `progetti`, etc. — kept in Italian for
+historical reasons, see [docs/glossary.md](docs/glossary.md)), internal state/variable identifiers
+(`state.ui.vistaCorrente`, `mostraArchiviati`, `carico-risorse`, …), or code comments (this
+codebase's comments stay in Italian, written by/for the maintainer). Only what a user actually
+reads on screen needs to be English.
+
 ## Running / testing
 
 There is no build, dev server, or automated test suite in this repo. To run the app: open
@@ -126,7 +138,7 @@ exactly **one** team — this is a real 1-team-to-N-resources relationship, not 
 resources are nested inside their team in `team-risorse.json`, never listed independently.
 
 ```json
-{ "team": [ { "codice": "dev", "nome": "Sviluppo", "colore": "#00B050", "risorse": [ { "sigla": "LC", "nome": "Luca Cozzi" } ] } ] }
+{ "team": [ { "codice": "dev", "nome": "Development", "colore": "#00B050", "risorse": [ { "sigla": "LC", "nome": "Luca Cozzi" } ] } ] }
 ```
 
 - All CRUD for teams and resources is centralized in the dedicated page
@@ -200,12 +212,12 @@ Each project's `team` field (`progetti/<slug>.json`) is a structured object, not
   per-team `<optgroup>`s) — used both for project creation (`MP.projectCrud.createProject`, which
   now opens this form for the name *and* all team fields in one step, since the button that used
   to live in the gantt toolbar moved into the hamburger menu — see `toolbar.js` below) and for the
-  existing "Team di progetto…" row-menu edit action (`MP.projectCrud.editTeam`, `project-crud.js`).
+  existing "Project team…" row-menu edit action (`MP.projectCrud.editTeam`, `project-crud.js`).
 - Read-only view: the "i" icon rendered by `gantt-row.js` immediately before the project name
   (only on the row where the name itself is shown) opens `MP.modal.showProjectCard`, listing name,
   archived status, baseline/task counts, and all 5 team fields with the two sigla references
-  resolved to a name. No "Modifica" action inside it by design — editing stays solely in the "Team
-  di progetto…" row-menu entry, so there's exactly one write path for this field.
+  resolved to a name. No "Edit" action inside it by design — editing stays solely in the "Project
+  team…" row-menu entry, so there's exactly one write path for this field.
 - A `solutionAnalyst`/`vvReference` sigla that no longer exists in `team-risorse.json` is an
   **orphan reference**, same non-blocking-warning treatment as the task-level ones —
   `MP.validation.findOrphanProjectRiferimenti`, surfaced in the gantt warnings panel.
@@ -262,7 +274,14 @@ inserted at the right point in that list. Layers, low → high:
    from the (possibly duplicated/inconsistent) `milestone: true` flags across its tasks — the mode
    across all tasks that have one set, reading concluso tasks too since this is read-only
    derivation, not the write-side sync in `gantt-view.js`; flags a baseline `inconsistent` if its
-   tasks disagree on the week, without correcting the underlying data — feeds the milestones page).
+   tasks disagree on the week, without correcting the underlying data — feeds the milestones page;
+   `countUpcomingBaselines` filters those same rows to `settimana >= getTodayIso()` — a simple ISO
+   string compare, valid since both sides are `YYYY-MM-DD` — and feeds the "upcoming baselines"
+   count in the shared `dataset-header.js`, so gantt/carico-risorse users see it without opening
+   the Milestones page). `week-utils.js` also exports `getTodayIso()` (today's date, recomputed
+   from the browser clock on every call, never persisted) alongside the pre-existing
+   `getCurrentWeekIso()` (the Monday of the week containing today) — `countUpcomingBaselines` uses
+   the former since a release date is a specific day, not a week-column highlight.
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs:
      `confirmConflict` for save conflicts, `promptText`/`promptColor` single-field prompts, plus
@@ -270,25 +289,32 @@ inserted at the right point in that list. Layers, low → high:
      — kept as bespoke functions rather than a generic form-builder since they're the only
      multi-field use case so far), `toast.js` (non-blocking notifications), `context-menu.js` (the
      "⋮" action menu used by every CRUD row action), `toolbar.js` (top-bar hamburger menu — the
-     single entry point for view switching / backup / "+ Nuovo progetto", reuses `context-menu`
-     rather than duplicating open/close logic; project creation is reachable from every page, not
-     just the gantt one, so after a successful create it switches `state.ui.vistaCorrente` to
-     `gantt` so the result is visible — plus `renderPageTitle`, a small label next to the hamburger
-     showing the current view's name, sourced from the same `VIEWS` list used to build the menu
-     so the two never drift apart: `gantt` → "Master Plan", `carico-risorse` → "Carico risorse",
-     `milestones` → "Milestone", `team-risorse` → "Team e risorse"; `.page-title`'s font-size is
+     single entry point for view switching / backup / "+ New project" / "Change data folder…",
+     reuses `context-menu` rather than duplicating open/close logic; project creation is reachable
+     from every page, not just the gantt one, so after a successful create it switches
+     `state.ui.vistaCorrente` to `gantt` so the result is visible; "Change data folder…" (after a
+     `window.confirm`) resets `state` to `{ status: 'not-connected', dirHandle: null, dataset: null }`
+     — no dedicated disconnect logic in `app.js`, it just reuses the existing `not-connected` screen
+     and its "Select data folder" button/picker flow, since releasing the handle and re-running
+     `connectToDirectory` needs no special-casing — plus `renderPageTitle`, a small label next to
+     the hamburger showing the current view's name, sourced from the same `VIEWS` list used to
+     build the menu so the two never drift apart: `gantt` → "Master Plan", `carico-risorse` →
+     "Resource load", `milestones` → "Milestones", `team-risorse` → "Team & resources" (internal
+     `state.ui.vistaCorrente` codes stay the original Italian identifiers — only the displayed
+     `label` is English, see "UI language" above); `.page-title`'s font-size is
      tuned in CSS to make its box the same height as `.hamburger-btn` next to it, since it has no
      padding/border of its own to match the button's box with), `dataset-header.js` (the
      header shared by the gantt, resource-load, and milestones pages: a `.gantt-toolbar` info
      line — connected folder name (`state.dirHandle.name`; the File System Access API never
      exposes an absolute filesystem path, see Hard Constraints/`app.js` — this is the closest
      available proxy for "which data folder is this") + week range + task-row count + project
-     count, computed via `MP.ganttView.buildRows` so all pages report the exact same numbers —
-     plus the team-color legend from `legend.js`; takes
+     count + upcoming-baseline count (`MP.milestones.countUpcomingBaselines`, release week ≥ today —
+     see `milestones.js` above), computed via `MP.ganttView.buildRows` so all pages report the exact
+     same numbers — plus the team-color legend from `legend.js`; takes
      an optional extra element to append to the info line, used by the gantt page for its
-     archiviati/conclusi toggles (the "+ Nuovo progetto" button that used to live here moved to
+     archiviati/conclusi toggles (the "+ New project" button that used to live here moved to
      the hamburger menu, see `toolbar.js` above), and by the milestones page for its
-     "Totale rilasci nel periodo" counter), `app-header.js` (static brand header — logo, "Weavo" title,
+     "Total releases in period" counter), `app-header.js` (static brand header — logo, "Weavo" title,
      version, copyright — rendered once into `#app-header` from `app.js`'s `bootstrap()`,
      outside the `state.status` render cycle since its content never changes; present on every
      screen including `not-connected`/`unsupported`/`error`, not just the `ready` views).
@@ -356,7 +382,7 @@ inserted at the right point in that list. Layers, low → high:
      (create/rename/recolor/delete team; create/rename/move/delete resource within a team) — the
      only place in the UI where `team-risorse.json` is edited.
    - `milestones/milestones-view.js`: read-only report on the density of baseline release
-     milestones across the calendar, one row per baseline (fixed columns "Attività"/"Baseline"
+     milestones across the calendar, one row per baseline (fixed columns "Project"/"Baseline"
      only — no per-task row, since `MP.milestones.computeBaselineMilestones` already collapses
      each baseline to its single effective release week) instead of the gantt's per-task rows;
      same week columns/range as gantt and carico-risorse (`MP.weekUtils.getWeeksInRange`) and the
@@ -367,8 +393,9 @@ inserted at the right point in that list. Layers, low → high:
      team mismatches). Below the grid — inside the same `.gantt-scroll` so it scrolls horizontally
      in sync without any dedicated sync code — a bar-chart row (`.milestone-histogram`) of releases
      per week, outside the `.gantt-grid` itself because CSS Grid's `grid-auto-rows: 24px` is too
-     short for readable bars. The total release count feeds the "Totale rilasci nel periodo"
-     counter passed as `dataset-header.js`'s extra element.
+     short for readable bars. The total release count feeds the "Total releases in period"
+     counter passed as `dataset-header.js`'s extra element (distinct from the header's own
+     "upcoming baselines" count, which is scoped to today-and-later rather than the whole period).
    - `weeks/week-controls.js`: exports two standalone edge-button renderers (no combined control
      bar, no count input). `gantt-view.js` places them **inside the weeks grid itself**, in an
      extra row above the column-label row (`.gantt-cell.week-edge-row`, class `has-week-edge-row`

@@ -1,7 +1,7 @@
 // Vista milestone: densità delle scadenze di rilascio baseline sul calendario.
 // Stesse settimane di gantt/carico-risorse (MP.weekUtils.getWeeksInRange) e
 // stesso header condiviso (MP.datasetHeader), ma righe ridotte a una per
-// baseline (colonne fisse "Attività" + "Baseline", niente Task/Team) — il dato
+// baseline (colonne fisse "Project" + "Baseline", niente Task/Team) — il dato
 // mostrato è la settimana di rilascio derivata da MP.milestones (vedi
 // js/model/milestones.js) leggendo i task della baseline, mai un editing
 // affordance: sola lettura, come carico-risorse. In fondo alla griglia una
@@ -53,13 +53,13 @@
 
     const counterEl = document.createElement('span');
     counterEl.className = 'milestone-counter';
-    counterEl.textContent = `Totale rilasci nel periodo: ${totalRilasci}`;
+    counterEl.textContent = `Total releases in period: ${totalRilasci}`;
     page.appendChild(MP.datasetHeader.renderDatasetHeader(state, counterEl));
 
     if (totalRilasci === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'Nessuna baseline ha una milestone di rilascio impostata nel periodo.';
+      empty.textContent = 'No baseline has a release milestone set in this period.';
       page.appendChild(empty);
       return page;
     }
@@ -70,7 +70,7 @@
     grid.className = 'gantt-grid';
     grid.style.gridTemplateColumns = `170px 90px repeat(${weeks.length}, 46px)`;
 
-    grid.appendChild(headerCell('Attività', 'col-1'));
+    grid.appendChild(headerCell('Project', 'col-1'));
     grid.appendChild(headerCell('Baseline', 'col-2'));
     for (const settimana of weeks) {
       grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
@@ -92,8 +92,8 @@
           cell.classList.add('milestone');
           const parts = [`${row.progetto.nome} — Baseline ${row.baseline.versione}`];
           if (row.taskNome) parts.push(row.taskNome);
-          parts.push(`rilascio ${iso}`);
-          if (row.inconsistent) parts.push('date incoerenti tra i task della baseline, da normalizzare');
+          parts.push(`release ${iso}`);
+          if (row.inconsistent) parts.push('inconsistent dates across the baseline\'s tasks, needs normalizing');
           cell.title = parts.join(' — ');
         }
         if (i === currentWeekIndex) cell.classList.add('current-week-line');
@@ -101,8 +101,8 @@
       });
     });
 
-    grid.appendChild(fixedCell('Totale', 'col-1'));
-    grid.appendChild(fixedCell('rilasci/settimana', 'col-2'));
+    grid.appendChild(fixedCell('Total', 'col-1'));
+    grid.appendChild(fixedCell('releases/week', 'col-2'));
     weeks.forEach((iso, i) => {
       const cell = document.createElement('div');
       cell.className = 'gantt-cell week-cell';
@@ -147,7 +147,7 @@
         const bar = document.createElement('div');
         bar.className = 'milestone-hist-bar';
         bar.style.height = `${Math.round((count / maxCount) * 100)}%`;
-        bar.title = `${formatWeekLabel(iso)}: ${count} rilasci`;
+        bar.title = `${formatWeekLabel(iso)}: ${count} releases`;
         cell.appendChild(bar);
       }
       hist.appendChild(cell);

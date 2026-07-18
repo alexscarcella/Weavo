@@ -14,15 +14,15 @@
       const box = document.createElement('div');
       box.className = 'modal-box modal-conflict';
       box.innerHTML = `
-        <h2>Conflitto di salvataggio</h2>
-        <p>Il file <code>${path}</code> (${label}) risulta modificato sul disco rispetto a quanto
-        caricato in questa sessione — probabilmente un altro utente ha salvato nel frattempo.</p>
-        <p>Puoi sovrascriverlo con le tue modifiche (quelle dell'altro utente andranno perse),
-        oppure annullare: le tue modifiche restano solo in questa finestra finché non riprovi o
-        ricarichi l'app per vedere la versione più recente.</p>
+        <h2>Save conflict</h2>
+        <p>The file <code>${path}</code> (${label}) has been modified on disk since it was
+        loaded in this session — probably another user saved it in the meantime.</p>
+        <p>You can overwrite it with your changes (the other user's changes will be lost),
+        or cancel: your changes stay only in this window until you retry or
+        reload the app to see the latest version.</p>
         <div class="modal-actions">
-          <button type="button" class="modal-btn-cancel">Annulla</button>
-          <button type="button" class="modal-btn-overwrite">Sovrascrivi comunque</button>
+          <button type="button" class="modal-btn-cancel">Cancel</button>
+          <button type="button" class="modal-btn-overwrite">Overwrite anyway</button>
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);
@@ -54,8 +54,8 @@
           ? `<textarea id="${fieldId}" class="modal-textarea" rows="4"></textarea>`
           : `<input type="text" id="${fieldId}" class="modal-input">`}
         <div class="modal-actions">
-          <button type="button" class="modal-btn-cancel">Annulla</button>
-          <button type="button" class="modal-btn-save">Salva</button>
+          <button type="button" class="modal-btn-cancel">Cancel</button>
+          <button type="button" class="modal-btn-save">Save</button>
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);
@@ -86,7 +86,7 @@
   // (textarea readonly) prima di un'azione distruttiva, richiedendo comunque un click esplicito
   // di conferma (chiudere/Escape/click fuori equivalgono ad annullare) — a differenza di
   // promptText non è editabile e risolve con l'esito della scelta (bool), non col testo.
-  function confirmWithReport({ title, message = '', reportText = '', confirmLabel = 'Conferma', cancelLabel = 'Annulla', danger = false } = {}) {
+  function confirmWithReport({ title, message = '', reportText = '', confirmLabel = 'Confirm', cancelLabel = 'Cancel', danger = false } = {}) {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
@@ -126,7 +126,7 @@
   // Editor a scelta singola tra opzioni fisse (select), al posto di window.prompt a testo
   // libero — usato ad es. per scegliere il team di destinazione nello spostamento di una
   // risorsa. Risolve col value selezionato, o null se annullato.
-  function promptSelect({ title, label = '', options, value = '', confirmLabel = 'Conferma', cancelLabel = 'Annulla' } = {}) {
+  function promptSelect({ title, label = '', options, value = '', confirmLabel = 'Confirm', cancelLabel = 'Cancel' } = {}) {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
@@ -188,13 +188,13 @@
             .join('');
           return opts ? `<optgroup label="${escapeHtml(t.nome)}">${opts}</optgroup>` : '';
         }).join('');
-        return `<option value="">— Nessuno —</option>${groups}`;
+        return `<option value="">— None —</option>${groups}`;
       };
 
       box.innerHTML = `
         <h2>${escapeHtml(title)}</h2>
         ${nome !== null ? `
-        <label class="modal-field-label" for="mpf-nome">Nome progetto</label>
+        <label class="modal-field-label" for="mpf-nome">Project name</label>
         <input type="text" id="mpf-nome" class="modal-input" required>` : ''}
         <label class="modal-field-label" for="mpf-pm">Project manager</label>
         <input type="text" id="mpf-pm" class="modal-input">
@@ -204,11 +204,11 @@
         <select id="mpf-sa" class="modal-select">${resourceOptions()}</select>
         <label class="modal-field-label" for="mpf-vv">V&amp;V reference</label>
         <select id="mpf-vv" class="modal-select">${resourceOptions()}</select>
-        <label class="modal-field-label" for="mpf-note">Note</label>
+        <label class="modal-field-label" for="mpf-note">Notes</label>
         <textarea id="mpf-note" class="modal-textarea" rows="3"></textarea>
         <div class="modal-actions">
-          <button type="button" class="modal-btn-cancel">Annulla</button>
-          <button type="button" class="modal-btn-save">Salva</button>
+          <button type="button" class="modal-btn-cancel">Cancel</button>
+          <button type="button" class="modal-btn-save">Save</button>
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);
@@ -275,7 +275,7 @@
         const found = MP.schema.findResourceEntry(teamRisorsa, sigla);
         return found
           ? `${escapeHtml(sigla)} — ${escapeHtml(found.risorsa.nome)}`
-          : `${escapeHtml(sigla)} <span class="project-card-orphan" title="Risorsa non trovata in team-risorse.json">(non trovata)</span>`;
+          : `${escapeHtml(sigla)} <span class="project-card-orphan" title="Resource not found in team-risorse.json">(not found)</span>`;
       };
       const totTask = progetto.baseline.reduce((sum, b) => sum + b.task.length, 0);
       const team = progetto.team || {};
@@ -284,15 +284,15 @@
 
       box.innerHTML = `
         <h2>${escapeHtml(progetto.nome)}</h2>
-        ${row('Stato', progetto.archiviato ? 'Archiviato' : 'Attivo')}
-        ${row('Baseline', `${progetto.baseline.length} (${totTask} task totali)`)}
+        ${row('Status', progetto.archiviato ? 'Archived' : 'Active')}
+        ${row('Baseline', `${progetto.baseline.length} (${totTask} tasks total)`)}
         ${row('Project manager', escapeHtml(team.projectManager))}
         ${row('Project Engineer', escapeHtml(team.projectEngineer))}
         ${row('Solution analyst reference', resolveRef(team.solutionAnalyst))}
         ${row('V&V reference', resolveRef(team.vvReference))}
-        ${row('Note', team.note ? escapeHtml(team.note).replace(/\n/g, '<br>') : '')}
+        ${row('Notes', team.note ? escapeHtml(team.note).replace(/\n/g, '<br>') : '')}
         <div class="modal-actions">
-          <button type="button" class="modal-btn-cancel">Chiudi</button>
+          <button type="button" class="modal-btn-cancel">Close</button>
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);
@@ -330,8 +330,8 @@
           <input type="text" class="modal-input modal-color-hex" value="${initial}" maxlength="7">
         </div>
         <div class="modal-actions">
-          <button type="button" class="modal-btn-cancel">Annulla</button>
-          <button type="button" class="modal-btn-save">Salva</button>
+          <button type="button" class="modal-btn-cancel">Cancel</button>
+          <button type="button" class="modal-btn-save">Save</button>
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);

@@ -79,9 +79,10 @@ flowchart TB
    page's title next to the hamburger button — dataset-header, app-header), `crud/` (one file per
    entity), `gantt/` (the main grid view), plus one folder per secondary view (resource load,
    team/resource management, milestones density report, week-range controls). The gantt and
-   resource-load pages share a header (week range, task/project counts, color legend) via
-   `common/dataset-header.js`, so the two views always report identical numbers; the milestones
-   page reuses the same header component.
+   resource-load pages share a header (week range, task/project/upcoming-baseline counts, color
+   legend) via `common/dataset-header.js`, so the two views always report identical numbers; the
+   upcoming-baseline count is `MP.milestones.countUpcomingBaselines` (release week ≥ today) and the
+   milestones page reuses the same header component.
 5. **`js/app.js`** — the entry point. Subscribes to the store, maps `state.status` to a render
    function, and owns the initial directory-picker flow. Also renders the static brand header
    (`MP.appHeader`) once at startup into `#app-header`, a sibling of `#app` — it sits outside the
@@ -103,6 +104,7 @@ stateDiagram-v2
     loading --> not-connected: user cancelled the picker
     error --> not-connected: retry
     ready --> ready: any store update (edits, view switch)
+    ready --> not-connected: user picks "Change data folder…" from the ☰ menu
 ```
 
 `state.dataset` (present only in `ready`) holds `{ manifest, teamRisorsa, progetti, warnings }`

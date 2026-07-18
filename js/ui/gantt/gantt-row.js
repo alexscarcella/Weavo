@@ -23,7 +23,7 @@
       team.projectEngineer && `PE: ${team.projectEngineer}`,
       team.solutionAnalyst && `Solution analyst: ${team.solutionAnalyst}`,
       team.vvReference && `V&V: ${team.vvReference}`,
-      team.note && `Note: ${team.note}`,
+      team.note && `Notes: ${team.note}`,
     ].filter(Boolean);
     return righe.join('\n');
   }
@@ -39,7 +39,7 @@
     return div;
   }
 
-  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved, lastEdited }) {
+  function renderTaskRow({ state, progetto, baseline, task, file, showProgetto, showBaseline, projectIndex, baselineIndex, weeks, teamMap, sigleValide, siglaTeamMap, allocationIndex, onCellSaved, onBulkCellsSaved, onCellsShift, lastEdited }) {
     const cells = [];
 
     const col1 = fixedCell(showProgetto ? progetto.nome : '', 'col-1');
@@ -54,7 +54,7 @@
       infoBtn.type = 'button';
       infoBtn.className = 'project-info-btn';
       infoBtn.textContent = 'i';
-      infoBtn.title = 'Info progetto';
+      infoBtn.title = 'Project info';
       infoBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         MP.modal.showProjectCard({ progetto, teamRisorsa: state.dataset.teamRisorsa });
@@ -63,13 +63,13 @@
       else col1.appendChild(infoBtn);
 
       col1.appendChild(menuButton([
-        { label: 'Rinomina progetto', onClick: () => MP.projectCrud.renameProject(state, file) },
-        { label: 'Team di progetto…', onClick: () => MP.projectCrud.editTeam(state, file) },
-        { label: progetto.archiviato ? 'Riattiva progetto' : 'Archivia progetto', onClick: () => MP.projectCrud.toggleArchivio(state, file) },
-        { label: '+ Nuova baseline', onClick: () => MP.baselineCrud.createBaseline(state, file) },
-        { label: '↑', title: 'Sposta su', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, -1) },
-        { label: '↓', title: 'Sposta giù', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, 1) },
-        { label: 'Elimina progetto', danger: true, onClick: () => MP.projectCrud.deleteProject(state, file) },
+        { label: 'Rename project', onClick: () => MP.projectCrud.renameProject(state, file) },
+        { label: 'Project team…', onClick: () => MP.projectCrud.editTeam(state, file) },
+        { label: progetto.archiviato ? 'Reactivate project' : 'Archive project', onClick: () => MP.projectCrud.toggleArchivio(state, file) },
+        { label: '+ New baseline', onClick: () => MP.baselineCrud.createBaseline(state, file) },
+        { label: '↑', title: 'Move up', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, -1) },
+        { label: '↓', title: 'Move down', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, 1) },
+        { label: 'Delete project', danger: true, onClick: () => MP.projectCrud.deleteProject(state, file) },
       ]));
     }
     cells.push(col1);
@@ -77,11 +77,11 @@
     const col2 = fixedCell(showBaseline && baseline ? baseline.versione : '', 'col-2');
     if (showBaseline && baseline) {
       col2.appendChild(menuButton([
-        { label: 'Rinomina baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
-        { label: '+ Nuovo task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },
-        { label: '↑', title: 'Sposta su', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, -1) },
-        { label: '↓', title: 'Sposta giù', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, 1) },
-        { label: 'Elimina baseline', danger: true, onClick: () => MP.baselineCrud.deleteBaseline(state, file, baseline) },
+        { label: 'Rename baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
+        { label: '+ New task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },
+        { label: '↑', title: 'Move up', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, -1) },
+        { label: '↓', title: 'Move down', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, 1) },
+        { label: 'Delete baseline', danger: true, onClick: () => MP.baselineCrud.deleteBaseline(state, file, baseline) },
       ]));
     }
     cells.push(col2);
@@ -93,7 +93,7 @@
       chk.type = 'checkbox';
       chk.className = 'task-concluso-checkbox';
       chk.checked = task.concluso;
-      chk.title = 'Segna come concluso';
+      chk.title = 'Mark as completed';
       chk.addEventListener('click', (e) => e.stopPropagation());
       chk.addEventListener('change', () => MP.taskCrud.toggleConcluso(state, file, task));
       col3.appendChild(chk);
@@ -105,20 +105,20 @@
       col3.appendChild(taskText);
 
       col3.appendChild(menuButton([
-        { label: 'Rinomina task', onClick: () => MP.taskCrud.renameTask(state, file, task) },
-        { label: '↑', title: 'Sposta su (attraversa le baseline)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, -1) },
-        { label: '↓', title: 'Sposta giù (attraversa le baseline)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, 1) },
-        { label: 'Elimina task', danger: true, onClick: () => MP.taskCrud.deleteTask(state, file, baseline, task) },
+        { label: 'Rename task', onClick: () => MP.taskCrud.renameTask(state, file, task) },
+        { label: '↑', title: 'Move up (crosses baselines)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, -1) },
+        { label: '↓', title: 'Move down (crosses baselines)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, 1) },
+        { label: 'Delete task', danger: true, onClick: () => MP.taskCrud.deleteTask(state, file, baseline, task) },
       ]));
     } else if (baseline) {
       const placeholder = document.createElement('span');
       placeholder.className = 'cell-text hint-text';
-      placeholder.textContent = '— nessun task —';
+      placeholder.textContent = '— no task —';
       col3.appendChild(placeholder);
     } else {
       const placeholder = document.createElement('span');
       placeholder.className = 'cell-text hint-text';
-      placeholder.textContent = '— nessuna baseline —';
+      placeholder.textContent = '— no baseline —';
       col3.appendChild(placeholder);
     }
     cells.push(col3);
@@ -137,6 +137,7 @@
           state,
           file,
           onCellSaved,
+          onCellsShift,
           lastEdited,
         });
         cells.push(cell);
@@ -160,6 +161,7 @@
             weekCells,
             dataset: state.dataset,
             onApply: (weeksRange, newEntry) => onBulkCellsSaved({ state, file, task, weeksRange, newEntry }),
+            onCellsShift: (weeksRange, direction) => onCellsShift({ state, file, task, baseline, weeks: weeksRange, direction }),
           });
         });
       });

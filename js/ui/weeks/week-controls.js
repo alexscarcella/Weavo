@@ -12,7 +12,7 @@
       await MP.saveCoordinator.saveManifest(state);
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio di manifest.json: ${e.message}`);
+      window.alert(`Error saving manifest.json: ${e.message}`);
     }
   }
 
@@ -28,7 +28,7 @@
     const weeks = getWeeksInRange(manifest.settimane.prima, manifest.settimane.ultima);
 
     if (weeks.length < 2) {
-      window.alert('Impossibile eliminare: deve restare almeno una settimana nel gantt.');
+      window.alert('Cannot remove: at least one week must remain in the gantt.');
       return;
     }
 
@@ -37,14 +37,14 @@
     const allocazioni = findAllocationsInWeeks(dataset, weeksToRemove);
     const etichetta = formatWeekLabel(settimanaDaRimuovere);
 
-    let messaggio = `Eliminare la settimana del ${etichetta}?`;
+    let messaggio = `Remove the week of ${etichetta}?`;
     if (allocazioni.length > 0) {
       const dettaglio = allocazioni
         .slice(0, 10)
         .map((a) => `- ${a.progetto} / BL ${a.baseline} / ${a.task}`)
         .join('\n');
-      const extra = allocazioni.length > 10 ? `\n… e altre ${allocazioni.length - 10} allocazioni.` : '';
-      messaggio = `La settimana del ${etichetta} contiene ${allocazioni.length} allocazioni che verranno eliminate definitivamente:\n\n${dettaglio}${extra}\n\nProcedere comunque?`;
+      const extra = allocazioni.length > 10 ? `\n… and ${allocazioni.length - 10} more allocations.` : '';
+      messaggio = `The week of ${etichetta} contains ${allocazioni.length} allocations that will be permanently deleted:\n\n${dettaglio}${extra}\n\nProceed anyway?`;
     }
     if (!window.confirm(messaggio)) return;
 
@@ -71,7 +71,7 @@
       }
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio: ${e.message}`);
+      window.alert(`Error saving: ${e.message}`);
     }
   }
 
@@ -85,8 +85,8 @@
     btn.type = 'button';
     btn.className = 'week-edge-btn week-edge-add';
     btn.textContent = '+';
-    btn.title = 'Aggiungi una settimana in fondo al gantt (futuro)';
-    btn.setAttribute('aria-label', 'Aggiungi settimana');
+    btn.title = 'Add a week at the end of the gantt (future)';
+    btn.setAttribute('aria-label', 'Add week');
     btn.addEventListener('click', () => handleAddWeek(state));
     return btn;
   }
@@ -96,8 +96,8 @@
     btn.type = 'button';
     btn.className = 'week-edge-btn week-edge-remove';
     btn.textContent = '−';
-    btn.title = 'Elimina la prima settimana del gantt (passato)';
-    btn.setAttribute('aria-label', 'Elimina settimana');
+    btn.title = 'Remove the first week of the gantt (past)';
+    btn.setAttribute('aria-label', 'Remove week');
     btn.addEventListener('click', () => handleRemoveWeek(state));
     return btn;
   }

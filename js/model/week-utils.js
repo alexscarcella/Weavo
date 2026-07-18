@@ -42,11 +42,17 @@
     return `${day}/${month}`;
   }
 
+  // Data odierna (formato ISO), letta dall'orologio locale del browser — mai
+  // persistita, ricalcolata ad ogni chiamata.
+  function getTodayIso() {
+    const now = new Date();
+    return toIso(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())));
+  }
+
   // Lunedì (formato ISO) della settimana in cui cade la data odierna — usato per
   // evidenziare la colonna corrente nel gantt e nel carico risorse.
   function getCurrentWeekIso() {
-    const now = new Date();
-    const todayIso = toIso(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())));
+    const todayIso = getTodayIso();
     const dow = toDate(todayIso).getUTCDay();
     const diffFromMonday = dow === 0 ? 6 : dow - 1;
     return addDays(todayIso, -diffFromMonday);
@@ -79,6 +85,7 @@
     addWeeks,
     getWeeksInRange,
     formatWeekLabel,
+    getTodayIso,
     getCurrentWeekIso,
     findAllocationsInWeeks,
   };

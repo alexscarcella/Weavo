@@ -45,12 +45,12 @@
       div.appendChild(item);
     });
 
-    div.appendChild(staticItem('#d9d9d9', null, 'Concluso'));
+    div.appendChild(staticItem('#d9d9d9', null, 'Closed'));
     div.appendChild(staticItem(null, 'legend-milestone', 'Milestone'));
-    div.appendChild(staticItem(null, 'legend-overallocated', 'Sovrallocazione'));
-    div.appendChild(staticItem(null, 'legend-mismatch', 'Team da regolarizzare'));
-    div.appendChild(badgeItem('', '?', 'Team non definito'));
-    div.appendChild(badgeItem('badge-orfano-risorsa', '!', 'Sigla non in anagrafica'));
+    div.appendChild(staticItem(null, 'legend-overallocated', 'Overallocated'));
+    div.appendChild(staticItem(null, 'legend-mismatch', 'Team to regularize'));
+    div.appendChild(badgeItem('', '?', 'Team not defined'));
+    div.appendChild(badgeItem('badge-orfano-risorsa', '!', 'Sigla not in directory'));
 
     return div;
   }

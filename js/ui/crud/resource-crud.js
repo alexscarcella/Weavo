@@ -10,18 +10,18 @@
       await MP.saveCoordinator.saveTeamRisorsa(state);
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio di team-risorse.json: ${e.message}`);
+      window.alert(`Error saving team-risorse.json: ${e.message}`);
     }
   }
 
   function promptTeamCodice(teamRisorsa, message) {
     const codici = teamRisorsa.team.map((t) => `${t.codice} (${t.nome})`).join(', ');
-    const codice = window.prompt(`${message}\nTeam disponibili: ${codici}`);
+    const codice = window.prompt(`${message}\nAvailable teams: ${codici}`);
     if (!codice || !codice.trim()) return null;
     const codiceTrim = codice.trim();
     const team = MP.schema.findTeamByCodice(teamRisorsa, codiceTrim);
     if (!team) {
-      window.alert(`Nessun team con codice "${codiceTrim}".`);
+      window.alert(`No team with code "${codiceTrim}".`);
       return null;
     }
     return team;
@@ -30,22 +30,22 @@
   async function createResource(state, teamCodiceInput, siglaInput, nomeInput) {
     const teamRisorsa = state.dataset.teamRisorsa;
     if (teamRisorsa.team.length === 0) {
-      window.alert('Crea prima almeno un team: una risorsa deve sempre appartenere a un team.');
+      window.alert('Create at least one team first: a resource must always belong to a team.');
       return;
     }
     const team = teamCodiceInput !== undefined
       ? MP.schema.findTeamByCodice(teamRisorsa, teamCodiceInput)
-      : promptTeamCodice(teamRisorsa, 'Codice del team a cui assegnare la nuova risorsa (obbligatorio):');
+      : promptTeamCodice(teamRisorsa, 'Code of the team to assign the new resource to (required):');
     if (!team) return;
 
-    const sigla = siglaInput !== undefined ? siglaInput : window.prompt('Sigla della nuova risorsa (es. LC):');
+    const sigla = siglaInput !== undefined ? siglaInput : window.prompt('Sigla of the new resource (e.g. LC):');
     if (!sigla || !sigla.trim()) return;
     const siglaTrim = sigla.trim().toUpperCase();
     if (MP.schema.existingSigle(teamRisorsa).has(siglaTrim)) {
-      window.alert(`Esiste già una risorsa con sigla "${siglaTrim}".`);
+      window.alert(`A resource with sigla "${siglaTrim}" already exists.`);
       return;
     }
-    const nome = nomeInput !== undefined ? nomeInput : window.prompt('Nome esteso della risorsa:');
+    const nome = nomeInput !== undefined ? nomeInput : window.prompt('Full name of the resource:');
     if (!nome || !nome.trim()) return;
     team.risorse.push({ sigla: siglaTrim, nome: nome.trim() });
     await persist(state);
@@ -54,7 +54,7 @@
   async function renameResource(state, sigla, nuovoNomeInput) {
     const found = MP.schema.findResourceEntry(state.dataset.teamRisorsa, sigla);
     if (!found) return;
-    const nuovoNome = nuovoNomeInput !== undefined ? nuovoNomeInput : window.prompt('Nuovo nome esteso:', found.risorsa.nome);
+    const nuovoNome = nuovoNomeInput !== undefined ? nuovoNomeInput : window.prompt('New full name:', found.risorsa.nome);
     if (!nuovoNome || !nuovoNome.trim()) return;
     found.risorsa.nome = nuovoNome.trim();
     await persist(state);
@@ -79,14 +79,14 @@
     } else {
       const altriTeam = teamRisorsa.team.filter((t) => t.codice !== found.team.codice);
       if (altriTeam.length === 0) {
-        window.alert('Non ci sono altri team a cui spostare questa risorsa.');
+        window.alert('There are no other teams to move this resource to.');
         return;
       }
       const codiceScelto = await MP.modal.promptSelect({
-        title: `Sposta "${sigla} — ${found.risorsa.nome}"`,
-        label: 'Nuovo team',
+        title: `Move "${sigla} — ${found.risorsa.nome}"`,
+        label: 'New team',
         options: altriTeam.map((t) => ({ value: t.codice, label: `${t.codice} — ${t.nome}` })),
-        confirmLabel: 'Sposta',
+        confirmLabel: 'Move',
       });
       if (!codiceScelto) return;
       nuovoTeam = MP.schema.findTeamByCodice(teamRisorsa, codiceScelto);
@@ -112,10 +112,10 @@
     }
 
     const extra = daRegolarizzare.length > 0
-      ? `\n\n${daRegolarizzare.length} cella/e verranno aggiornate automaticamente al nuovo team "${nuovoTeam.codice}" perché coinvolgono solo risorse di quel team. Le celle con risorse su team diversi resteranno segnalate come "da regolarizzare" nel pannello avvisi, da sistemare a mano.`
+      ? `\n\n${daRegolarizzare.length} cell(s) will be automatically updated to the new team "${nuovoTeam.codice}" because they only involve resources of that team. Cells with resources from different teams will remain flagged as "to regularize" in the warnings panel, to fix by hand.`
       : '';
     const confermato = window.confirm(
-      `Spostare "${sigla} — ${found.risorsa.nome}" dal team "${found.team.codice}" al team "${nuovoTeam.codice}"?${extra}`
+      `Move "${sigla} — ${found.risorsa.nome}" from team "${found.team.codice}" to team "${nuovoTeam.codice}"?${extra}`
     );
     if (!confermato) return;
 
@@ -135,7 +135,7 @@
       }
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio: ${e.message}`);
+      window.alert(`Error saving: ${e.message}`);
     }
   }
 
@@ -143,14 +143,14 @@
     const riga = (r) => `${r.progetto.nome} / ${r.baseline.versione} / ${r.task.nome} / ${r.settimana}`;
     const sezione = (titolo, records, nota) => [
       `${titolo} (${records.length}):`,
-      ...(records.length ? records.map((r) => `${riga(r)}${nota ? ` (${nota})` : ''}`) : ['(nessuna)']),
+      ...(records.length ? records.map((r) => `${riga(r)}${nota ? ` (${nota})` : ''}`) : ['(none)']),
     ].join('\n');
     return [
-      `Risorsa: ${sigla} — ${nomeRisorsa}`,
+      `Resource: ${sigla} — ${nomeRisorsa}`,
       '',
-      sezione('Allocazioni che verranno rimosse', attive, null),
+      sezione('Allocations that will be removed', attive, null),
       '',
-      sezione('Allocazioni su task conclusi (non modificate)', concluse, 'storica'),
+      sezione('Allocations on completed tasks (unchanged)', concluse, 'historical'),
     ].join('\n');
   }
 
@@ -170,11 +170,11 @@
 
     if (!skipConfirm) {
       const confermato = await MP.modal.confirmWithReport({
-        title: `Eliminare la risorsa "${sigla} — ${found.risorsa.nome}"?`,
-        message: 'Verrà rimossa dall\'anagrafica team-risorse.json. Le allocazioni attive elencate sotto verranno rimosse dai task non conclusi; quelle su task conclusi restano invariate (dato storico). Il testo qui sotto è preselezionato: copialo se vuoi conservarlo altrove.',
+        title: `Delete the resource "${sigla} — ${found.risorsa.nome}"?`,
+        message: 'It will be removed from the team-risorse.json directory. The active allocations listed below will be removed from non-completed tasks; those on completed tasks remain unchanged (historical data). The text below is pre-selected: copy it if you want to keep it elsewhere.',
         reportText: buildDeletionReport(sigla, found.risorsa.nome, attive, concluse),
-        confirmLabel: "Procedi con l'eliminazione",
-        cancelLabel: 'Annulla',
+        confirmLabel: 'Proceed with deletion',
+        cancelLabel: 'Cancel',
         danger: true,
       });
       if (!confermato) return;
@@ -196,7 +196,7 @@
       await MP.saveCoordinator.saveTeamRisorsa(state);
       MP.store.setState({});
     } catch (e) {
-      window.alert(`Errore nel salvataggio: ${e.message}`);
+      window.alert(`Error saving: ${e.message}`);
     }
   }
 

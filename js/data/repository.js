@@ -25,7 +25,7 @@
         data.team = MP.schema.normalizeProjectTeam(data.team);
         progetti.set(voce.file, { data, rawText });
       } catch (e) {
-        warnings.push(`Impossibile caricare "${voce.file}" (${voce.nome}): ${e.message}`);
+        warnings.push(`Unable to load "${voce.file}" (${voce.nome}): ${e.message}`);
       }
     }
 
