@@ -60,13 +60,14 @@ on-screen labels quoted below (menu items, buttons) are the exact text you'll se
   (`index.html`) that runs in your browser.
 - There's no "database" sitting somewhere on a server: all the data — projects, baselines,
   tasks, weekly allocations, teams and resources — is stored as plain text files (JSON) inside a
-  folder you choose, typically a shared OneDrive folder or a company network path. **The folder
-  is the database.**
+  folder you choose, typically a folder shared via a cloud-sync service (OneDrive, Dropbox, Google
+  Drive, …) or a company network path. **The folder is the database.**
 - On opening, the app asks which folder to use. From then on, every change you make (assigning a
   resource to a task, creating a project, moving a resource between teams…) is written
   immediately to one of the files in that folder — there's no separate "Save" button, it saves
   itself on every edit.
-- Several people can work on the same shared folder (e.g. via OneDrive), but not in real time
+- Several people can work on the same shared folder (via OneDrive, Dropbox, a network share, or
+  any similar mechanism), but not in real time
   like an online document: if a colleague saves a change to the same file while you still have it
   open, the app notices and asks for confirmation before overwriting, so no one's change is ever
   silently lost.
@@ -87,8 +88,8 @@ on-screen labels quoted below (menu items, buttons) are the exact text you'll se
 
 - **Google Chrome or Microsoft Edge**, up to date. The app does not work in Firefox or Safari.
 - A **shared folder** that everyone who needs to collaborate can read and write to — typically a
-  shared OneDrive folder, or a company network path. No server or database to install or
-  configure.
+  folder shared via a cloud-sync service (OneDrive, Dropbox, Google Drive, …), or a company
+  network path. No server or database to install or configure.
 
 ### 3. Set up the data folder (one-time setup)
 
@@ -196,9 +197,11 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
   the files from the chosen backup subfolder (`backup/YYYYMMDD_HHMMSS/`) over the current files in
   the data folder (`manifest.json`, `team-resources.json`, the contents of `projects/`), overwriting
   them. Do this with the app closed for every user, to avoid write conflicts during the copy.
-- If the data folder lives on OneDrive, you likely also have an additional, independent safety
-  net beyond these manual backups (OneDrive's per-file "Version history") — but don't rely on
-  that alone: still use the app's backup function before risky operations, since it restores the
+- If the data folder lives on a cloud-sync service, you likely also have an additional,
+  independent safety net beyond these manual backups — most of them keep their own per-file
+  version history (e.g. OneDrive's "Version history", Dropbox's "Version history", Google Drive's
+  "Manage versions") — but don't rely on that alone: still use the app's backup function before
+  risky operations, since it restores the
   whole dataset in one shot rather than file by file.
 
 ### 7. FAQ / things to know
