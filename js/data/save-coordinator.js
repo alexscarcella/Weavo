@@ -1,21 +1,18 @@
 // Punto unico di scrittura "sicura": rilegge il file su disco subito prima di
 // scrivere e, se il contenuto è cambiato rispetto all'ultimo testo noto in
 // sessione (dataRef.rawText), chiede conferma via modal prima di sovrascrivere
-// (§6.4 spec). Aggiorna dataRef.rawText dopo ogni scrittura riuscita, cosicché
-// i controlli successivi confrontino sempre contro l'ultima versione scritta da
-// questa sessione, non contro il caricamento iniziale.
+// (§6.4 spec), mostrando un riassunto di cosa è cambiato (MP.conflictDiff, vedi
+// quel file) per una decisione informata. Aggiorna dataRef.rawText dopo ogni
+// scrittura riuscita, cosicché i controlli successivi confrontino sempre contro
+// l'ultima versione scritta da questa sessione, non contro il caricamento iniziale.
 (function (MP) {
   'use strict';
 
   async function withConflictCheck({ dirHandle, path, dataRef, writeFn, label }) {
-    let diskText = null;
-    try {
-      diskText = await MP.fsAccess.readTextFile(dirHandle, path);
-    } catch (e) {
-      diskText = null; // file assente (es. cancellato): non è un conflitto di contenuto
-    }
+    const diskText = await MP.repository.readTextFileOrNull(dirHandle, path);
     if (diskText !== null && diskText !== dataRef.rawText) {
-      const proceed = await MP.modal.confirmConflict({ label, path });
+      const diffLines = MP.conflictDiff.summarize(path, dataRef.rawText, diskText);
+      const proceed = await MP.modal.confirmConflict({ label, path, diffLines });
       if (!proceed) return false;
     }
     const text = await writeFn();

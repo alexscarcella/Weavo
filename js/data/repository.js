@@ -45,6 +45,19 @@
     };
   }
 
+  // Rilettura "tollerante": restituisce null invece di lanciare se il file non
+  // esiste più (es. cancellato) — usata sia da save-coordinator.js (reread-before-write
+  // appena prima di scrivere) sia da remote-check.js (rilettura passiva su focus,
+  // vedi quel file) per lo stesso identico pattern "rileggi e confronta col rawText
+  // noto in sessione", senza duplicarlo in due punti.
+  async function readTextFileOrNull(dirHandle, path) {
+    try {
+      return await MP.fsAccess.readTextFile(dirHandle, path);
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Scrittura diretta, senza controllo di conflitto: usata da save-coordinator.js
   // (che fa reread-before-write) e da chi non ne ha bisogno (es. backup).
   async function saveProject(dirHandle, file, projectData) {
@@ -105,5 +118,5 @@
     return { folder: `${PATHS.backupDir}/${timestamp}`, fileCount: 2 + projectFiles.length };
   }
 
-  MP.repository = { loadDataset, saveProject, saveManifest, saveTeamResources, createBackup };
+  MP.repository = { loadDataset, saveProject, saveManifest, saveTeamResources, createBackup, readTextFileOrNull };
 })(window.MP = window.MP || {});

@@ -27,9 +27,11 @@ as-is.
 
 ### Conflict detection
 The reread-before-write check performed by `MP.saveCoordinator` before every save: it compares
-the file currently on disk against the last version this session knows about, and asks for
-confirmation before overwriting if they differ. See
-[database.md](database.md#conflict-detection).
+the file currently on disk against the last version this session knows about, and — showing a
+summary of what actually changed (`MP.conflictDiff`) — asks for confirmation before overwriting if
+they differ. A separate, opt-in soft check (`MP.remoteCheck`, "Notify me of changes on disk" in the
+☰ menu) gives the same kind of heads-up outside the save path, triggered when the tab regains
+focus rather than by a timer. See [database.md](database.md#conflict-detection).
 
 ### Dataset
 The whole in-memory picture of the data folder once loaded: `{ manifest, teamResources, projects,

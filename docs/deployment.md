@@ -22,6 +22,11 @@ same place:
    Google Drive, etc.) all work, since the app only needs regular filesystem read/write access to
    it, nothing cloud-provider-specific.
 
+Two or more people can have that data folder open in the app at the same time — there's no
+locking, only save-time conflict detection plus an opt-in soft notification of changes made by
+someone else; see [database.md](database.md#conflict-detection) for what that actually does and
+doesn't cover before rolling this out to a team.
+
 Each tagged version (`vX.Y`) also publishes a ready-made zip as a
 [GitHub Release](https://github.com/alexscarcella/Weavo/releases) asset (`weavo-vX.Y.zip`),
 containing exactly `index.html`, `css/`, `js/`, and `sample-data/` — the same static files

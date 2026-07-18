@@ -40,6 +40,10 @@
         label: state.ui.autoBackupOnExit ? '✓ Backup on exit' : 'Backup on exit',
         onClick: () => MP.store.setAutoBackupOnExit(!state.ui.autoBackupOnExit),
       },
+      {
+        label: state.ui.notifyOnRemoteChanges ? '✓ Notify me of changes on disk' : 'Notify me of changes on disk',
+        onClick: () => MP.store.setNotifyOnRemoteChanges(!state.ui.notifyOnRemoteChanges),
+      },
       { label: 'Change data folder…', onClick: () => changeDataFolder(state), separator: true },
     ];
   }

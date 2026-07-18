@@ -304,11 +304,35 @@ inserted at the right point in that list. Layers, low → high:
      `repository.loadDataset`).
    - `repository.js`: composes `fs-access` (and, first, `legacy-migration`) into whole-dataset
      load (`loadDataset`) and raw per-file save/backup operations, with no conflict checking of
-     its own.
+     its own. Also exports `readTextFileOrNull(dirHandle, path)`, a tolerant reread (returns
+     `null` instead of throwing if the file no longer exists) factored out so `save-coordinator.js`
+     and `remote-check.js` share the exact same "reread and compare to the known `rawText`"
+     primitive instead of each reimplementing the try/catch.
    - `save-coordinator.js`: the **only** place that should perform a write in response to a user
      edit. Wraps `repository` saves with reread-before-write conflict detection (§6.4 of spec):
      rereads the file from disk immediately before writing, and if it differs from the last text
-     this session knows about, prompts via `MP.modal.confirmConflict` before overwriting.
+     this session knows about, computes a human-readable diff via `MP.conflictDiff.summarize`
+     (see below) and prompts via `MP.modal.confirmConflict({ label, path, diffLines })` before
+     overwriting.
+   - `conflict-diff.js`: pure, read-only structural diff between two raw-text versions of the same
+     file, used only to populate the save-conflict modal above with **what** changed instead of
+     just *that* it changed. Parses both JSON texts and dispatches on `path`: for a project file,
+     diffs at task/week granularity (`"<iso> added/cleared/changed"`, new/removed tasks — matched
+     by a `baselineVersion::taskName` key since the schema has no stable task id, so a rename shows
+     up as one task removed and a different one added, not as a dedicated "renamed" line —
+     `completed` toggles); for `manifest.json`, added/removed projects and week-range changes; for
+     `team-resources.json`, added/removed/renamed/recolored teams and added/removed/renamed
+     resources (matched by `code`/`initials`, the stable keys). Falls back to a generic
+     "unable to summarize" line on any parse error, and caps output at 20 lines (`+N more` trailer)
+     so a massively diverged file doesn't blow up the modal.
+   - `remote-check.js`: passive, **event-driven** (never a timer) check for changes on disk outside
+     the save path — `findChangedFiles(state)` rereads every file the session knows about
+     (manifest, team-resources, every loaded project) via `readTextFileOrNull` and returns the ones
+     whose disk text differs from the known `rawText`, with no modal and no mutation of that
+     `rawText` (so save-coordinator's own check at actual save time is untouched). Invoked from
+     `app.js`'s `visibilitychange` listener, gated by `state.ui.notifyOnRemoteChanges` (see
+     `store.js` below) — see [docs/database.md](docs/database.md#conflict-detection) for the full
+     picture of how this fits alongside the save-time reread-before-write check.
    - `slug.js`: kebab-case ASCII slug generation for project filenames, with collision
      suffixing — shared between the app and the Excel import script's own copy of the algorithm.
 2. **`js/state/store.js`** — minimal in-memory state container + pub/sub (`getState`/`setState`/
@@ -317,12 +341,14 @@ inserted at the right point in that list. Layers, low → high:
    `ready`) holds `{ manifest, teamResources, projects: Map<file, {data, rawText}>, warnings }`
    plus `*Meta` entries used by save-coordinator for conflict checks. `state.ui.currentView`
    (`gantt | resource-load | milestones | team-resources`) picks the page `js/app.js` renders below
-   the top bar. `state.ui.autoBackupOnExit` (default `false`) is the only `ui.*` flag persisted
-   across sessions — seeded from and written through `localStorage['mp.autoBackupOnExit']` via the
-   store's own `setAutoBackupOnExit(value)` (not `setState` directly, so the flag and its
-   `localStorage` copy can't drift), read once at module load since `store.js` loads before every
-   other script that touches it. Toggled from `toolbar.js`'s hamburger menu; consumed by
-   `app.js`'s `pagehide` listener — see below.
+   the top bar. `state.ui.autoBackupOnExit` and `state.ui.notifyOnRemoteChanges` (both default
+   `false`) are the only `ui.*` flags persisted across sessions — each seeded from and written
+   through its own `localStorage` key (`mp.autoBackupOnExit`, `mp.notifyOnRemoteChanges`) via the
+   store's own `setAutoBackupOnExit(value)`/`setNotifyOnRemoteChanges(value)` (not `setState`
+   directly, so the flag and its `localStorage` copy can't drift), read once at module load since
+   `store.js` loads before every other script that touches it. Both toggled from `toolbar.js`'s
+   hamburger menu; `autoBackupOnExit` is consumed by `app.js`'s `pagehide` listener,
+   `notifyOnRemoteChanges` by its `visibilitychange` listener — see below.
 3. **`js/model/`** — pure derivations over an in-memory dataset, no I/O, no DOM:
    `week-utils.js` (ISO week arithmetic, Monday-based; `getCurrentWeekIso()` returns the Monday of
    the real-world current week — used by both the gantt and resource-load views to highlight
@@ -375,7 +401,10 @@ inserted at the right point in that list. Layers, low → high:
      view-switch rows above it) that, when on, makes `app.js`'s `pagehide` listener call
      `MP.repository.createBackup` automatically on tab/window close — best-effort only, since a
      browser doesn't guarantee async work finishes once a page is actually unloading, see
-     docs/deployment.md "Backups"; project creation is reachable
+     docs/deployment.md "Backups"; right below it, a second toggle, "Notify me of changes on disk"
+     (`state.ui.notifyOnRemoteChanges`, same ✓-prefix/`setState`-avoiding convention), gates
+     `app.js`'s `visibilitychange`-driven soft remote-change check — see
+     [docs/database.md](docs/database.md#conflict-detection); project creation is reachable
      from every page, not just the gantt one, so after a successful create it switches
      `state.ui.currentView` to `gantt` so the result is visible; "Change data folder…" (after a
      `window.confirm`) resets `state` to `{ status: 'not-connected', dirHandle: null, dataset: null }`
@@ -589,6 +618,13 @@ inserted at the right point in that list. Layers, low → high:
    it, since nothing can delay the browser tearing down the page, so this is best-effort only (see
    docs/deployment.md "Backups"). A module-level `backupOnExitInFlight` flag guards against
    `pagehide` firing again (e.g. bfcache entry) while a backup from the same exit is still running.
+   A second module-level listener, on `visibilitychange`, drives the soft remote-change
+   notification (see [docs/database.md](docs/database.md#conflict-detection)) — deliberately
+   event-driven (fires only when the tab becomes visible again) rather than a `setInterval`, with a
+   60s module-level cooldown
+   (`lastRemoteCheckAt`) so rapid alt-tabbing can't refire it back-to-back; gated by
+   `state.ui.notifyOnRemoteChanges` (default off), calls `MP.remoteCheck.findChangedFiles` and, if
+   anything differs, shows a `MP.toast` — no auto-reload, no forced action.
    Because `render()` does `appEl.innerHTML = ''` and rebuilds the whole tree on every state
    change, it explicitly saves the `.gantt-scroll` container's `scrollLeft`/`scrollTop` (a class
    shared by the gantt, resource-load, and milestones pages) before clearing and restores it on
@@ -623,3 +659,7 @@ inserted at the right point in that list. Layers, low → high:
 - Any code path that writes a project/manifest/team-resources file in response to a user action
   must go through `MP.saveCoordinator`, not call `MP.repository.save*` directly — that's what
   gives conflict detection.
+- Any code path that needs to compare a file's on-disk content against what this session knows
+  (a new conflict check, a new soft "did this change" probe, …) should reuse
+  `MP.repository.readTextFileOrNull(dirHandle, path)` rather than reimplementing the try/catch —
+  see `save-coordinator.js` and `remote-check.js` for the two existing consumers.

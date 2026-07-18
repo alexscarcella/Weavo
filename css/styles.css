@@ -512,6 +512,12 @@ code {
 .modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1rem; }
 .modal-btn-overwrite, .modal-btn-save { background: #2E86FF; color: #fff; border-color: #2E86FF; }
 .modal-conflict .modal-btn-overwrite { background: #b00020; border-color: #b00020; }
+.modal-conflict-diff {
+  margin: 0 0 0.8rem; padding: 0.6rem 0.8rem; max-height: 220px; overflow-y: auto;
+  background: #f7f7f7; border: 1px solid #ddd; border-radius: 4px;
+  font-family: monospace; font-size: 0.8rem; line-height: 1.5;
+}
+.modal-conflict-diff li { list-style: none; }
 .modal-danger-confirm h2 { color: #b00020; }
 .modal-danger-confirm .modal-btn-save { background: #b00020; border-color: #b00020; }
 

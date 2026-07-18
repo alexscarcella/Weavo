@@ -169,6 +169,33 @@
       .finally(() => { backupOnExitInFlight = false; });
   });
 
+  let lastRemoteCheckAt = 0;
+  const REMOTE_CHECK_COOLDOWN_MS = 60000;
+
+  // Preavviso "soft" di modifiche esterne (MP.remoteCheck, vedi quel file), attivo solo
+  // se l'utente lo ha abilitato in state.ui.notifyOnRemoteChanges (default off). Innescato
+  // dal ritorno di focus sulla scheda, non da un timer: nessun I/O periodico mentre resta
+  // in background o resta a fuoco senza cambi di visibilità. Il cooldown evita ricontrolli
+  // ravvicinati su un alt-tab rapido.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    const state = getState();
+    if (!state.ui.notifyOnRemoteChanges || state.status !== 'ready' || !state.dirHandle) return;
+    const now = Date.now();
+    if (now - lastRemoteCheckAt < REMOTE_CHECK_COOLDOWN_MS) return;
+    lastRemoteCheckAt = now;
+    MP.remoteCheck.findChangedFiles(state)
+      .then((changed) => {
+        if (changed.length === 0) return;
+        const detail = changed.length === 1 ? changed[0].label : `${changed.length} files`;
+        MP.toast.showToast(
+          `${detail} changed on disk since you loaded this dataset — reopen the data folder to see the latest version.`,
+          { kind: 'info', duration: 8000 },
+        );
+      })
+      .catch(() => {});
+  });
+
   subscribe(render);
   bootstrap();
 })(window.MP = window.MP || {});

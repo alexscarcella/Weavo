@@ -64,8 +64,10 @@ resource names) via a local `escapeHtml` helper before interpolating into `inner
 
 ## What's explicitly out of scope
 
-- Multi-user real-time collaboration/locking — see [database.md](database.md#conflict-detection)
-  for what conflict handling actually exists (reread-before-write, not a lock).
+- Multi-user real-time collaboration/locking, and any form of user presence signal ("who else has
+  this folder open right now") — see [database.md](database.md#conflict-detection) for what
+  conflict handling actually exists (reread-before-write, plus an opt-in soft notification of
+  changes on disk; neither is a lock, and neither can identify *who* changed something).
 - Audit logging of who changed what — the filesystem/network share's own history (if any) is the
   only record.
 - Data validation as a security boundary — `js/model/validation.js` catches data-consistency

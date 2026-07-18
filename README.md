@@ -206,9 +206,16 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 - **"I closed and reopened the app and it's asking for the folder again"** — expected, see step
   4: it's a browser limitation when the app is opened as a plain file, not a malfunction.
 - **"A colleague was working at the same time and the app is warning me about a conflict"** —
-  someone saved a change to the same file after you had it open. Only confirm if you're sure you
-  want to overwrite their change; otherwise cancel, reload the page (re-selecting the folder), and
-  reapply your change on top of the more recent one.
+  someone saved a change to the same file after you had it open. The warning lists what actually
+  changed (which tasks/weeks, or which project/team/resource), so you can tell at a glance whether
+  it overlaps with your own edit. Only confirm if you're sure you want to overwrite their change;
+  otherwise cancel, reload the page (re-selecting the folder), and reapply your change on top of
+  the more recent one.
+- **"I want a heads-up before I even start editing, not just when I try to save"** — turn on ☰ menu
+  → *"Notify me of changes on disk"* (off by default). While it's on, coming back to the app's
+  browser tab checks whether anything changed on disk since you loaded it and shows a brief
+  notification if so — it never blocks you and never overwrites anything, it's just an early
+  warning. It can't tell you *who* made the change, only *what* file.
 - **"The app won't open, or errors right away"** — check that you're using an up-to-date Chrome or
   Edge; Firefox and Safari are not supported.
 - The JSON files inside the data folder are plain, readable text and can even be hand-edited with

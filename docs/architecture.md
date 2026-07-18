@@ -36,6 +36,8 @@ flowchart TB
         legacymig["legacy-migration.js\none-time legacy schema upgrade"]
         repository["repository.js\nload dataset, raw save/backup"]
         savecoord["save-coordinator.js\nreread-before-write conflict check"]
+        conflictdiff["conflict-diff.js\nstructural diff for the conflict modal"]
+        remotecheck["remote-check.js\nopt-in, focus-triggered remote-change check"]
         slug["slug.js\nfilename slugs"]
     end
     subgraph state["js/state — store"]
@@ -69,8 +71,11 @@ flowchart TB
    on an older `schemaVersion` (see [database.md](database.md#legacy-data-migration));
    `repository.js` composes these into whole-dataset load and raw per-file save/backup;
    `save-coordinator.js` is the *only* place a user-triggered write should go through, because it
-   adds reread-before-write conflict detection (see
-   [database.md](database.md#conflict-detection)).
+   adds reread-before-write conflict detection, showing a summary of what changed
+   (`conflict-diff.js`, a pure structural diff with no I/O of its own) before the user decides
+   whether to overwrite. `remote-check.js` reuses the same reread primitive for an unrelated,
+   opt-in purpose: a focus-triggered (never timer-driven) heads-up that something changed on disk,
+   independent of the save path (see [database.md](database.md#conflict-detection)).
 2. **`js/state/store.js`** — a state container in the classic sense: one object, `getState`,
    `setState`, `subscribe`. No framework, no virtual DOM, no reducers. `setState` shallow-merges a
    patch and notifies every subscriber synchronously.

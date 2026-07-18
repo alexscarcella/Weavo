@@ -7,16 +7,20 @@
 (function (MP) {
   'use strict';
 
-  function confirmConflict({ label, path }) {
+  function confirmConflict({ label, path, diffLines = [] }) {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
       const box = document.createElement('div');
-      box.className = 'modal-box modal-conflict';
+      box.className = 'modal-box modal-box-wide modal-conflict';
+      const diffHtml = diffLines.length > 0
+        ? `<p>What changed on disk:</p><ul class="modal-conflict-diff">${diffLines.map((l) => `<li>${escapeHtml(l)}</li>`).join('')}</ul>`
+        : '';
       box.innerHTML = `
         <h2>Save conflict</h2>
         <p>The file <code>${path}</code> (${label}) has been modified on disk since it was
         loaded in this session — probably another user saved it in the meantime.</p>
+        ${diffHtml}
         <p>You can overwrite it with your changes (the other user's changes will be lost),
         or cancel: your changes stay only in this window until you retry or
         reload the app to see the latest version.</p>

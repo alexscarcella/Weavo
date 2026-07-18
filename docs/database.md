@@ -132,11 +132,35 @@ folder open at once. Instead, every write goes through `MP.saveCoordinator`
 
 1. Rereads the target file from disk immediately before writing.
 2. Compares it against the text this session last read or wrote for that file.
-3. If they differ, prompts the user to confirm before overwriting (rather than silently
-   discarding someone else's concurrent change).
+3. If they differ, computes a human-readable summary of what changed (`js/data/conflict-diff.js`
+   — added/removed/changed tasks and weeks for a project file, added/removed projects and
+   week-range changes for `manifest.json`, added/removed teams/resources for
+   `team-resources.json`) and prompts the user to confirm before overwriting, showing that summary
+   alongside the generic warning (rather than silently discarding someone else's concurrent
+   change, or asking the user to decide blind).
 
 This is a reread-before-write check, not a merge — the user resolves the conflict by choosing to
 overwrite or to cancel and reconcile by hand.
+
+### Soft notification of remote changes (opt-in)
+
+The check above only fires at the moment of an actual save. A second, independent mechanism gives
+an earlier, non-blocking heads-up: when the user turns on "Notify me of changes on disk" (☰ menu,
+off by default), `js/data/remote-check.js` compares every file the session knows about against
+disk and, if any differ, shows a toast — no modal, no overwrite, no forced reload. This check is
+deliberately **never driven by a timer**: it only runs when the browser tab regains focus
+(`visibilitychange`), with a client-side cooldown so rapid tab-switching can't refire it
+back-to-back — so there's no periodic background I/O against the shared folder, opt-in or not.
+It shares its file-reread primitive with the save-time check above
+(`MP.repository.readTextFileOrNull`) but never touches the `rawText` the save-time check compares
+against, so the two are fully independent: dismissing or ignoring the toast has no effect on what
+happens at the next actual save.
+
+Neither mechanism can identify *who* changed a file, *when*, or reveal whether another user
+currently has the folder open — the File System Access API exposes no such information, and the
+app makes no attempt to write its own presence signal (a heartbeat file, a lock file) to fill that
+gap; see [security.md](security.md#whats-explicitly-out-of-scope) for why that's a deliberate
+scope boundary, not an oversight.
 
 ## Legacy data migration
 
