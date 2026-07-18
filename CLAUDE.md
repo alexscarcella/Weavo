@@ -361,7 +361,19 @@ inserted at the right point in that list. Layers, low → high:
      sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
      gantt library, per spec §9) and exports `buildRows` (dataset → visible task rows, honoring
      `mostraArchiviati`/`mostraConclusi`) so `dataset-header.js` can compute the same row count
-     shown in both pages; `gantt-row.js` renders one task row; `gantt-cell.js` renders one
+     shown in both pages. Archiving isn't only project-level: a baseline can independently be
+     archived too (`baseline.archiviata`, toggled via the same "⋮" menu on the baseline row,
+     `MP.baselineCrud.toggleArchivio`) — `buildRows` filters `progetto.baseline` down to
+     non-archived ones (unless `mostraArchiviati` is on) *before* deciding whether the project
+     needs a "— no baseline —" placeholder row, so a project whose only baselines are all
+     archived still gets a reachable placeholder row instead of disappearing entirely. A
+     project's own `archiviato` still wins first — an archived project hides regardless of its
+     baselines' individual flags. `MP.milestones.computeBaselineMilestones` applies the same
+     per-baseline filter (same `mostraArchiviati` flag, no separate toggle), so an archived
+     baseline's release also drops out of the milestones page and the header's "upcoming
+     baselines" count. Archiving a baseline never touches its tasks/data — same
+     no-destructive-auto-correction principle as project archiving and task `concluso`.
+     `gantt-row.js` renders one task row; `gantt-cell.js` renders one
      week×task cell (double click opens `cell-popover.js` for that single cell, resetting any
      pending range selection first; a cell whose resource(s) are overallocated gets a native
      `title` tooltip built from `MP.overallocation.findAllocations`, listing per sigla the other

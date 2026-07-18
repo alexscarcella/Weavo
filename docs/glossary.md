@@ -15,7 +15,10 @@ deletes or rewrites its data — see [database.md](database.md#progettislugjson)
 
 ### Baseline
 A **project**'s release/version line (e.g. `"1.0"`, `"2.0"`). A project has one or more baselines;
-each baseline owns its own list of **tasks**. In the JSON, the field is `versione`.
+each baseline owns its own list of **tasks**. In the JSON, the field is `versione`. Can
+independently be archived (`archiviata: true`, same "no destructive auto-correction" principle as
+[archived project](#archived-project-archiviato)) — hidden from the gantt/milestones views unless
+the "Show archived" toggle is on, but never deleted or rewritten.
 
 ### Completed task (`concluso`)
 A task-level flag (`concluso: true`) marking a task as finished. Completed tasks are excluded from

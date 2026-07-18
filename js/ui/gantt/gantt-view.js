@@ -45,12 +45,13 @@
 
       const pIdx = projectIndex++;
 
-      if (progetto.baseline.length === 0) {
+      const baselineVisibili = progetto.baseline.filter((b) => mostraArchiviati || !b.archiviata);
+      if (baselineVisibili.length === 0) {
         rows.push({ progetto, baseline: null, task: null, file: voce.file, showProgetto: true, showBaseline: false, projectIndex: pIdx, baselineIndex: 0 });
         continue;
       }
 
-      progetto.baseline.forEach((baseline, bi) => {
+      baselineVisibili.forEach((baseline, bi) => {
         const taskVisibili = baseline.task.filter((t) => mostraConclusi || !t.concluso);
         if (taskVisibili.length === 0) {
           rows.push({ progetto, baseline, task: null, file: voce.file, showProgetto: bi === 0, showBaseline: true, projectIndex: pIdx, baselineIndex: bi });

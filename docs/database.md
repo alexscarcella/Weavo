@@ -75,6 +75,7 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
   "baseline": [
     {
       "versione": "1.0",
+      "archiviata": false,
       "task": [
         {
           "nome": "Integration Testing",
@@ -116,7 +117,12 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
 - `concluso: true` marks a task as finished: it's excluded from overallocation counting and from
   team-mismatch detection, but its data is never deleted or rewritten automatically.
 - `archiviato: true` marks a whole project as archived — same principle, no destructive
-  auto-correction.
+  auto-correction. A baseline can independently be archived too (`baseline.archiviata: true`,
+  same "row ⋮ menu" affordance) — archiving a baseline never touches its tasks or their data,
+  it only hides that baseline from the gantt/milestones views (and from the milestones-based
+  "upcoming baselines" count) unless the shared "Show archived" toggle is on. A project's own
+  `archiviato` flag still takes precedence: archiving the project hides all of its baselines
+  regardless of their individual `archiviata` value.
 
 ## Conflict detection
 

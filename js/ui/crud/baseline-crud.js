@@ -46,5 +46,10 @@
     await persistProject(state, file);
   }
 
-  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaseline };
+  async function toggleArchivio(state, file, baseline) {
+    baseline.archiviata = !baseline.archiviata;
+    await persistProject(state, file);
+  }
+
+  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaseline, toggleArchivio };
 })(window.MP = window.MP || {});

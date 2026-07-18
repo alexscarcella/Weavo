@@ -19,7 +19,8 @@
       const progetto = entry.data;
       if (progetto.archiviato && !mostraArchiviati) continue;
 
-      progetto.baseline.forEach((baseline, bi) => {
+      const baselineVisibili = progetto.baseline.filter((b) => mostraArchiviati || !b.archiviata);
+      baselineVisibili.forEach((baseline, bi) => {
         const counts = new Map();
         let taskNome = null;
         for (const task of baseline.task) {
