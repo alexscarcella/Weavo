@@ -68,6 +68,22 @@
     return mismatch;
   }
 
+  // Tutte le week entry che referenziano una sigla (in entry.risorse), divise tra task attivi
+  // (non conclusi) e conclusi. A differenza dei find* sopra ritorna riferimenti mutabili
+  // (task, entry, ...) e non stringhe già appiattite: usato sia per decidere quali celle
+  // riscrivere dopo uno spostamento di risorsa, sia per il cascade-delete e il riepilogo
+  // copiabile alla cancellazione, entrambi in resource-crud.js.
+  function findResourceAllocations(dataset, sigla) {
+    const attive = [];
+    const concluse = [];
+    forEachWeekEntry(dataset, ({ file, progetto, baseline, task, settimana, entry }) => {
+      if (!Array.isArray(entry.risorse) || !entry.risorse.includes(sigla)) return;
+      const record = { file, progetto, baseline, task, settimana, entry };
+      (task.concluso ? concluse : attive).push(record);
+    });
+    return { attive, concluse };
+  }
+
   // Sigle orfane nei riferimenti risorsa di progetto (solutionAnalyst/vvReference in
   // progetto.team), stesso principio di findOrphanRisorse ma sul livello progetto invece che
   // sulle week entry.
@@ -90,5 +106,12 @@
     return orfani;
   }
 
-  MP.validation = { findOrphanTeam, findOrphanRisorse, findTeamMismatches, findOrphanProjectRiferimenti };
+  MP.validation = {
+    forEachWeekEntry,
+    findOrphanTeam,
+    findOrphanRisorse,
+    findTeamMismatches,
+    findOrphanProjectRiferimenti,
+    findResourceAllocations,
+  };
 })(window.MP = window.MP || {});

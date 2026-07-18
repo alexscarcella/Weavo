@@ -82,6 +82,88 @@
     });
   }
 
+  // Conferma con riepilogo di sola lettura: mostra un testo pre-selezionato e copiabile
+  // (textarea readonly) prima di un'azione distruttiva, richiedendo comunque un click esplicito
+  // di conferma (chiudere/Escape/click fuori equivalgono ad annullare) — a differenza di
+  // promptText non è editabile e risolve con l'esito della scelta (bool), non col testo.
+  function confirmWithReport({ title, message = '', reportText = '', confirmLabel = 'Conferma', cancelLabel = 'Annulla', danger = false } = {}) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      const box = document.createElement('div');
+      box.className = `modal-box modal-box-wide${danger ? ' modal-danger-confirm' : ''}`;
+      box.innerHTML = `
+        <h2>${escapeHtml(title)}</h2>
+        ${message ? `<p>${escapeHtml(message)}</p>` : ''}
+        <textarea class="modal-textarea" rows="12" readonly></textarea>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">${escapeHtml(cancelLabel)}</button>
+          <button type="button" class="modal-btn-save">${escapeHtml(confirmLabel)}</button>
+        </div>`;
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      const field = box.querySelector('textarea');
+      field.value = reportText;
+      field.focus();
+      field.select();
+
+      const close = (result) => {
+        overlay.remove();
+        resolve(result);
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(false));
+      box.querySelector('.modal-btn-save').addEventListener('click', () => close(true));
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close(false);
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close(false);
+      });
+    });
+  }
+
+  // Editor a scelta singola tra opzioni fisse (select), al posto di window.prompt a testo
+  // libero — usato ad es. per scegliere il team di destinazione nello spostamento di una
+  // risorsa. Risolve col value selezionato, o null se annullato.
+  function promptSelect({ title, label = '', options, value = '', confirmLabel = 'Conferma', cancelLabel = 'Annulla' } = {}) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      const box = document.createElement('div');
+      box.className = 'modal-box';
+      const fieldId = 'modal-select-field';
+      const opts = options.map((o) => `<option value="${escapeHtml(o.value)}">${escapeHtml(o.label)}</option>`).join('');
+      box.innerHTML = `
+        <h2>${escapeHtml(title)}</h2>
+        ${label ? `<label class="modal-field-label" for="${fieldId}">${escapeHtml(label)}</label>` : ''}
+        <select id="${fieldId}" class="modal-select">${opts}</select>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">${escapeHtml(cancelLabel)}</button>
+          <button type="button" class="modal-btn-save">${escapeHtml(confirmLabel)}</button>
+        </div>`;
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      const field = box.querySelector(`#${fieldId}`);
+      if (value) field.value = value;
+      field.focus();
+
+      const close = (result) => {
+        overlay.remove();
+        resolve(result);
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
+      box.querySelector('.modal-btn-save').addEventListener('click', () => close(field.value));
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close(null);
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close(null);
+      });
+    });
+  }
+
   function escapeHtml(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -284,5 +366,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptColor, promptProjectForm, showProjectCard };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, confirmWithReport };
 })(window.MP = window.MP || {});

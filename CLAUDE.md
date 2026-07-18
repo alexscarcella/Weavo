@@ -139,11 +139,23 @@ resources are nested inside their team in `team-risorse.json`, never listed inde
   view duplicates it with its own "manage" button (removed as redundant).
 - A team can have zero resources; deleting a team with resources still assigned is **blocked**
   (`MP.teamCrud.deleteTeam`) — the user must move or delete its resources first.
-- Moving a resource to a different team (`MP.resourceCrud.moveResource`) only rewrites
-  `team-risorse.json`. It deliberately does **not** touch any project file: existing week
-  entries keep the `team` they were saved with. `MP.validation.findTeamMismatches` (see below)
-  is what surfaces the resulting inconsistency for the user to fix by hand — there is no
-  assisted bulk-regularization flow yet (tracked in `requirements/backlog.md`).
+- Moving a resource to a different team (`MP.resourceCrud.moveResource`) does **assisted bulk
+  regularization**: before persisting, it scans every non-`concluso` week entry referencing the
+  resource (`MP.validation.findResourceAllocations`) and, for cells where the move leaves every
+  allocated sigla belonging to a single team ("unambiguous"), rewrites that cell's `team` to
+  match — after a confirmation showing how many cells will be updated — so the cell's rendered
+  color (driven by `entry.team`, see `gantt-cell.js`) follows the resource automatically. Cells
+  where the move leaves resources spanning more than one team ("ambiguous", e.g. a cell with two
+  resources independently moved to different teams) are left untouched and keep being surfaced
+  by `MP.validation.findTeamMismatches` (see below) for manual fix-up in the cell popover.
+  Deleting a resource (`MP.resourceCrud.deleteResource`) similarly cascades: it removes the
+  sigla from every non-`concluso` week entry's `risorse` (clearing `team` too if `risorse`
+  becomes empty, preserving `milestone: true` if set) before removing the resource from
+  `team-risorse.json`, showing a copyable plain-text summary of the affected allocations first
+  and requiring explicit confirmation. `concluso` task allocations are never touched by either
+  flow (see below) and become orphan references once the resource is gone. Project-level
+  `solutionAnalyst`/`vvReference` sigla references are never touched by either flow either — see
+  "Project team/referents" below.
 - A week entry's `team` field must match the team of every sigla in its `risorse` array in
   principle, but this isn't enforced at write time for pre-existing data — only flagged. The
   cell popover ([js/ui/gantt/cell-popover.js](js/ui/gantt/cell-popover.js)) enforces it going
@@ -168,7 +180,8 @@ predates the team/risorse merge and still describes the old two-file `risorse.js
   dropped or auto-corrected.
 - A task marked `concluso: true` is excluded from overallocation counting *and* from mismatch
   detection (its weeks no longer count as active commitment) but its data is not deleted or
-  auto-corrected — closed tasks are never touched by team/resource changes.
+  auto-corrected — closed tasks are never touched by team/resource changes, including the
+  bulk-regularization-on-move and cascade-delete-on-deletion flows described above.
 
 ### Project team/referents
 
