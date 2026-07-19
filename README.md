@@ -178,6 +178,9 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
   (release calendar) pages are read-only: they're for checking, not editing. The header shared by
   every page also shows a running count of upcoming baselines (release milestones due from today
   onward), so you don't need to open the Milestones page just to see how many are coming up.
+- The **Milestones** page opens with a scrollable list of upcoming releases grouped by month
+  (above the release-density chart and calendar), with a **"Copy"** button that puts the list on
+  your clipboard as plain text — handy for pasting into an email or a text file.
 - **Switch to a different data folder:** ☰ menu → *"Change data folder…"* → confirm. This closes
   the current folder (no data is touched) and takes you back to the folder-selection screen, where
   you pick a different one with the usual button.

@@ -369,6 +369,31 @@ code {
 
 /* --- Vista milestone --- */
 .milestone-counter { font-weight: 600; color: #2a3542; }
+
+.milestone-list-section {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+}
+.milestone-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding-bottom: 0.4rem;
+}
+.milestone-list-header h3 { margin: 0; font-size: 0.95rem; }
+.milestone-copy-btn { font-size: 0.8rem; padding: 0.25rem 0.75rem; }
+.milestone-list-month { margin: 0.6rem 0 0.2rem; font-size: 0.8rem; color: #555; }
+.milestone-list-items { margin: 0; padding-left: 1.4rem; font-size: 0.85rem; }
+.milestone-list-items li { margin: 0.15rem 0; }
 .gantt-cell.col-fixed.row-inconsistent { box-shadow: inset 3px 0 0 #ffb300; }
 .gantt-cell.week-cell.milestone-total-cell { font-weight: 700; color: #b71c1c; }
 

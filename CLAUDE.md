@@ -363,13 +363,25 @@ inserted at the right point in that list. Layers, low → high:
    across all tasks that have one set, reading completed tasks too since this is read-only
    derivation, not the write-side sync in `gantt-view.js`; flags a baseline `inconsistent` if its
    tasks disagree on the week, without correcting the underlying data — feeds the milestones page;
+   each row also carries `distinctDates` (every distinct ISO week found with `milestone: true`
+   across the baseline's tasks, sorted — not just the "winning" one), used by the function below to
+   surface the other dates of an inconsistent baseline rather than silently picking one.
    `countUpcomingBaselines` filters those same rows to `settimana >= getTodayIso()` — a simple ISO
    string compare, valid since both sides are `YYYY-MM-DD` — and feeds the "upcoming baselines"
    count in the shared `dataset-header.js`, so gantt/resource-load users see it without opening
-   the Milestones page). `week-utils.js` also exports `getTodayIso()` (today's date, recomputed
-   from the browser clock on every call, never persisted) alongside the pre-existing
-   `getCurrentWeekIso()` (the Monday of the week containing today) — `countUpcomingBaselines` uses
-   the former since a release date is a specific day, not a week-column highlight.
+   the Milestones page. `computeUpcomingMilestonesByMonth(dataset, showArchived)` is the pure
+   derivation behind the Milestones page's copyable list (see below): filters to the same
+   `settimana >= getTodayIso()` upcoming rows, then — for an `inconsistent` baseline — picks the
+   *most recent* of `distinctDates` as `displayDate` (deliberately different from
+   `computeBaselineMilestones`'s own "most frequent, earliest on tie" pick, which stays unchanged
+   for the grid/histogram/upcoming-count) and keeps the rest as `otherDates`; groups rows by
+   calendar month (`YYYY-MM` of `displayDate`), sorted ascending, rows within a month sorted by
+   date then project name. Returns plain data (no formatted strings, no DOM) — date/month display
+   formatting is the UI layer's job, kept out of this pure-derivation module). `week-utils.js` also
+   exports `getTodayIso()` (today's date, recomputed from the browser clock on every call, never
+   persisted) alongside the pre-existing `getCurrentWeekIso()` (the Monday of the week containing
+   today) — `countUpcomingBaselines` uses the former since a release date is a specific day, not a
+   week-column highlight.
    `week-shift.js` is a small, self-contained pure module for the "shift" feature (see
    `gantt/` below): `canShiftWeeks(dataset, task, weeks, direction)` is the ammissibility
    predicate (blocks on `task.completed`, on the shift crossing `manifest.weeks.first`/
@@ -571,20 +583,45 @@ inserted at the right point in that list. Layers, low → high:
      resources (create/rename/recolor/delete team; create/rename/move/delete resource within a
      team) — the only place in the UI where `team-resources.json` is edited.
    - `milestones/milestones-view.js`: read-only report on the density of baseline release
-     milestones across the calendar, one row per baseline (fixed columns "Project"/"Baseline"
-     only — no per-task row, since `MP.milestones.computeBaselineMilestones` already collapses
-     each baseline to its single effective release week) instead of the gantt's per-task rows;
-     same week columns/range as gantt and resource-load (`MP.weekUtils.getWeeksInRange`) and the
-     same shared `dataset-header.js`, filtered by the same `state.ui.showArchived` flag (no
-     dedicated toggle on this page, so its row set always matches the project count shown in the
-     shared header). A row whose baseline has inconsistent milestone dates across its tasks gets a
-     `row-inconsistent` amber marker (never auto-corrected, same non-blocking-warning principle as
-     team mismatches). Below the grid — inside the same `.gantt-scroll` so it scrolls horizontally
-     in sync without any dedicated sync code — a bar-chart row (`.milestone-histogram`) of releases
-     per week, outside the `.gantt-grid` itself because CSS Grid's `grid-auto-rows: 24px` is too
-     short for readable bars. The total release count feeds the "Total releases in period"
-     counter passed as `dataset-header.js`'s extra element (distinct from the header's own
-     "upcoming baselines" count, which is scoped to today-and-later rather than the whole period).
+     milestones across the calendar. Renders, top to bottom, three independent sections sharing
+     one page: a copyable upcoming-releases list, a bar-chart histogram, and the full-period
+     calendar grid (in that order — the list is scoped to upcoming-only, the other two stay
+     scoped to the whole dataset period, so the three can show different row counts by design).
+     - The **list** (`renderMilestoneList`, backed by `MP.milestones.computeUpcomingMilestonesByMonth`,
+       so only future releases, grouped by calendar month) is a plain `<h4>`/`<ul>` per month, one
+       `<li>` per baseline formatted as `"<day Mon year> — <project> — <baseline version>"` (plus
+       `" (other dates: …)"` when the baseline's milestone is `inconsistent`, using the *most
+       recent* of the tasks' distinct dates as the shown one — see `distinctDates` on
+       `js/model/milestones.js` above). A "Copy" button (disabled when the list is empty) builds
+       the same text as plain lines (`"- "` bullets, month names as their own line, blank line
+       between months) and calls `navigator.clipboard.writeText` — the first use of the Clipboard
+       API in this codebase; wrapped in try/catch with a `MP.toast.showToast` success/error message,
+       same non-blocking feedback pattern as the Backup action in `toolbar.js`. Date/month display
+       formatting (`formatReadableDate`, `formatMonthLabel`, via `toLocaleDateString`) lives only in
+       this UI module, not in the pure `js/model/milestones.js` derivation. Its container
+       (`.milestone-list-section`, css/styles.css) is capped at `max-height: 220px` with its own
+       `overflow-y: auto` and a `position: sticky` header — deliberately bounded rather than
+       `flex: 0 0 auto`-to-content, otherwise a long list of upcoming milestones would grow past the
+       page's available height and squeeze `.gantt-scroll` (the histogram+grid below) down to
+       nothing, breaking the single-page-scrollbar layout described under `js/app.js` below (found
+       empirically: an unbounded list section pushed the grid off-screen with no way to reach it).
+     - The **grid** is one row per baseline (fixed columns "Project"/"Baseline" only — no per-task
+       row, since `MP.milestones.computeBaselineMilestones` already collapses each baseline to its
+       single effective release week) instead of the gantt's per-task rows; same week columns/range
+       as gantt and resource-load (`MP.weekUtils.getWeeksInRange`) and the same shared
+       `dataset-header.js`, filtered by the same `state.ui.showArchived` flag (no dedicated toggle
+       on this page, so its row set always matches the project count shown in the shared header). A
+       row whose baseline has inconsistent milestone dates across its tasks gets a `row-inconsistent`
+       amber marker (never auto-corrected, same non-blocking-warning principle as team mismatches).
+     - The **histogram** — inside the same `.gantt-scroll` as the grid so it scrolls horizontally in
+       sync without any dedicated sync code, placed *before* the grid in DOM order — is a bar-chart
+       row (`.milestone-histogram`) of releases per week, outside the `.gantt-grid` itself because
+       CSS Grid's `grid-auto-rows: 24px` is too short for readable bars.
+     - The total release count (whole period) feeds the "Total releases in period" counter passed
+       as `dataset-header.js`'s extra element (distinct from the header's own "upcoming baselines"
+       count, which is scoped to today-and-later rather than the whole period — same scope as the
+       list above, but computed independently via `countUpcomingBaselines` for the header vs.
+       `computeUpcomingMilestonesByMonth` for the list, since the header only needs a count).
    - `weeks/week-controls.js`: exports two standalone edge-button renderers (no combined control
      bar, no count input). `gantt-view.js` places them **inside the weeks grid itself**, in an
      extra row above the column-label row (`.gantt-cell.week-edge-row`, class `has-week-edge-row`

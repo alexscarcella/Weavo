@@ -47,6 +47,7 @@
           progetto,
           baseline,
           settimana,
+          distinctDates: Array.from(counts.keys()).sort(),
           taskName,
           inconsistent,
           showProgetto: bi === 0,
@@ -69,5 +70,45 @@
       .length;
   }
 
-  MP.milestones = { computeBaselineMilestones, countUpcomingBaselines };
+  // Elenco (per la pagina Milestone, sezione copiabile) delle sole milestone future,
+  // raggruppate per mese solare della loro data effettiva. Pura derivazione, nessuna
+  // formattazione/locale qui: quella resta al layer UI. Per una baseline "inconsistent"
+  // (task in disaccordo sulla settimana) la data mostrata è la più recente tra quelle
+  // trovate (non quella "più frequente" usata da computeBaselineMilestones per
+  // griglia/istogramma), con le altre date riportate in `otherDates` come nota.
+  function computeUpcomingMilestonesByMonth(dataset, showArchived) {
+    const todayIso = MP.weekUtils.getTodayIso();
+    const upcoming = computeBaselineMilestones(dataset, showArchived)
+      .filter((row) => row.settimana && row.settimana >= todayIso)
+      .map((row) => {
+        const displayDate = row.inconsistent ? row.distinctDates[row.distinctDates.length - 1] : row.settimana;
+        const otherDates = row.inconsistent ? row.distinctDates.filter((iso) => iso !== displayDate) : [];
+        return {
+          displayDate,
+          otherDates,
+          inconsistent: row.inconsistent,
+          progettoName: row.progetto.name,
+          baselineVersion: row.baseline.version,
+        };
+      });
+
+    const byMonth = new Map();
+    for (const item of upcoming) {
+      const monthKey = item.displayDate.slice(0, 7);
+      if (!byMonth.has(monthKey)) byMonth.set(monthKey, []);
+      byMonth.get(monthKey).push(item);
+    }
+
+    return Array.from(byMonth.keys())
+      .sort()
+      .map((monthKey) => {
+        const monthRows = byMonth.get(monthKey).sort((a, b) => {
+          if (a.displayDate !== b.displayDate) return a.displayDate < b.displayDate ? -1 : 1;
+          return a.progettoName.localeCompare(b.progettoName);
+        });
+        return { monthKey, rows: monthRows };
+      });
+  }
+
+  MP.milestones = { computeBaselineMilestones, countUpcomingBaselines, computeUpcomingMilestonesByMonth };
 })(window.MP = window.MP || {});
