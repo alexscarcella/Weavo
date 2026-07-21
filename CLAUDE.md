@@ -150,7 +150,7 @@ exactly **one** team — this is a real 1-team-to-N-resources relationship, not 
 resources are nested inside their team in `team-resources.json`, never listed independently.
 
 ```json
-{ "teams": [ { "code": "dev", "name": "Development", "color": "#00B050", "resources": [ { "initials": "LC", "name": "Luca Cozzi" } ] } ] }
+{ "teams": [ { "code": "dev", "name": "Development", "color": "#00B050", "resources": [ { "initials": "LC", "name": "Luca Ciazzi" } ] } ] }
 ```
 
 - All CRUD for teams and resources is centralized in the dedicated page
