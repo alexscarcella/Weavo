@@ -192,7 +192,7 @@ code {
 .gantt-cell.col-1 { left: 0; width: 170px; }
 .gantt-cell.col-2 { left: 170px; width: 90px; color: #555; }
 .gantt-cell.col-3 { left: 260px; width: 300px; font-weight: 400; }
-.gantt-cell.task-completed { color: #888; }
+.gantt-cell.completed-dim { color: #888; }
 
 .gantt-cell.header {
   position: sticky;
@@ -282,7 +282,7 @@ code {
 }
 .badge-orphan-resource { background: #ff8a65; color: #4a1c00; }
 
-.toggle-archived, .toggle-completed { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+.toggle-completed { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
 
 .gantt-cell.editable-cell { cursor: pointer; }
 .gantt-cell.editable-cell:hover { outline: 2px solid #2E86FF; outline-offset: -2px; }
@@ -510,7 +510,7 @@ code {
 .gantt-cell.col-fixed:hover .task-drag-handle { opacity: 1; }
 .task-drag-handle:hover { color: #2E86FF; }
 
-.task-completed-checkbox { flex: none; margin-right: 0.3rem; cursor: pointer; }
+.completed-checkbox { flex: none; margin-right: 0.3rem; cursor: pointer; }
 .hint-text { color: #999; font-style: italic; }
 
 /* --- Modal bloccante (conflitto di salvataggio) --- */

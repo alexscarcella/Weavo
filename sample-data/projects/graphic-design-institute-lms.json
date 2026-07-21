@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team GRAPHIC DESIGN INSTITUTE LMS (Jez Humble / Jesse Robbins)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Penetration Testing",
@@ -255,7 +255,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Certification Testing",
@@ -431,7 +431,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Real-Time Event Streaming",

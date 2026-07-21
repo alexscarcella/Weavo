@@ -288,7 +288,7 @@
 
       box.innerHTML = `
         <h2>${escapeHtml(progetto.name)}</h2>
-        ${row('Status', progetto.archived ? 'Archived' : 'Active')}
+        ${row('Status', progetto.completed ? 'Completed' : 'Active')}
         ${row('Baseline', `${progetto.baseline.length} (${totTask} tasks total)`)}
         ${row('Project manager', escapeHtml(referents.projectManager))}
         ${row('Project Engineer', escapeHtml(referents.projectEngineer))}
@@ -375,10 +375,13 @@
       <h3>Rows: rename, reorder, delete…</h3>
       <ul>
         <li>The <strong>⋮</strong> menu on a project/baseline/task row name covers
-        renaming, reordering, archiving, and deleting.</li>
-        <li>The checkbox next to a task name marks it as completed — completed tasks
-        are excluded from overallocation checks and are never touched automatically
-        by team/resource changes.</li>
+        renaming, reordering, and deleting.</li>
+        <li>The checkbox next to a project/baseline/task name marks it as completed.
+        For a task this happens immediately — completed tasks are excluded from
+        overallocation checks and are never touched automatically by team/resource
+        changes. For a project or baseline, checking the box asks for confirmation
+        first, since it hides the whole project/baseline block by default;
+        unchecking it needs no confirmation.</li>
       </ul>
 
       <h3>Warnings on cells</h3>

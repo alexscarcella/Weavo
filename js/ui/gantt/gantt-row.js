@@ -46,6 +46,7 @@
     col1.classList.add('project-color-bar');
     col1.style.setProperty('--project-bar-color', PROJECT_BAR_COLORS[projectIndex % PROJECT_BAR_COLORS.length]);
     if (showProgetto) {
+      if (progetto.completed) col1.classList.add('completed-dim');
       const nomeSpan = col1.querySelector('.cell-text');
       const teamTooltip = formatTeamTooltip(progetto.referents);
       if (nomeSpan) nomeSpan.title = teamTooltip ? `${progetto.name}\n${teamTooltip}` : progetto.name;
@@ -62,10 +63,19 @@
       if (nomeSpan) col1.insertBefore(infoBtn, nomeSpan);
       else col1.appendChild(infoBtn);
 
+      const completedChk = document.createElement('input');
+      completedChk.type = 'checkbox';
+      completedChk.className = 'completed-checkbox';
+      completedChk.checked = !!progetto.completed;
+      completedChk.title = 'Mark as completed';
+      completedChk.addEventListener('click', (e) => e.stopPropagation());
+      completedChk.addEventListener('change', () => MP.projectCrud.toggleCompleted(state, file));
+      if (nomeSpan) col1.insertBefore(completedChk, nomeSpan);
+      else col1.appendChild(completedChk);
+
       col1.appendChild(menuButton([
         { label: 'Rename project', onClick: () => MP.projectCrud.renameProject(state, file) },
         { label: 'Project team…', onClick: () => MP.projectCrud.editReferents(state, file) },
-        { label: progetto.archived ? 'Reactivate project' : 'Archive project', onClick: () => MP.projectCrud.toggleArchived(state, file) },
         { label: '+ New baseline', onClick: () => MP.baselineCrud.createBaseline(state, file) },
         { label: '↑', title: 'Move up', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, -1) },
         { label: '↓', title: 'Move down', className: 'context-menu-item-icon', onClick: () => MP.projectCrud.moveProject(state, file, 1) },
@@ -76,9 +86,21 @@
 
     const col2 = fixedCell(showBaseline && baseline ? baseline.version : '', 'col-2');
     if (showBaseline && baseline) {
+      if (baseline.completed) col2.classList.add('completed-dim');
+      const versionSpan = col2.querySelector('.cell-text');
+
+      const completedChk = document.createElement('input');
+      completedChk.type = 'checkbox';
+      completedChk.className = 'completed-checkbox';
+      completedChk.checked = !!baseline.completed;
+      completedChk.title = 'Mark as completed';
+      completedChk.addEventListener('click', (e) => e.stopPropagation());
+      completedChk.addEventListener('change', () => MP.baselineCrud.toggleCompleted(state, file, baseline));
+      if (versionSpan) col2.insertBefore(completedChk, versionSpan);
+      else col2.appendChild(completedChk);
+
       col2.appendChild(menuButton([
         { label: 'Rename baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
-        { label: baseline.archived ? 'Reactivate baseline' : 'Archive baseline', onClick: () => MP.baselineCrud.toggleArchived(state, file, baseline) },
         { label: 'Shift baseline…', onClick: () => MP.baselineCrud.shiftBaseline(state, file, baseline) },
         { label: '+ New task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },
         { label: 'Delete baseline', danger: true, onClick: () => MP.baselineCrud.deleteBaseline(state, file, baseline) },
@@ -87,7 +109,7 @@
     cells.push(col2);
 
     const col3 = document.createElement('div');
-    col3.className = `gantt-cell col-fixed col-3${task && task.completed ? ' task-completed' : ''}`;
+    col3.className = `gantt-cell col-fixed col-3${task && task.completed ? ' completed-dim' : ''}`;
     if (task) {
       const dragHandle = document.createElement('span');
       dragHandle.className = 'task-drag-handle';
@@ -100,7 +122,7 @@
 
       const chk = document.createElement('input');
       chk.type = 'checkbox';
-      chk.className = 'task-completed-checkbox';
+      chk.className = 'completed-checkbox';
       chk.checked = task.completed;
       chk.title = 'Mark as completed';
       chk.addEventListener('click', (e) => e.stopPropagation());
@@ -140,8 +162,7 @@
       dragHandle.draggable = true;
       dragHandle.addEventListener('dragstart', (e) => MP.baselineDrag.handleDragStart(e, { state, file, baseline, cells: [col1, col2, col3] }));
       dragHandle.addEventListener('dragend', (e) => MP.baselineDrag.handleDragEnd(e));
-      const versionText = col2.querySelector('.cell-text');
-      col2.insertBefore(dragHandle, versionText);
+      col2.insertBefore(dragHandle, col2.firstChild);
     }
 
     // Bersaglio di drop del drag&drop baseline: qualunque riga della baseline (task compresi

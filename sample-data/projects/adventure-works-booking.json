@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team ADVENTURE WORKS BOOKING (Werner Vogels / Ken Thompson)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Checkout Module Development",
@@ -221,7 +221,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Refactoring",
@@ -407,7 +407,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Integration Testing",

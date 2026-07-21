@@ -2,7 +2,7 @@
 // settimane + conteggio task/progetti/baseline in arrivo, esattamente come la
 // vista gantt calcola le proprie righe visibili — vedi MP.ganttView.buildRows)
 // più la legenda colori (MP.legend). Le azioni specifiche di una vista (es. "+
-// Nuovo progetto" e i toggle archiviati/conclusi in gantt) vengono passate
+// Nuovo progetto" e i toggle "mostra completati" in gantt) vengono passate
 // come elemento extra da affiancare sulla stessa riga, per restare "una riga
 // come oggi" anche dopo la condivisione tra le due pagine.
 (function (MP) {
@@ -10,8 +10,8 @@
 
   function renderDatasetHeader(state, extraActionsEl) {
     const { dataset } = state;
-    const rows = MP.ganttView.buildRows(dataset, state.ui.showArchived, state.ui.showCompleted);
-    const upcomingBaselines = MP.milestones.countUpcomingBaselines(dataset, state.ui.showArchived);
+    const rows = MP.ganttView.buildRows(dataset, state.ui.showCompletedProjects, state.ui.showCompleted);
+    const upcomingBaselines = MP.milestones.countUpcomingBaselines(dataset, state.ui.showCompletedProjects);
 
     const fragment = document.createDocumentFragment();
 

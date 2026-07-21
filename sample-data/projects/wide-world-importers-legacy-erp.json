@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team WIDE WORLD IMPORTERS LEGACY ERP (Barbara Liskov / Kohsuke Kawaguchi)"
   },
-  "archived": true,
+  "completed": true,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Unit Testing",
@@ -103,7 +103,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Disaster Recovery Plan",
@@ -232,7 +232,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Change Request Analysis",

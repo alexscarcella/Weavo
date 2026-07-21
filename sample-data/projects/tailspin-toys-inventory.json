@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team TAILSPIN TOYS INVENTORY (Chuck Thacker / Ada Lovelace)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Certification Testing",
@@ -232,7 +232,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Technical Documentation",
@@ -498,7 +498,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Requirements Analysis",

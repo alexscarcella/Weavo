@@ -39,7 +39,7 @@
     const weeks = getWeeksInRange(dataset.manifest.weeks.first, dataset.manifest.weeks.last);
     const currentWeek = getCurrentWeekIso();
     const currentWeekIndex = weeks.indexOf(currentWeek);
-    const rows = computeBaselineMilestones(dataset, state.ui.showArchived);
+    const rows = computeBaselineMilestones(dataset, state.ui.showCompletedProjects);
 
     const weekCounts = new Map();
     let totalRilasci = 0;
@@ -57,7 +57,7 @@
     counterEl.textContent = `Total releases in period: ${totalRilasci}`;
     page.appendChild(MP.datasetHeader.renderDatasetHeader(state, counterEl));
 
-    const monthGroups = computeUpcomingMilestonesByMonth(dataset, state.ui.showArchived);
+    const monthGroups = computeUpcomingMilestonesByMonth(dataset, state.ui.showCompletedProjects);
     page.appendChild(renderMilestoneList(monthGroups));
 
     if (totalRilasci === 0) {

@@ -1,5 +1,5 @@
 // CRUD progetti: crea (con slug automatico e gestione collisioni), rinomina,
-// elimina, archivia/riattiva, riordina. Nessuna lista di progetti hardcoded:
+// elimina, completa/riattiva, riordina. Nessuna lista di progetti hardcoded:
 // tutto passa da manifest.json + projects/*.json.
 (function (MP) {
   'use strict';
@@ -78,9 +78,13 @@
     await persist(state, { manifest: false, projectFiles: [file] });
   }
 
-  async function toggleArchived(state, file) {
+  async function toggleCompleted(state, file) {
     const entry = state.dataset.projects.get(file);
-    entry.data.archived = !entry.data.archived;
+    const marking = !entry.data.completed;
+    if (marking && !window.confirm(`Mark project "${entry.data.name}" as completed? It will be hidden unless "Show completed projects/baselines" is on.`)) {
+      return;
+    }
+    entry.data.completed = marking;
     await persist(state, { manifest: false, projectFiles: [file] });
   }
 
@@ -112,5 +116,5 @@
     await persist(state, { manifest: true, projectFiles: [] });
   }
 
-  MP.projectCrud = { createProject, renameProject, editReferents, toggleArchived, deleteProject, moveProject };
+  MP.projectCrud = { createProject, renameProject, editReferents, toggleCompleted, deleteProject, moveProject };
 })(window.MP = window.MP || {});

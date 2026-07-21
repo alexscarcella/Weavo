@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team CITY POWER & LIGHT GRID MONITOR (Alan Kay / Jesse Robbins)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Data Migration",
@@ -206,7 +206,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "User Acceptance Testing",
@@ -304,7 +304,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Deployment to Staging",

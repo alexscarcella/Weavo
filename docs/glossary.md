@@ -1,7 +1,7 @@
 # Glossary
 
 Terms as used throughout the code, the data files, and the other docs in this folder. The JSON
-field names match the English terms below one-to-one (e.g. `archived`, `completed`, `initials`) —
+field names match the English terms below one-to-one (e.g. `completed`, `initials`) —
 code comments stay in Italian (written by/for the maintainer), but the persisted data model and
 every identifier that mirrors it are English.
 
@@ -9,21 +9,22 @@ every identifier that mirrors it are English.
 The fact that a specific **resource** is assigned to a specific **task** in a specific **week**.
 Always **boolean** — either allocated or not, never a percentage or fraction of a week.
 
-### Archived project (`archived`)
-A project-level flag (`archived: true`) marking a project as no longer active. Archiving never
-deletes or rewrites its data — see [database.md](database.md#projectsslugjson).
-
 ### Baseline
 A **project**'s release/version line (e.g. `"1.0"`, `"2.0"`). A project has one or more baselines;
 each baseline owns its own list of **tasks**. In the JSON, the field is `version`. Can
-independently be archived (`archived: true`, same "no destructive auto-correction" principle as
-[archived project](#archived-project-archived)) — hidden from the gantt/milestones views unless
-the "Show archived" toggle is on, but never deleted or rewritten.
+independently be marked **completed** (`completed: true`, checkbox to the left of the version,
+confirmed before marking — same "no destructive auto-correction" principle as
+[completed task](#completed-task-completed)) — hidden from the gantt/milestones views unless the
+"Show completed projects/baselines" toggle is on, but never deleted or rewritten.
 
 ### Completed task (`completed`)
 A task-level flag (`completed: true`) marking a task as finished. Completed tasks are excluded
 from **overallocation** counting and from **team mismatch** detection, but their week data is kept
-as-is.
+as-is. Projects and baselines share the same `completed` field/concept (checkbox in the row) but,
+unlike tasks, marking either one hides it by default and asks for confirmation first — see
+[Baseline](#baseline) and [Project](#project). Completing a project/baseline is purely a
+visibility change: it does **not** exclude its tasks from overallocation/team-mismatch checks
+(only an individual task's own `completed` flag does that).
 
 ### Conflict detection
 The reread-before-write check performed by `MP.saveCoordinator` before every save: it compares

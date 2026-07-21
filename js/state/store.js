@@ -12,7 +12,7 @@
     error: null,
     ui: {
       currentView: 'gantt', // gantt | resource-load | milestones | team-resources
-      showArchived: false,
+      showCompletedProjects: false,
       showCompleted: false,
       autoBackupOnExit: localStorage.getItem(AUTO_BACKUP_KEY) === 'true',
       // Preavviso "il dataset è cambiato su disco" al ritorno di focus sulla scheda

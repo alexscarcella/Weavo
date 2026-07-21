@@ -71,11 +71,11 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
     "vvReference": "",
     "note": ""
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Integration Testing",
@@ -98,7 +98,7 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
   on demand rather than denormalized; `note` is free multi-line text. Edited as a whole via a
   dedicated form (project row's "⋮" menu → "Project team…"); a read-only summary card
   (project row's "i" icon) shows the resolved values alongside the project's baseline/task counts
-  and archived status. A resource `initials` value referenced here that no longer exists in
+  and completed status. A resource `initials` value referenced here that no longer exists in
   `team-resources.json` is an **orphan reference**, flagged the same non-blocking way as the
   orphan team/resource references below.
 - Allocation is **boolean**, per task per week — a resource is either on a task that week, or it
@@ -115,14 +115,19 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
   schema itself — the flag stays duplicated per `task.weeks[iso]` rather than living on
   `baseline` directly.
 - `completed: true` marks a task as finished: it's excluded from overallocation counting and from
-  team-mismatch detection, but its data is never deleted or rewritten automatically.
-- `archived: true` marks a whole project as archived — same principle, no destructive
-  auto-correction. A baseline can independently be archived too (`baseline.archived: true`,
-  same "row ⋮ menu" affordance) — archiving a baseline never touches its tasks or their data,
-  it only hides that baseline from the gantt/milestones views (and from the milestones-based
-  "upcoming baselines" count) unless the shared "Show archived" toggle is on. A project's own
-  `archived` flag still takes precedence: archiving the project hides all of its baselines
-  regardless of their individual `archived` value.
+  team-mismatch detection, but its data is never deleted or rewritten automatically. Toggled via
+  the checkbox next to the task name, no confirmation.
+- Projects and baselines share the same `completed` field/concept, toggled via a checkbox to the
+  left of the name (project row's col1 / baseline row's col2) rather than a menu action — same "no
+  destructive auto-correction" principle as tasks, but marking either one asks for confirmation
+  first (unmarking doesn't), since it hides a whole block by default. `baseline.completed: true`
+  never touches its tasks or their data, it only hides that baseline from the gantt/milestones
+  views (and from the milestones-based "upcoming baselines" count) unless the "Show completed
+  projects/baselines" toggle is on. A project's own `completed` flag still takes precedence:
+  completing the project hides all of its baselines regardless of their individual `completed`
+  value. Unlike task-level `completed`, marking a project/baseline completed does **not** exclude
+  its tasks from overallocation/team-mismatch checks — that stays scoped to each task's own
+  `completed` flag.
 
 ## Conflict detection
 
@@ -164,29 +169,36 @@ scope boundary, not an oversight.
 
 ## Legacy data migration
 
-`schemaVersion` in `manifest.json` gates a one-time, automatic upgrade of pre-existing data. Every
-version prior to this one used Italian JSON field names (`nome`, `sigla`, `settimane`, `codice`,
-`versione`, `risorse`, `archiviato`, `concluso`, …), the file `team-risorse.json`, and the
-directory `progetti/`. `js/data/legacy-migration.js` (`MP.legacyMigration.migrateIfNeeded`, called
-as the first step of `repository.loadDataset`) checks `manifest.schemaVersion` on every folder
-connect: if it's missing or below the current version, the folder is treated as legacy data and
-converted in place — old-shaped files are read, transformed in memory to the current shape, and
-written under the current names (`team-resources.json`, `projects/`); the old `team-risorse.json`
-file and `progetti/` directory are then removed. `manifest.json` is written last, so it acts as
-the commit point: an interrupted migration simply retries from scratch on the next connect, with
-no partial state to reconcile. A folder already on the current `schemaVersion` is detected cheaply
-(one small JSON parse) and the migration is skipped entirely. This mechanism intentionally has no
-dedicated backup step or crash-recovery bookkeeping — see [glossary.md](glossary.md) and
-`js/data/legacy-migration.js`'s own comments for the reasoning: the data is not treated as
-irreplaceable (it can be regenerated from the Excel import script, or restored from the app's own
-manual/automatic backup feature).
+`schemaVersion` in `manifest.json` gates automatic, one-time upgrades of pre-existing data.
+`js/data/legacy-migration.js` (`MP.legacyMigration.migrateIfNeeded`, called as the first step of
+`repository.loadDataset`) checks `manifest.schemaVersion` on every folder connect and, if it's
+below the current version, converts the folder in place — the exact transform depends on the
+detected version:
 
-Beyond this one-time legacy upgrade, there is no other migration tooling: a future schema change
-means updating `js/data/schema.js` and every reader of the changed shape in the same pass. The
-`project.referents` legacy-string self-heal (`MP.schema.normalizeProjectReferents`, called from
-`repository.loadDataset`) predates and is orthogonal to the shape migration above — it upgrades a
-legacy free-text `referents` value in memory on load regardless of `schemaVersion`, rewriting the
-file to the structured shape the next time that project is saved.
+- **v1 (or missing) → v3**: the oldest shape, with Italian JSON field names (`nome`, `sigla`,
+  `settimane`, `codice`, `versione`, `risorse`, `archiviato`, `concluso`, …), the file
+  `team-risorse.json`, and the directory `progetti/`. Old-shaped files are read, transformed in
+  memory to the current shape, and written under the current names (`team-resources.json`,
+  `projects/`); the old `team-risorse.json` file and `progetti/` directory are then removed.
+- **v2 → v3**: data already in the current English-named shape (same `team-resources.json`/
+  `projects/` paths, no file/directory renaming needed) but with `archived` instead of `completed`
+  on `project` and `baseline` — a narrower, field-rename-only pass over the project files.
+
+Either way, `manifest.json` is written last, so it acts as the commit point: an interrupted
+migration simply retries from scratch on the next connect, with no partial state to reconcile. A
+folder already on the current `schemaVersion` is detected cheaply (one small JSON parse) and the
+migration is skipped entirely. This mechanism intentionally has no dedicated backup step or
+crash-recovery bookkeeping — see [glossary.md](glossary.md) and `js/data/legacy-migration.js`'s own
+comments for the reasoning: the data is not treated as irreplaceable (it can be regenerated from
+the Excel import script, or restored from the app's own manual/automatic backup feature).
+
+Beyond these versioned upgrades, there is no other migration tooling: a future schema change means
+updating `js/data/schema.js`, adding a new incremental step to `legacy-migration.js`, and updating
+every reader of the changed shape in the same pass. The `project.referents` legacy-string self-heal
+(`MP.schema.normalizeProjectReferents`, called from `repository.loadDataset`) predates and is
+orthogonal to the shape migrations above — it upgrades a legacy free-text `referents` value in
+memory on load regardless of `schemaVersion`, rewriting the file to the structured shape the next
+time that project is saved.
 
 ## Referential integrity is advisory, not enforced
 

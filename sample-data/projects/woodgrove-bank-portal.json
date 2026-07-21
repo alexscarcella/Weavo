@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team WOODGROVE BANK PORTAL (Cem Kaner / Margaret Hamilton)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Monitoring & Alerting Setup",
@@ -79,7 +79,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Regression Testing",
@@ -161,7 +161,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Real-Time Event Streaming",

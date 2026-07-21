@@ -60,9 +60,9 @@ was a deliberate one-time sweep (July 2026) of every string rendered to the scre
 must be written in English too.
 
 A later refactoring pass extended this to the data model itself: every persisted JSON field name
-(`initials`, `name`, `weeks`, `code`, `version`, `projects`, `archived`, `completed`, etc. — see
+(`initials`, `name`, `weeks`, `code`, `version`, `projects`, `completed`, etc. — see
 [docs/glossary.md](docs/glossary.md)) and every internal identifier that directly mirrors one
-(`state.ui.currentView`, `showArchived`, the view code `'resource-load'`, exported function names
+(`state.ui.currentView`, `showCompletedProjects`, the view code `'resource-load'`, exported function names
 like `findOrphanResources`, …) is English too — there's no carve-out left for Italian anywhere in
 the persisted data or in the code paths that construct/read it. The only remaining exceptions are
 **code comments** (this codebase's comments stay in Italian, written by/for the maintainer) and
@@ -204,10 +204,11 @@ Each project's `referents` field (`projects/<slug>.json`) is a structured object
   that used to live in the gantt toolbar moved into the hamburger menu — see `toolbar.js` below)
   and for the existing "Project team…" row-menu edit action (`MP.projectCrud.editReferents`,
   `project-crud.js`).
-- Read-only view: the "i" icon rendered by `gantt-row.js` immediately before the project name
-  (only on the row where the name itself is shown) opens `MP.modal.showProjectCard`, listing name,
-  archived status, baseline/task counts, and all 5 referent fields with the two initials
-  references resolved to a name. No "Edit" action inside it by design — editing stays solely in
+- Read-only view: the "i" icon rendered by `gantt-row.js` before the project name (before the
+  completed checkbox, only on the row where the name itself is shown) opens
+  `MP.modal.showProjectCard`, listing name, completed status, baseline/task counts, and all 5
+  referent fields with the two initials references resolved to a name. No "Edit" action inside it
+  by design — editing stays solely in
   the "Project team…" row-menu entry, so there's exactly one write path for this field.
 - A `solutionAnalyst`/`vvReference` initials value that no longer exists in `team-resources.json`
   is an **orphan reference**, same non-blocking-warning treatment as the task-level ones —
@@ -225,26 +226,39 @@ Each project's `referents` field (`projects/<slug>.json`) is a structured object
 
 Every field name described above is a deliberate, one-time rename from an earlier Italian-named
 schema (`nome`, `sigla`, `settimane`, `codice`, `versione`, `risorse`, `archiviato`/`archiviata`,
-`concluso`, the file `team-risorse.json`, the directory `progetti/`). Because real data folders on
-a shared OneDrive/network location can't be migrated by hand, `manifest.schemaVersion` (bumped to
-`2` for this rename) gates an automatic, one-time upgrade: `MP.legacyMigration.migrateIfNeeded`
-([js/data/legacy-migration.js](js/data/legacy-migration.js)), called as the first step of
-`repository.loadDataset`, checks the version on every folder connect. If it's missing or below
-`MP.schema.SCHEMA_VERSION`, the folder is legacy: old-shaped files are read (following
-`manifest.progetti`, the old field name, since the manifest itself hasn't been transformed yet),
-transformed in memory to the current shape via the module's pure `transformManifest`/
-`transformTeamResources`/`transformProject` functions, and written under the current names
-(`team-resources.json`, `projects/`) — `manifest.json` is written **last**, so it doubles as the
-commit point: an interrupted migration just retries from scratch on the next connect, no partial
-state to reconcile. The old `team-risorse.json` file and `progetti/` directory are removed only
-after the new files are fully written. A folder already on the current `schemaVersion` is detected
-cheaply (one small JSON parse) and skips migration entirely.
+`concluso`, the file `team-risorse.json`, the directory `progetti/`), plus a later, narrower rename
+of `archived` → `completed` on `project`/`baseline` — done to unify that concept with task-level
+`completed` (checkbox in the row, not a menu action; see "Where to make common changes" and
+`gantt-row.js` below). Because real data folders on a shared OneDrive/network location can't be
+migrated by hand, `manifest.schemaVersion` gates automatic, one-time upgrades:
+`MP.legacyMigration.migrateIfNeeded` ([js/data/legacy-migration.js](js/data/legacy-migration.js)),
+called as the first step of `repository.loadDataset`, checks the version on every folder connect
+and dispatches to one of two incremental transforms based on what it finds (both converge on the
+current `SCHEMA_VERSION`, currently `3`):
+
+- **v1 (or missing) → current**: the folder is legacy Italian-named data — old-shaped files are
+  read (following `manifest.progetti`, the old field name, since the manifest itself hasn't been
+  transformed yet), transformed in memory via the module's pure `transformManifest`/
+  `transformTeamResources`/`transformProject` functions (which now also emit `completed` instead of
+  `archiviato`/`archiviata`, so a v1 folder lands directly on the current shape in one pass), and
+  written under the current names (`team-resources.json`, `projects/`) — `manifest.json` is written
+  **last**, so it doubles as the commit point: an interrupted migration just retries from scratch
+  on the next connect, no partial state to reconcile. The old `team-risorse.json` file and
+  `progetti/` directory are removed only after the new files are fully written.
+- **v2 → current**: the folder is already English-named (current `PATHS`, no file/directory
+  renaming needed) but still has `archived` instead of `completed` on project/baseline —
+  `renameArchivedToCompletedProject`/`renameArchivedToCompletedBaseline` do a narrower rewrite of
+  just the project files, `manifest.json` written last as the commit point, same as above.
+  `team-resources.json` is untouched by this step.
+
+A folder already on the current `schemaVersion` is detected cheaply (one small JSON parse) and
+skips migration entirely.
 
 This mechanism deliberately has **no dedicated pre-migration backup and no crash-recovery
 bookkeeping** — data in this app is not treated as irreplaceable: the app already has its own
 manual/automatic backup feature (`MP.repository.createBackup`, see `docs/deployment.md`
 "Backups") a user can run before opening an old folder with a new app version, or fall back to
-OneDrive's own version history. Keep the migration's own legacy path literals
+OneDrive's own version history. Keep the v1-migration's own legacy path literals
 (`'team-risorse.json'`, `'progetti'`) hardcoded, never sourced from `MP.schema.PATHS` — after this
 refactor those constants point at the *new* names, and a legacy folder by definition doesn't have
 those yet.
@@ -337,7 +351,7 @@ inserted at the right point in that list. Layers, low → high:
    `countUpcomingBaselines` filters those same rows to `settimana >= getTodayIso()` — a simple ISO
    string compare, valid since both sides are `YYYY-MM-DD` — and feeds the "upcoming baselines"
    count in the shared `dataset-header.js`, so gantt/resource-load users see it without opening
-   the Milestones page. `computeUpcomingMilestonesByMonth(dataset, showArchived)` is the pure
+   the Milestones page. `computeUpcomingMilestonesByMonth(dataset, showCompletedProjects)` is the pure
    derivation behind the Milestones page's copyable list (see below): filters to the same
    `settimana >= getTodayIso()` upcoming rows, then — for an `inconsistent` baseline — picks the
    *most recent* of `distinctDates` as `displayDate` (deliberately different from
@@ -435,7 +449,7 @@ inserted at the right point in that list. Layers, low → high:
      see `milestones.js` above), computed via `MP.ganttView.buildRows` so all pages report the exact
      same numbers — plus the team-color legend from `legend.js`; takes
      an optional extra element to append to the info line, used by the gantt page for its
-     archived/completed toggles (the "+ New project" button that used to live here moved to
+     completed toggles (the "+ New project" button that used to live here moved to
      the hamburger menu, see `toolbar.js` above), and by the milestones page for its
      "Total releases in period" counter), `app-header.js` (static brand header — logo, "Weavo" title,
      version, copyright — rendered once into `#app-header` from `app.js`'s `bootstrap()`,
@@ -443,8 +457,9 @@ inserted at the right point in that list. Layers, low → high:
      screen including `not-connected`/`unsupported`/`error`, not just the `ready` views).
    - `crud/`: one file per entity (`project-crud.js`, `baseline-crud.js`, `task-crud.js`,
      `resource-crud.js`, `team-crud.js`). Each is create/rename/delete/reorder (+ `toggleCompleted`
-     for tasks, `toggleArchived` for projects/baselines, `recolorTeam`/`moveResource` for
-     team/resources) directly against the in-memory dataset, persisted via
+     for tasks/baselines/projects — task's fires with no confirmation, baseline's/project's
+     confirms only when marking as completed, not when reactivating — `recolorTeam`/`moveResource`
+     for team/resources) directly against the in-memory dataset, persisted via
      `MP.saveCoordinator`/`MP.repository`, then triggers re-render. `project-crud.js`'s
      `createProject`/`editReferents` open `MP.modal.promptProjectForm` themselves when not given a
      preset value (same "modal call lives inside the CRUD function" pattern as the rest of this
@@ -456,24 +471,28 @@ inserted at the right point in that list. Layers, low → high:
      `canShiftBaseline` either rejects with `window.alert(check.reason)` or feeds a
      `window.confirm` summary (weeks, direction, tasks/allocations affected, completed tasks
      left untouched) before mutating and persisting — reachable from the baseline row's "⋮" menu
-     (`gantt-row.js`, "Shift baseline…", next to "Rename baseline"/"Archive baseline").
+     (`gantt-row.js`, "Shift baseline…", next to "Rename baseline"). The "Rename project"/
+     "Rename baseline" menus no longer carry an Archive/Reactivate entry — that's now the
+     checkbox to the left of the name (col1 for project, col2 for baseline), mirroring the
+     pre-existing task checkbox in col3, see below.
    - `gantt/`: the main view. `gantt-view.js` builds the compact grid (CSS Grid + `position:
      sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
      gantt library, per spec §9) and exports `buildRows` (dataset → visible task rows, honoring
-     `showArchived`/`showCompleted`) so `dataset-header.js` can compute the same row count
-     shown in both pages. Archiving isn't only project-level: a baseline can independently be
-     archived too (`baseline.archived`, toggled via the same "⋮" menu on the baseline row,
-     `MP.baselineCrud.toggleArchived`) — `buildRows` filters `progetto.baseline` down to
-     non-archived ones (unless `showArchived` is on) *before* deciding whether the project
-     needs a "— no baseline —" placeholder row, so a project whose only baselines are all
-     archived still gets a reachable placeholder row instead of disappearing entirely. A
-     project's own `archived` still wins first — an archived project hides regardless of its
-     baselines' individual flags. `MP.milestones.computeBaselineMilestones` applies the same
-     per-baseline filter (same `showArchived` flag, no separate toggle), so an archived
-     baseline's release also drops out of the milestones page and the header's "upcoming
-     baselines" count. Archiving a baseline never touches its tasks/data — same
-     no-destructive-auto-correction principle as project archiving and task `completed`.
-     `gantt-row.js` renders one task row; `gantt-cell.js` renders one
+     `showCompletedProjects`/`showCompleted`) so `dataset-header.js` can compute the same row count
+     shown in both pages. Completing isn't only project-level: a baseline can independently be
+     completed too (`baseline.completed`, toggled via the checkbox in col2, confirmed only when
+     marking as completed — `MP.baselineCrud.toggleCompleted`) — `buildRows` filters
+     `progetto.baseline` down to non-completed ones (unless `showCompletedProjects` is on) *before*
+     deciding whether the project needs a "— no baseline —" placeholder row, so a project whose
+     only baselines are all completed still gets a reachable placeholder row instead of
+     disappearing entirely. A project's own `completed` still wins first — a completed project
+     hides regardless of its baselines' individual flags. `MP.milestones.computeBaselineMilestones`
+     applies the same per-baseline filter (same `showCompletedProjects` flag, no separate toggle),
+     so a completed baseline's release also drops out of the milestones page and the header's
+     "upcoming baselines" count. Completing a baseline never touches its tasks/data, and does
+     **not** exclude them from overallocation/team-mismatch checks either (unlike task-level
+     `completed`) — same no-destructive-auto-correction principle as project completion, purely a
+     visibility change. `gantt-row.js` renders one task row; `gantt-cell.js` renders one
      week×task cell (double click is disabled — every action goes through right-click, see
      below; a cell whose resource(s) are overallocated gets a native
      `title` tooltip built from `MP.overallocation.findAllocations`, listing per resource the
@@ -611,7 +630,7 @@ inserted at the right point in that list. Layers, low → high:
      handlers inert and vice versa.
      The mutation is `MP.baselineCrud.moveBaselineToPosition(state, file, baseline, targetIndex)`,
      operating on the raw unfiltered `progetto.baseline` array by object reference (same
-     splice-remove-then-insert shape as `moveTaskToPosition`, safe regardless of `showArchived`
+     splice-remove-then-insert shape as `moveTaskToPosition`, safe regardless of `showCompletedProjects`
      filtering baseline visibility for display). Drag&drop is now the **only** way to reorder
      baselines — the "↑"/"↓" `col2` menu entries and the old swap-based
      `MP.baselineCrud.moveBaseline` were removed as redundant, same precedent as the task-level
@@ -669,7 +688,7 @@ inserted at the right point in that list. Layers, low → high:
        row, since `MP.milestones.computeBaselineMilestones` already collapses each baseline to its
        single effective release week) instead of the gantt's per-task rows; same week columns/range
        as gantt and resource-load (`MP.weekUtils.getWeeksInRange`) and the same shared
-       `dataset-header.js`, filtered by the same `state.ui.showArchived` flag (no dedicated toggle
+       `dataset-header.js`, filtered by the same `state.ui.showCompletedProjects` flag (no dedicated toggle
        on this page, so its row set always matches the project count shown in the shared header). A
        row whose baseline has inconsistent milestone dates across its tasks gets a `row-inconsistent`
        amber marker (never auto-corrected, same non-blocking-warning principle as team mismatches).

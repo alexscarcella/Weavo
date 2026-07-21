@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team PROSEWARE MEDIA STREAMING (Ken Thompson / Martin Fowler)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Third-Party Data Feed Import",
@@ -119,7 +119,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "API Development",
@@ -376,7 +376,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Change Request Analysis",

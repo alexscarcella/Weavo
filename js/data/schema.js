@@ -16,7 +16,7 @@
 (function (MP) {
   'use strict';
 
-  const SCHEMA_VERSION = 2;
+  const SCHEMA_VERSION = 3;
 
   const PATHS = {
     manifest: 'manifest.json',
@@ -145,19 +145,19 @@
    * Crea un nuovo progetto vuoto (nessuna baseline).
    * @param {string} name - nome del progetto.
    * @param {Object} [referents] - referenti di progetto, vedi `createProjectReferents`.
-   * @returns {{name: string, referents: Object, archived: boolean, baseline: Array}}
+   * @returns {{name: string, referents: Object, completed: boolean, baseline: Array}}
    */
   function createProject(name, referents = createProjectReferents()) {
-    return { name, referents, archived: false, baseline: [] };
+    return { name, referents, completed: false, baseline: [] };
   }
 
   /**
    * Crea una nuova baseline/release vuota (nessun task).
    * @param {string} version - identificativo/versione della baseline.
-   * @returns {{version: string, archived: boolean, task: Array}}
+   * @returns {{version: string, completed: boolean, task: Array}}
    */
   function createBaseline(version) {
-    return { version, archived: false, task: [] };
+    return { version, completed: false, task: [] };
   }
 
   /**

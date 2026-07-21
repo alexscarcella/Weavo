@@ -11,15 +11,15 @@
 (function (MP) {
   'use strict';
 
-  function computeBaselineMilestones(dataset, showArchived) {
+  function computeBaselineMilestones(dataset, showCompletedProjects) {
     const rows = [];
     for (const voce of dataset.manifest.projects) {
       const entry = dataset.projects.get(voce.file);
       if (!entry) continue;
       const progetto = entry.data;
-      if (progetto.archived && !showArchived) continue;
+      if (progetto.completed && !showCompletedProjects) continue;
 
-      const baselineVisibili = progetto.baseline.filter((b) => showArchived || !b.archived);
+      const baselineVisibili = progetto.baseline.filter((b) => showCompletedProjects || !b.completed);
       baselineVisibili.forEach((baseline, bi) => {
         const counts = new Map();
         let taskName = null;
@@ -63,9 +63,9 @@
   // dare visibilità immediata a quante consegne restano da fare, senza dover apre la pagina
   // Milestone. Confronto per stringa ISO (YYYY-MM-DD), valido perché entrambe le date sono
   // nello stesso formato.
-  function countUpcomingBaselines(dataset, showArchived) {
+  function countUpcomingBaselines(dataset, showCompletedProjects) {
     const todayIso = MP.weekUtils.getTodayIso();
-    return computeBaselineMilestones(dataset, showArchived)
+    return computeBaselineMilestones(dataset, showCompletedProjects)
       .filter((row) => row.settimana && row.settimana >= todayIso)
       .length;
   }
@@ -76,9 +76,9 @@
   // (task in disaccordo sulla settimana) la data mostrata è la più recente tra quelle
   // trovate (non quella "più frequente" usata da computeBaselineMilestones per
   // griglia/istogramma), con le altre date riportate in `otherDates` come nota.
-  function computeUpcomingMilestonesByMonth(dataset, showArchived) {
+  function computeUpcomingMilestonesByMonth(dataset, showCompletedProjects) {
     const todayIso = MP.weekUtils.getTodayIso();
-    const upcoming = computeBaselineMilestones(dataset, showArchived)
+    const upcoming = computeBaselineMilestones(dataset, showCompletedProjects)
       .filter((row) => row.settimana && row.settimana >= todayIso)
       .map((row) => {
         const displayDate = row.inconsistent ? row.distinctDates[row.distinctDates.length - 1] : row.settimana;

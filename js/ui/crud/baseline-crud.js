@@ -38,7 +38,7 @@
 
   // Sposta una baseline in una posizione esatta all'interno del proprio progetto (usato dal
   // drag&drop, vedi baseline-drag.js) — le baseline non si spostano mai tra progetti diversi.
-  // targetIndex è l'indice nell'array grezzo (non filtrato da showArchived) calcolato dal
+  // targetIndex è l'indice nell'array grezzo (non filtrato da showCompletedProjects) calcolato dal
   // chiamante prima di questa rimozione.
   async function moveBaselineToPosition(state, file, baseline, targetIndex) {
     const progetto = state.dataset.projects.get(file).data;
@@ -52,8 +52,12 @@
     await persistProject(state, file);
   }
 
-  async function toggleArchived(state, file, baseline) {
-    baseline.archived = !baseline.archived;
+  async function toggleCompleted(state, file, baseline) {
+    const marking = !baseline.completed;
+    if (marking && !window.confirm(`Mark baseline "${baseline.version}" as completed? It will be hidden unless "Show completed projects/baselines" is on.`)) {
+      return;
+    }
+    baseline.completed = marking;
     await persistProject(state, file);
   }
 
@@ -101,5 +105,5 @@
     await persistProject(state, file);
   }
 
-  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaselineToPosition, toggleArchived, shiftBaseline };
+  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaselineToPosition, toggleCompleted, shiftBaseline };
 })(window.MP = window.MP || {});

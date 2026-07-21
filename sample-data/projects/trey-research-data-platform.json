@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team TREY RESEARCH DATA PLATFORM (Gene Kim / Werner Vogels)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Code Review",
@@ -134,7 +134,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Backend Integration",
@@ -293,7 +293,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Training & Handover",

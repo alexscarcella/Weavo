@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team CONTOSO FLEET OPERATIONS (Larry Tesler / Frances Allen)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Penetration Testing",
@@ -241,7 +241,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Third-Party Data Feed Import",
@@ -470,7 +470,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Performance Testing",
@@ -539,7 +539,7 @@
     },
     {
       "version": "4.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Mobile App Development",

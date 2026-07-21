@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team HUMONGOUS INSURANCE RECORDS (Grace Hopper / Kent Beck)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Production Rollout",
@@ -249,7 +249,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Certification Testing",
@@ -362,7 +362,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "CI/CD Pipeline Setup",

@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team FABRIKAM PAYMENTS PLATFORM (Bob Taylor / Gene Kim)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "System Architecture Design",
@@ -186,7 +186,7 @@
     },
     {
       "version": "2.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "CI/CD Pipeline Setup",
@@ -315,7 +315,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Bug Fixing",
@@ -416,7 +416,7 @@
     },
     {
       "version": "4.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Disaster Recovery Plan",

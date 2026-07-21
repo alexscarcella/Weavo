@@ -34,18 +34,18 @@
   // showCompleted), non deve sparire dal gantt: senza una riga non ci
   // sarebbe modo di raggiungerne il menu "⋮" per aggiungere la prima
   // baseline/task (righe segnaposto con baseline/task null).
-  function buildRows(dataset, showArchived, showCompleted) {
+  function buildRows(dataset, showCompletedProjects, showCompleted) {
     const rows = [];
     let projectIndex = 0;
     for (const voce of dataset.manifest.projects) {
       const entry = dataset.projects.get(voce.file);
       if (!entry) continue;
       const progetto = entry.data;
-      if (progetto.archived && !showArchived) continue;
+      if (progetto.completed && !showCompletedProjects) continue;
 
       const pIdx = projectIndex++;
 
-      const baselineVisibili = progetto.baseline.filter((b) => showArchived || !b.archived);
+      const baselineVisibili = progetto.baseline.filter((b) => showCompletedProjects || !b.completed);
       if (baselineVisibili.length === 0) {
         rows.push({ progetto, baseline: null, task: null, file: voce.file, showProgetto: true, showBaseline: false, projectIndex: pIdx, baselineIndex: 0 });
         continue;
@@ -306,7 +306,7 @@
     const validInitials = new Set(resourcesFlat.map((r) => r.initials));
     const initialsTeamMap = new Map(resourcesFlat.map((r) => [r.initials, r.teamCode]));
     const allocationIndex = MP.overallocation.buildAllocationIndex(dataset);
-    const rows = buildRows(dataset, state.ui.showArchived, state.ui.showCompleted);
+    const rows = buildRows(dataset, state.ui.showCompletedProjects, state.ui.showCompleted);
     const currentWeek = MP.weekUtils.getCurrentWeekIso();
     const currentWeekIndex = weeks.indexOf(currentWeek);
 
@@ -316,16 +316,16 @@
     const toolbarActions = document.createElement('span');
     toolbarActions.className = 'toolbar-actions';
     toolbarActions.innerHTML = `
-      <label class="toggle-archived">
-        <input type="checkbox" id="chk-archived" ${state.ui.showArchived ? 'checked' : ''}>
-        Show archived
+      <label class="toggle-completed">
+        <input type="checkbox" id="chk-completed-projects" ${state.ui.showCompletedProjects ? 'checked' : ''}>
+        Show completed projects/baselines
       </label>
       <label class="toggle-completed">
         <input type="checkbox" id="chk-completed" ${state.ui.showCompleted ? 'checked' : ''}>
-        Show completed
+        Show completed tasks
       </label>`;
-    toolbarActions.querySelector('#chk-archived').addEventListener('change', (e) => {
-      MP.store.setState((s) => ({ ui: { ...s.ui, showArchived: e.target.checked } }));
+    toolbarActions.querySelector('#chk-completed-projects').addEventListener('change', (e) => {
+      MP.store.setState((s) => ({ ui: { ...s.ui, showCompletedProjects: e.target.checked } }));
     });
     toolbarActions.querySelector('#chk-completed').addEventListener('change', (e) => {
       MP.store.setState((s) => ({ ui: { ...s.ui, showCompleted: e.target.checked } }));
@@ -338,7 +338,7 @@
     if (rows.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'hint';
-      empty.textContent = 'No tasks to display (empty dataset or all projects are archived).';
+      empty.textContent = 'No tasks to display (empty dataset or all projects are completed).';
       page.appendChild(empty);
       return page;
     }

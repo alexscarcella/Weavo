@@ -7,11 +7,11 @@
     "vvReference": "",
     "note": "Team COHO WINERY SUPPLY CHAIN (Barbara Liskov / Jez Humble)"
   },
-  "archived": false,
+  "completed": false,
   "baseline": [
     {
       "version": "1.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "Production Rollout",
@@ -175,7 +175,7 @@
     },
     {
       "version": "3.0",
-      "archived": false,
+      "completed": false,
       "task": [
         {
           "name": "System Architecture Design",

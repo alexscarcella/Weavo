@@ -1,7 +1,14 @@
-// Migrazione lazy del vecchio formato dati (campi italiani, schemaVersion 1,
-// cartella "progetti/" + file "team-risorse.json") verso il nuovo formato
-// inglese (schemaVersion 2, "projects/" + "team-resources.json"). Vedi
-// CLAUDE.md "Migrazione dati legacy" per il contesto completo.
+// Migrazione lazy di un data folder ancora su uno schemaVersion precedente.
+// Due step incrementali, entrambi scatenati da un unico ingresso
+// (migrateIfNeeded) in base alla versione rilevata:
+// - v1 (o assente) -> v3: vecchio formato con campi italiani, cartella
+//   "progetti/" + file "team-risorse.json", verso il formato inglese attuale
+//   ("projects/" + "team-resources.json", campo "completed" al posto di
+//   "archiviata"/"archiviato"). Vedi CLAUDE.md "Migrazione dati legacy".
+// - v2 -> v3: dati già nel formato inglese attuale (stessi PATHS, nessun
+//   rename di file/cartelle) ma con "archived" invece di "completed" su
+//   project/baseline — rename di campo introdotto per omogeneizzare il
+//   concetto con "completed" a livello task.
 //
 // I dati non sono critici (rigenerabili da import.js/xlsx o da un backup
 // manuale/automatico già esistente nell'app), quindi qui non c'è un backup
@@ -45,7 +52,7 @@
   function transformBaseline(oldBaseline) {
     return {
       version: oldBaseline.versione,
-      archived: !!oldBaseline.archiviata,
+      completed: !!oldBaseline.archiviata,
       task: (oldBaseline.task || []).map(transformTask),
     };
   }
@@ -54,8 +61,24 @@
     return {
       name: oldProjectData.nome,
       referents: MP.schema.normalizeProjectReferents(oldProjectData.team),
-      archived: !!oldProjectData.archiviato,
+      completed: !!oldProjectData.archiviato,
       baseline: (oldProjectData.baseline || []).map(transformBaseline),
+    };
+  }
+
+  // v2 -> v3: dati già inglesi (PATHS invariati), solo rename di campo su
+  // project/baseline. team-resources.json non è toccato da questo step.
+  function renameArchivedToCompletedBaseline(oldBaseline) {
+    const { archived, ...rest } = oldBaseline;
+    return { ...rest, completed: !!archived };
+  }
+
+  function renameArchivedToCompletedProject(oldProjectData) {
+    const { archived, ...rest } = oldProjectData;
+    return {
+      ...rest,
+      completed: !!archived,
+      baseline: (oldProjectData.baseline || []).map(renameArchivedToCompletedBaseline),
     };
   }
 
@@ -85,19 +108,8 @@
     };
   }
 
-  /**
-   * Se `dirHandle` punta a una cartella dati nel vecchio formato (schemaVersion
-   * assente o < 2), la converte sul posto al nuovo formato e ritorna `true`.
-   * Se è già nel formato corrente, non fa nulla e ritorna `false` (costo:
-   * un solo JSON.parse di manifest.json).
-   * @param {FileSystemDirectoryHandle} dirHandle
-   * @returns {Promise<boolean>}
-   */
-  async function migrateIfNeeded(dirHandle) {
-    const manifestText = await MP.fsAccess.readTextFile(dirHandle, MP.schema.PATHS.manifest);
-    const oldManifest = JSON.parse(manifestText);
-    if (oldManifest.schemaVersion >= MP.schema.SCHEMA_VERSION) return false;
-
+  // v1 (o schemaVersion assente) -> v3: vecchio formato italiano, file/cartelle legacy.
+  async function migrateV1ToV3(dirHandle, oldManifest) {
     const oldTeamRisorsaText = await MP.fsAccess.readTextFile(dirHandle, LEGACY_TEAM_RESOURCES_FILE);
     const oldTeamRisorsa = JSON.parse(oldTeamRisorsaText);
 
@@ -131,6 +143,53 @@
 
     await MP.fsAccess.removeFile(dirHandle, LEGACY_TEAM_RESOURCES_FILE);
     await MP.fsAccess.removeDirectory(dirHandle, LEGACY_PROJECTS_DIR);
+  }
+
+  // v2 -> v3: dati già inglesi, stessi PATHS/file — solo rename di campo
+  // (archived -> completed) su ogni progetto e le sue baseline. team-resources.json
+  // non è toccato da questo step.
+  async function migrateV2ToV3(dirHandle, oldManifest) {
+    const oldProjects = [];
+    for (const voce of oldManifest.projects || []) {
+      const rawText = await MP.fsAccess.readTextFile(dirHandle, voce.file);
+      oldProjects.push({ file: voce.file, data: JSON.parse(rawText) });
+    }
+
+    const newProjects = oldProjects.map(({ file, data }) => ({
+      file,
+      data: renameArchivedToCompletedProject(data),
+    }));
+    const newManifest = { ...oldManifest, schemaVersion: MP.schema.SCHEMA_VERSION };
+
+    for (const { file, data } of newProjects) {
+      await MP.fsAccess.writeTextFile(dirHandle, file, JSON.stringify(data, null, 2) + '\n');
+    }
+    // manifest.json per ultimo: è il commit point, vedi commento in testa al file.
+    await MP.fsAccess.writeTextFile(
+      dirHandle,
+      MP.schema.PATHS.manifest,
+      JSON.stringify(newManifest, null, 2) + '\n'
+    );
+  }
+
+  /**
+   * Se `dirHandle` punta a una cartella dati su uno schemaVersion precedente, la
+   * converte sul posto al formato corrente e ritorna `true`. Se è già alla
+   * versione corrente, non fa nulla e ritorna `false` (costo: un solo
+   * JSON.parse di manifest.json).
+   * @param {FileSystemDirectoryHandle} dirHandle
+   * @returns {Promise<boolean>}
+   */
+  async function migrateIfNeeded(dirHandle) {
+    const manifestText = await MP.fsAccess.readTextFile(dirHandle, MP.schema.PATHS.manifest);
+    const oldManifest = JSON.parse(manifestText);
+    if (oldManifest.schemaVersion >= MP.schema.SCHEMA_VERSION) return false;
+
+    if (oldManifest.schemaVersion === 2) {
+      await migrateV2ToV3(dirHandle, oldManifest);
+    } else {
+      await migrateV1ToV3(dirHandle, oldManifest);
+    }
 
     return true;
   }
