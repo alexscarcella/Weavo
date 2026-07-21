@@ -414,9 +414,12 @@ inserted at the right point in that list. Layers, low → high:
      `connectToDirectory` needs no special-casing — plus `renderPageTitle`, a small label next to
      the hamburger showing the current view's name, sourced from the same `VIEWS` list used to
      build the menu so the two never drift apart: `gantt` → "Master Plan", `resource-load` →
-     "Resource load", `milestones` → "Milestones", `team-resources` → "Team & resources" (the
+     "Workload", `milestones` → "Milestones", `team-resources` → "Team & resources" (the
      internal `state.ui.currentView` codes are the same English words as the displayed `label`
-     for every view except `gantt`, which stays a short internal code rather than "Master Plan");
+     for every view except `gantt` — a short internal code rather than "Master Plan" — and
+     `resource-load`, kept as the pre-existing internal id/filename even though the label shown
+     to users is now "Workload", to avoid a wider rename across the module's file/folder name,
+     CSS classes, and every code comment referencing it);
      `.page-title`'s font-size is
      tuned in CSS to make its box the same height as `.hamburger-btn` next to it, since it has no
      padding/border of its own to match the button's box with; `renderHelpButton` is the round "?"
@@ -571,28 +574,71 @@ inserted at the right point in that list. Layers, low → high:
      source `file` and sets `dropEffect = 'none'` (no indicator) when they differ, so a task can
      never be dropped into a different project — only across baselines of the *same* project, or
      reordered within one. The mutation is `MP.taskCrud.moveTaskToPosition(state, file,
-     sourceBaseline, task, targetBaseline, targetIndex)` — a general splice-remove-then-insert
-     (unlike `moveTask`'s adjacent-swap-or-append used by the "⋮" menu's ↑/↓ actions, which is
-     unchanged and still the keyboard/no-drag fallback), reusing the same `persistProject` →
-     `MP.saveCoordinator.saveProject` + `MP.store.setState({})` path as every other task mutation.
+     sourceBaseline, task, targetBaseline, targetIndex)` — a general splice-remove-then-insert,
+     reusing the same `persistProject` → `MP.saveCoordinator.saveProject` + `MP.store.setState({})`
+     path as every other task mutation. Drag&drop is the **only** way to reorder tasks — unlike
+     projects (`gantt-row.js`'s "⋮" menu still has ↑/↓ for those), the task-level ↑/↓
+     menu entries and `MP.taskCrud.moveTask` were removed as redundant once drag&drop covered the
+     same ground (including the cross-baseline case ↑/↓ used to handle via adjacent-swap-or-append).
      If the dragged task's week carried `milestone: true`, it is **not** resynced against the
      destination baseline's milestone (same non-auto-correction principle as elsewhere) — any
      resulting disagreement is only surfaced passively via `MP.milestones.computeBaselineMilestones`'s
      existing `inconsistent` marker on the Milestones page, and self-heals the next time a
      milestone in that baseline is touched through `cell-popover.js`.
 
+     **Baseline drag&drop** (reorder a project's baselines): `js/ui/gantt/baseline-drag.js`
+     mirrors `task-drag.js`'s module-singleton pattern, simplified since a baseline only ever
+     moves within one array (`progetto.baseline`) — no source/target distinction like tasks have,
+     and no cross-project moves are possible at all (a baseline never leaves its project; the
+     `file` mismatch check still guards against dropping onto a different project's row). The
+     drag **handle** only lives on the single row where `showBaseline` is true — the row that
+     shows the baseline's `version`/"⋮" menu in `col2` — since that's the one row that always
+     exists and is the natural "grab point" for the whole block. The drop **target**, however, is
+     every row belonging to that baseline (task rows and the "— no task —" placeholder included,
+     same condition as task-drag's own drop wiring) — restricting it to the name row alone was
+     tried first and turned out to break the common case of dragging a baseline to the very end of
+     a multi-task baseline's block: the name row sits at the *top* of the block, so "drop after
+     the last baseline" would have required hovering the lower half of a row far from where the
+     block visually ends. Position (before/after) is computed from whichever row/half is under the
+     cursor, same midpoint check as task-drag, but always means "before/after this baseline as a
+     whole," never "before/after this specific task" — dragging a baseline is a single block move,
+     never an interleave into another baseline's tasks. The handle (reuses the `.task-drag-handle`
+     CSS class as-is — the styling is generic, not task-specific) sits in `col2` before the
+     version text; the drop-target listeners are attached to every one of the baseline's rows'
+     3 fixed columns alongside (not instead of) the task-drag listeners already there — the two
+     coexist without conflict because each module keeps its own private `dragging` singleton and
+     every handler no-ops when its own state is null, so a baseline-drag gesture leaves `taskDrag`'s
+     handlers inert and vice versa.
+     The mutation is `MP.baselineCrud.moveBaselineToPosition(state, file, baseline, targetIndex)`,
+     operating on the raw unfiltered `progetto.baseline` array by object reference (same
+     splice-remove-then-insert shape as `moveTaskToPosition`, safe regardless of `showArchived`
+     filtering baseline visibility for display). Drag&drop is now the **only** way to reorder
+     baselines — the "↑"/"↓" `col2` menu entries and the old swap-based
+     `MP.baselineCrud.moveBaseline` were removed as redundant, same precedent as the task-level
+     removal above.
+
      `legend.js` renders the color legend dynamically from
      `team-resources.json`, read-only, no navigation affordance of its own — reaching the
      team/resources page is via the `toolbar.js` hamburger menu only, on every page, not a
      per-view "manage" button.
    - `resource-load/resource-load-view.js`: per-resource per-week allocation count (replaces the
-     original spreadsheet's `COUNTIF` formulas), header shared with the gantt page (see
-     `dataset-header.js` above). Resources are grouped by team (a full-width group-header row per
-     team, plus a team-colored bar on the initials column — colors always read from
-     `team-resources.json`, nothing hardcoded), and each week cell is heat-colored by allocation
-     count (green = 1, yellow = 2, red > 2) via the `load-1`/`load-2`/`load-3plus` CSS classes —
-     its own separate legend, appended after the shared header — read-only, no navigation
-     affordance of its own.
+     original spreadsheet's `COUNTIF` formulas), displayed to the user as "Workload" (see
+     `toolbar.js` above — the internal id/filename stayed `resource-load`), header shared with
+     the gantt page (see `dataset-header.js` above). Resources are grouped by team (a full-width
+     group-header row per team, plus a team-colored bar on the initials column — colors always
+     read from `team-resources.json`, nothing hardcoded), and each week cell is heat-colored by
+     allocation count (green = 1, yellow = 2, red > 2) via the `load-1`/`load-2`/`load-3plus` CSS
+     classes — its own separate legend, appended after the shared header — read-only, no
+     navigation affordance of its own. Its two fixed columns use dedicated CSS classes
+     (`rl-col-initials` 70px, `rl-col-name` 220px, css/styles.css) rather than the gantt page's
+     `col-1`/`col-2` — those are sized for project-name/baseline-version and reusing them here
+     both under-sized the resource name column and, since this view's own
+     `grid-template-columns` declared different track widths than what `col-1`/`col-2` render at
+     (a `position: sticky` element's own CSS `width` — not its grid track size — governs what's
+     painted, so a mismatch between the two doesn't error, it just misaligns silently), caused a
+     ~20px silent overlap with the first week column, hidden behind the sticky column's
+     background. Found by rendering the grid in isolation in headless Chrome and reading
+     `getBoundingClientRect()` on every cell — not obvious from the CSS/JS alone.
    - `team-resources/team-resources-view.js`: the dedicated CRUD page for teams and their
      resources (create/rename/recolor/delete team; create/rename/move/delete resource within a
      team) — the only place in the UI where `team-resources.json` is edited.

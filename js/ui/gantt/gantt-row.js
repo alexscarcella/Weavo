@@ -81,8 +81,6 @@
         { label: baseline.archived ? 'Reactivate baseline' : 'Archive baseline', onClick: () => MP.baselineCrud.toggleArchived(state, file, baseline) },
         { label: 'Shift baseline…', onClick: () => MP.baselineCrud.shiftBaseline(state, file, baseline) },
         { label: '+ New task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },
-        { label: '↑', title: 'Move up', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, -1) },
-        { label: '↓', title: 'Move down', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, 1) },
         { label: 'Delete baseline', danger: true, onClick: () => MP.baselineCrud.deleteBaseline(state, file, baseline) },
       ]));
     }
@@ -117,8 +115,6 @@
 
       col3.appendChild(menuButton([
         { label: 'Rename task', onClick: () => MP.taskCrud.renameTask(state, file, task) },
-        { label: '↑', title: 'Move up (crosses baselines)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, -1) },
-        { label: '↓', title: 'Move down (crosses baselines)', className: 'context-menu-item-icon', onClick: () => MP.taskCrud.moveTask(state, file, baseline, task, 1) },
         { label: 'Delete task', danger: true, onClick: () => MP.taskCrud.deleteTask(state, file, baseline, task) },
       ]));
     } else if (baseline) {
@@ -133,6 +129,36 @@
       col3.appendChild(placeholder);
     }
     cells.push(col3);
+
+    // Drag handle del drag&drop baseline (vedi baseline-drag.js): solo sulla riga con il nome
+    // della baseline (showBaseline) — è l'unico punto da cui si afferra il blocco.
+    if (showBaseline && baseline) {
+      const dragHandle = document.createElement('span');
+      dragHandle.className = 'task-drag-handle';
+      dragHandle.textContent = '⠿';
+      dragHandle.title = 'Drag to reorder within this project';
+      dragHandle.draggable = true;
+      dragHandle.addEventListener('dragstart', (e) => MP.baselineDrag.handleDragStart(e, { state, file, baseline, cells: [col1, col2, col3] }));
+      dragHandle.addEventListener('dragend', (e) => MP.baselineDrag.handleDragEnd(e));
+      const versionText = col2.querySelector('.cell-text');
+      col2.insertBefore(dragHandle, versionText);
+    }
+
+    // Bersaglio di drop del drag&drop baseline: qualunque riga della baseline (task compresi
+    // e il segnaposto "— no task —"), non solo quella col nome — altrimenti non si potrebbe
+    // agganciare il punto di inserimento "dopo l'ultima baseline" quando il suo blocco ha più
+    // righe (il "before/after" si calcola sul punto medio della riga sotto il cursore, quindi
+    // vale sempre "prima/dopo questa baseline nel suo complesso", non "prima/dopo questa riga").
+    // Coesiste senza conflitti con i listener task-drag qui sotto: ciascun modulo tiene il
+    // proprio stato `dragging` privato e i suoi handler non fanno nulla quando è null.
+    if (baseline) {
+      const baselineDragCells = [col1, col2, col3];
+      baselineDragCells.forEach((cell) => {
+        cell.addEventListener('dragover', (e) => MP.baselineDrag.handleDragOver(e, { file, baseline, cells: baselineDragCells }));
+        cell.addEventListener('dragleave', (e) => MP.baselineDrag.handleDragLeave(e, { cells: baselineDragCells }));
+        cell.addEventListener('drop', (e) => MP.baselineDrag.handleDrop(e, { file, baseline, cells: baselineDragCells }));
+      });
+    }
 
     // Bersaglio di drop del drag&drop task (vedi task-drag.js): qualunque riga
     // con una baseline reale, compresa la riga segnaposto "— no task —" di una

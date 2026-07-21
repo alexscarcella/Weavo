@@ -36,13 +36,19 @@
     await persistProject(state, file);
   }
 
-  async function moveBaseline(state, file, baseline, direction) {
+  // Sposta una baseline in una posizione esatta all'interno del proprio progetto (usato dal
+  // drag&drop, vedi baseline-drag.js) — le baseline non si spostano mai tra progetti diversi.
+  // targetIndex è l'indice nell'array grezzo (non filtrato da showArchived) calcolato dal
+  // chiamante prima di questa rimozione.
+  async function moveBaselineToPosition(state, file, baseline, targetIndex) {
     const progetto = state.dataset.projects.get(file).data;
     const arr = progetto.baseline;
     const idx = arr.indexOf(baseline);
-    const swapWith = idx + direction;
-    if (idx < 0 || swapWith < 0 || swapWith >= arr.length) return;
-    [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
+    if (idx < 0) return;
+    arr.splice(idx, 1);
+    let insertAt = targetIndex;
+    if (idx < targetIndex) insertAt -= 1;
+    arr.splice(insertAt, 0, baseline);
     await persistProject(state, file);
   }
 
@@ -95,5 +101,5 @@
     await persistProject(state, file);
   }
 
-  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaseline, toggleArchived, shiftBaseline };
+  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaselineToPosition, toggleArchived, shiftBaseline };
 })(window.MP = window.MP || {});
