@@ -143,6 +143,8 @@
 
   // Applica la stessa allocazione (team+resources) a tutte le settimane del
   // range selezionato (vedi cell-selection.js), con un solo salvataggio.
+  // Chiamata solo da `openCellContextMenu` qui sotto, quando il range risolto
+  // dal click destro copre più di una settimana.
   async function handleBulkCellsSaved({ state, file, task, weeksRange, newEntry }) {
     for (const settimana of weeksRange) {
       if (MP.schema.isWeekEntryEmpty(newEntry)) {
@@ -161,13 +163,21 @@
   }
 
   // Apre il menu contestuale di shift (due voci ◀/▶, riuso di MP.contextMenu —
-  // vedi js/ui/common/context-menu.js) per `weeks` (una cella singola o un
-  // range Ctrl-selezionato, vedi cell-shift-selection.js). Azione
-  // completamente indipendente dal popover di allocazione: nessun campo
-  // condiviso, nessun rischio di sovrascrittura incrociata (vedi il piano per
-  // il bug della prima versione, che le mescolava in un'unica UI). `anchorEl`
-  // è opzionale: se assente (riapertura dopo uno shift), viene ritrovato via
-  // `MP.ganttCell.getCellDiv` (popolato ad ogni render).
+  // vedi js/ui/common/context-menu.js), posizionato SOPRA la cella
+  // (`placement: 'above'`) per `weeks` (una cella singola o il range
+  // selezionato, vedi cell-selection.js). Chiamato sia da
+  // `openCellContextMenu` (click destro iniziale, quando il range ha già
+  // un'allocazione — vedi sotto) sia da `handleCellsShift` stesso per
+  // riaprirsi sulla nuova posizione dopo uno shift riuscito. Azione
+  // indipendente dal popover di allocazione quanto a dati mutati (nessun
+  // campo condiviso, nessun rischio di sovrascrittura incrociata — vedi il
+  // bug della prima versione, che le mescolava in un'unica UI), ma se il
+  // popover è aperto contemporaneamente sopra un salvataggio pendente, ogni
+  // voce attende `MP.cellPopover.whenIdle()` prima di agire, così un'eventuale
+  // modifica non ancora commessa nel popover non va persa né viene applicato
+  // lo shift su dati non ancora salvati. `anchorEl` è opzionale: se assente
+  // (riapertura dopo uno shift), viene ritrovato via `MP.ganttCell.getCellDiv`
+  // (popolato ad ogni render).
   function openShiftMenu({ state, file, task, baseline, weeks, anchorEl }) {
     const el = anchorEl || MP.ganttCell.getCellDiv(task, weeks[0]);
     if (!el) return;
@@ -175,31 +185,68 @@
     const rightCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, 1);
     MP.contextMenu.openMenu({
       anchorEl: el,
+      placement: 'above',
       actions: [
         { header: true, label: weeks.length > 1 ? `${weeks.length} weeks selected` : '1 week selected' },
         {
           label: '◀ Shift one week back',
           disabled: !leftCheck.allowed,
           title: leftCheck.allowed ? undefined : leftCheck.reason,
-          onClick: () => handleCellsShift({ state, file, task, baseline, weeks, direction: -1 }),
+          onClick: async () => {
+            await MP.cellPopover.whenIdle();
+            await handleCellsShift({ state, file, task, baseline, weeks, direction: -1 });
+          },
         },
         {
           label: '▶ Shift one week forward',
           disabled: !rightCheck.allowed,
           title: rightCheck.allowed ? undefined : rightCheck.reason,
-          onClick: () => handleCellsShift({ state, file, task, baseline, weeks, direction: 1 }),
+          onClick: async () => {
+            await MP.cellPopover.whenIdle();
+            await handleCellsShift({ state, file, task, baseline, weeks, direction: 1 });
+          },
         },
       ],
     });
   }
 
+  // Punto d'ingresso del click destro su una cella (gantt-cell.js): risolve
+  // sempre entrambe le azioni possibili sul range restituito da
+  // `MP.cellSelection.getRangeForAction` (una cella singola o l'intera
+  // selezione corrente). Apre sempre il popover di allocazione sotto la
+  // cella; se il range ha già un'allocazione in una qualunque delle sue
+  // settimane, apre anche il menu di shift sopra la cella, contemporaneamente.
+  function openCellContextMenu({ state, file, task, baseline, weeks, anchorEl }) {
+    const isBulk = weeks.length > 1;
+    MP.cellPopover.openPopover({
+      anchorEl,
+      dataset: state.dataset,
+      task,
+      settimana: isBulk ? undefined : weeks[0],
+      weeksRange: isBulk ? weeks : undefined,
+      onSave: (newEntry) => {
+        const promise = isBulk
+          ? handleBulkCellsSaved({ state, file, task, weeksRange: weeks, newEntry })
+          : handleCellSaved({ state, file, task, baseline, settimana: weeks[0], newEntry });
+        MP.cellSelection.reset();
+        return promise;
+      },
+    });
+
+    const hasAllocation = weeks.some((w) => !MP.schema.isWeekEntryEmpty((task.weeks || {})[w]));
+    if (hasAllocation) {
+      openShiftMenu({ state, file, task, baseline, weeks, anchorEl });
+    }
+  }
+
   // Sposta di una settimana (avanti/indietro) l'allocazione di una cella
-  // singola o dell'intero range Ctrl-selezionato (vedi js/model/week-shift.js
+  // singola o dell'intero range selezionato (vedi js/model/week-shift.js
   // per il predicato di ammissibilità e la mutazione, che preserva il
-  // contenuto individuale di ciascuna cella). Dopo il salvataggio riapre il
-  // menu di shift sulla nuova posizione (stesso meccanismo già usato per
-  // `lastEdited`: il div va ritrovato dopo il re-render completo del DOM), per
-  // permettere shift ripetuti in sequenza senza dover riselezionare da capo.
+  // contenuto individuale di ciascuna cella). Dopo il salvataggio riapre SOLO
+  // il menu di shift sulla nuova posizione (stesso meccanismo già usato per
+  // `lastEdited`: il div va ritrovato dopo il re-render completo del DOM) —
+  // non il popover di allocazione — per permettere shift ripetuti in sequenza
+  // senza dover riselezionare da capo.
   async function handleCellsShift({ state, file, task, baseline, weeks, direction }) {
     const check = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, direction);
     if (!check.allowed) return; // la voce di menu è già disabilitata in questo caso
@@ -217,7 +264,7 @@
       await MP.saveCoordinator.saveProject(state, file);
       markLastEdited(affectedTasks, [...weeks, ...targets]);
       MP.store.setState({});
-      MP.cellShiftSelection.relocate(file, task, targets);
+      MP.cellSelection.relocate(file, task, targets);
       openShiftMenu({ state, file, task, baseline, weeks: targets });
     } catch (e) {
       window.alert(`Error saving "${file}": ${e.message}`);
@@ -354,9 +401,7 @@
         validInitials,
         initialsTeamMap,
         allocationIndex,
-        onCellSaved: handleCellSaved,
-        onBulkCellsSaved: handleBulkCellsSaved,
-        onOpenShiftMenu: openShiftMenu,
+        onCellContextMenu: openCellContextMenu,
         lastEdited,
       });
       if (currentWeekIndex !== -1) cells[3 + currentWeekIndex].classList.add('current-week-line');

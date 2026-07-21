@@ -471,15 +471,17 @@ inserted at the right point in that list. Layers, low → high:
      baselines" count. Archiving a baseline never touches its tasks/data — same
      no-destructive-auto-correction principle as project archiving and task `completed`.
      `gantt-row.js` renders one task row; `gantt-cell.js` renders one
-     week×task cell (double click opens `cell-popover.js` for that single cell, resetting any
-     pending range selection first; a cell whose resource(s) are overallocated gets a native
+     week×task cell (double click is disabled — every action goes through right-click, see
+     below; a cell whose resource(s) are overallocated gets a native
      `title` tooltip built from `MP.overallocation.findAllocations`, listing per resource the
      other project/baseline/task it's allocated to that same week — same
      `projectName`/`baselineVersion`/`taskName` shape the resource-load heat cells already use in
      `resource-load-view.js`, so the wording matches across both views); `cell-popover.js` is the
      editing popover (team-first, then multi-select resources restricted to that team, then
      milestone flag — milestone only in single-cell mode, see below — autosave on close,
-     non-blocking double-allocation warning); a task admits only **one** milestone week, and all
+     non-blocking double-allocation warning), opened only from the right-click handler
+     (`gantt-view.js`'s `openCellContextMenu`, see `cell-selection.js` below), never from a plain
+     click; a task admits only **one** milestone week, and all
      tasks of the same baseline share a single milestone: `gantt-view.js`'s `handleCellSaved`
      calls `syncBaselineMilestone` when a saved entry has `milestone: true` — it clears the flag
      from every other week of every non-`completed` task in `baseline.task` (including the edited
@@ -495,50 +497,65 @@ inserted at the right point in that list. Layers, low → high:
      self-heal only the next time any task in that baseline has its milestone touched via the
      popover. This resolves the "Milestone unica per baseline" item in
      `requirements/backlog.md`, which should be removed/marked done there.
-     `cell-selection.js` is the click/shift-click range-selection controller, confined to one
-     task row at a time (module-singleton state, highlighted via a CSS class rather than the app
-     store, since it doesn't need to survive a full re-render) — a shift-click extends the range
-     from the last plain-clicked cell ("anchor") and immediately opens `cell-popover.js` in bulk
-     mode (`weeksRange`), which applies the same team+resources to every selected week in one
-     save (no milestone in bulk mode — see `requirements/backlog.md` on why milestone stays a
-     single-cell/single-baseline concept); after a successful save (single-cell or bulk),
-     `gantt-view.js` records the saved task+week(s) in a module-level `lastEdited` (with a
-     timer that clears it after ~2.5s, triggering one more re-render to fade it out) and threads
-     it down through `renderTaskRow`/`renderWeekCell` so the just-saved cell(s) get a
-     `cell-just-edited` CSS highlight after the full re-render — needed because `js/app.js`'s
-     `render()` rebuilds the entire DOM tree from scratch on every `MP.store.setState()`, which
-     would otherwise silently drop any highlight applied to the old (now-discarded) elements.
+     `cell-selection.js` is the **single** range-selection controller for the whole grid,
+     confined to one task row at a time (module-singleton state, highlighted via the
+     `cell-selected` CSS class rather than the app store, since it doesn't need to survive a full
+     re-render). A plain click sets a lone-cell anchor; a shift-click on the same row extends the
+     range from that anchor — both are **highlight-only**, no popup opens on click. Every actual
+     action is triggered by **right-click** instead: `gantt-cell.js`'s `contextmenu` listener
+     calls `MP.cellSelection.getRangeForAction` (resolves to the current selection's weeks if the
+     clicked cell falls inside it, otherwise re-anchors the selection to just that lone cell —
+     Excel-style "right-click outside the selection replaces it") and hands the resulting week
+     array to `gantt-view.js`'s `openCellContextMenu`, which:
+     - always opens `cell-popover.js` **below** the cell (single-cell mode for a lone week,
+       bulk mode — same team+resources applied to every selected week, no milestone field, see
+       `requirements/backlog.md` on why milestone stays a single-cell/single-baseline concept —
+       for a multi-week range);
+     - additionally opens the shift menu (see below) **above** the cell, at the same time, but
+       only if at least one week in the range already has an allocation (`MP.schema.isWeekEntryEmpty`
+       checked per week) — an empty range has nothing to shift.
+
+     After a successful save (single-cell or bulk), `gantt-view.js` records the saved task+week(s)
+     in a module-level `lastEdited` (with a timer that clears it after ~2.5s, triggering one more
+     re-render to fade it out) and threads it down through `renderTaskRow`/`renderWeekCell` so the
+     just-saved cell(s) get a `cell-just-edited` CSS highlight after the full re-render — needed
+     because `js/app.js`'s `render()` rebuilds the entire DOM tree from scratch on every
+     `MP.store.setState()`, which would otherwise silently drop any highlight applied to the old
+     (now-discarded) elements.
 
      **Shift feature** (move an allocation, or a whole selected block of them, one week
-     back/forward): deliberately **not** part of `cell-popover.js` — a first version put shift
-     arrows inside that same popover and reopened it (seeded from the anchor week) after each
-     shift so it could "stay open, repositioned"; closing that reopened popover without touching
-     anything still ran the existing autosave-on-close bulk path, silently overwriting the whole
-     range with the anchor week's single value and destroying the very per-cell heterogeneity the
-     shift had just preserved. The fix was architectural, not a patch: shift now lives entirely
-     outside the allocation popover, with its own selection state, so the two can never touch the
-     same data. Right-click (`contextmenu`, `gantt-cell.js`) on a week cell opens a
-     `MP.contextMenu` menu (reused as-is, see `common/` above) with two actions — "shift one week
-     back/forward" — built by `gantt-view.js`'s `openShiftMenu`, which computes both directions'
-     `MP.weekShift.canShiftWeeks` up front to grey out (with a tooltip reason) whichever direction
-     isn't allowed, and prepends a `header: true` "N weeks selected" line so the user can tell
-     whether the click landed on a lone cell or an active multi-week selection. `handleCellsShift`
-     does the actual mutation (`MP.weekShift.shiftWeeksData`) + baseline-milestone resync (reuses
+     back/forward): still deliberately **not** part of `cell-popover.js`'s own save path — an
+     early version put shift arrows inside that same popover and reopened it (seeded from the
+     anchor week) after each shift so it could "stay open, repositioned"; closing that reopened
+     popover without touching anything still ran the existing autosave-on-close bulk path,
+     silently overwriting the whole range with the anchor week's single value and destroying the
+     very per-cell heterogeneity the shift had just preserved. The fix was architectural, not a
+     patch: shift's own mutation (`MP.weekShift.shiftWeeksData`) never goes through
+     `createWeekEntry`/the popover's save path, so the two can never overwrite each other's data —
+     this holds even now that both panels can be visible at once (see below), since "shown
+     together" only affects *when* each one's save runs, never *which* function mutates
+     `task.weeks`. `gantt-view.js`'s `openShiftMenu` builds a `MP.contextMenu` menu (reused as-is,
+     see `common/` above, opened with `placement: 'above'` so it renders above the cell instead of
+     the default below) with two actions — "shift one week back/forward" — computing both
+     directions' `MP.weekShift.canShiftWeeks` up front to grey out (with a tooltip reason)
+     whichever direction isn't allowed, and prepending a `header: true` "N weeks selected" line so
+     the user can tell whether the click landed on a lone cell or an active multi-week selection.
+     Because the shift menu can be showing above an allocation popover that still has unsaved
+     edits pending below it, each shift action first `await`s `MP.cellPopover.whenIdle()` — a
+     promise the popover keeps updated to whatever save is currently in flight (or already
+     resolved) — before running `handleCellsShift`, so a pending edit is always committed first
+     and the shift never runs against stale data or races the popover's own save on the same file.
+     `handleCellsShift` does the actual mutation + baseline-milestone resync (reuses
      `syncBaselineMilestone` for any shifted week that carried `milestone: true`) + save, then —
      mirroring the `lastEdited` re-render problem above — re-finds the destination cell's div via
      `gantt-cell.js`'s `getCellDiv(task, settimana)` (a `WeakMap<task, Map<settimana, div>>`
-     rebuilt on every `renderWeekCell` call) and reopens `openShiftMenu` there, so repeated shifts
-     in the same direction don't require re-right-clicking each time. A **multi-week** shift
-     selection is Ctrl+click (`cell-shift-selection.js`, a module-singleton anchor+range tracker
-     structurally identical to `cell-selection.js` but with completely separate state and its own
-     `cell-shift-selected` highlight class), never the plain click/shift-click of `cell-selection.js`
-     — the two selections are independent on purpose and are never active "for the same reason" at
-     once, reinforcing that shift and bulk-allocate remain unrelated features that happen to share
-     the same grid.
+     rebuilt on every `renderWeekCell` call), calls `MP.cellSelection.relocate` to move the
+     selection there, and reopens **only** `openShiftMenu` at that position (not the allocation
+     popover) so repeated shifts in the same direction don't require re-right-clicking each time.
 
      **Task drag&drop** (reposition a task, including across baselines of the same project):
      `js/ui/gantt/task-drag.js`, a module-singleton drag controller (same pattern as
-     `cell-selection.js`/`cell-shift-selection.js` — private state outside the store, since no
+     `cell-selection.js` — private state outside the store, since no
      `setState` fires mid-drag so the DOM is never rebuilt out from under an in-progress gesture).
      There is no DOM element representing "a row" (the grid is one flat sequence of sibling
      `.gantt-cell`s, see `gantt-view.js`'s row-cell-appending loop and the per-cell

@@ -287,17 +287,11 @@ code {
 .gantt-cell.editable-cell { cursor: pointer; }
 .gantt-cell.editable-cell:hover { outline: 2px solid #2E86FF; outline-offset: -2px; }
 
-/* --- Selezione range multi-cella (click + shift-click, vedi cell-selection.js) --- */
+/* --- Selezione range multi-cella (click + shift-click, vedi cell-selection.js):
+   unica selezione, alimenta sia il popover di allocazione sia il menu di
+   shift, entrambi aperti dal click destro. --- */
 .gantt-cell.cell-selected {
   outline: 2px solid #2E86FF; outline-offset: -2px; background-color: rgba(46, 134, 255, 0.15);
-}
-
-/* --- Selezione range dedicata allo shift (Ctrl+click, vedi
-   cell-shift-selection.js) — tratteggio viola per non confondersi con la
-   selezione di allocazione qui sopra (blu, continua): sono due meccanismi
-   indipendenti, mai attivi insieme sulla stessa interpretazione. --- */
-.gantt-cell.cell-shift-selected {
-  outline: 2px dashed #8e44ad; outline-offset: -2px; background-color: rgba(142, 68, 173, 0.12);
 }
 
 /* --- Cella (o range) appena salvata: evidenziazione temporanea, si spegne da

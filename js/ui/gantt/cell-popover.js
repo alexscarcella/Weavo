@@ -4,7 +4,11 @@
 // poi l'eventuale flag milestone (solo modalità singola cella — un range
 // applica solo team+resources, la milestone resta un concetto per singola
 // settimana). Salvataggio automatico alla chiusura (nessun bottone "salva"
-// separato), con avviso non bloccante su doppia allocazione.
+// separato), con avviso non bloccante su doppia allocazione. Aperto solo dal
+// click destro (gantt-view.js:openCellContextMenu), mai dal click semplice —
+// `whenIdle()` espone il salvataggio pendente in corso in modo che il menu di
+// shift (che può apparire insieme, sopra questo popover) possa attendere che
+// un'eventuale modifica non ancora salvata sia commessa prima di agire.
 (function (MP) {
   'use strict';
 
@@ -13,6 +17,12 @@
   const { formatWeekLabel } = MP.weekUtils;
 
   let activeContext = null;
+
+  // Promise dell'ultimo salvataggio commesso (o già risolta se nessuno è in
+  // corso): esposta via `whenIdle()` per chi deve attendere che un eventuale
+  // salvataggio pendente del popover sia completato prima di agire sugli
+  // stessi dati (es. il menu di shift sopra il popover, vedi gantt-view.js).
+  let pendingSave = Promise.resolve();
 
   function handleOutsideClick(e) {
     const pop = document.querySelector('.cell-popover');
@@ -38,7 +48,12 @@
   function commitAndClose() {
     const ctx = activeContext;
     closeExisting();
-    if (ctx) ctx.save();
+    if (ctx) pendingSave = Promise.resolve(ctx.save());
+    return pendingSave;
+  }
+
+  function whenIdle() {
+    return pendingSave;
   }
 
   function positionPopover(pop, anchorEl) {
@@ -178,7 +193,7 @@
           resources: [...selectedResources],
           milestone: isBulk ? false : selectedMilestone,
         });
-        onSave(newEntry);
+        return onSave(newEntry);
       },
     };
 
@@ -191,5 +206,5 @@
     }, 0);
   }
 
-  MP.cellPopover = { openPopover, closeExisting };
+  MP.cellPopover = { openPopover, closeExisting, commitAndClose, whenIdle };
 })(window.MP = window.MP || {});

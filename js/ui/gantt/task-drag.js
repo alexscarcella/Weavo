@@ -7,9 +7,8 @@
 // presenti, anche per le righe segnaposto, e sticky-left quindi sempre
 // visibili indipendentemente dallo scroll orizzontale.
 // Stato di modulo (singleton), fuori dallo store: stesso pattern di
-// cell-selection.js/cell-shift-selection.js. Nessun setState viene emesso
-// durante il trascinamento (solo al drop), quindi il DOM non viene mai
-// ricostruito a metà gesto.
+// cell-selection.js. Nessun setState viene emesso durante il trascinamento
+// (solo al drop), quindi il DOM non viene mai ricostruito a metà gesto.
 (function (MP) {
   'use strict';
 

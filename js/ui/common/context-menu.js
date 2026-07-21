@@ -1,5 +1,10 @@
 // Piccolo menu contestuale generico (elenco di azioni), usato dalle icone "⋮"
-// di riga per le operazioni CRUD su progetti/baseline/task.
+// di riga per le operazioni CRUD su progetti/baseline/task, e dal menu di
+// shift della griglia (gantt-view.js). `openMenu` posiziona di default sotto
+// `anchorEl`; passando `placement: 'above'` lo posiziona invece sopra,
+// misurando l'altezza reale del menu appena renderizzato (usato quando il
+// menu di shift deve comparire sopra la cella, mentre il popover di
+// allocazione compare sotto — vedi gantt-view.js:openCellContextMenu).
 (function (MP) {
   'use strict';
 
@@ -14,7 +19,7 @@
     document.removeEventListener('mousedown', onOutsideClick, true);
   }
 
-  function openMenu({ anchorEl, actions }) {
+  function openMenu({ anchorEl, actions, placement }) {
     closeExisting();
     const menu = document.createElement('div');
     menu.className = 'context-menu';
@@ -53,7 +58,12 @@
 
     const rect = anchorEl.getBoundingClientRect();
     menu.style.position = 'fixed';
-    menu.style.top = `${Math.min(rect.bottom + 2, window.innerHeight - 220)}px`;
+    if (placement === 'above') {
+      const menuHeight = menu.getBoundingClientRect().height;
+      menu.style.top = `${Math.max(8, rect.top - menuHeight - 2)}px`;
+    } else {
+      menu.style.top = `${Math.min(rect.bottom + 2, window.innerHeight - 220)}px`;
+    }
     menu.style.left = `${Math.min(rect.left, window.innerWidth - 190)}px`;
 
     setTimeout(() => document.addEventListener('mousedown', onOutsideClick, true), 0);

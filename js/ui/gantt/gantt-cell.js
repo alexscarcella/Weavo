@@ -1,16 +1,18 @@
-// Rendering di una singola cella settimana×task. Il doppio click apre il
-// popover di edit per questa sola cella (resettando un'eventuale selezione
-// multi-cella in corso); il click semplice è gestito da gantt-row.js tramite
-// cell-selection.js, che serve invece alla selezione di un range sulla riga.
-// Il click destro (contextmenu) apre invece il menu di shift (vedi
-// gantt-view.js/cell-shift-selection.js) — un'azione indipendente
-// dall'allocazione, che non condivide mai stato con il popover di edit.
+// Rendering di una singola cella settimana×task. Il click semplice/shift-click
+// è gestito da gantt-row.js tramite cell-selection.js (selezione di una cella
+// o di un range sulla riga — solo evidenziazione, nessun popover). Il doppio
+// click non fa nulla: ogni azione passa dal click destro (contextmenu), che
+// risolve la selezione corrente in un elenco di settimane
+// (cell-selection.js:getRangeForAction) e apre il menu combinato
+// (gantt-view.js:openCellContextMenu) — popover di allocazione sotto la
+// cella, ed eventualmente il menu di shift sopra, se il range ha già
+// un'allocazione.
 (function (MP) {
   'use strict';
 
   // Registro task -> (settimana -> div) della cella attualmente renderizzata,
-  // ricostruito ad ogni render. Usato da gantt-view.js/cell-shift-selection.js
-  // dopo uno shift per ritrovare il div della cella di destinazione (appena
+  // ricostruito ad ogni render. Usato da gantt-view.js/cell-selection.js dopo
+  // uno shift per ritrovare il div della cella di destinazione (appena
   // ricreato dal re-render completo del DOM, vedi app.js) e riaprire il menu
   // di shift / ri-evidenziare la selezione lì sopra. WeakMap sul `task`
   // (riferimento stabile in memoria per la sessione) così le voci di task
@@ -31,7 +33,7 @@
     return perSettimana ? perSettimana.get(settimana) : undefined;
   }
 
-  function renderWeekCell({ task, baseline, settimana, teamMap, validInitials, initialsTeamMap, allocationIndex, state, file, onCellSaved, onOpenShiftMenu, lastEdited }) {
+  function renderWeekCell({ task, baseline, settimana, teamMap, validInitials, initialsTeamMap, allocationIndex, state, file, onCellContextMenu, lastEdited }) {
     const entry = (task.weeks || {})[settimana];
     const div = document.createElement('div');
     div.className = 'gantt-cell week-cell editable-cell';
@@ -112,21 +114,10 @@
 
     if (titleParts.length) div.title = titleParts.join(' — ');
 
-    div.addEventListener('dblclick', () => {
-      MP.cellSelection.reset();
-      MP.cellPopover.openPopover({
-        anchorEl: div,
-        dataset: state.dataset,
-        task,
-        settimana,
-        onSave: (newEntry) => onCellSaved({ state, file, task, baseline, settimana, newEntry }),
-      });
-    });
-
     div.addEventListener('contextmenu', (e) => {
       e.preventDefault();
-      const weeks = MP.cellShiftSelection.weeksForShift(file, task, settimana);
-      onOpenShiftMenu({ state, file, task, baseline, weeks, anchorEl: div });
+      const weeks = MP.cellSelection.getRangeForAction({ file, task, settimana, div });
+      onCellContextMenu({ state, file, task, baseline, weeks, anchorEl: div });
     });
 
     registerCell(task, settimana, div);

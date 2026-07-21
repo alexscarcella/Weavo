@@ -327,21 +327,22 @@
     box.innerHTML = `
       <h2>How to use the Gantt</h2>
 
-      <h3>Editing an allocation</h3>
+      <h3>Selecting a cell or a range</h3>
       <ul>
-        <li><strong>Double-click</strong> a week cell to open the editor: pick a team,
-        then the resources (only from that team), then — single cell only — the
-        delivery milestone flag.</li>
-        <li>Closing the editor (click outside or <kbd>Esc</kbd>) saves automatically —
-        there's no separate "Save" button.</li>
+        <li><strong>Click</strong> a week cell to select just that one. To select
+        several adjacent weeks on the same row, <strong>Shift+click</strong> another
+        cell on that row — clicking just selects/highlights, it doesn't open
+        anything by itself.</li>
       </ul>
 
-      <h3>Editing several weeks at once</h3>
+      <h3>Editing an allocation</h3>
       <ul>
-        <li><strong>Click</strong> a cell to set a starting point, then
-        <strong>Shift+click</strong> another cell on the same row to select the range
-        between them — the editor applies the same team and resources to every
-        selected week in one go.</li>
+        <li><strong>Right-click</strong> the selected cell (or range) to open the
+        editor below it: pick a team, then the resources (only from that team),
+        then — single cell only — the delivery milestone flag. For a range, the
+        same team and resources are applied to every selected week in one go.</li>
+        <li>Closing the editor (click outside or <kbd>Esc</kbd>) saves automatically —
+        there's no separate "Save" button.</li>
       </ul>
 
       <h3>Clearing an allocation</h3>
@@ -352,14 +353,14 @@
 
       <h3>Shifting an allocation by one week</h3>
       <ul>
-        <li><strong>Right-click</strong> a cell to shift it one week back or forward —
-        this is a separate action from editing, so it never overwrites what's in
-        the cell.</li>
-        <li>To shift several weeks together while keeping each cell's own content,
-        first <strong>Ctrl+click</strong> two cells on the same row to select the
-        range, then right-click inside it — the menu's top line shows how many
-        weeks are currently selected, useful to confirm the selection went
-        through.</li>
+        <li>Right-clicking a cell (or range) that already has an allocation also
+        opens a shift menu <strong>above</strong> it, at the same time as the editor
+        below — "shift one week back/forward". The menu's top line shows how many
+        weeks are selected.</li>
+        <li>Shifting keeps each cell's own content (it's a separate action from
+        editing, never routed through the editor's save) — if you were mid-edit in
+        the editor below, clicking a shift action saves that edit first, then
+        shifts.</li>
         <li>Shifting is blocked (with a tooltip explaining why) when the destination
         already has an allocation, the task is completed, or you'd go past the
         first/last week of the sheet.</li>
