@@ -146,7 +146,7 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 ### 5. Daily use
 
 - The **☰** menu in the top-left corner is the entry point for every function: switching pages
-  ("Master Plan" / "Resource load" / "Milestones" / "Team & resources"), creating a new project
+  ("Master Plan" / "Workload" / "Milestones" / "Team & resources"), creating a new project
   ("**+ New project**"), running a backup ("**💾 Backup**"), and closing the current data folder to
   pick another one ("**Change data folder…**").
 - **Create a project:** ☰ menu → *"+ New project"* → fill in the name and, optionally, the
@@ -174,7 +174,7 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
   of the top bar for a short built-in guide covering editing, clearing, and shifting allocations.
 - **Manage teams and resources** (create/rename/recolor a team; create/rename/move/delete a
   resource): ☰ menu → *"Team & resources"*.
-- The **"Resource load"** (who's over-allocated, with traffic-light colors) and **"Milestones"**
+- The **"Workload"** (who's over-allocated, with traffic-light colors) and **"Milestones"**
   (release calendar) pages are read-only: they're for checking, not editing. The header shared by
   every page also shows a running count of upcoming baselines (release milestones due from today
   onward), so you don't need to open the Milestones page just to see how many are coming up.

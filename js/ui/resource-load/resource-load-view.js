@@ -107,10 +107,10 @@
     scroll.className = 'gantt-scroll';
     const grid = document.createElement('div');
     grid.className = 'gantt-grid';
-    grid.style.gridTemplateColumns = `70px 170px repeat(${weeks.length}, 46px)`;
+    grid.style.gridTemplateColumns = `70px 220px repeat(${weeks.length}, 46px)`;
 
-    grid.appendChild(headerCell('Initials', 'col-1'));
-    grid.appendChild(headerCell('Name', 'col-2'));
+    grid.appendChild(headerCell('Initials', 'rl-col-initials'));
+    grid.appendChild(headerCell('Name', 'rl-col-name'));
     for (const settimana of weeks) {
       grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
     }
@@ -119,11 +119,11 @@
       teamHeaderRow(team, weeks.length, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
 
       for (const risorsa of team.resources) {
-        const col1 = fixedCell(risorsa.initials, 'col-1');
+        const col1 = fixedCell(risorsa.initials, 'rl-col-initials');
         col1.classList.add('team-color-bar');
         col1.style.setProperty('--team-bar-color', team.color);
         grid.appendChild(col1);
-        grid.appendChild(fixedCell(risorsa.name, 'col-2'));
+        grid.appendChild(fixedCell(risorsa.name, 'rl-col-name'));
 
         weeks.forEach((settimana, i) => {
           const refs = findAllocations(index, risorsa.initials, settimana);

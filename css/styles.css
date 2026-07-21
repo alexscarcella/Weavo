@@ -418,8 +418,18 @@ code {
   border-radius: 4px 4px 0 0;
 }
 
-.gantt-cell.col-1.team-color-bar { padding-left: 8px; }
-.gantt-cell.col-1.team-color-bar::before {
+/* Colonne fisse dedicate alla vista Workload (Initials/Name): non riusano
+   col-1/col-2 come il gantt perché lì quelle classi sono legate a larghezze
+   pensate per nome progetto/versione baseline, non per iniziali/nome risorsa —
+   riusarle causava un disallineamento tra le colonne sticky (dimensionate da
+   queste classi) e le colonne settimana reali (dimensionate da
+   grid-template-columns in resource-load-view.js), con un overlap di alcuni
+   pixel sulla prima settimana. */
+.gantt-cell.rl-col-initials { left: 0; width: 70px; }
+.gantt-cell.rl-col-name { left: 70px; width: 220px; color: #555; }
+
+.gantt-cell.rl-col-initials.team-color-bar { padding-left: 8px; }
+.gantt-cell.rl-col-initials.team-color-bar::before {
   content: '';
   position: absolute;
   left: 0;
