@@ -53,5 +53,61 @@
     });
   }
 
-  MP.weekShift = { canShiftWeeks, shiftWeeksData };
+  // Shift dell'intera baseline (tutti i task non-completed, tutte le settimane non
+  // vuote di ciascuno) di `deltaWeeks` (intero con segno, non necessariamente ±1).
+  // A differenza di canShiftWeeks/shiftWeeksData non serve un controllo "cella di
+  // destinazione già occupata": uno stesso task viene traslato per intero (tutte le
+  // sue settimane non vuote, stesso delta), quindi la mappa chiave→valore risultante
+  // è per costruzione iniettiva (nessuna collisione interna possibile). I task
+  // completed vengono saltati (mai auto-corretti, stesso principio usato altrove) e
+  // contati a parte per il messaggio di conferma lato UI. Blocca l'intera operazione
+  // (nessuno shift parziale) se anche una sola settimana uscirebbe dal range
+  // manifest.weeks.first/last.
+  function canShiftBaseline(dataset, baseline, deltaWeeks) {
+    const { first, last } = dataset.manifest.weeks;
+    let affectedTasksCount = 0;
+    let skippedCompletedCount = 0;
+    let movedWeeksCount = 0;
+    for (const task of baseline.task) {
+      if (task.completed) {
+        skippedCompletedCount++;
+        continue;
+      }
+      let taskHasMove = false;
+      for (const [iso, entry] of Object.entries(task.weeks || {})) {
+        if (!entry || isWeekEntryEmpty(entry)) continue;
+        const target = addWeeks(iso, deltaWeeks);
+        if (target < first || target > last) {
+          return {
+            allowed: false,
+            reason: `Shifting would move "${task.name}" (week ${iso}) to ${target}, which is outside the current range (${first} – ${last}).`,
+          };
+        }
+        taskHasMove = true;
+        movedWeeksCount++;
+      }
+      if (taskHasMove) affectedTasksCount++;
+    }
+    return { allowed: true, affectedTasksCount, skippedCompletedCount, movedWeeksCount };
+  }
+
+  // Muta ogni task non-completed della baseline, ricostruendo `task.weeks` da zero
+  // con ogni entry non vuota traslata di `deltaWeeks` — le milestone si spostano
+  // insieme all'entry che le contiene, nessuna sincronizzazione dedicata necessaria
+  // (tutti i task della baseline si spostano della stessa quantità). Va chiamata solo
+  // dopo un `canShiftBaseline` con `allowed: true`.
+  function shiftBaselineData(baseline, deltaWeeks) {
+    for (const task of baseline.task) {
+      if (task.completed) continue;
+      const oldWeeks = task.weeks || {};
+      const newWeeks = {};
+      for (const [iso, entry] of Object.entries(oldWeeks)) {
+        if (!entry || isWeekEntryEmpty(entry)) continue;
+        newWeeks[addWeeks(iso, deltaWeeks)] = entry;
+      }
+      task.weeks = newWeeks;
+    }
+  }
+
+  MP.weekShift = { canShiftWeeks, shiftWeeksData, canShiftBaseline, shiftBaselineData };
 })(window.MP = window.MP || {});

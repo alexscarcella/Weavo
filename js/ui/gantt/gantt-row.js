@@ -79,6 +79,7 @@
       col2.appendChild(menuButton([
         { label: 'Rename baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
         { label: baseline.archived ? 'Reactivate baseline' : 'Archive baseline', onClick: () => MP.baselineCrud.toggleArchived(state, file, baseline) },
+        { label: 'Shift baseline…', onClick: () => MP.baselineCrud.shiftBaseline(state, file, baseline) },
         { label: '+ New task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },
         { label: '↑', title: 'Move up', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, -1) },
         { label: '↓', title: 'Move down', className: 'context-menu-item-icon', onClick: () => MP.baselineCrud.moveBaseline(state, file, baseline, 1) },

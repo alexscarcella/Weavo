@@ -106,35 +106,11 @@ triggers the workflow, which (1) fails the build if `APP_VERSION` in
 [js/ui/common/app-header.js](js/ui/common/app-header.js) doesn't match the pushed tag, (2) builds
 `weavo-vX.Y.zip` via `git archive` scoped to `index.html favicon.svg css js sample-data` (so untracked/gitignored
 content like `sample-data/backup/` can never end up in it), and (3) creates a GitHub Release with
-that zip attached via `softprops/action-gh-release`. `docs/`, `README.md`, `requirements/`,
-`scripts/`, and `spike-fsa/` are deliberately excluded from the zip — they're dev-facing, not
-needed to run the app. Per-release steps are manual and undocumented in code: bump `APP_VERSION`,
-commit, then `git tag -a vX.Y -m vX.Y && git push origin vX.Y`. Never reuse/force-push an existing
-tag to fix a bad release — delete it (local + remote) and the GitHub Release, then re-tag.
-
-### Excel import script (dev-time only, not part of the app runtime)
-
-[scripts/import-excel/](scripts/import-excel/) is a one-shot Node script (uses `exceljs`, needs
-`npm install`) that converts the "Master Plan" sheet of `requirements/Master plan software.xlsx`
-into the `manifest.json` / `team-resources.json` / `projects/*.json` structure (current
-team/resources model — see below). Run with `--dry-run` first and review the report before
-writing real output. See [scripts/import-excel/README.md](scripts/import-excel/README.md) for the
-full set of parsing heuristics (column layout, baseline carry-over, color→team mapping, milestone
-detection, valid initials format, never-allocated-resource exclusion) — these were
-reverse-engineered from the real spreadsheet, not assumed, so re-derive from the actual file
-rather than guessing if the heuristics need adjusting. Since the sheet has no explicit
-initials→team column, each resource's team is inferred by majority vote over the colors of the
-cells it appears in; initials that tie or have no color signal at all make the script stop
-**without writing anything** until resolved via a local, gitignored `team-overrides.json` (real
-personnel data, never committed — see the README for its shape; this override file deliberately
-keeps the old Italian field names `codice`/`nome`/`colore`, since it's an external, unversioned
-input the import script translates internally, not part of the app's own persisted data — see the
-README's "Come viene assegnato il team a ogni risorsa" for the reasoning). A companion script,
-`scripts/import-excel/analyze-output.js`, re-runs `js/model/validation.js`'s orphan/mismatch
-checks against an already-written data folder (via a Node `vm` sandbox, no browser needed) —
-useful after any import or hand-edit, not just right after running `import.js`. The script's own
-default output folder, `import-output/` at repo root, is gitignored (may contain a full real copy
-of project data).
+that zip attached via `softprops/action-gh-release`. `docs/`, `README.md`, `requirements/`, and
+`spike-fsa/` are deliberately excluded from the zip — they're dev-facing, not needed to run the
+app. Per-release steps are manual and undocumented in code: bump `APP_VERSION`, commit, then
+`git tag -a vX.Y -m vX.Y && git push origin vX.Y`. Never reuse/force-push an existing tag to fix
+a bad release — delete it (local + remote) and the GitHub Release, then re-tag.
 
 ## Data model
 
@@ -243,10 +219,7 @@ Each project's `referents` field (`projects/<slug>.json`) is a structured object
   rewritten in the new shape the next time that project is saved (lazy "self-heal on touch", same
   principle as the baseline-milestone self-heal above; no batch migration script). This self-heal
   is orthogonal to, and predates, the whole-schema legacy migration described next — it runs
-  regardless of `manifest.schemaVersion`. The Excel import script
-  (`scripts/import-excel/import.js`) always writes the new shape with all 5 fields empty — it no
-  longer captures the old free-text referents from column A; those are filled in by hand in the
-  app after import.
+  regardless of `manifest.schemaVersion`.
 
 ### Legacy data migration
 
@@ -268,18 +241,13 @@ after the new files are fully written. A folder already on the current `schemaVe
 cheaply (one small JSON parse) and skips migration entirely.
 
 This mechanism deliberately has **no dedicated pre-migration backup and no crash-recovery
-bookkeeping** — data in this app is not treated as irreplaceable: real data can be regenerated via
-the Excel import script, and the app already has its own manual/automatic backup feature
-(`MP.repository.createBackup`, see `docs/deployment.md` "Backups") a user can run before opening
-an old folder with a new app version, or fall back to OneDrive's own version history. Keep the
-migration's own legacy path literals (`'team-risorse.json'`, `'progetti'`) hardcoded, never sourced
-from `MP.schema.PATHS` — after this refactor those constants point at the *new* names, and a
-legacy folder by definition doesn't have those yet.
-
-`scripts/import-excel/`'s own output already targets the current schema directly (it doesn't go
-through the migration module for that) but reuses `legacy-migration.js`'s pure transform functions
-where useful for one-off data conversions (see that script's own history/comments) — the
-orchestration half (`migrateIfNeeded`, the actual disk I/O) is app-only.
+bookkeeping** — data in this app is not treated as irreplaceable: the app already has its own
+manual/automatic backup feature (`MP.repository.createBackup`, see `docs/deployment.md`
+"Backups") a user can run before opening an old folder with a new app version, or fall back to
+OneDrive's own version history. Keep the migration's own legacy path literals
+(`'team-risorse.json'`, `'progetti'`) hardcoded, never sourced from `MP.schema.PATHS` — after this
+refactor those constants point at the *new* names, and a legacy folder by definition doesn't have
+those yet.
 
 ## Architecture
 
@@ -391,6 +359,27 @@ inserted at the right point in that list. Layers, low → high:
    is the mutation, which snapshots every entry in `weeks` before deleting any of them so the
    write pass is never order-dependent — this preserves each cell's own content when shifting a
    multi-week block (a "translate", not a normalize-to-one-value bulk edit, see below).
+   The same module also exports `canShiftBaseline(dataset, baseline, deltaWeeks)`/
+   `shiftBaselineData(baseline, deltaWeeks)` for a coarser-grained operation: shifting an
+   entire baseline (every non-`completed` task's every non-empty week, milestones included)
+   by an arbitrary signed number of weeks in one go, entered by the user as a single free-form
+   number (not limited to ±1 like the per-cell shift above). Unlike `canShiftWeeks`/
+   `shiftWeeksData`, no "destination already occupied" check is needed: since *all* of a
+   task's non-empty weeks move by the same delta, the resulting key→entry mapping is
+   injective by construction (no two source weeks can collide on the same destination week).
+   `completed` tasks are skipped (left untouched, same non-auto-correction principle used
+   everywhere else) rather than blocking the whole operation, and are reported separately via
+   `skippedCompletedCount` so the confirmation prompt can mention them. Milestones need no
+   dedicated re-sync (unlike `syncBaselineMilestone` in `gantt-view.js`, which *propagates* a
+   milestone across a baseline's tasks): here every non-completed task moves by the same
+   delta, so a milestone already shared across tasks stays shared after the shift — the only
+   edge case is a milestone that lived solely on a `completed` task, which then diverges from
+   the (now-shifted) rest of the baseline; this simply shows up as `inconsistent` on the
+   Milestones page like any other pre-existing disagreement, self-healing the next time a
+   milestone in that baseline is touched via the popover. If shifting would push even one week
+   outside `manifest.weeks.first`/`last`, the whole operation is blocked (no partial shift, no
+   auto-extension of the manifest range) — `MP.baselineCrud.shiftBaseline` (see `crud/` below)
+   surfaces the reason via `window.alert`.
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs:
      `confirmConflict` for save conflicts, `promptText`/`promptColor` single-field prompts, plus
@@ -456,7 +445,15 @@ inserted at the right point in that list. Layers, low → high:
      `MP.saveCoordinator`/`MP.repository`, then triggers re-render. `project-crud.js`'s
      `createProject`/`editReferents` open `MP.modal.promptProjectForm` themselves when not given a
      preset value (same "modal call lives inside the CRUD function" pattern as the rest of this
-     file), see "Project team/referents" above for the field shape.
+     file), see "Project team/referents" above for the field shape. `baseline-crud.js`'s
+     `shiftBaseline(state, file, baseline, deltaInput)` is the user-facing entry point for the
+     whole-baseline shift described above (`MP.weekShift.canShiftBaseline`/`shiftBaselineData`,
+     `js/model/week-shift.js`): a single `window.prompt` for a signed integer number of weeks
+     (`deltaInput` bypasses it, used by tests), validated as a non-zero whole number, then
+     `canShiftBaseline` either rejects with `window.alert(check.reason)` or feeds a
+     `window.confirm` summary (weeks, direction, tasks/allocations affected, completed tasks
+     left untouched) before mutating and persisting — reachable from the baseline row's "⋮" menu
+     (`gantt-row.js`, "Shift baseline…", next to "Rename baseline"/"Archive baseline").
    - `gantt/`: the main view. `gantt-view.js` builds the compact grid (CSS Grid + `position:
      sticky` for frozen first 3 columns and frozen header row — deliberately not a heavyweight
      gantt library, per spec §9) and exports `buildRows` (dataset → visible task rows, honoring

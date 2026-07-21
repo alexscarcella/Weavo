@@ -51,5 +51,49 @@
     await persistProject(state, file);
   }
 
-  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaseline, toggleArchived };
+  // Shift dell'intera baseline (tutti i task non-completed, milestone comprese) di N
+  // settimane avanti/indietro in un colpo solo — vedi MP.weekShift.canShiftBaseline/
+  // shiftBaselineData per la logica pura. `deltaInput` (usato dai test) bypassa il
+  // prompt.
+  async function shiftBaseline(state, file, baseline, deltaInput) {
+    const raw = deltaInput !== undefined ? deltaInput : window.prompt(
+      'How many weeks should the whole baseline shift? Use a negative number to shift backward, positive to shift forward (e.g. -2 or 3):'
+    );
+    if (raw === null || raw === undefined) return;
+    const trimmed = String(raw).trim();
+    if (!/^-?\d+$/.test(trimmed)) {
+      window.alert('Enter a whole number of weeks (e.g. -2 or 3).');
+      return;
+    }
+    const delta = parseInt(trimmed, 10);
+    if (delta === 0) {
+      window.alert('Enter a non-zero number of weeks.');
+      return;
+    }
+
+    const check = MP.weekShift.canShiftBaseline(state.dataset, baseline, delta);
+    if (!check.allowed) {
+      window.alert(check.reason);
+      return;
+    }
+    if (check.movedWeeksCount === 0) {
+      window.alert('This baseline has no allocations or milestones to shift.');
+      return;
+    }
+
+    const direction = delta > 0 ? 'forward' : 'backward';
+    const magnitude = Math.abs(delta);
+    const skippedNote = check.skippedCompletedCount > 0
+      ? ` ${check.skippedCompletedCount} completed task(s) will be left untouched.`
+      : '';
+    const confermato = window.confirm(
+      `Shift baseline "${baseline.version}" ${magnitude} week(s) ${direction}? This will move ${check.movedWeeksCount} allocation(s)/milestone(s) across ${check.affectedTasksCount} task(s).${skippedNote}`
+    );
+    if (!confermato) return;
+
+    MP.weekShift.shiftBaselineData(baseline, delta);
+    await persistProject(state, file);
+  }
+
+  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaseline, toggleArchived, shiftBaseline };
 })(window.MP = window.MP || {});
