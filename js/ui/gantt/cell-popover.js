@@ -88,8 +88,11 @@
     const pop = document.createElement('div');
     pop.className = 'cell-popover';
 
+    // Colore di sfondo per riga (funziona in Chrome/Edge, gli unici browser target — vedi
+    // CLAUDE.md) così il team si distingue anche solo scorrendo la lista, non solo dopo la
+    // selezione. Applicato anche al controllo chiuso (vedi sotto), non solo alle opzioni.
     const teamOptions = dataset.teamResources.teams
-      .map((t) => `<option value="${t.code}" ${t.code === selectedTeam ? 'selected' : ''}>${t.name}</option>`)
+      .map((t) => `<option value="${t.code}" style="background-color:${t.color}" ${t.code === selectedTeam ? 'selected' : ''}>${t.name}</option>`)
       .join('');
 
     const altreDiverse = isBulk
@@ -159,8 +162,9 @@
       for (const initials of [...selectedResources]) {
         if (!team.resources.some((r) => r.initials === initials)) selectedResources.delete(initials);
       }
-      resourcesListEl.innerHTML = team.resources.length
-        ? team.resources.map((r) => `
+      const resourcesOrdinate = [...team.resources].sort((a, b) => a.name.localeCompare(b.name));
+      resourcesListEl.innerHTML = resourcesOrdinate.length
+        ? resourcesOrdinate.map((r) => `
             <label class="popover-resource">
               <input type="checkbox" value="${r.initials}" ${selectedResources.has(r.initials) ? 'checked' : ''}>
               <span>${r.initials} — ${r.name}</span>
@@ -175,11 +179,20 @@
       });
     }
 
-    pop.querySelector('.popover-team').addEventListener('change', (e) => {
+    // Colora anche il controllo chiuso col colore del team scelto (non solo le opzioni
+    // della tendina aperta), così il colore resta visibile senza dover riaprire il menu.
+    const teamSelectEl = pop.querySelector('.popover-team');
+    function syncTeamSelectColor() {
+      const team = MP.schema.findTeamByCode(dataset.teamResources, selectedTeam);
+      teamSelectEl.style.backgroundColor = team ? team.color : '';
+    }
+    teamSelectEl.addEventListener('change', (e) => {
       selectedTeam = e.target.value;
+      syncTeamSelectColor();
       renderResourcesList();
       refreshConflicts();
     });
+    syncTeamSelectColor();
     const milestoneCheckbox = pop.querySelector('.popover-milestone');
     if (milestoneCheckbox) {
       milestoneCheckbox.addEventListener('change', (e) => {
