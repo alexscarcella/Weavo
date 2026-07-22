@@ -26,6 +26,15 @@ unlike tasks, marking either one hides it by default and asks for confirmation f
 visibility change: it does **not** exclude its tasks from overallocation/team-mismatch checks
 (only an individual task's own `completed` flag does that).
 
+### Completed week (`completed` on a week entry)
+A finer-grained, per-week `completed: true` set on a single **week entry**, independent of
+task-level [Completed task](#completed-task-completed) — it marks that one week of an otherwise
+active task is finished, without closing the whole task. Gets the same treatment as a completed
+task but scoped to that week: excluded from **overallocation** and **team mismatch**, rendered
+with the same grey cell background, and not eligible for the one-week shift action. `team`/
+`resources` on that week are preserved, not cleared, and the flag is reversible. Set via a
+checkbox in the cell's editing popover, for a single cell or a multi-week selection alike.
+
 ### Conflict detection
 The reread-before-write check performed by `MP.saveCoordinator` before every save: it compares
 the file currently on disk against the last version this session knows about, and — showing a
@@ -75,7 +84,9 @@ surfaced as a non-blocking warning, never auto-corrected.
 ### Overallocation
 The situation where the same resource (`initials`) is allocated to more than one task in the same
 week, across any project. Computed by `MP.overallocation.buildAllocationIndex` and highlighted in
-the gantt and resource-load views; completed tasks don't count toward it.
+the gantt and resource-load views; completed tasks — and individually
+[completed weeks](#completed-week-completed-on-a-week-entry) within an otherwise-active task —
+don't count toward it.
 
 ### Project
 The top-level planning unit (`projects/<slug>.json`), containing one or more **baselines**. Has a
@@ -100,11 +111,12 @@ team names/colors is hardcoded in the app — see [database.md](database.md#team
 ### Team mismatch
 A week entry where the allocated resource's `team` no longer matches the team it currently
 belongs to in `team-resources.json` — typically left behind after moving a resource to a different
-team. Detected by `MP.validation.findTeamMismatches` (non-completed tasks only) and surfaced as a
-non-blocking warning; the user resolves it by hand.
+team. Detected by `MP.validation.findTeamMismatches` (non-completed tasks and non-completed weeks
+only) and surfaced as a non-blocking warning; the user resolves it by hand.
 
 ### Week entry
-The value at `task.weeks[iso]` for a given ISO Monday date: either an allocation
-(`{ team, resources }`), a milestone (`{ milestone: true }`), both together, or absent entirely.
-Never a partial state like a `team` with no `resources`. Always constructed through
-`MP.schema.createWeekEntry(...)`.
+The value at `task.weeks[iso]` for a given ISO Monday date: an allocation
+(`{ team, resources }`), a milestone (`{ milestone: true }`), a per-week
+[completed](#completed-week-completed-on-a-week-entry) flag (`{ completed: true }`), any
+combination of the three together, or absent entirely. Never a partial state like a `team` with no
+`resources`. Always constructed through `MP.schema.createWeekEntry(...)`.

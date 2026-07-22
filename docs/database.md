@@ -82,7 +82,8 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
           "completed": false,
           "weeks": {
             "2026-01-05": { "team": "dev", "resources": ["AB"] },
-            "2026-01-12": { "milestone": true }
+            "2026-01-12": { "milestone": true },
+            "2025-12-29": { "team": "dev", "resources": ["AB"], "completed": true }
           }
         }
       ]
@@ -117,6 +118,14 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
 - `completed: true` marks a task as finished: it's excluded from overallocation counting and from
   team-mismatch detection, but its data is never deleted or rewritten automatically. Toggled via
   the checkbox next to the task name, no confirmation.
+- A single week entry can independently carry its own `completed: true`, orthogonal to the
+  task-level flag above: it marks that one week of an otherwise-active task is finished without
+  closing the whole task. It gets the same treatment as a completed task, just scoped to that one
+  week — excluded from overallocation counting and team-mismatch detection, rendered with the
+  same grey background as a fully completed task, and not eligible for the "shift one week
+  back/forward" action — while leaving `team`/`resources` on that week untouched and fully
+  reversible. Set via a checkbox in the cell's editing popover, available for a single cell or a
+  multi-week selection alike.
 - Projects and baselines share the same `completed` field/concept, toggled via a checkbox to the
   left of the name (project row's col1 / baseline row's col2) rather than a menu action — same "no
   destructive auto-correction" principle as tasks, but marking either one asks for confirmation

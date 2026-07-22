@@ -194,19 +194,40 @@ predates the team/resources merge and still describes the old two-file `risorse.
 - Allocation model is **boolean** — a resource is either allocated to a task in a given week or
   not; no percentages/fractions.
 - A week entry (`task.weeks[iso]`) is only meaningful if `team` + non-empty `resources` are
-  both present together, or if `milestone: true` is set — never a partial state like
-  `{team: "dev", resources: []}`. Always construct these via `MP.schema.createWeekEntry(...)`.
+  both present together, or if `milestone: true` is set, or if `completed: true` is set (see
+  below) — never a partial state like `{team: "dev", resources: []}`. Always construct these via
+  `MP.schema.createWeekEntry(...)`.
 - `team` codes and resource `initials` referenced by a task but missing from
   `team-resources.json` are **orphan references**
   (`MP.validation.findOrphanTeam`/`findOrphanResources`); a resource allocated under a `team`
   different from the one it currently belongs to is a **mismatch**
-  (`MP.validation.findTeamMismatches`, non-`completed` tasks only). Both are surfaced as
-  non-blocking warnings (badge on the cell + line in the warnings panel), never silently
-  dropped or auto-corrected.
+  (`MP.validation.findTeamMismatches`, non-`completed` tasks and non-`completed` weeks only —
+  see below). Both are surfaced as non-blocking warnings (badge on the cell + line in the
+  warnings panel), never silently dropped or auto-corrected.
 - A task marked `completed: true` is excluded from overallocation counting *and* from mismatch
   detection (its weeks no longer count as active commitment) but its data is not deleted or
   auto-corrected — closed tasks are never touched by team/resource changes, including the
   bulk-regularization-on-move and cascade-delete-on-deletion flows described above.
+- A single week entry can *also* carry `completed: true`, independent of `milestone` and
+  orthogonal to task-level `completed` above: it records that one week of an otherwise-active
+  task has been finished, without closing the whole task (a task can freely mix completed and
+  active weeks). Set via a "Completed" checkbox in `cell-popover.js`
+  ([js/ui/gantt/cell-popover.js](js/ui/gantt/cell-popover.js)), available in **both** single-cell
+  and bulk (multi-week range) mode — unlike `milestone`, which stays single-cell-only — where bulk
+  mode applies the same anchor-cell normalization already used for `team`/`resources` (all
+  selected weeks end up with the anchor week's `completed` value). A completed week gets the
+  exact same treatment as a completed task, just scoped to that one cell instead of the whole
+  task: excluded from `MP.overallocation.buildAllocationIndex` and
+  `MP.validation.findTeamMismatches`, rendered with the identical `#d9d9d9` grey background
+  (`gantt-cell.js`'s `weekCompleted = task.completed || entry.completed`) which also suppresses
+  the overallocation/mismatch badges on that cell (orphan-team/orphan-resource badges still show
+  regardless, same as for a completed task). `MP.weekShift.canShiftWeeks` blocks the ◀/▶ shift menu
+  on any selected week that's completed, and a whole-baseline shift
+  (`MP.weekShift.canShiftBaseline`/`shiftBaselineData`) leaves a completed week fixed at its
+  original position instead of translating it with the rest of the task — see the `week-shift.js`
+  entry below for how a resulting collision is handled. Fully reversible (unchecking the box
+  clears the flag) and never destructive — the week's `team`/`resources` are preserved, not
+  cleared, while `completed: true` is set.
 
 ### Project team/referents
 
@@ -389,34 +410,42 @@ inserted at the right point in that list. Layers, low → high:
    week-column highlight.
    `week-shift.js` is a small, self-contained pure module for the "shift" feature (see
    `gantt/` below): `canShiftWeeks(dataset, task, weeks, direction)` is the ammissibility
-   predicate (blocks on `task.completed`, on the shift crossing `manifest.weeks.first`/
-   `last`, or on the one destination week that falls outside the selected block already
-   holding a non-empty entry in *this* task — reused both to enable/disable the shift menu
-   items and as a safety re-check before mutating) and `shiftWeeksData(task, weeks, direction)`
-   is the mutation, which snapshots every entry in `weeks` before deleting any of them so the
-   write pass is never order-dependent — this preserves each cell's own content when shifting a
-   multi-week block (a "translate", not a normalize-to-one-value bulk edit, see below).
+   predicate (blocks on `task.completed`, on any *source* week in the selected range itself
+   carrying `completed: true` — per-week completion, see the Key rules section above, is "closed
+   data" just like a completed task and is never moved — on the shift crossing
+   `manifest.weeks.first`/`last`, or on the one destination week that falls outside the selected
+   block already holding a non-empty entry in *this* task — reused both to enable/disable the
+   shift menu items and as a safety re-check before mutating) and `shiftWeeksData(task, weeks,
+   direction)` is the mutation, which snapshots every entry in `weeks` before deleting any of them
+   so the write pass is never order-dependent — this preserves each cell's own content when
+   shifting a multi-week block (a "translate", not a normalize-to-one-value bulk edit, see below).
    The same module also exports `canShiftBaseline(dataset, baseline, deltaWeeks)`/
    `shiftBaselineData(baseline, deltaWeeks)` for a coarser-grained operation: shifting an
    entire baseline (every non-`completed` task's every non-empty week, milestones included)
    by an arbitrary signed number of weeks in one go, entered by the user as a single free-form
-   number (not limited to ±1 like the per-cell shift above). Unlike `canShiftWeeks`/
-   `shiftWeeksData`, no "destination already occupied" check is needed: since *all* of a
-   task's non-empty weeks move by the same delta, the resulting key→entry mapping is
-   injective by construction (no two source weeks can collide on the same destination week).
-   `completed` tasks are skipped (left untouched, same non-auto-correction principle used
-   everywhere else) rather than blocking the whole operation, and are reported separately via
-   `skippedCompletedCount` so the confirmation prompt can mention them. Milestones need no
-   dedicated re-sync (unlike `syncBaselineMilestone` in `gantt-view.js`, which *propagates* a
-   milestone across a baseline's tasks): here every non-completed task moves by the same
+   number (not limited to ±1 like the per-cell shift above). A week entry with `completed: true`
+   is treated as **stationary** — never translated, same "closed data never touched" principle as
+   the per-cell shift above — so among the *moving* (non-completed) weeks of a task the resulting
+   key→entry mapping is still injective by construction (no two moving source weeks can collide
+   with each other), but a moving week can still collide with a *stationary* completed week that
+   happens to already sit at its destination iso; `canShiftBaseline` detects this explicitly per
+   task (comparing each moving target against that task's own set of stationary/completed isos)
+   and blocks the whole operation with a reason naming the task/weeks involved, rather than
+   silently clobbering the stationary week. `completed` tasks are skipped entirely (left
+   untouched, same non-auto-correction principle used everywhere else) and reported via
+   `skippedCompletedCount`; individual stationary/completed weeks left in place inside an
+   otherwise-active task are reported separately via `skippedCompletedWeeksCount` — both feed the
+   `MP.baselineCrud.shiftBaseline` confirmation prompt so the user knows what was left untouched.
+   Milestones need no dedicated re-sync (unlike `syncBaselineMilestone` in `gantt-view.js`, which
+   *propagates* a milestone across a baseline's tasks): here every moving task moves by the same
    delta, so a milestone already shared across tasks stays shared after the shift — the only
-   edge case is a milestone that lived solely on a `completed` task, which then diverges from
-   the (now-shifted) rest of the baseline; this simply shows up as `inconsistent` on the
-   Milestones page like any other pre-existing disagreement, self-healing the next time a
-   milestone in that baseline is touched via the popover. If shifting would push even one week
-   outside `manifest.weeks.first`/`last`, the whole operation is blocked (no partial shift, no
-   auto-extension of the manifest range) — `MP.baselineCrud.shiftBaseline` (see `crud/` below)
-   surfaces the reason via `window.alert`.
+   edge case is a milestone that lived solely on a `completed` task or on a stationary completed
+   week, which then diverges from the (now-shifted) rest of the baseline; this simply shows up as
+   `inconsistent` on the Milestones page like any other pre-existing disagreement, self-healing
+   the next time a milestone in that baseline is touched via the popover. If shifting would push
+   even one *moving* week outside `manifest.weeks.first`/`last`, the whole operation is blocked
+   (no partial shift, no auto-extension of the manifest range) — `MP.baselineCrud.shiftBaseline`
+   (see `crud/` below) surfaces the reason via `window.alert`.
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs:
      `confirmConflict` for save conflicts, `promptText`/`promptColor` single-field prompts, plus
@@ -492,8 +521,8 @@ inserted at the right point in that list. Layers, low → high:
      `js/model/week-shift.js`): a single `window.prompt` for a signed integer number of weeks
      (`deltaInput` bypasses it, used by tests), validated as a non-zero whole number, then
      `canShiftBaseline` either rejects with `window.alert(check.reason)` or feeds a
-     `window.confirm` summary (weeks, direction, tasks/allocations affected, completed tasks
-     left untouched) before mutating and persisting — reachable from the baseline row's "⋮" menu
+     `window.confirm` summary (weeks, direction, tasks/allocations affected, completed tasks and
+     completed weeks left untouched) before mutating and persisting — reachable from the baseline row's "⋮" menu
      (`gantt-row.js`, "Shift baseline…", next to "Rename baseline"). The "Rename project"/
      "Rename baseline" menus no longer carry an Archive/Reactivate entry — that's now the
      checkbox to the left of the name (col1 for project, col2 for baseline), mirroring the
@@ -517,14 +546,23 @@ inserted at the right point in that list. Layers, low → high:
      `completed`) — same no-destructive-auto-correction principle as project completion, purely a
      visibility change. `gantt-row.js` renders one task row; `gantt-cell.js` renders one
      week×task cell (double click is disabled — every action goes through right-click, see
-     below; a cell whose resource(s) are overallocated gets a native
+     below; `weekCompleted = task.completed || entry.completed` drives the `#d9d9d9` grey
+     background and, further down, suppresses the overallocation/mismatch checks below for that
+     cell — see "Key rules" above for the per-week `completed` flag itself; a cell whose
+     resource(s) are overallocated gets a native
      `title` tooltip built from `MP.overallocation.findAllocations`, listing per resource the
      other project/baseline/task it's allocated to that same week — same
      `projectName`/`baselineVersion`/`taskName` shape the resource-load heat cells already use in
      `resource-load-view.js`, so the wording matches across both views); `cell-popover.js` is the
-     editing popover (team-first, then multi-select resources restricted to that team, then
-     milestone flag — milestone only in single-cell mode, see below — autosave on close,
-     non-blocking double-allocation warning), opened only from the right-click handler
+     editing popover (team-first — each `<option>`, and the closed control itself once a team is
+     picked, gets its background tinted with that team's `color` via inline `style`, functional
+     since the app targets Chrome/Edge only, so the team stays visually identifiable without
+     reopening the dropdown — then multi-select resources restricted to that team and sorted
+     alphabetically by `name` (`localeCompare`, computed on a copy so `team.resources`'s stored
+     order in `team-resources.json` is never mutated), then a "Completed" checkbox — single-cell
+     **and** bulk mode alike, see "Key rules" above — then the milestone flag — milestone only in
+     single-cell mode, see below — autosave on close, non-blocking double-allocation warning),
+     opened only from the right-click handler
      (`gantt-view.js`'s `openCellContextMenu`, see `cell-selection.js` below), never from a plain
      click; a task admits only **one** milestone week, and all
      tasks of the same baseline share a single milestone: `gantt-view.js`'s `handleCellSaved`
@@ -553,9 +591,9 @@ inserted at the right point in that list. Layers, low → high:
      Excel-style "right-click outside the selection replaces it") and hands the resulting week
      array to `gantt-view.js`'s `openCellContextMenu`, which:
      - always opens `cell-popover.js` **below** the cell (single-cell mode for a lone week,
-       bulk mode — same team+resources applied to every selected week, no milestone field, see
-       `requirements/backlog.md` on why milestone stays a single-cell/single-baseline concept —
-       for a multi-week range);
+       bulk mode — same team+resources+`completed` applied to every selected week, no milestone
+       field, see `requirements/backlog.md` on why milestone stays a single-cell/single-baseline
+       concept — for a multi-week range);
      - additionally opens the shift menu (see below) **above** the cell, at the same time, but
        only if at least one week in the range already has an allocation (`MP.schema.isWeekEntryEmpty`
        checked per week) — an empty range has nothing to shift.
