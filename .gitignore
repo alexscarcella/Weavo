@@ -18,3 +18,7 @@ import-output/
 
 # Real sigla->team mapping used to resolve the Excel import's color-inference gaps — real personnel data
 scripts/import-excel/team-overrides.json
+
+# /graphify knowledge-graph build of the repo — regenerable, not source material
+# graphify-out/
+graphify-out/cost.json

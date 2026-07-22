@@ -29,6 +29,14 @@ of a real data folder. `.claude/` is excluded too, since local permission settin
 machine-specific absolute paths in them. Don't assume `git status`/`git log` reflect these; check
 the filesystem directly, and never `git add -f` anything under these paths.
 
+`graphify-out/` (the `/graphify` knowledge-graph build of this repo — see "Codebase knowledge
+graph (graphify)" under "Running / testing") is the one generated-output directory that **is**
+version-controlled, not excluded: `graph.json`/`graph.html`/`GRAPH_REPORT.md`/`manifest.json` are
+committed so the graph travels with the repo instead of requiring every clone to rebuild it, with
+a `merge=graphify` driver on `graph.json` in `.gitattributes` to handle merge conflicts on that
+generated file sanely. Only `graphify-out/cost.json` (local cumulative token-cost bookkeeping) is
+gitignored.
+
 ## Hard constraints (non-negotiable, verified empirically)
 
 - **No build step, no bundler, no TypeScript.** The app is plain HTML/CSS/JS copied as static
@@ -97,6 +105,21 @@ style path (`/tmp/...`) resolves incorrectly — always use a native Windows pat
 [spike-fsa/index.html](spike-fsa/index.html) is a standalone throwaway test page (not part of the
 app) for manually checking whether File System Access API directory permissions survive a
 browser/PC restart on a real network/OneDrive folder — unrelated to the main app's code path.
+
+### Codebase knowledge graph (graphify)
+
+`graphify-out/` (committed — see "Local-only files" above for the one exception, `cost.json`)
+holds a `/graphify` knowledge-graph build of this repo: `graph.json` (nodes/edges), `graph.html`
+(interactive viewer), `GRAPH_REPORT.md` (community/god-node/audit summary), plus a `manifest.json`
+used for incremental `--update` runs. It's a dev-exploration aid, not part of the
+shipped app — nothing under `js/`/`css/`/`index.html` reads it. Rebuild it with `/graphify .`
+(full rebuild) or `/graphify . --update` (incremental); query an existing graph with
+`/graphify query "<question>"` instead of re-deriving structure by hand. Since docs/papers/images
+need an LLM pass (Gemini if `GEMINI_API_KEY`/`GOOGLE_API_KEY` is set, otherwise Claude Code
+subagents dispatched via the Agent tool), a run can legitimately skip that pass if subagent
+dispatch is unavailable/declined in a given session — the resulting graph then only covers code
+structure (AST-derived), which is still useful for navigating `js/` but won't surface
+doc-to-code or narrative relationships; rerun semantic extraction later to fill that in.
 
 ### Versioned release packaging (GitHub Actions)
 
@@ -779,3 +802,13 @@ inserted at the right point in that list. Layers, low → high:
   (a new conflict check, a new soft "did this change" probe, …) should reuse
   `MP.repository.readTextFileOrNull(dirHandle, path)` rather than reimplementing the try/catch —
   see `save-coordinator.js` and `remote-check.js` for the two existing consumers.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

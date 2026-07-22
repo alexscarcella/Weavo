@@ -268,6 +268,11 @@ Deeper documentation lives in [`docs/`](docs/):
 - [`docs/security.md`](docs/security.md) — the trust model and known limitations
 - [`docs/glossary.md`](docs/glossary.md) — terms used across the code and the data files
 
+If you use [Claude Code](https://claude.com/claude-code), the [graphify](https://github.com/safishamsi/graphify)
+skill can build a queryable knowledge graph of this codebase — useful for tracing call/data
+relationships across the `js/` module layers. Its output (`graphify-out/`) is committed to the
+repo so it travels with the code; it's a dev-exploration aid, not part of the app.
+
 ## Status
 
 Early-stage personal project — expect rough edges.
