@@ -123,7 +123,21 @@
         col1.classList.add('team-color-bar');
         col1.style.setProperty('--team-bar-color', team.color);
         grid.appendChild(col1);
-        grid.appendChild(fixedCell(risorsa.name, 'rl-col-name'));
+
+        const col2 = fixedCell(risorsa.name, 'rl-col-name');
+        const nameSpan = col2.querySelector('.cell-text');
+        const infoBtn = document.createElement('button');
+        infoBtn.type = 'button';
+        infoBtn.className = 'project-info-btn';
+        infoBtn.textContent = 'i';
+        infoBtn.title = 'Resource info';
+        infoBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const { upcoming, past } = MP.validation.groupResourceTaskAllocations(dataset, risorsa.initials);
+          MP.modal.showResourceAllocations({ risorsa, upcoming, past });
+        });
+        col2.insertBefore(infoBtn, nameSpan);
+        grid.appendChild(col2);
 
         weeks.forEach((settimana, i) => {
           const refs = findAllocations(index, risorsa.initials, settimana);

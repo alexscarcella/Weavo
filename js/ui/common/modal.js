@@ -315,6 +315,102 @@
     });
   }
 
+  // Icona "copy" (due rettangoli sovrapposti), stroke-only cosicché erediti il colore via
+  // currentColor/CSS invece di un'emoji — usata dal bottone di copia del popover allocazioni
+  // risorsa sotto.
+  const COPY_ICON_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+
+  function formatWeekRange(r) {
+    const formatWeek = MP.weekUtils.formatWeekLabel;
+    return r.firstWeek === r.lastWeek ? formatWeek(r.firstWeek) : `${formatWeek(r.firstWeek)} – ${formatWeek(r.lastWeek)}`;
+  }
+
+  function formatRowText(r) {
+    return `${formatWeekRange(r)} — ${r.progetto} / BL ${r.baseline} / ${r.task} — ${r.weekCount} wk`;
+  }
+
+  // Testo semplice (per client senza supporto a ClipboardItem) e un frammento HTML equivalente
+  // (intestazioni + elenco puntato) per lo stesso contenuto, cosicché incollando in Word/Outlook
+  // si ottenga una lista formattata invece di una singola riga di testo piatto — vedi
+  // copyResourceAllocationsToClipboard sotto.
+  function buildResourceAllocationsText(risorsa, upcoming, past) {
+    const section = (title, rows) => `${title}\n${rows.length ? rows.map((r) => `- ${formatRowText(r)}`).join('\n') : 'None.'}`;
+    return `${risorsa.name} (${risorsa.initials})\n\n${section('Upcoming tasks', upcoming)}\n\n${section('Past tasks', past)}`;
+  }
+
+  function buildResourceAllocationsHtml(risorsa, upcoming, past) {
+    const section = (title, rows) =>
+      `<h4>${escapeHtml(title)}</h4>${rows.length ? `<ul>${rows.map((r) => `<li>${escapeHtml(formatRowText(r))}</li>`).join('')}</ul>` : '<p>None.</p>'}`;
+    return `<div><h3>${escapeHtml(risorsa.name)} (${escapeHtml(risorsa.initials)})</h3>${section('Upcoming tasks', upcoming)}${section('Past tasks', past)}</div>`;
+  }
+
+  async function copyResourceAllocationsToClipboard(risorsa, upcoming, past) {
+    const text = buildResourceAllocationsText(risorsa, upcoming, past);
+    try {
+      if (window.ClipboardItem) {
+        const html = buildResourceAllocationsHtml(risorsa, upcoming, past);
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/plain': new Blob([text], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' }),
+          }),
+        ]);
+      } else {
+        await navigator.clipboard.writeText(text);
+      }
+      MP.toast.showToast('Task list copied to clipboard', { kind: 'success' });
+    } catch (e) {
+      MP.toast.showToast(`Copy failed: ${e.message}`, { kind: 'error', duration: 6000 });
+    }
+  }
+
+  // Scheda di sola lettura con i task non completed di una risorsa (icona "i" nella vista
+  // Workload, js/ui/resource-load/resource-load-view.js), già raggruppati/ordinati da
+  // MP.validation.groupResourceTaskAllocations — questo modulo si limita a formattarli. Il
+  // bottone 📋 copia lo stesso contenuto (testo + HTML) via navigator.clipboard.write, per
+  // incollarlo formattato in una mail o in un documento Word.
+  function showResourceAllocations({ risorsa, upcoming, past }) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      const box = document.createElement('div');
+      box.className = 'modal-box modal-box-wide project-card';
+
+      const rowHtml = (r) =>
+        `<div class="project-card-row"><span class="project-card-label">${formatWeekRange(r)}</span><span class="project-card-value">${escapeHtml(r.progetto)} / BL ${escapeHtml(r.baseline)} / ${escapeHtml(r.task)} — ${r.weekCount} wk</span></div>`;
+      const section = (title, rows) =>
+        `<h3>${escapeHtml(title)}</h3>${rows.length ? rows.map(rowHtml).join('') : '<p class="hint">None.</p>'}`;
+
+      const nothingToCopy = upcoming.length === 0 && past.length === 0;
+      box.innerHTML = `
+        <div class="modal-copy-header">
+          <h2>${escapeHtml(risorsa.name)} (${escapeHtml(risorsa.initials)})</h2>
+          <button type="button" class="modal-copy-icon-btn" title="Copy list to clipboard"${nothingToCopy ? ' disabled' : ''}>${COPY_ICON_SVG}</button>
+        </div>
+        ${section('Upcoming tasks', upcoming)}
+        ${section('Past tasks', past)}
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Close</button>
+        </div>`;
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyResourceAllocationsToClipboard(risorsa, upcoming, past));
+
+      const close = () => {
+        overlay.remove();
+        resolve();
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', close);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+    });
+  }
+
   // Guida sintetica alle interazioni del gantt (bottone "?" nella top-bar,
   // vedi toolbar.js) — contenuto statico, nessun dato utente da sanificare.
   // Non risolve nulla (a differenza degli altri dialoghi): serve solo a
@@ -462,5 +558,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, confirmWithReport, showHelpGuide };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showResourceAllocations, confirmWithReport, showHelpGuide };
 })(window.MP = window.MP || {});

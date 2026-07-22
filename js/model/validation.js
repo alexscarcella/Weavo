@@ -106,6 +106,44 @@
     return orfani;
   }
 
+  // Allocazioni attive (task non completed) di una risorsa, raggruppate per task con prima/
+  // ultima settimana e conteggio — dietro l'icona "i" della vista Workload
+  // (js/ui/resource-load/resource-load-view.js). Un task "a cavallo" della settimana corrente
+  // (alcune settimane già passate, altre future per quella risorsa) genera due gruppi distinti,
+  // uno per settimane passate e uno per future, così da comparire nella sezione giusta di
+  // entrambe invece di forzare l'intero task in una sola.
+  function groupResourceTaskAllocations(dataset, initials) {
+    const { attive } = findResourceAllocations(dataset, initials);
+    const perTask = new Map();
+    for (const { progetto, baseline, task, settimana } of attive) {
+      if (!perTask.has(task)) perTask.set(task, { progetto, baseline, task, settimane: [] });
+      perTask.get(task).settimane.push(settimana);
+    }
+
+    const currentWeek = MP.weekUtils.getCurrentWeekIso();
+    const upcoming = [];
+    const past = [];
+    for (const { progetto, baseline, task, settimane } of perTask.values()) {
+      settimane.sort();
+      const passate = settimane.filter((s) => s < currentWeek);
+      const future = settimane.filter((s) => s >= currentWeek);
+      const toRow = (subset) => ({
+        progetto: progetto.name,
+        baseline: baseline.version,
+        task: task.name,
+        firstWeek: subset[0],
+        lastWeek: subset[subset.length - 1],
+        weekCount: subset.length,
+      });
+      if (future.length > 0) upcoming.push(toRow(future));
+      if (passate.length > 0) past.push(toRow(passate));
+    }
+    upcoming.sort((a, b) => (a.firstWeek < b.firstWeek ? -1 : a.firstWeek > b.firstWeek ? 1 : 0));
+    past.sort((a, b) => (a.firstWeek > b.firstWeek ? -1 : a.firstWeek < b.firstWeek ? 1 : 0));
+
+    return { upcoming, past };
+  }
+
   MP.validation = {
     forEachWeekEntry,
     findOrphanTeam,
@@ -113,5 +151,6 @@
     findTeamMismatches,
     findOrphanProjectReferents,
     findResourceAllocations,
+    groupResourceTaskAllocations,
   };
 })(window.MP = window.MP || {});
