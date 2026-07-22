@@ -93,9 +93,10 @@
 
     const direction = delta > 0 ? 'forward' : 'backward';
     const magnitude = Math.abs(delta);
-    const skippedNote = check.skippedCompletedCount > 0
-      ? ` ${check.skippedCompletedCount} completed task(s) will be left untouched.`
-      : '';
+    const skippedParts = [];
+    if (check.skippedCompletedCount > 0) skippedParts.push(`${check.skippedCompletedCount} completed task(s)`);
+    if (check.skippedCompletedWeeksCount > 0) skippedParts.push(`${check.skippedCompletedWeeksCount} completed week(s)`);
+    const skippedNote = skippedParts.length ? ` ${skippedParts.join(' and ')} will be left untouched.` : '';
     const confermato = window.confirm(
       `Shift baseline "${baseline.version}" ${magnitude} week(s) ${direction}? This will move ${check.movedWeeksCount} allocation(s)/milestone(s) across ${check.affectedTasksCount} task(s).${skippedNote}`
     );

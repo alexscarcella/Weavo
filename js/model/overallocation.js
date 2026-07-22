@@ -1,7 +1,8 @@
 // Indice delle allocazioni per (initials, settimana), cross-progetto. Usato sia dal popover di
 // editing (avviso su doppia allocazione) sia dalla vista gantt/resource-load per evidenziare la
 // sovrallocazione. I task completed non contano come impegno attivo (§4.6 della spec) e sono
-// esclusi dall'indice.
+// esclusi dall'indice, così come le singole settimane marcate completed all'interno di un task
+// ancora attivo (completamento parziale).
 (function (MP) {
   'use strict';
 
@@ -10,8 +11,8 @@
     for (const [file, { data: progetto }] of dataset.projects) {
       progetto.baseline.forEach((baseline) => {
         baseline.task.forEach((task) => {
-          if (task.completed) return;
           for (const [settimana, entry] of Object.entries(task.weeks || {})) {
+            if (task.completed || entry.completed) continue;
             for (const initials of entry.resources || []) {
               const key = `${initials}|${settimana}`;
               if (!index.has(key)) index.set(key, []);

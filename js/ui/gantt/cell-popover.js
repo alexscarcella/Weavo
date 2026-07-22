@@ -81,6 +81,7 @@
     let selectedTeam = entry.team || '';
     const selectedResources = new Set(entry.resources || []);
     let selectedMilestone = entry.milestone === true;
+    let selectedCompleted = entry.completed === true;
 
     const index = buildAllocationIndex(dataset);
 
@@ -94,8 +95,8 @@
     const altreDiverse = isBulk
       ? weeks.slice(1).filter((w) => {
           const e = (task.weeks || {})[w];
-          const vuota = !e || (!e.team && !(e.resources || []).length && !e.milestone);
-          return !vuota && JSON.stringify({ team: e.team, resources: e.resources || [] }) !== JSON.stringify({ team: entry.team, resources: entry.resources || [] });
+          const vuota = !e || (!e.team && !(e.resources || []).length && !e.milestone && !e.completed);
+          return !vuota && JSON.stringify({ team: e.team, resources: e.resources || [], completed: e.completed === true }) !== JSON.stringify({ team: entry.team, resources: entry.resources || [], completed: entry.completed === true });
         }).length
       : 0;
 
@@ -112,6 +113,9 @@
       <div class="popover-field">
         <label>Resources</label>
         <div class="popover-resources-list"></div>
+      </div>
+      <div class="popover-field popover-completed-field">
+        <label><input type="checkbox" class="popover-completed" ${selectedCompleted ? 'checked' : ''}> Completed</label>
       </div>
       ${isBulk ? '' : `<div class="popover-field popover-milestone-field">
         <label><input type="checkbox" class="popover-milestone" ${selectedMilestone ? 'checked' : ''}> Delivery milestone</label>
@@ -182,6 +186,9 @@
         selectedMilestone = e.target.checked;
       });
     }
+    pop.querySelector('.popover-completed').addEventListener('change', (e) => {
+      selectedCompleted = e.target.checked;
+    });
 
     renderResourcesList();
     refreshConflicts();
@@ -192,6 +199,7 @@
           team: selectedTeam,
           resources: [...selectedResources],
           milestone: isBulk ? false : selectedMilestone,
+          completed: selectedCompleted,
         });
         return onSave(newEntry);
       },

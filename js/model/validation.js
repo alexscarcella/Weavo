@@ -45,11 +45,13 @@
   // diverso dal team a cui la risorsa appartiene ora in team-resources.json —
   // tipicamente il risultato di uno spostamento di risorsa tra team dopo che
   // l'allocazione era già stata registrata. Segnalato, non corretto in
-  // automatico: l'utente regolarizza a mano riaprendo la cella.
+  // automatico: l'utente regolarizza a mano riaprendo la cella. Una settimana
+  // marcata completed (completamento parziale di un task attivo) è esclusa
+  // allo stesso modo di un task interamente completed.
   function findTeamMismatches(dataset) {
     const mismatch = [];
     forEachWeekEntry(dataset, ({ progetto, baseline, task, settimana, entry }) => {
-      if (task.completed || !entry.team) return;
+      if (task.completed || entry.completed || !entry.team) return;
       for (const initials of entry.resources || []) {
         const found = MP.schema.findResourceEntry(dataset.teamResources, initials);
         if (found && found.team.code !== entry.team) {

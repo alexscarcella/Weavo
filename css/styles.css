@@ -332,7 +332,8 @@ code {
   display: flex; align-items: center; gap: 0.4rem; font-weight: 400 !important;
   padding: 0.15rem 0; cursor: pointer;
 }
-.popover-milestone-field label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; cursor: pointer; }
+.popover-milestone-field label,
+.popover-completed-field label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; cursor: pointer; }
 .popover-warning {
   background: #fff3e0; border: 1px solid #ffb74d; border-radius: 4px;
   padding: 0.4rem 0.5rem; font-size: 0.78rem; margin-top: 0.3rem;

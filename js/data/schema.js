@@ -179,29 +179,33 @@
    * @param {string} [options.team] - code team dell'allocazione.
    * @param {string[]} [options.resources] - initials delle risorse allocate.
    * @param {boolean} [options.milestone] - flag di rilascio baseline su questa settimana.
-   * @returns {{team?: string, resources?: string[], milestone?: boolean}}
+   * @param {boolean} [options.completed] - flag di completamento parziale di questa singola
+   *   settimana (indipendente da task.completed) — vedi isWeekEntryEmpty.
+   * @returns {{team?: string, resources?: string[], milestone?: boolean, completed?: boolean}}
    */
-  function createWeekEntry({ team, resources, milestone } = {}) {
+  function createWeekEntry({ team, resources, milestone, completed } = {}) {
     const entry = {};
     if (team && Array.isArray(resources) && resources.length > 0) {
       entry.team = team;
       entry.resources = resources;
     }
     if (milestone) entry.milestone = true;
+    if (completed) entry.completed = true;
     return entry;
   }
 
   /**
    * Indica se una week entry è vuota, cioè priva sia di un'allocazione
-   * (team + resources non vuoto) sia del flag milestone.
-   * @param {{team?: string, resources?: string[], milestone?: boolean}|null|undefined} entry
+   * (team + resources non vuoto) sia del flag milestone sia del flag completed.
+   * @param {{team?: string, resources?: string[], milestone?: boolean, completed?: boolean}|null|undefined} entry
    * @returns {boolean}
    */
   function isWeekEntryEmpty(entry) {
     if (!entry) return true;
     const hasAllocation = !!entry.team && Array.isArray(entry.resources) && entry.resources.length > 0;
     const hasMilestone = entry.milestone === true;
-    return !hasAllocation && !hasMilestone;
+    const hasCompleted = entry.completed === true;
+    return !hasAllocation && !hasMilestone && !hasCompleted;
   }
 
   MP.schema = {

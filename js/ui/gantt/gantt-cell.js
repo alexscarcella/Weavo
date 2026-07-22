@@ -43,7 +43,9 @@
       div.classList.add('cell-just-edited');
     }
 
-    if (task.completed) {
+    const weekCompleted = task.completed || (entry && entry.completed === true);
+
+    if (weekCompleted) {
       div.style.background = '#d9d9d9';
     } else if (entry && entry.team) {
       const teamInfo = teamMap.get(entry.team);
@@ -64,6 +66,10 @@
       titleParts.push('Delivery milestone');
     }
 
+    if (entry && entry.completed) {
+      titleParts.push('Completed');
+    }
+
     if (entry && Array.isArray(entry.resources) && entry.resources.length) {
       const testo = document.createElement('span');
       testo.className = 'cell-text';
@@ -81,7 +87,7 @@
         div.appendChild(badge);
       }
 
-      if (!task.completed) {
+      if (!weekCompleted) {
         const sovrallocate = entry.resources.filter(
           (s) => MP.overallocation.findAllocations(allocationIndex, s, settimana).length > 1
         );
