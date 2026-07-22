@@ -463,6 +463,82 @@
     return renderAllocationsCard(`${team.name} — team tasks`, upcoming, past);
   }
 
+  function formatReadableDate(iso) {
+    return new Date(`${iso}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function formatMilestoneLine(row) {
+    let line = `${formatReadableDate(row.displayDate)} — ${row.progettoName} — ${row.baselineVersion}`;
+    if (row.inconsistent && row.otherDates.length > 0) {
+      line += ` (other dates: ${row.otherDates.map(formatReadableDate).join(', ')})`;
+    }
+    return line;
+  }
+
+  function buildMilestoneClipboardText(monthGroups) {
+    return monthGroups
+      .map((group) => `${formatMonthLabel(group.monthKey)}\n${group.rows.map((row) => `- ${formatMilestoneLine(row)}`).join('\n')}`)
+      .join('\n\n');
+  }
+
+  async function copyMilestoneListToClipboard(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      MP.toast.showToast('Milestone list copied to clipboard', { kind: 'success' });
+    } catch (e) {
+      MP.toast.showToast(`Copy failed: ${e.message}`, { kind: 'error', duration: 6000 });
+    }
+  }
+
+  // Scheda di sola lettura con le sole milestone future raggruppate per mese
+  // (MP.milestones.computeUpcomingMilestonesByMonth) — stesso schema di
+  // renderAllocationsCard sopra (header con icona copia + bottone Close),
+  // usata dalla pagina Milestones al posto del vecchio blocco fisso in pagina.
+  function renderMilestoneListCard(monthGroups) {
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      const box = document.createElement('div');
+      box.className = 'modal-box modal-box-wide milestone-list-card';
+
+      const body = monthGroups.length === 0
+        ? '<p class="hint">No upcoming milestones.</p>'
+        : monthGroups
+            .map((group) => `<h4 class="milestone-list-month">${escapeHtml(formatMonthLabel(group.monthKey))}</h4><ul class="milestone-list-items">${group.rows.map((row) => `<li>${escapeHtml(formatMilestoneLine(row))}</li>`).join('')}</ul>`)
+            .join('');
+
+      box.innerHTML = `
+        <div class="modal-copy-header">
+          <h2>Upcoming milestones</h2>
+          <button type="button" class="modal-copy-icon-btn" title="Copy list to clipboard"${monthGroups.length === 0 ? ' disabled' : ''}>${COPY_ICON_SVG}</button>
+        </div>
+        ${body}
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Close</button>
+        </div>`;
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyMilestoneListToClipboard(buildMilestoneClipboardText(monthGroups)));
+
+      const close = () => {
+        overlay.remove();
+        resolve();
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', close);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+    });
+  }
+
+  function showMilestoneList(monthGroups) {
+    return renderMilestoneListCard(monthGroups);
+  }
+
   // Guida sintetica alle interazioni del gantt (bottone "?" nella top-bar,
   // vedi toolbar.js) — contenuto statico, nessun dato utente da sanificare.
   // Non risolve nulla (a differenza degli altri dialoghi): serve solo a
@@ -610,5 +686,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showResourceAllocations, showTeamAllocations, confirmWithReport, showHelpGuide };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showResourceAllocations, showTeamAllocations, showMilestoneList, confirmWithReport, showHelpGuide };
 })(window.MP = window.MP || {});

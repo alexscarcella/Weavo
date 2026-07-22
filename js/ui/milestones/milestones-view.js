@@ -4,11 +4,15 @@
 // baseline (colonne fisse "Project" + "Baseline", niente Task/Team) — il dato
 // mostrato è la settimana di rilascio derivata da MP.milestones (vedi
 // js/model/milestones.js) leggendo i task della baseline, mai un editing
-// affordance: sola lettura, come resource-load. Ordine di rendering: elenco
-// puntato copiabile delle sole milestone future (aggregate per mese) →
-// istogramma a barre → calendario a griglia con, in fondo, una riga di
-// conteggio per settimana — istogramma e griglia condividono lo stesso
-// .gantt-scroll per restare allineati durante lo scroll orizzontale.
+// affordance: sola lettura, come resource-load. L'elenco puntato copiabile
+// delle sole milestone future (aggregate per mese) vive in un popover
+// (MP.modal.showMilestoneList, stesso stile header-con-icona-copia della
+// scheda allocazioni di resource-load) aperto dal bottone "Upcoming
+// milestones" nella riga info dell'header, non più come blocco fisso in
+// pagina. Ordine di rendering della pagina: header → istogramma a barre →
+// calendario a griglia con, in fondo, una riga di conteggio per settimana —
+// istogramma e griglia condividono lo stesso .gantt-scroll per restare
+// allineati durante lo scroll orizzontale.
 (function (MP) {
   'use strict';
 
@@ -55,10 +59,19 @@
     const counterEl = document.createElement('span');
     counterEl.className = 'milestone-counter';
     counterEl.textContent = `Total releases in period: ${totalRilasci}`;
-    page.appendChild(MP.datasetHeader.renderDatasetHeader(state, counterEl));
 
     const monthGroups = computeUpcomingMilestonesByMonth(dataset, state.ui.showCompletedProjects);
-    page.appendChild(renderMilestoneList(monthGroups));
+    const listBtn = document.createElement('button');
+    listBtn.type = 'button';
+    listBtn.className = 'milestone-list-btn';
+    listBtn.textContent = '📋 Upcoming milestones';
+    listBtn.addEventListener('click', () => MP.modal.showMilestoneList(monthGroups));
+
+    const headerExtra = document.createElement('span');
+    headerExtra.className = 'milestone-header-extra';
+    headerExtra.appendChild(counterEl);
+    headerExtra.appendChild(listBtn);
+    page.appendChild(MP.datasetHeader.renderDatasetHeader(state, headerExtra));
 
     if (totalRilasci === 0) {
       const empty = document.createElement('p');
@@ -158,89 +171,6 @@
     });
 
     return hist;
-  }
-
-  function formatReadableDate(iso) {
-    return new Date(`${iso}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  }
-
-  function formatMonthLabel(monthKey) {
-    return new Date(`${monthKey}-01T00:00:00`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-  }
-
-  function formatMilestoneLine(row) {
-    let line = `${formatReadableDate(row.displayDate)} — ${row.progettoName} — ${row.baselineVersion}`;
-    if (row.inconsistent && row.otherDates.length > 0) {
-      line += ` (other dates: ${row.otherDates.map(formatReadableDate).join(', ')})`;
-    }
-    return line;
-  }
-
-  function buildClipboardText(monthGroups) {
-    return monthGroups
-      .map((group) => `${formatMonthLabel(group.monthKey)}\n${group.rows.map((row) => `- ${formatMilestoneLine(row)}`).join('\n')}`)
-      .join('\n\n');
-  }
-
-  async function copyMilestoneListToClipboard(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      MP.toast.showToast('Milestone list copied to clipboard', { kind: 'success' });
-    } catch (e) {
-      MP.toast.showToast(`Copy failed: ${e.message}`, { kind: 'error', duration: 6000 });
-    }
-  }
-
-  // Elenco puntato copiabile delle sole milestone future (vedi
-  // MP.milestones.computeUpcomingMilestonesByMonth), aggregate per mese — mostrato prima
-  // di istogramma e calendario, che restano invece sull'intero periodo del dataset. Il
-  // pulsante Copy usa testo semplice (navigator.clipboard.writeText), coerente con
-  // l'unico altro precedente nel codice (il report di cancellazione risorsa in
-  // resource-crud.js, che pre-seleziona testo semplice anziché scrivere HTML).
-  function renderMilestoneList(monthGroups) {
-    const section = document.createElement('div');
-    section.className = 'milestone-list-section';
-
-    const header = document.createElement('div');
-    header.className = 'milestone-list-header';
-    const title = document.createElement('h3');
-    title.textContent = 'Upcoming milestones';
-    header.appendChild(title);
-
-    const copyBtn = document.createElement('button');
-    copyBtn.type = 'button';
-    copyBtn.className = 'milestone-copy-btn';
-    copyBtn.textContent = 'Copy';
-    copyBtn.disabled = monthGroups.length === 0;
-    copyBtn.addEventListener('click', () => copyMilestoneListToClipboard(buildClipboardText(monthGroups)));
-    header.appendChild(copyBtn);
-    section.appendChild(header);
-
-    if (monthGroups.length === 0) {
-      const empty = document.createElement('p');
-      empty.className = 'hint';
-      empty.textContent = 'No upcoming milestones.';
-      section.appendChild(empty);
-      return section;
-    }
-
-    for (const group of monthGroups) {
-      const monthHeading = document.createElement('h4');
-      monthHeading.className = 'milestone-list-month';
-      monthHeading.textContent = formatMonthLabel(group.monthKey);
-      section.appendChild(monthHeading);
-
-      const ul = document.createElement('ul');
-      ul.className = 'milestone-list-items';
-      for (const row of group.rows) {
-        const li = document.createElement('li');
-        li.textContent = formatMilestoneLine(row);
-        ul.appendChild(li);
-      }
-      section.appendChild(ul);
-    }
-
-    return section;
   }
 
   MP.milestonesView = { renderMilestonesView };
