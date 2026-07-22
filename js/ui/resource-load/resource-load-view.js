@@ -41,7 +41,7 @@
 
   // Riga separatrice piena larghezza che apre un gruppo team: colonne initials+nome
   // sticky con nome team e swatch colore, il resto della riga come banda tinteggiata.
-  function teamHeaderRow(team, weeksCount, currentWeekIndex) {
+  function teamHeaderRow(dataset, team, weeksCount, currentWeekIndex) {
     const cells = [];
     const header = document.createElement('div');
     header.className = 'gantt-cell col-fixed team-group-header';
@@ -50,6 +50,19 @@
     swatch.className = 'team-swatch';
     swatch.style.background = team.color;
     header.appendChild(swatch);
+
+    const infoBtn = document.createElement('button');
+    infoBtn.type = 'button';
+    infoBtn.className = 'project-info-btn';
+    infoBtn.textContent = 'i';
+    infoBtn.title = 'Team info';
+    infoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const { upcoming, past } = MP.validation.groupTeamTaskAllocations(dataset, team.code);
+      MP.modal.showTeamAllocations({ team, upcoming, past });
+    });
+    header.appendChild(infoBtn);
+
     const label = document.createElement('span');
     label.className = 'cell-text';
     label.textContent = team.name;
@@ -116,7 +129,7 @@
     }
 
     for (const team of teams) {
-      teamHeaderRow(team, weeks.length, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
+      teamHeaderRow(dataset, team, weeks.length, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
 
       for (const risorsa of team.resources) {
         const col1 = fixedCell(risorsa.initials, 'rl-col-initials');

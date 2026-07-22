@@ -325,30 +325,69 @@
     return r.firstWeek === r.lastWeek ? formatWeek(r.firstWeek) : `${formatWeek(r.firstWeek)} – ${formatWeek(r.lastWeek)}`;
   }
 
+  function formatMonthLabel(monthKey) {
+    return new Date(`${monthKey}-01T00:00:00`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+  }
+
+  // Le righe di ciascuna sezione arrivano già ordinate cronologicamente da
+  // MP.validation.group*TaskAllocations, quindi le righe dello stesso mese (calcolato sulla
+  // firstWeek, lo stesso campo usato per l'ordinamento) sono sempre contigue — un semplice
+  // "apri un nuovo gruppo quando cambia il mese" basta, nessun bisogno di raggruppare/riordinare.
+  function groupRowsByMonth(rows) {
+    const groups = [];
+    for (const r of rows) {
+      const monthKey = r.firstWeek.slice(0, 7);
+      const last = groups[groups.length - 1];
+      if (last && last.monthKey === monthKey) last.rows.push(r);
+      else groups.push({ monthKey, rows: [r] });
+    }
+    return groups;
+  }
+
   function formatRowText(r) {
     return `${formatWeekRange(r)} — ${r.progetto} / BL ${r.baseline} / ${r.task} — ${r.weekCount} wk`;
   }
 
+  // Segmento "progetto / BL / task — N wk" con il progetto in grassetto, condiviso dalle righe
+  // del popover e dal frammento HTML copiato negli appunti (vedi sotto) — la data resta fuori,
+  // renderizzata a parte da ciascun chiamante (colonna propria nel popover, stesso testo inline
+  // nella lista copiata).
+  function formatRowBodyHtml(r) {
+    return `<strong>${escapeHtml(r.progetto)}</strong> / BL ${escapeHtml(r.baseline)} / ${escapeHtml(r.task)} — ${r.weekCount} wk`;
+  }
+
   // Testo semplice (per client senza supporto a ClipboardItem) e un frammento HTML equivalente
-  // (intestazioni + elenco puntato) per lo stesso contenuto, cosicché incollando in Word/Outlook
-  // si ottenga una lista formattata invece di una singola riga di testo piatto — vedi
-  // copyResourceAllocationsToClipboard sotto.
-  function buildResourceAllocationsText(risorsa, upcoming, past) {
-    const section = (title, rows) => `${title}\n${rows.length ? rows.map((r) => `- ${formatRowText(r)}`).join('\n') : 'None.'}`;
-    return `${risorsa.name} (${risorsa.initials})\n\n${section('Upcoming tasks', upcoming)}\n\n${section('Past tasks', past)}`;
+  // (intestazioni mese + elenco puntato, progetto in grassetto) per lo stesso contenuto,
+  // raggruppato per anno/mese come il popover, cosicché incollando in Word/Outlook si ottenga
+  // una lista formattata invece di una singola riga di testo piatto — vedi
+  // copyAllocationsToClipboard sotto.
+  function buildAllocationsText(heading, upcoming, past) {
+    const section = (title, rows) => {
+      if (rows.length === 0) return `${title}\nNone.`;
+      const body = groupRowsByMonth(rows)
+        .map((g) => `${formatMonthLabel(g.monthKey)}\n${g.rows.map((r) => `- ${formatRowText(r)}`).join('\n')}`)
+        .join('\n\n');
+      return `${title}\n${body}`;
+    };
+    return `${heading}\n\n${section('Upcoming tasks', upcoming)}\n\n${section('Past tasks', past)}`;
   }
 
-  function buildResourceAllocationsHtml(risorsa, upcoming, past) {
-    const section = (title, rows) =>
-      `<h4>${escapeHtml(title)}</h4>${rows.length ? `<ul>${rows.map((r) => `<li>${escapeHtml(formatRowText(r))}</li>`).join('')}</ul>` : '<p>None.</p>'}`;
-    return `<div><h3>${escapeHtml(risorsa.name)} (${escapeHtml(risorsa.initials)})</h3>${section('Upcoming tasks', upcoming)}${section('Past tasks', past)}</div>`;
+  function buildAllocationsHtml(heading, upcoming, past) {
+    const section = (title, rows) => {
+      if (rows.length === 0) return `<h4>${escapeHtml(title)}</h4><p>None.</p>`;
+      const body = groupRowsByMonth(rows)
+        .map((g) => `<h5>${escapeHtml(formatMonthLabel(g.monthKey))}</h5><ul>${g.rows.map((r) => `<li>${formatWeekRange(r)} — ${formatRowBodyHtml(r)}</li>`).join('')}</ul>`)
+        .join('');
+      return `<h4>${escapeHtml(title)}</h4>${body}`;
+    };
+    return `<div><h3>${escapeHtml(heading)}</h3>${section('Upcoming tasks', upcoming)}${section('Past tasks', past)}</div>`;
   }
 
-  async function copyResourceAllocationsToClipboard(risorsa, upcoming, past) {
-    const text = buildResourceAllocationsText(risorsa, upcoming, past);
+  async function copyAllocationsToClipboard(heading, upcoming, past) {
+    const text = buildAllocationsText(heading, upcoming, past);
     try {
       if (window.ClipboardItem) {
-        const html = buildResourceAllocationsHtml(risorsa, upcoming, past);
+        const html = buildAllocationsHtml(heading, upcoming, past);
         await navigator.clipboard.write([
           new ClipboardItem({
             'text/plain': new Blob([text], { type: 'text/plain' }),
@@ -364,27 +403,32 @@
     }
   }
 
-  // Scheda di sola lettura con i task non completed di una risorsa (icona "i" nella vista
-  // Workload, js/ui/resource-load/resource-load-view.js), già raggruppati/ordinati da
-  // MP.validation.groupResourceTaskAllocations — questo modulo si limita a formattarli. Il
-  // bottone 📋 copia lo stesso contenuto (testo + HTML) via navigator.clipboard.write, per
-  // incollarlo formattato in una mail o in un documento Word.
-  function showResourceAllocations({ risorsa, upcoming, past }) {
+  // Scheda di sola lettura con task non completed già raggruppati/ordinati in "Upcoming"/"Past"
+  // (MP.validation.groupResourceTaskAllocations per una risorsa, groupTeamTaskAllocations per un
+  // intero team) — questo modulo si limita a formattarli, condivisa da showResourceAllocations e
+  // showTeamAllocations sotto. Il bottone 📋 copia lo stesso contenuto (testo + HTML) via
+  // navigator.clipboard.write, per incollarlo formattato in una mail o in un documento Word.
+  function renderAllocationsCard(heading, upcoming, past) {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
       const box = document.createElement('div');
-      box.className = 'modal-box modal-box-wide project-card';
+      box.className = 'modal-box modal-box-wide project-card allocations-card';
 
       const rowHtml = (r) =>
-        `<div class="project-card-row"><span class="project-card-label">${formatWeekRange(r)}</span><span class="project-card-value">${escapeHtml(r.progetto)} / BL ${escapeHtml(r.baseline)} / ${escapeHtml(r.task)} — ${r.weekCount} wk</span></div>`;
-      const section = (title, rows) =>
-        `<h3>${escapeHtml(title)}</h3>${rows.length ? rows.map(rowHtml).join('') : '<p class="hint">None.</p>'}`;
+        `<div class="project-card-row"><span class="project-card-label">${formatWeekRange(r)}</span><span class="project-card-value">${formatRowBodyHtml(r)}</span></div>`;
+      const section = (title, rows) => {
+        if (rows.length === 0) return `<h3>${escapeHtml(title)}</h3><p class="hint">None.</p>`;
+        const body = groupRowsByMonth(rows)
+          .map((g) => `<h4 class="allocations-month">${escapeHtml(formatMonthLabel(g.monthKey))}</h4>${g.rows.map(rowHtml).join('')}`)
+          .join('');
+        return `<h3>${escapeHtml(title)}</h3>${body}`;
+      };
 
       const nothingToCopy = upcoming.length === 0 && past.length === 0;
       box.innerHTML = `
         <div class="modal-copy-header">
-          <h2>${escapeHtml(risorsa.name)} (${escapeHtml(risorsa.initials)})</h2>
+          <h2>${escapeHtml(heading)}</h2>
           <button type="button" class="modal-copy-icon-btn" title="Copy list to clipboard"${nothingToCopy ? ' disabled' : ''}>${COPY_ICON_SVG}</button>
         </div>
         ${section('Upcoming tasks', upcoming)}
@@ -395,7 +439,7 @@
       overlay.appendChild(box);
       document.body.appendChild(overlay);
 
-      box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyResourceAllocationsToClipboard(risorsa, upcoming, past));
+      box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyAllocationsToClipboard(heading, upcoming, past));
 
       const close = () => {
         overlay.remove();
@@ -409,6 +453,14 @@
         if (e.key === 'Escape') close();
       });
     });
+  }
+
+  function showResourceAllocations({ risorsa, upcoming, past }) {
+    return renderAllocationsCard(`${risorsa.name} (${risorsa.initials})`, upcoming, past);
+  }
+
+  function showTeamAllocations({ team, upcoming, past }) {
+    return renderAllocationsCard(`${team.name} — team tasks`, upcoming, past);
   }
 
   // Guida sintetica alle interazioni del gantt (bottone "?" nella top-bar,
@@ -558,5 +610,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showResourceAllocations, confirmWithReport, showHelpGuide };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showResourceAllocations, showTeamAllocations, confirmWithReport, showHelpGuide };
 })(window.MP = window.MP || {});

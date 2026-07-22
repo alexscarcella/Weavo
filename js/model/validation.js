@@ -144,6 +144,51 @@
     return { upcoming, past };
   }
 
+  // Come groupResourceTaskAllocations, ma per un intero team trattato come un'unica entità —
+  // dietro l'icona "i" della riga di intestazione team nella vista Workload. Un task conta come
+  // "del team" su una settimana se almeno una risorsa del team vi è allocata quella settimana
+  // (appartenenza letta da team-resources.json, non da entry.team); più risorse del team sulla
+  // stessa settimana non producono righe duplicate — è l'unione delle settimane, non una somma
+  // per risorsa — perché la richiesta è "solo i task, senza distinzione per singola risorsa".
+  function groupTeamTaskAllocations(dataset, teamCode) {
+    const team = dataset.teamResources.teams.find((t) => t.code === teamCode);
+    const teamInitials = new Set(((team && team.resources) || []).map((r) => r.initials));
+    const perTask = new Map();
+    forEachWeekEntry(dataset, ({ progetto, baseline, task, settimana, entry }) => {
+      if (task.completed) return;
+      if (!Array.isArray(entry.resources) || !entry.resources.some((initials) => teamInitials.has(initials))) return;
+      if (!perTask.has(task)) perTask.set(task, { progetto, baseline, task, settimane: new Set() });
+      perTask.get(task).settimane.add(settimana);
+    });
+
+    const currentWeek = MP.weekUtils.getCurrentWeekIso();
+    const upcoming = [];
+    const past = [];
+    for (const { progetto, baseline, task, settimane } of perTask.values()) {
+      const ordinate = [...settimane].sort();
+      const passate = ordinate.filter((s) => s < currentWeek);
+      const future = ordinate.filter((s) => s >= currentWeek);
+      const toRow = (subset) => ({
+        progetto: progetto.name,
+        baseline: baseline.version,
+        task: task.name,
+        firstWeek: subset[0],
+        lastWeek: subset[subset.length - 1],
+        weekCount: subset.length,
+      });
+      if (future.length > 0) upcoming.push(toRow(future));
+      if (passate.length > 0) past.push(toRow(passate));
+    }
+    const compare = (dir) => (a, b) => {
+      if (a.firstWeek !== b.firstWeek) return dir * (a.firstWeek < b.firstWeek ? -1 : 1);
+      return a.progetto < b.progetto ? -1 : a.progetto > b.progetto ? 1 : 0;
+    };
+    upcoming.sort(compare(1));
+    past.sort(compare(-1));
+
+    return { upcoming, past };
+  }
+
   MP.validation = {
     forEachWeekEntry,
     findOrphanTeam,
@@ -152,5 +197,6 @@
     findOrphanProjectReferents,
     findResourceAllocations,
     groupResourceTaskAllocations,
+    groupTeamTaskAllocations,
   };
 })(window.MP = window.MP || {});
