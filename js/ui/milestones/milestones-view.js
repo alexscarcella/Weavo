@@ -72,7 +72,7 @@
     scroll.className = 'gantt-scroll';
     const grid = document.createElement('div');
     grid.className = 'gantt-grid';
-    grid.style.gridTemplateColumns = `170px 90px repeat(${weeks.length}, 46px)`;
+    grid.style.gridTemplateColumns = `170px 117px repeat(${weeks.length}, 46px)`;
 
     grid.appendChild(headerCell('Project', 'col-1'));
     grid.appendChild(headerCell('Baseline', 'col-2'));

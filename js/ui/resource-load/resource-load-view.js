@@ -131,7 +131,8 @@
     for (const team of teams) {
       teamHeaderRow(dataset, team, weeks.length, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
 
-      for (const risorsa of team.resources) {
+      const sortedResources = [...team.resources].sort((a, b) => a.name.localeCompare(b.name));
+      for (const risorsa of sortedResources) {
         const col1 = fixedCell(risorsa.initials, 'rl-col-initials');
         col1.classList.add('team-color-bar');
         col1.style.setProperty('--team-bar-color', team.color);

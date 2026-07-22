@@ -190,8 +190,8 @@ code {
   font-weight: 500;
 }
 .gantt-cell.col-1 { left: 0; width: 170px; }
-.gantt-cell.col-2 { left: 170px; width: 90px; color: #555; }
-.gantt-cell.col-3 { left: 260px; width: 300px; font-weight: 400; }
+.gantt-cell.col-2 { left: 170px; width: 117px; color: #555; }
+.gantt-cell.col-3 { left: 287px; width: 300px; font-weight: 400; }
 .gantt-cell.completed-dim { color: #888; }
 
 .gantt-cell.header {

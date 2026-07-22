@@ -352,7 +352,7 @@
     // delle settimane invece di restare bloccate. `renderTaskRow`/`gantt-row.js`
     // non sanno nulla di queste 2 colonne (restituiscono sempre 3+weeks.length
     // celle): sono `gantt-view.js` a inserire i filler prima/dopo, riga per riga.
-    grid.style.gridTemplateColumns = `170px 90px 300px repeat(${weeks.length + 2}, 46px)`;
+    grid.style.gridTemplateColumns = `170px 117px 300px repeat(${weeks.length + 2}, 46px)`;
 
     // Riga pulsanti "a bordo tabella" in stile Excel, sopra le etichette di
     // colonna: sacrifica un'intera riga di altezza (24px, come le altre)

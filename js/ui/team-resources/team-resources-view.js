@@ -68,7 +68,8 @@
       empty.textContent = 'No resources in this team.';
       risorseWrap.appendChild(empty);
     } else {
-      team.resources.forEach((risorsa) => risorseWrap.appendChild(renderResourceRow(state, team, risorsa)));
+      const sortedResources = [...team.resources].sort((a, b) => a.name.localeCompare(b.name));
+      sortedResources.forEach((risorsa) => risorseWrap.appendChild(renderResourceRow(state, team, risorsa)));
     }
     card.appendChild(risorseWrap);
 
