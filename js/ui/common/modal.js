@@ -300,6 +300,8 @@
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);
+      box.tabIndex = -1;
+      box.focus();
 
       const close = () => {
         overlay.remove();
@@ -438,6 +440,8 @@
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);
+      box.tabIndex = -1;
+      box.focus();
 
       box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyAllocationsToClipboard(heading, upcoming, past));
 
@@ -518,6 +522,8 @@
         </div>`;
       overlay.appendChild(box);
       document.body.appendChild(overlay);
+      box.tabIndex = -1;
+      box.focus();
 
       box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyMilestoneListToClipboard(buildMilestoneClipboardText(monthGroups)));
 

@@ -1,72 +1,77 @@
-# Graph Report - .  (2026-07-22)
+# Graph Report - Weavo - Master Plan  (2026-07-27)
 
 ## Corpus Check
-- 23 files · ~55,469 words
+- 63 files · ~55,532 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 374 nodes · 570 edges · 52 communities (41 shown, 11 thin omitted)
+- 374 nodes · 571 edges · 52 communities (41 shown, 11 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.69)
-- Token cost: 170,466 input · 0 output
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `61d3a171`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- App Constraints & Docs
-- Modal Dialogs & Reports
-- File System Access Wrapper
-- Legacy Schema Migration
-- Data Schema Factories
-- Gantt View Save Logic
-- Gantt Editing Module Contract
-- ISO Week Arithmetic
-- Milestones Page View
-- App Entry Point
-- Repository Load & Save
-- Data Consistency Validation
-- Project CRUD
-- Cell Allocation Popover
-- Hamburger Toolbar Menu
-- Baseline CRUD
-- Resource CRUD
-- Baseline Drag & Drop
-- Task Drag & Drop
-- Save Conflict Diff
-- Task CRUD
-- Team CRUD
-- Cell Range Selection
-- App State Store
-- Workload View
-- Week Range Controls
-- Manifest Schema
-- Save Coordinator
-- Context Menu Widget
-- Gantt Color Legend
-- Team/Resources CRUD View
-- Baseline Milestone Derivation
-- Gantt Cell Rendering
-- Gantt Row Rendering
-- Shared Header Namespaces
-- Gantt Cell Namespace
-- Gantt Row Namespace
-- Legend Namespace
-- Resource CRUD Namespace
-- Workload View Namespace
-- Slug Namespace
-- Team CRUD Namespace
-- Team/Resources View Namespace
-- Toast Namespace
-- Week Controls Namespace
+- docs/glossary.md
+- modal.js
+- fs-access.js
+- legacy-migration.js
+- schema.js
+- gantt-view.js
+- MP.cellPopover
+- week-utils.js
+- milestones-view.js
+- app.js
+- repository.js
+- validation.js
+- project-crud.js
+- cell-popover.js
+- toolbar.js
+- baseline-crud.js
+- resource-crud.js
+- baseline-drag.js
+- task-drag.js
+- conflict-diff.js
+- task-crud.js
+- team-crud.js
+- cell-selection.js
+- store.js
+- resource-load-view.js
+- week-controls.js
+- manifest.json
+- save-coordinator.js
+- context-menu.js
+- legend.js
+- team-resources-view.js
+- milestones.js
+- gantt-cell.js
+- gantt-row.js
+- MP.milestones
+- MP.ganttCell
+- MP.ganttRow
+- MP.legend
+- MP.resourceCrud
+- MP.resourceLoadView
+- MP.slug
+- MP.teamCrud
+- MP.teamResourcesView
+- MP.toast
+- MP.weekControls
 
 ## God Nodes (most connected - your core abstractions)
-1. `escapeHtml()` - 9 edges
+1. `escapeHtml()` - 10 edges
 2. `renderAllocationsCard()` - 9 edges
 3. `buildAllocationsHtml()` - 7 edges
-4. `persistProject()` - 7 edges
-5. `render()` - 6 edges
-6. `getFileHandle()` - 6 edges
-7. `migrateV1ToV3()` - 6 edges
-8. `persist()` - 6 edges
-9. `persistProject()` - 6 edges
-10. `forEachWeekEntry()` - 6 edges
+4. `renderMilestoneListCard()` - 7 edges
+5. `persistProject()` - 7 edges
+6. `render()` - 6 edges
+7. `getFileHandle()` - 6 edges
+8. `migrateV1ToV3()` - 6 edges
+9. `forEachWeekEntry()` - 6 edges
+10. `formatMonthLabel()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Single-scrollbar page layout` --semantically_similar_to--> `Full-DOM-rebuild render flow`  [INFERRED] [semantically similar]
@@ -90,139 +95,139 @@
 
 ## Communities (52 total, 11 thin omitted)
 
-### Community 0 - "App Constraints & Docs"
+### Community 0 - "docs/glossary.md"
 Cohesion: 0.07
 Nodes (49): Chrome/Edge-only target browsers, graphify knowledge-graph tooling, No build step / no bundler / no TypeScript, No ES modules (classic-script IIFE pattern), No IndexedDB under file://, Single-scrollbar page layout, English-only UI language sweep, MP.appHeader (+41 more)
 
-### Community 1 - "Modal Dialogs & Reports"
-Cohesion: 0.21
-Nodes (17): buildAllocationsHtml(), buildAllocationsText(), confirmConflict(), confirmWithReport(), copyAllocationsToClipboard(), escapeHtml(), formatMonthLabel(), formatRowBodyHtml() (+9 more)
+### Community 1 - "modal.js"
+Cohesion: 0.17
+Nodes (23): buildAllocationsHtml(), buildAllocationsText(), buildMilestoneClipboardText(), confirmConflict(), confirmWithReport(), copyAllocationsToClipboard(), copyMilestoneListToClipboard(), escapeHtml() (+15 more)
 
-### Community 2 - "File System Access Wrapper"
+### Community 2 - "fs-access.js"
 Cohesion: 0.19
 Nodes (9): ensurePermission(), fileExists(), getFileHandle(), queryPermissionSilently(), readTextFile(), removeFile(), resolveDirHandle(), splitPath() (+1 more)
 
-### Community 3 - "Legacy Schema Migration"
+### Community 3 - "legacy-migration.js"
 Cohesion: 0.29
 Nodes (13): legacyToNewProjectPath(), migrateIfNeeded(), migrateV1ToV3(), migrateV2ToV3(), renameArchivedToCompletedBaseline(), renameArchivedToCompletedProject(), transformBaseline(), transformManifest() (+5 more)
 
-### Community 4 - "Data Schema Factories"
+### Community 4 - "schema.js"
 Cohesion: 0.16
 Nodes (4): createProjectReferents(), existingInitials(), flattenResources(), normalizeProjectReferents()
 
-### Community 5 - "Gantt View Save Logic"
+### Community 5 - "gantt-view.js"
 Cohesion: 0.31
 Nodes (13): buildRows(), clearBaselineMilestone(), clearOtherMilestones(), handleBulkCellsSaved(), handleCellSaved(), handleCellsShift(), headerCell(), markLastEdited() (+5 more)
 
-### Community 6 - "Gantt Editing Module Contract"
+### Community 6 - "MP.cellPopover"
 Cohesion: 0.19
 Nodes (13): Shift feature kept out of cell-popover save path, MP.baselineCrud, MP.cellPopover, MP.cellSelection, MP.ganttView, MP.modal, MP.projectCrud, MP.saveCoordinator (+5 more)
 
-### Community 7 - "ISO Week Arithmetic"
+### Community 7 - "week-utils.js"
 Cohesion: 0.36
 Nodes (9): addDays(), addWeeks(), formatWeekLabel(), getCurrentWeekIso(), getTodayIso(), getWeeksInRange(), isMonday(), toDate() (+1 more)
 
-### Community 8 - "Milestones Page View"
-Cohesion: 0.38
-Nodes (10): buildClipboardText(), copyMilestoneListToClipboard(), fixedCell(), formatMilestoneLine(), formatMonthLabel(), formatReadableDate(), headerCell(), renderHistogram() (+2 more)
+### Community 8 - "milestones-view.js"
+Cohesion: 0.70
+Nodes (4): fixedCell(), headerCell(), renderHistogram(), renderMilestonesView()
 
-### Community 9 - "App Entry Point"
+### Community 9 - "app.js"
 Cohesion: 0.36
 Nodes (8): connectToDirectory(), escapeHtml(), render(), renderError(), renderMessage(), renderNotConnected(), renderReady(), renderUnsupported()
 
-### Community 10 - "Repository Load & Save"
+### Community 10 - "repository.js"
 Cohesion: 0.28
 Nodes (3): backupTimestamp(), createBackup(), pad2()
 
-### Community 11 - "Data Consistency Validation"
+### Community 11 - "validation.js"
 Cohesion: 0.39
 Nodes (7): findOrphanResources(), findOrphanTeam(), findResourceAllocations(), findTeamMismatches(), forEachWeekEntry(), groupResourceTaskAllocations(), groupTeamTaskAllocations()
 
-### Community 12 - "Project CRUD"
+### Community 12 - "project-crud.js"
 Cohesion: 0.39
 Nodes (8): createProject(), deleteProject(), editReferents(), existingSlugs(), moveProject(), persist(), renameProject(), toggleCompleted()
 
-### Community 13 - "Cell Allocation Popover"
+### Community 13 - "cell-popover.js"
 Cohesion: 0.50
 Nodes (7): closeExisting(), commitAndClose(), detachGlobalListeners(), handleKeydown(), handleOutsideClick(), openPopover(), positionPopover()
 
-### Community 14 - "Hamburger Toolbar Menu"
+### Community 14 - "toolbar.js"
 Cohesion: 0.39
 Nodes (5): buildActions(), changeDataFolder(), createProject(), renderHamburgerMenu(), runBackup()
 
-### Community 15 - "Baseline CRUD"
+### Community 15 - "baseline-crud.js"
 Cohesion: 0.46
 Nodes (7): createBaseline(), deleteBaseline(), moveBaselineToPosition(), persistProject(), renameBaseline(), shiftBaseline(), toggleCompleted()
 
-### Community 16 - "Resource CRUD"
+### Community 16 - "resource-crud.js"
 Cohesion: 0.39
 Nodes (6): buildDeletionReport(), createResource(), deleteResource(), persist(), promptTeamCode(), renameResource()
 
-### Community 17 - "Baseline Drag & Drop"
+### Community 17 - "baseline-drag.js"
 Cohesion: 0.43
 Nodes (6): clearIndicator(), handleDragEnd(), handleDragLeave(), handleDragOver(), handleDrop(), reset()
 
-### Community 18 - "Task Drag & Drop"
+### Community 18 - "task-drag.js"
 Cohesion: 0.43
 Nodes (6): clearIndicator(), handleDragEnd(), handleDragLeave(), handleDragOver(), handleDrop(), reset()
 
-### Community 19 - "Save Conflict Diff"
+### Community 19 - "conflict-diff.js"
 Cohesion: 0.52
 Nodes (6): diffWeeks(), flattenTasks(), summarize(), summarizeManifest(), summarizeProject(), summarizeTeamResources()
 
-### Community 20 - "Task CRUD"
+### Community 20 - "task-crud.js"
 Cohesion: 0.52
 Nodes (6): createTask(), deleteTask(), moveTaskToPosition(), persistProject(), renameTask(), toggleCompleted()
 
-### Community 21 - "Team CRUD"
+### Community 21 - "team-crud.js"
 Cohesion: 0.52
 Nodes (6): createTeam(), deleteTeam(), existingCodici(), persist(), recolorTeam(), renameTeam()
 
-### Community 22 - "Cell Range Selection"
+### Community 22 - "cell-selection.js"
 Cohesion: 0.57
 Nodes (6): clearHighlight(), getRangeForAction(), handleCellClick(), relocate(), reset(), setAnchor()
 
-### Community 23 - "App State Store"
+### Community 23 - "store.js"
 Cohesion: 0.47
 Nodes (3): setAutoBackupOnExit(), setNotifyOnRemoteChanges(), setState()
 
-### Community 24 - "Workload View"
+### Community 24 - "resource-load-view.js"
 Cohesion: 0.60
 Nodes (5): fixedCell(), headerCell(), loadClass(), renderResourceLoadView(), teamHeaderRow()
 
-### Community 25 - "Week Range Controls"
+### Community 25 - "week-controls.js"
 Cohesion: 0.53
 Nodes (5): handleAddWeek(), handleRemoveWeek(), persistManifest(), renderAddWeekButton(), renderRemoveWeekButton()
 
-### Community 26 - "Manifest Schema"
+### Community 26 - "manifest.json"
 Cohesion: 0.33
 Nodes (5): projects, schemaVersion, weeks, first, last
 
-### Community 27 - "Save Coordinator"
+### Community 27 - "save-coordinator.js"
 Cohesion: 0.70
 Nodes (4): saveManifest(), saveProject(), saveTeamResources(), withConflictCheck()
 
-### Community 29 - "Context Menu Widget"
+### Community 29 - "context-menu.js"
 Cohesion: 0.80
 Nodes (4): closeExisting(), createMenuButton(), onOutsideClick(), openMenu()
 
-### Community 30 - "Gantt Color Legend"
+### Community 30 - "legend.js"
 Cohesion: 0.80
 Nodes (4): badgeItem(), renderLegend(), staticItem(), swatch()
 
-### Community 31 - "Team/Resources CRUD View"
+### Community 31 - "team-resources-view.js"
 Cohesion: 0.70
 Nodes (4): renderResourceRow(), renderTeamCard(), renderTeamResourcesView(), swatch()
 
-### Community 32 - "Baseline Milestone Derivation"
+### Community 32 - "milestones.js"
 Cohesion: 0.83
 Nodes (3): computeBaselineMilestones(), computeUpcomingMilestonesByMonth(), countUpcomingBaselines()
 
-### Community 35 - "Gantt Row Rendering"
+### Community 35 - "gantt-row.js"
 Cohesion: 0.83
 Nodes (3): fixedCell(), formatTeamTooltip(), renderTaskRow()
 
-### Community 36 - "Shared Header Namespaces"
+### Community 36 - "MP.milestones"
 Cohesion: 0.67
 Nodes (3): MP.datasetHeader, MP.milestones, MP.weekUtils
 
@@ -234,13 +239,11 @@ Nodes (3): MP.datasetHeader, MP.milestones, MP.weekUtils
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Known limitation: unescaped user-supplied strings` connect `Gantt Editing Module Contract` to `App Constraints & Docs`?**
+- **Why does `Known limitation: unescaped user-supplied strings` connect `MP.cellPopover` to `docs/glossary.md`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **Why does `Shift feature kept out of cell-popover save path` connect `Gantt Editing Module Contract` to `App Constraints & Docs`?**
+- **Why does `Shift feature kept out of cell-popover save path` connect `MP.cellPopover` to `docs/glossary.md`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Are the 4 inferred relationships involving `render()` (e.g. with `renderError()` and `renderNotConnected()`) actually correct?**
-  _`render()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `schemaVersion`, `first`, `last` to the rest of the system?**
   _27 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `App Constraints & Docs` be split into smaller, more focused modules?**
+- **Should `docs/glossary.md` be split into smaller, more focused modules?**
   _Cohesion score 0.06829573934837092 - nodes in this community are weakly interconnected._
