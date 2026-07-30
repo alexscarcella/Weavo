@@ -16,8 +16,11 @@ node_modules/
 # One-shot Excel import output: may contain a full real copy of project data — never version-controlled
 import-output/
 
-# Real sigla->team mapping used to resolve the Excel import's color-inference gaps — real personnel data
-scripts/import-excel/team-overrides.json
+# Everything about the real Master Plan Excel import is private/local use only — the script,
+# its config, and its output never go to the remote repo (only sample-data/'s fictional demo
+# dataset does). Supersedes the node_modules/ and import-output/ rules above for this path, but
+# those stay as-is since they also apply elsewhere.
+scripts/import-excel/
 
 # /graphify knowledge-graph build of the repo — regenerable, not source material
 # graphify-out/

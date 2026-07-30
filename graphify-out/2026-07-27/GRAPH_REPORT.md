@@ -1,16 +1,16 @@
 # Graph Report - Weavo - Master Plan  (2026-07-27)
 
 ## Corpus Check
-- 63 files · ~55,807 words
+- 63 files · ~55,532 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 376 nodes · 592 edges · 52 communities (41 shown, 11 thin omitted)
+- 374 nodes · 571 edges · 52 communities (41 shown, 11 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d55e2a9a`
+- Built from commit: `61d3a171`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -62,16 +62,16 @@
 - MP.weekControls
 
 ## God Nodes (most connected - your core abstractions)
-1. `openModal()` - 11 edges
-2. `renderAllocationsCard()` - 11 edges
-3. `wireModalDismiss()` - 10 edges
-4. `escapeHtml()` - 10 edges
-5. `renderMilestoneListCard()` - 9 edges
-6. `buildAllocationsHtml()` - 7 edges
-7. `persistProject()` - 7 edges
-8. `render()` - 6 edges
-9. `getFileHandle()` - 6 edges
-10. `migrateV1ToV3()` - 6 edges
+1. `escapeHtml()` - 10 edges
+2. `renderAllocationsCard()` - 9 edges
+3. `buildAllocationsHtml()` - 7 edges
+4. `renderMilestoneListCard()` - 7 edges
+5. `persistProject()` - 7 edges
+6. `render()` - 6 edges
+7. `getFileHandle()` - 6 edges
+8. `migrateV1ToV3()` - 6 edges
+9. `forEachWeekEntry()` - 6 edges
+10. `formatMonthLabel()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Single-scrollbar page layout` --semantically_similar_to--> `Full-DOM-rebuild render flow`  [INFERRED] [semantically similar]
@@ -97,11 +97,11 @@
 
 ### Community 0 - "docs/glossary.md"
 Cohesion: 0.07
-Nodes (51): Chrome/Edge-only target browsers, graphify knowledge-graph tooling, No build step / no bundler / no TypeScript, No ES modules (classic-script IIFE pattern), No IndexedDB under file://, Single-scrollbar page layout, English-only UI language sweep, MP.appHeader (+43 more)
+Nodes (49): Chrome/Edge-only target browsers, graphify knowledge-graph tooling, No build step / no bundler / no TypeScript, No ES modules (classic-script IIFE pattern), No IndexedDB under file://, Single-scrollbar page layout, English-only UI language sweep, MP.appHeader (+41 more)
 
 ### Community 1 - "modal.js"
-Cohesion: 0.20
-Nodes (28): buildAllocationsHtml(), buildAllocationsText(), buildMilestoneClipboardText(), confirmConflict(), confirmWithReport(), copyAllocationsToClipboard(), copyMilestoneListToClipboard(), escapeHtml() (+20 more)
+Cohesion: 0.17
+Nodes (23): buildAllocationsHtml(), buildAllocationsText(), buildMilestoneClipboardText(), confirmConflict(), confirmWithReport(), copyAllocationsToClipboard(), copyMilestoneListToClipboard(), escapeHtml() (+15 more)
 
 ### Community 2 - "fs-access.js"
 Cohesion: 0.19
@@ -120,8 +120,8 @@ Cohesion: 0.31
 Nodes (13): buildRows(), clearBaselineMilestone(), clearOtherMilestones(), handleBulkCellsSaved(), handleCellSaved(), handleCellsShift(), headerCell(), markLastEdited() (+5 more)
 
 ### Community 6 - "MP.cellPopover"
-Cohesion: 0.24
-Nodes (11): Shift feature kept out of cell-popover save path, MP.baselineCrud, MP.cellPopover, MP.cellSelection, MP.ganttView, MP.modal, MP.projectCrud, MP.taskCrud (+3 more)
+Cohesion: 0.19
+Nodes (13): Shift feature kept out of cell-popover save path, MP.baselineCrud, MP.cellPopover, MP.cellSelection, MP.ganttView, MP.modal, MP.projectCrud, MP.saveCoordinator (+5 more)
 
 ### Community 7 - "week-utils.js"
 Cohesion: 0.36
@@ -240,10 +240,10 @@ Nodes (3): MP.datasetHeader, MP.milestones, MP.weekUtils
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Known limitation: unescaped user-supplied strings` connect `MP.cellPopover` to `docs/glossary.md`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Why does `Shift feature kept out of cell-popover save path` connect `MP.cellPopover` to `docs/glossary.md`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `schemaVersion`, `first`, `last` to the rest of the system?**
   _27 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `docs/glossary.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.06545879602571596 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06829573934837092 - nodes in this community are weakly interconnected._

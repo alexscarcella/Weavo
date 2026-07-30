@@ -455,7 +455,24 @@ inserted at the right point in that list. Layers, low → high:
      promise/result to resolve, just a static read-only panel — opened by the "?" button described
      below, with a short section-by-section walkthrough of the gantt interactions: single/bulk
      cell editing, clearing an allocation, the shift feature, milestones, row actions, and the
-     warning badges), `toast.js` (non-blocking notifications), `context-menu.js` (the
+     warning badges). Every dialog's overlay/box creation goes through the module-private
+     `openModal(className, html, { focusBox })` and its click-outside/Escape wiring through
+     `wireModalDismiss(overlay, box, onDismiss)`, rather than each function hand-rolling the same
+     `document.createElement`/`appendChild`/listener boilerplate — the duplication used to be real:
+     a fix adding focus-trapping to 3 read-only card dialogs (so Escape actually reaches their
+     keydown listener — see next sentence) was pasted 3 times and still missed a 4th
+     (`showHelpGuide`). `openModal`'s `focusBox: true` calls `box.tabIndex = -1; box.focus()` and is
+     required only for dialogs with no interactive field of their own (`showProjectCard`,
+     `renderAllocationsCard`, `renderMilestoneListCard`, `showHelpGuide`) — without it, Escape is
+     pressed while focus sits outside `box` (e.g. still on the button that opened the dialog), so
+     the keydown event never bubbles into `wireModalDismiss`'s listener on `box` and Escape silently
+     does nothing. Dialogs with a text/select/textarea field skip `focusBox` and call `field.focus()`
+     themselves instead (sometimes also `.select()` to preselect existing text) — the keydown still
+     bubbles from that field up through `box`, so Escape/click-outside work the same either way.
+     `confirmConflict` is the one exception: it uses `openModal` for creation but never calls
+     `wireModalDismiss`, since an unresolved save conflict must be dismissed only by an explicit
+     Cancel/Overwrite click, not an accidental Escape or stray click outside the box. `toast.js`
+     (non-blocking notifications), `context-menu.js` (the
      "⋮" action menu used by every CRUD row action — also reused as-is by the shift feature's
      right-click menu, see `gantt/` below; an action entry supports `disabled: true` (+ `title`
      tooltip explaining why, same convention as native disabled controls) to render a non-

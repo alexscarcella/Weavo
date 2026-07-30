@@ -7,16 +7,55 @@
 (function (MP) {
   'use strict';
 
+  // Crea overlay+box, imposta l'HTML e li appende al DOM — boilerplate comune a ogni dialogo
+  // di questo file. `focusBox: true` porta il focus tastiera su `box` stesso (via tabIndex=-1),
+  // necessario solo per i dialoghi di sola lettura che non hanno alcun campo interattivo a
+  // ricevere il focus di default (showProjectCard, renderAllocationsCard,
+  // renderMilestoneListCard, showHelpGuide) — senza, l'handler Escape wireModalDismiss sotto non
+  // riceverebbe mai l'evento, perché il keydown targetizza `document.body` e non risale fino a
+  // `box` (che ne è un discendente, non un antenato). I dialoghi con un campo di input/select
+  // gestiscono il proprio focus (spesso con `.select()` per preselezionare il testo) e non
+  // passano questa opzione: il keydown targetizza il campo ma risale comunque fino a `box` per
+  // bubbling, quindi wireModalDismiss lo intercetta lo stesso.
+  function openModal(className, html, { focusBox = false } = {}) {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    const box = document.createElement('div');
+    box.className = className;
+    box.innerHTML = html;
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    if (focusBox) {
+      box.tabIndex = -1;
+      box.focus();
+    }
+    return { overlay, box };
+  }
+
+  // Chiusura condivisa: click fuori da `box` (sull'overlay) o tasto Escape invocano lo stesso
+  // `onDismiss` — tipicamente un `close(null)`/`close(false)` locale al chiamante. Alcuni dialoghi
+  // (es. promptText, promptColor) attaccano in più un proprio handler Escape/Enter sul campo per
+  // il tasto Enter, che convive con questo senza conflitti: Escape è gestito qui, Enter resta a
+  // carico del chiamante.
+  function wireModalDismiss(overlay, box, onDismiss) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) onDismiss();
+    });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') onDismiss();
+    });
+  }
+
+  // Conferma esplicita del conflitto di salvataggio: a differenza di ogni altro dialogo qui
+  // sotto, niente click-fuori/Escape-per-annullare — richiede un click deliberato su uno dei due
+  // bottoni, dato l'esito potenzialmente distruttivo (sovrascrivere le modifiche di un altro
+  // utente). Usa openModal solo per la creazione, non wireModalDismiss.
   function confirmConflict({ label, path, diffLines = [] }) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box modal-box-wide modal-conflict';
       const diffHtml = diffLines.length > 0
         ? `<p>What changed on disk:</p><ul class="modal-conflict-diff">${diffLines.map((l) => `<li>${escapeHtml(l)}</li>`).join('')}</ul>`
         : '';
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box modal-box-wide modal-conflict', `
         <h2>Save conflict</h2>
         <p>The file <code>${path}</code> (${label}) has been modified on disk since it was
         loaded in this session — probably another user saved it in the meantime.</p>
@@ -27,9 +66,7 @@
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Cancel</button>
           <button type="button" class="modal-btn-overwrite">Overwrite anyway</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
+        </div>`);
 
       box.querySelector('.modal-btn-cancel').addEventListener('click', () => {
         overlay.remove();
@@ -46,12 +83,8 @@
   // multiline). Risolve con il testo inserito, o null se annullato.
   function promptText({ title, label, value = '', multiline = false, placeholder = '' } = {}) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box';
       const fieldId = 'modal-prompt-field';
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box', `
         <h2>${title}</h2>
         ${label ? `<label class="modal-field-label" for="${fieldId}">${label}</label>` : ''}
         ${multiline
@@ -60,9 +93,7 @@
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Cancel</button>
           <button type="button" class="modal-btn-save">Save</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
+        </div>`);
 
       const field = box.querySelector(`#${fieldId}`);
       field.value = value;
@@ -76,12 +107,9 @@
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
       box.querySelector('.modal-btn-save').addEventListener('click', () => close(field.value));
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close(null);
-      });
+      wireModalDismiss(overlay, box, () => close(null));
       field.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close(null);
-        else if (e.key === 'Enter' && !multiline) close(field.value);
+        if (e.key === 'Enter' && !multiline) close(field.value);
       });
     });
   }
@@ -92,20 +120,14 @@
   // promptText non è editabile e risolve con l'esito della scelta (bool), non col testo.
   function confirmWithReport({ title, message = '', reportText = '', confirmLabel = 'Confirm', cancelLabel = 'Cancel', danger = false } = {}) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = `modal-box modal-box-wide${danger ? ' modal-danger-confirm' : ''}`;
-      box.innerHTML = `
+      const { overlay, box } = openModal(`modal-box modal-box-wide${danger ? ' modal-danger-confirm' : ''}`, `
         <h2>${escapeHtml(title)}</h2>
         ${message ? `<p>${escapeHtml(message)}</p>` : ''}
         <textarea class="modal-textarea" rows="12" readonly></textarea>
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">${escapeHtml(cancelLabel)}</button>
           <button type="button" class="modal-btn-save">${escapeHtml(confirmLabel)}</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
+        </div>`);
 
       const field = box.querySelector('textarea');
       field.value = reportText;
@@ -118,12 +140,7 @@
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(false));
       box.querySelector('.modal-btn-save').addEventListener('click', () => close(true));
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close(false);
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close(false);
-      });
+      wireModalDismiss(overlay, box, () => close(false));
     });
   }
 
@@ -132,22 +149,16 @@
   // risorsa. Risolve col value selezionato, o null se annullato.
   function promptSelect({ title, label = '', options, value = '', confirmLabel = 'Confirm', cancelLabel = 'Cancel' } = {}) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box';
       const fieldId = 'modal-select-field';
       const opts = options.map((o) => `<option value="${escapeHtml(o.value)}">${escapeHtml(o.label)}</option>`).join('');
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box', `
         <h2>${escapeHtml(title)}</h2>
         ${label ? `<label class="modal-field-label" for="${fieldId}">${escapeHtml(label)}</label>` : ''}
         <select id="${fieldId}" class="modal-select">${opts}</select>
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">${escapeHtml(cancelLabel)}</button>
           <button type="button" class="modal-btn-save">${escapeHtml(confirmLabel)}</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
+        </div>`);
 
       const field = box.querySelector(`#${fieldId}`);
       if (value) field.value = value;
@@ -159,12 +170,7 @@
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
       box.querySelector('.modal-btn-save').addEventListener('click', () => close(field.value));
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close(null);
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close(null);
-      });
+      wireModalDismiss(overlay, box, () => close(null));
     });
   }
 
@@ -180,11 +186,6 @@
   // esistente. Risolve con `{ name?, referents: {...} } | null` (null se annullato).
   function promptProjectForm({ title, name = null, referents, teamResources }) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box modal-box-wide';
-
       const resourceOptions = () => {
         const groups = teamResources.teams.map((t) => {
           const opts = (t.resources || [])
@@ -195,7 +196,7 @@
         return `<option value="">— None —</option>${groups}`;
       };
 
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box modal-box-wide', `
         <h2>${escapeHtml(title)}</h2>
         ${name !== null ? `
         <label class="modal-field-label" for="mpf-name">Project name</label>
@@ -213,9 +214,7 @@
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Cancel</button>
           <button type="button" class="modal-btn-save">Save</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
+        </div>`);
 
       const nameField = name !== null ? box.querySelector('#mpf-name') : null;
       const pmField = box.querySelector('#mpf-pm');
@@ -255,12 +254,7 @@
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
       box.querySelector('.modal-btn-save').addEventListener('click', save);
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close(null);
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close(null);
-      });
+      wireModalDismiss(overlay, box, () => close(null));
     });
   }
 
@@ -269,11 +263,6 @@
   // "Modifica" qui, per non duplicare l'azione di scrittura in due punti.
   function showProjectCard({ progetto, teamResources }) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box modal-box-wide project-card';
-
       const resolveRef = (initials) => {
         if (!initials) return '—';
         const found = MP.schema.findResourceEntry(teamResources, initials);
@@ -286,7 +275,7 @@
       const row = (label, valueHtml) =>
         `<div class="project-card-row"><span class="project-card-label">${escapeHtml(label)}</span><span class="project-card-value">${valueHtml || '—'}</span></div>`;
 
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box modal-box-wide project-card', `
         <h2>${escapeHtml(progetto.name)}</h2>
         ${row('Status', progetto.completed ? 'Completed' : 'Active')}
         ${row('Baseline', `${progetto.baseline.length} (${totTask} tasks total)`)}
@@ -297,23 +286,14 @@
         ${row('Notes', referents.note ? escapeHtml(referents.note).replace(/\n/g, '<br>') : '')}
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Close</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-      box.tabIndex = -1;
-      box.focus();
+        </div>`, { focusBox: true });
 
       const close = () => {
         overlay.remove();
         resolve();
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', close);
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close();
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close();
-      });
+      wireModalDismiss(overlay, box, close);
     });
   }
 
@@ -412,11 +392,6 @@
   // navigator.clipboard.write, per incollarlo formattato in una mail o in un documento Word.
   function renderAllocationsCard(heading, upcoming, past) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box modal-box-wide project-card allocations-card';
-
       const rowHtml = (r) =>
         `<div class="project-card-row"><span class="project-card-label">${formatWeekRange(r)}</span><span class="project-card-value">${formatRowBodyHtml(r)}</span></div>`;
       const section = (title, rows) => {
@@ -428,7 +403,7 @@
       };
 
       const nothingToCopy = upcoming.length === 0 && past.length === 0;
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box modal-box-wide project-card allocations-card', `
         <div class="modal-copy-header">
           <h2>${escapeHtml(heading)}</h2>
           <button type="button" class="modal-copy-icon-btn" title="Copy list to clipboard"${nothingToCopy ? ' disabled' : ''}>${COPY_ICON_SVG}</button>
@@ -437,11 +412,7 @@
         ${section('Past tasks', past)}
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Close</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-      box.tabIndex = -1;
-      box.focus();
+        </div>`, { focusBox: true });
 
       box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyAllocationsToClipboard(heading, upcoming, past));
 
@@ -450,12 +421,7 @@
         resolve();
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', close);
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close();
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close();
-      });
+      wireModalDismiss(overlay, box, close);
     });
   }
 
@@ -500,18 +466,13 @@
   // usata dalla pagina Milestones al posto del vecchio blocco fisso in pagina.
   function renderMilestoneListCard(monthGroups) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box modal-box-wide milestone-list-card';
-
       const body = monthGroups.length === 0
         ? '<p class="hint">No upcoming milestones.</p>'
         : monthGroups
             .map((group) => `<h4 class="milestone-list-month">${escapeHtml(formatMonthLabel(group.monthKey))}</h4><ul class="milestone-list-items">${group.rows.map((row) => `<li>${escapeHtml(formatMilestoneLine(row))}</li>`).join('')}</ul>`)
             .join('');
 
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box modal-box-wide milestone-list-card', `
         <div class="modal-copy-header">
           <h2>Upcoming milestones</h2>
           <button type="button" class="modal-copy-icon-btn" title="Copy list to clipboard"${monthGroups.length === 0 ? ' disabled' : ''}>${COPY_ICON_SVG}</button>
@@ -519,11 +480,7 @@
         ${body}
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Close</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-      box.tabIndex = -1;
-      box.focus();
+        </div>`, { focusBox: true });
 
       box.querySelector('.modal-copy-icon-btn').addEventListener('click', () => copyMilestoneListToClipboard(buildMilestoneClipboardText(monthGroups)));
 
@@ -532,12 +489,7 @@
         resolve();
       };
       box.querySelector('.modal-btn-cancel').addEventListener('click', close);
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close();
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close();
-      });
+      wireModalDismiss(overlay, box, close);
     });
   }
 
@@ -550,11 +502,7 @@
   // Non risolve nulla (a differenza degli altri dialoghi): serve solo a
   // mostrare/nascondere il pannello, niente input da riportare al chiamante.
   function showHelpGuide() {
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
-    const box = document.createElement('div');
-    box.className = 'modal-box modal-box-wide help-guide';
-    box.innerHTML = `
+    const { overlay, box } = openModal('modal-box modal-box-wide help-guide', `
       <h2>How to use the Gantt</h2>
 
       <h3>Selecting a cell or a range</h3>
@@ -623,18 +571,11 @@
 
       <div class="modal-actions">
         <button type="button" class="modal-btn-cancel">Close</button>
-      </div>`;
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
+      </div>`, { focusBox: true });
 
     const close = () => overlay.remove();
     box.querySelector('.modal-btn-cancel').addEventListener('click', close);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) close();
-    });
-    box.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') close();
-    });
+    wireModalDismiss(overlay, box, close);
   }
 
   const HEX_RE = /^#[0-9a-fA-F]{6}$/;
@@ -644,12 +585,8 @@
   // esatto. Risolve con l'esadecimale scelto, o null se annullato.
   function promptColor({ title, value = '#2E86FF' } = {}) {
     return new Promise((resolve) => {
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
-      const box = document.createElement('div');
-      box.className = 'modal-box';
       const initial = HEX_RE.test(value) ? value : '#2E86FF';
-      box.innerHTML = `
+      const { overlay, box } = openModal('modal-box', `
         <h2>${title}</h2>
         <div class="modal-color-row">
           <input type="color" class="modal-color-swatch" value="${initial}">
@@ -658,9 +595,7 @@
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Cancel</button>
           <button type="button" class="modal-btn-save">Save</button>
-        </div>`;
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
+        </div>`);
 
       const swatchInput = box.querySelector('.modal-color-swatch');
       const hexInput = box.querySelector('.modal-color-hex');
@@ -682,12 +617,9 @@
       box.querySelector('.modal-btn-save').addEventListener('click', () => {
         close(HEX_RE.test(hexInput.value) ? hexInput.value : swatchInput.value);
       });
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) close(null);
-      });
+      wireModalDismiss(overlay, box, () => close(null));
       hexInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') close(null);
-        else if (e.key === 'Enter') close(HEX_RE.test(hexInput.value) ? hexInput.value : swatchInput.value);
+        if (e.key === 'Enter') close(HEX_RE.test(hexInput.value) ? hexInput.value : swatchInput.value);
       });
     });
   }

@@ -1471,32 +1471,10 @@
       "norm_label": "modal.js"
     },
     {
-      "label": "openModal()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_openmodal",
-      "community": 1,
-      "community_name": "modal.js",
-      "norm_label": "openmodal()"
-    },
-    {
-      "label": "wireModalDismiss()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_wiremodaldismiss",
-      "community": 1,
-      "community_name": "modal.js",
-      "norm_label": "wiremodaldismiss()"
-    },
-    {
       "label": "confirmConflict()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L53",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "js_ui_common_modal_confirmconflict",
       "community": 1,
@@ -1507,7 +1485,7 @@
       "label": "promptText()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L84",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "js_ui_common_modal_prompttext",
       "community": 1,
@@ -1518,7 +1496,7 @@
       "label": "confirmWithReport()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L121",
+      "source_location": "L93",
       "_origin": "ast",
       "id": "js_ui_common_modal_confirmwithreport",
       "community": 1,
@@ -1529,7 +1507,7 @@
       "label": "promptSelect()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L150",
+      "source_location": "L133",
       "_origin": "ast",
       "id": "js_ui_common_modal_promptselect",
       "community": 1,
@@ -1540,7 +1518,7 @@
       "label": "escapeHtml()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L177",
+      "source_location": "L171",
       "_origin": "ast",
       "id": "js_ui_common_modal_escapehtml",
       "community": 1,
@@ -1551,7 +1529,7 @@
       "label": "promptProjectForm()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L187",
+      "source_location": "L181",
       "_origin": "ast",
       "id": "js_ui_common_modal_promptprojectform",
       "community": 1,
@@ -1562,7 +1540,7 @@
       "label": "showProjectCard()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L264",
+      "source_location": "L270",
       "_origin": "ast",
       "id": "js_ui_common_modal_showprojectcard",
       "community": 1,
@@ -1573,7 +1551,7 @@
       "label": "formatWeekRange()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L305",
+      "source_location": "L325",
       "_origin": "ast",
       "id": "js_ui_common_modal_formatweekrange",
       "community": 1,
@@ -1584,7 +1562,7 @@
       "label": "formatMonthLabel()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L310",
+      "source_location": "L330",
       "_origin": "ast",
       "id": "js_ui_common_modal_formatmonthlabel",
       "community": 1,
@@ -1595,7 +1573,7 @@
       "label": "groupRowsByMonth()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L318",
+      "source_location": "L338",
       "_origin": "ast",
       "id": "js_ui_common_modal_grouprowsbymonth",
       "community": 1,
@@ -1606,7 +1584,7 @@
       "label": "formatRowText()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L329",
+      "source_location": "L349",
       "_origin": "ast",
       "id": "js_ui_common_modal_formatrowtext",
       "community": 1,
@@ -1617,7 +1595,7 @@
       "label": "formatRowBodyHtml()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L337",
+      "source_location": "L357",
       "_origin": "ast",
       "id": "js_ui_common_modal_formatrowbodyhtml",
       "community": 1,
@@ -1628,7 +1606,7 @@
       "label": "buildAllocationsText()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L346",
+      "source_location": "L366",
       "_origin": "ast",
       "id": "js_ui_common_modal_buildallocationstext",
       "community": 1,
@@ -1639,7 +1617,7 @@
       "label": "buildAllocationsHtml()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L357",
+      "source_location": "L377",
       "_origin": "ast",
       "id": "js_ui_common_modal_buildallocationshtml",
       "community": 1,
@@ -1650,7 +1628,7 @@
       "label": "copyAllocationsToClipboard()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L368",
+      "source_location": "L388",
       "_origin": "ast",
       "id": "js_ui_common_modal_copyallocationstoclipboard",
       "community": 1,
@@ -1661,7 +1639,7 @@
       "label": "renderAllocationsCard()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L393",
+      "source_location": "L413",
       "_origin": "ast",
       "id": "js_ui_common_modal_renderallocationscard",
       "community": 1,
@@ -1672,7 +1650,7 @@
       "label": "showResourceAllocations()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L428",
+      "source_location": "L462",
       "_origin": "ast",
       "id": "js_ui_common_modal_showresourceallocations",
       "community": 1,
@@ -1683,7 +1661,7 @@
       "label": "showTeamAllocations()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L432",
+      "source_location": "L466",
       "_origin": "ast",
       "id": "js_ui_common_modal_showteamallocations",
       "community": 1,
@@ -1694,7 +1672,7 @@
       "label": "formatReadableDate()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L436",
+      "source_location": "L470",
       "_origin": "ast",
       "id": "js_ui_common_modal_formatreadabledate",
       "community": 1,
@@ -1705,7 +1683,7 @@
       "label": "formatMilestoneLine()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L440",
+      "source_location": "L474",
       "_origin": "ast",
       "id": "js_ui_common_modal_formatmilestoneline",
       "community": 1,
@@ -1716,7 +1694,7 @@
       "label": "buildMilestoneClipboardText()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L448",
+      "source_location": "L482",
       "_origin": "ast",
       "id": "js_ui_common_modal_buildmilestoneclipboardtext",
       "community": 1,
@@ -1727,7 +1705,7 @@
       "label": "copyMilestoneListToClipboard()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L454",
+      "source_location": "L488",
       "_origin": "ast",
       "id": "js_ui_common_modal_copymilestonelisttoclipboard",
       "community": 1,
@@ -1738,7 +1716,7 @@
       "label": "renderMilestoneListCard()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L467",
+      "source_location": "L501",
       "_origin": "ast",
       "id": "js_ui_common_modal_rendermilestonelistcard",
       "community": 1,
@@ -1749,7 +1727,7 @@
       "label": "showMilestoneList()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L496",
+      "source_location": "L544",
       "_origin": "ast",
       "id": "js_ui_common_modal_showmilestonelist",
       "community": 1,
@@ -1760,7 +1738,7 @@
       "label": "showHelpGuide()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L504",
+      "source_location": "L552",
       "_origin": "ast",
       "id": "js_ui_common_modal_showhelpguide",
       "community": 1,
@@ -1771,7 +1749,7 @@
       "label": "promptColor()",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L586",
+      "source_location": "L645",
       "_origin": "ast",
       "id": "js_ui_common_modal_promptcolor",
       "community": 1,
@@ -3285,8 +3263,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "claude.md",
-      "community_name": "docs/glossary.md",
-      "id": "claude_document"
+      "id": "claude_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "README.md",
@@ -3299,8 +3277,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "readme.md",
-      "community_name": "docs/glossary.md",
-      "id": "readme_document"
+      "id": "readme_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "docs/api.md",
@@ -3313,8 +3291,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "docs/api.md",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_document"
+      "id": "docs_api_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "docs/architecture.md",
@@ -3327,8 +3305,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "docs/architecture.md",
-      "community_name": "docs/glossary.md",
-      "id": "docs_architecture_document"
+      "id": "docs_architecture_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "docs/database.md",
@@ -3341,8 +3319,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "docs/database.md",
-      "community_name": "docs/glossary.md",
-      "id": "docs_database_document"
+      "id": "docs_database_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "docs/deployment.md",
@@ -3355,8 +3333,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "docs/deployment.md",
-      "community_name": "docs/glossary.md",
-      "id": "docs_deployment_document"
+      "id": "docs_deployment_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "docs/glossary.md",
@@ -3369,8 +3347,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "docs/glossary.md",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_document"
+      "id": "docs_glossary_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "docs/security.md",
@@ -3383,8 +3361,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "docs/security.md",
-      "community_name": "docs/glossary.md",
-      "id": "docs_security_document"
+      "id": "docs_security_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "index.html (entry point)",
@@ -3397,8 +3375,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "index.html (entry point)",
-      "community_name": "docs/glossary.md",
-      "id": "index_document"
+      "id": "index_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "spike-fsa/index.html (FSA permission spike)",
@@ -3411,8 +3389,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "spike-fsa/index.html (fsa permission spike)",
-      "community_name": "docs/glossary.md",
-      "id": "spike_fsa_index_document"
+      "id": "spike_fsa_index_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": ".github/workflows/release.yml (release workflow)",
@@ -3425,8 +3403,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": ".github/workflows/release.yml (release workflow)",
-      "community_name": "docs/glossary.md",
-      "id": "github_workflows_release_document"
+      "id": "github_workflows_release_document",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "No build step / no bundler / no TypeScript",
@@ -3439,8 +3417,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "no build step / no bundler / no typescript",
-      "community_name": "docs/glossary.md",
-      "id": "claude_nobuildstep"
+      "id": "claude_nobuildstep",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "No ES modules (classic-script IIFE pattern)",
@@ -3453,8 +3431,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "no es modules (classic-script iife pattern)",
-      "community_name": "docs/glossary.md",
-      "id": "claude_noesmodules"
+      "id": "claude_noesmodules",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "No IndexedDB under file://",
@@ -3467,8 +3445,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "no indexeddb under file://",
-      "community_name": "docs/glossary.md",
-      "id": "claude_noindexeddb"
+      "id": "claude_noindexeddb",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Chrome/Edge-only target browsers",
@@ -3481,8 +3459,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "chrome/edge-only target browsers",
-      "community_name": "docs/glossary.md",
-      "id": "claude_chromeedgeonly"
+      "id": "claude_chromeedgeonly",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "English-only UI language sweep",
@@ -3495,8 +3473,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "english-only ui language sweep",
-      "community_name": "docs/glossary.md",
-      "id": "claude_uilanguage"
+      "id": "claude_uilanguage",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "graphify knowledge-graph tooling",
@@ -3509,8 +3487,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "graphify knowledge-graph tooling",
-      "community_name": "docs/glossary.md",
-      "id": "claude_graphify"
+      "id": "claude_graphify",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Shift feature kept out of cell-popover save path",
@@ -3523,8 +3501,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "shift feature kept out of cell-popover save path",
-      "community_name": "MP.cellPopover",
-      "id": "claude_shiftpopoverseparation"
+      "id": "claude_shiftpopoverseparation",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "Single-scrollbar page layout",
@@ -3537,8 +3515,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "single-scrollbar page layout",
-      "community_name": "docs/glossary.md",
-      "id": "claude_singlescrollbarlayout"
+      "id": "claude_singlescrollbarlayout",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Full-DOM-rebuild render flow",
@@ -3551,8 +3529,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "full-dom-rebuild render flow",
-      "community_name": "docs/glossary.md",
-      "id": "docs_architecture_renderflow"
+      "id": "docs_architecture_renderflow",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Application state machine",
@@ -3565,8 +3543,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "application state machine",
-      "community_name": "docs/glossary.md",
-      "id": "docs_architecture_statemachine"
+      "id": "docs_architecture_statemachine",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Conflict detection (reread-before-write)",
@@ -3579,8 +3557,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "conflict detection (reread-before-write)",
-      "community_name": "docs/glossary.md",
-      "id": "docs_database_conflictdetection"
+      "id": "docs_database_conflictdetection",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.conflictDiff",
@@ -3591,10 +3569,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 6,
       "norm_label": "mp.conflictdiff",
-      "community_name": "docs/glossary.md",
-      "id": "docs_database_mp_conflictdiff"
+      "id": "docs_database_mp_conflictdiff",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.remoteCheck",
@@ -3607,8 +3585,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.remotecheck",
-      "community_name": "docs/glossary.md",
-      "id": "docs_database_mp_remotecheck"
+      "id": "docs_database_mp_remotecheck",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Legacy data migration",
@@ -3621,8 +3599,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "legacy data migration",
-      "community_name": "docs/glossary.md",
-      "id": "docs_database_legacydatamigration"
+      "id": "docs_database_legacydatamigration",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Referential integrity is advisory, not enforced",
@@ -3635,8 +3613,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "referential integrity is advisory, not enforced",
-      "community_name": "docs/glossary.md",
-      "id": "docs_database_referentialintegrity"
+      "id": "docs_database_referentialintegrity",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "No persisted directory-handle connection",
@@ -3649,8 +3627,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "no persisted directory-handle connection",
-      "community_name": "docs/glossary.md",
-      "id": "docs_deployment_nopersistedconnection"
+      "id": "docs_deployment_nopersistedconnection",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Backups (manual + backup-on-exit)",
@@ -3663,8 +3641,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "backups (manual + backup-on-exit)",
-      "community_name": "docs/glossary.md",
-      "id": "docs_deployment_backups"
+      "id": "docs_deployment_backups",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Security threat model (filesystem access = trust boundary)",
@@ -3677,8 +3655,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "security threat model (filesystem access = trust boundary)",
-      "community_name": "docs/glossary.md",
-      "id": "docs_security_threatmodel"
+      "id": "docs_security_threatmodel",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Known limitation: unescaped user-supplied strings",
@@ -3691,8 +3669,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "known limitation: unescaped user-supplied strings",
-      "community_name": "MP.cellPopover",
-      "id": "docs_security_unescapedstrings"
+      "id": "docs_security_unescapedstrings",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "No authentication, by design",
@@ -3705,8 +3683,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "no authentication, by design",
-      "community_name": "docs/glossary.md",
-      "id": "docs_security_noauth"
+      "id": "docs_security_noauth",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Versioned release packaging (tag-triggered zip release)",
@@ -3719,8 +3697,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "versioned release packaging (tag-triggered zip release)",
-      "community_name": "docs/glossary.md",
-      "id": "github_workflows_release_versionedreleasepackaging"
+      "id": "github_workflows_release_versionedreleasepackaging",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "APP_VERSION constant (js/ui/common/app-header.js)",
@@ -3733,8 +3711,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "app_version constant (js/ui/common/app-header.js)",
-      "community_name": "docs/glossary.md",
-      "id": "js_ui_common_app_header_app_version"
+      "id": "js_ui_common_app_header_app_version",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "FSA directory-permission persistence test protocol",
@@ -3747,8 +3725,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "fsa directory-permission persistence test protocol",
-      "community_name": "docs/glossary.md",
-      "id": "spike_fsa_index_permissionpersistencetest"
+      "id": "spike_fsa_index_permissionpersistencetest",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Allocation",
@@ -3761,8 +3739,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "allocation",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_allocation"
+      "id": "docs_glossary_allocation",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Baseline",
@@ -3775,8 +3753,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "baseline",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_baseline"
+      "id": "docs_glossary_baseline",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Completed task (completed)",
@@ -3789,8 +3767,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "completed task (completed)",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_completedtask"
+      "id": "docs_glossary_completedtask",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Completed week",
@@ -3803,8 +3781,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "completed week",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_completedweek"
+      "id": "docs_glossary_completedweek",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Dataset",
@@ -3817,8 +3795,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "dataset",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_dataset"
+      "id": "docs_glossary_dataset",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "File System Access API",
@@ -3831,8 +3809,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "file system access api",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_filesystemaccessapi"
+      "id": "docs_glossary_filesystemaccessapi",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Initials",
@@ -3845,8 +3823,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "initials",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_initials"
+      "id": "docs_glossary_initials",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Manifest",
@@ -3859,8 +3837,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "manifest",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_manifest"
+      "id": "docs_glossary_manifest",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Milestone",
@@ -3873,8 +3851,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "milestone",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_milestone"
+      "id": "docs_glossary_milestone",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Orphan reference",
@@ -3887,8 +3865,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "orphan reference",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_orphanreference"
+      "id": "docs_glossary_orphanreference",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Project",
@@ -3901,8 +3879,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "project",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_project"
+      "id": "docs_glossary_project",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Resource",
@@ -3915,8 +3893,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "resource",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_resource"
+      "id": "docs_glossary_resource",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Task",
@@ -3929,8 +3907,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "task",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_task"
+      "id": "docs_glossary_task",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Team",
@@ -3943,8 +3921,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "team",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_team"
+      "id": "docs_glossary_team",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Team mismatch",
@@ -3957,8 +3935,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "team mismatch",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_teammismatch"
+      "id": "docs_glossary_teammismatch",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "Week entry",
@@ -3971,8 +3949,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "week entry",
-      "community_name": "docs/glossary.md",
-      "id": "docs_glossary_weekentry"
+      "id": "docs_glossary_weekentry",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.schema",
@@ -3985,8 +3963,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.schema",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_schema"
+      "id": "docs_api_mp_schema",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.fsAccess",
@@ -3999,8 +3977,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.fsaccess",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_fsaccess"
+      "id": "docs_api_mp_fsaccess",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.legacyMigration",
@@ -4013,8 +3991,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.legacymigration",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_legacymigration"
+      "id": "docs_api_mp_legacymigration",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.repository",
@@ -4027,8 +4005,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.repository",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_repository"
+      "id": "docs_api_mp_repository",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.saveCoordinator",
@@ -4039,10 +4017,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 6,
       "norm_label": "mp.savecoordinator",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_savecoordinator"
+      "id": "docs_api_mp_savecoordinator",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.slug",
@@ -4055,8 +4033,8 @@
       "contributor": null,
       "community": 47,
       "norm_label": "mp.slug",
-      "community_name": "MP.slug",
-      "id": "docs_api_mp_slug"
+      "id": "docs_api_mp_slug",
+      "community_name": "MP.slug"
     },
     {
       "label": "MP.store",
@@ -4069,8 +4047,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.store",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_store"
+      "id": "docs_api_mp_store",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.weekUtils",
@@ -4083,8 +4061,8 @@
       "contributor": null,
       "community": 36,
       "norm_label": "mp.weekutils",
-      "community_name": "MP.milestones",
-      "id": "docs_api_mp_weekutils"
+      "id": "docs_api_mp_weekutils",
+      "community_name": "MP.milestones"
     },
     {
       "label": "MP.overallocation",
@@ -4097,8 +4075,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.overallocation",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_overallocation"
+      "id": "docs_api_mp_overallocation",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.validation",
@@ -4111,8 +4089,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.validation",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_validation"
+      "id": "docs_api_mp_validation",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.milestones",
@@ -4125,8 +4103,8 @@
       "contributor": null,
       "community": 36,
       "norm_label": "mp.milestones",
-      "community_name": "MP.milestones",
-      "id": "docs_api_mp_milestones"
+      "id": "docs_api_mp_milestones",
+      "community_name": "MP.milestones"
     },
     {
       "label": "MP.weekShift",
@@ -4139,8 +4117,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.weekshift",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_weekshift"
+      "id": "docs_api_mp_weekshift",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.modal",
@@ -4153,8 +4131,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.modal",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_modal"
+      "id": "docs_api_mp_modal",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.toast",
@@ -4167,8 +4145,8 @@
       "contributor": null,
       "community": 50,
       "norm_label": "mp.toast",
-      "community_name": "MP.toast",
-      "id": "docs_api_mp_toast"
+      "id": "docs_api_mp_toast",
+      "community_name": "MP.toast"
     },
     {
       "label": "MP.contextMenu",
@@ -4181,8 +4159,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.contextmenu",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_contextmenu"
+      "id": "docs_api_mp_contextmenu",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.toolbar",
@@ -4195,8 +4173,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.toolbar",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_toolbar"
+      "id": "docs_api_mp_toolbar",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.datasetHeader",
@@ -4209,8 +4187,8 @@
       "contributor": null,
       "community": 36,
       "norm_label": "mp.datasetheader",
-      "community_name": "MP.milestones",
-      "id": "docs_api_mp_datasetheader"
+      "id": "docs_api_mp_datasetheader",
+      "community_name": "MP.milestones"
     },
     {
       "label": "MP.appHeader",
@@ -4223,8 +4201,8 @@
       "contributor": null,
       "community": 0,
       "norm_label": "mp.appheader",
-      "community_name": "docs/glossary.md",
-      "id": "docs_api_mp_appheader"
+      "id": "docs_api_mp_appheader",
+      "community_name": "docs/glossary.md"
     },
     {
       "label": "MP.projectCrud",
@@ -4237,8 +4215,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.projectcrud",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_projectcrud"
+      "id": "docs_api_mp_projectcrud",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.baselineCrud",
@@ -4251,8 +4229,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.baselinecrud",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_baselinecrud"
+      "id": "docs_api_mp_baselinecrud",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.taskCrud",
@@ -4265,8 +4243,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.taskcrud",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_taskcrud"
+      "id": "docs_api_mp_taskcrud",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.resourceCrud",
@@ -4279,8 +4257,8 @@
       "contributor": null,
       "community": 45,
       "norm_label": "mp.resourcecrud",
-      "community_name": "MP.resourceCrud",
-      "id": "docs_api_mp_resourcecrud"
+      "id": "docs_api_mp_resourcecrud",
+      "community_name": "MP.resourceCrud"
     },
     {
       "label": "MP.teamCrud",
@@ -4293,8 +4271,8 @@
       "contributor": null,
       "community": 48,
       "norm_label": "mp.teamcrud",
-      "community_name": "MP.teamCrud",
-      "id": "docs_api_mp_teamcrud"
+      "id": "docs_api_mp_teamcrud",
+      "community_name": "MP.teamCrud"
     },
     {
       "label": "MP.ganttView",
@@ -4307,8 +4285,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.ganttview",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_ganttview"
+      "id": "docs_api_mp_ganttview",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.ganttRow",
@@ -4321,8 +4299,8 @@
       "contributor": null,
       "community": 43,
       "norm_label": "mp.ganttrow",
-      "community_name": "MP.ganttRow",
-      "id": "docs_api_mp_ganttrow"
+      "id": "docs_api_mp_ganttrow",
+      "community_name": "MP.ganttRow"
     },
     {
       "label": "MP.ganttCell",
@@ -4335,8 +4313,8 @@
       "contributor": null,
       "community": 42,
       "norm_label": "mp.ganttcell",
-      "community_name": "MP.ganttCell",
-      "id": "docs_api_mp_ganttcell"
+      "id": "docs_api_mp_ganttcell",
+      "community_name": "MP.ganttCell"
     },
     {
       "label": "MP.cellPopover",
@@ -4349,8 +4327,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.cellpopover",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_cellpopover"
+      "id": "docs_api_mp_cellpopover",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.cellSelection",
@@ -4363,8 +4341,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.cellselection",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_cellselection"
+      "id": "docs_api_mp_cellselection",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.taskDrag",
@@ -4377,8 +4355,8 @@
       "contributor": null,
       "community": 6,
       "norm_label": "mp.taskdrag",
-      "community_name": "MP.cellPopover",
-      "id": "docs_api_mp_taskdrag"
+      "id": "docs_api_mp_taskdrag",
+      "community_name": "MP.cellPopover"
     },
     {
       "label": "MP.legend",
@@ -4391,8 +4369,8 @@
       "contributor": null,
       "community": 44,
       "norm_label": "mp.legend",
-      "community_name": "MP.legend",
-      "id": "docs_api_mp_legend"
+      "id": "docs_api_mp_legend",
+      "community_name": "MP.legend"
     },
     {
       "label": "MP.resourceLoadView",
@@ -4405,8 +4383,8 @@
       "contributor": null,
       "community": 46,
       "norm_label": "mp.resourceloadview",
-      "community_name": "MP.resourceLoadView",
-      "id": "docs_api_mp_resourceloadview"
+      "id": "docs_api_mp_resourceloadview",
+      "community_name": "MP.resourceLoadView"
     },
     {
       "label": "MP.teamResourcesView",
@@ -4419,8 +4397,8 @@
       "contributor": null,
       "community": 49,
       "norm_label": "mp.teamresourcesview",
-      "community_name": "MP.teamResourcesView",
-      "id": "docs_api_mp_teamresourcesview"
+      "id": "docs_api_mp_teamresourcesview",
+      "community_name": "MP.teamResourcesView"
     },
     {
       "label": "MP.weekControls",
@@ -4433,8 +4411,8 @@
       "contributor": null,
       "community": 51,
       "norm_label": "mp.weekcontrols",
-      "community_name": "MP.weekControls",
-      "id": "docs_api_mp_weekcontrols"
+      "id": "docs_api_mp_weekcontrols",
+      "community_name": "MP.weekControls"
     }
   ],
   "links": [
@@ -6420,7 +6398,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L357",
+      "source_location": "L377",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6431,7 +6409,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L346",
+      "source_location": "L366",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6442,7 +6420,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L448",
+      "source_location": "L482",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6453,7 +6431,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L53",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6464,7 +6442,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L121",
+      "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6475,7 +6453,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L368",
+      "source_location": "L388",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6486,7 +6464,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L454",
+      "source_location": "L488",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6497,7 +6475,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L177",
+      "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6508,7 +6486,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L440",
+      "source_location": "L474",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6519,7 +6497,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L310",
+      "source_location": "L330",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6530,7 +6508,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L436",
+      "source_location": "L470",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6541,7 +6519,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L337",
+      "source_location": "L357",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6552,7 +6530,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L329",
+      "source_location": "L349",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6563,7 +6541,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L305",
+      "source_location": "L325",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6574,7 +6552,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L318",
+      "source_location": "L338",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6585,18 +6563,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L586",
+      "source_location": "L645",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6607,7 +6574,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L187",
+      "source_location": "L181",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6618,7 +6585,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L150",
+      "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6629,7 +6596,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L84",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6640,7 +6607,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L393",
+      "source_location": "L413",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6651,7 +6618,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L467",
+      "source_location": "L501",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6662,7 +6629,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L504",
+      "source_location": "L552",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6673,7 +6640,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L496",
+      "source_location": "L544",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6684,7 +6651,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L264",
+      "source_location": "L270",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6695,7 +6662,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L428",
+      "source_location": "L462",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6706,7 +6673,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L432",
+      "source_location": "L466",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal",
@@ -6714,250 +6681,11 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L58",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmconflict",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L123",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L589",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptcolor",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L199",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L154",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L87",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_prompttext",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L406",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L475",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L505",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showhelpguide",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L278",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L143",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L620",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptcolor",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L257",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L173",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L110",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_prompttext",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L424",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L492",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L578",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showhelpguide",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L296",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L56",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_confirmconflict",
@@ -6969,7 +6697,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L124",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_confirmwithreport",
@@ -6981,7 +6709,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L153",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_promptselect",
@@ -6993,7 +6721,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L359",
+      "source_location": "L379",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationshtml",
@@ -7005,7 +6733,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L338",
+      "source_location": "L358",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_formatrowbodyhtml",
@@ -7017,7 +6745,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L192",
+      "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_promptprojectform",
@@ -7029,7 +6757,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L398",
+      "source_location": "L423",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_renderallocationscard",
@@ -7041,7 +6769,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L472",
+      "source_location": "L511",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_rendermilestonelistcard",
@@ -7053,7 +6781,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L270",
+      "source_location": "L281",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_showprojectcard",
@@ -7065,7 +6793,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L361",
+      "source_location": "L381",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationshtml",
@@ -7077,7 +6805,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L330",
+      "source_location": "L350",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_formatrowtext",
@@ -7089,7 +6817,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L396",
+      "source_location": "L421",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_renderallocationscard",
@@ -7101,7 +6829,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L361",
+      "source_location": "L381",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationshtml",
@@ -7113,7 +6841,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L350",
+      "source_location": "L370",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationstext",
@@ -7125,7 +6853,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L450",
+      "source_location": "L484",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildmilestoneclipboardtext",
@@ -7137,7 +6865,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L400",
+      "source_location": "L425",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_renderallocationscard",
@@ -7149,7 +6877,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L472",
+      "source_location": "L511",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_rendermilestonelistcard",
@@ -7161,7 +6889,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L360",
+      "source_location": "L380",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationshtml",
@@ -7173,7 +6901,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L349",
+      "source_location": "L369",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationstext",
@@ -7185,7 +6913,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L399",
+      "source_location": "L424",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_renderallocationscard",
@@ -7197,7 +6925,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L350",
+      "source_location": "L370",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationstext",
@@ -7209,7 +6937,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L361",
+      "source_location": "L381",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildallocationshtml",
@@ -7221,7 +6949,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L396",
+      "source_location": "L421",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_renderallocationscard",
@@ -7233,7 +6961,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L369",
+      "source_location": "L389",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_copyallocationstoclipboard",
@@ -7245,7 +6973,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L372",
+      "source_location": "L392",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_copyallocationstoclipboard",
@@ -7257,7 +6985,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L417",
+      "source_location": "L446",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_renderallocationscard",
@@ -7269,7 +6997,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L429",
+      "source_location": "L463",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_showresourceallocations",
@@ -7281,7 +7009,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L433",
+      "source_location": "L467",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_showteamallocations",
@@ -7293,7 +7021,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L441",
+      "source_location": "L475",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_formatmilestoneline",
@@ -7305,7 +7033,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L450",
+      "source_location": "L484",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_buildmilestoneclipboardtext",
@@ -7317,7 +7045,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L472",
+      "source_location": "L511",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_rendermilestonelistcard",
@@ -7329,7 +7057,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L485",
+      "source_location": "L528",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_rendermilestonelistcard",
@@ -7341,7 +7069,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L485",
+      "source_location": "L528",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_rendermilestonelistcard",
@@ -7353,7 +7081,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "js/ui/common/modal.js",
-      "source_location": "L497",
+      "source_location": "L545",
       "weight": 1.0,
       "_origin": "ast",
       "source": "js_ui_common_modal_showmilestonelist",
@@ -11076,5 +10804,5 @@
       "source_file": "docs/database.md"
     }
   ],
-  "built_at_commit": "d55e2a9a6cfa951b25004ce98b7cc076f6191dd2"
+  "built_at_commit": "61d3a1710b435bb45f4efa102b766a9f9c3ca526"
 }
