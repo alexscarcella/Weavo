@@ -163,10 +163,10 @@
   /**
    * Crea un nuovo task vuoto (nessuna settimana allocata), non completed.
    * @param {string} name - nome del task.
-   * @returns {{name: string, completed: boolean, weeks: Object}}
+   * @returns {{name: string, completed: boolean, weeks: Object, note: string}}
    */
   function createTask(name) {
-    return { name, completed: false, weeks: {} };
+    return { name, completed: false, weeks: {}, note: '' };
   }
 
   /**

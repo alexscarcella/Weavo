@@ -81,15 +81,18 @@
 
   // Editor di testo libero generico (sostituisce window.prompt quando serve
   // multiline). Risolve con il testo inserito, o null se annullato.
-  function promptText({ title, label, value = '', multiline = false, placeholder = '' } = {}) {
+  // `maxLength`, se presente, aggiunge l'attributo maxlength al campo e un contatore
+  // "N/maxLength" sotto di esso, aggiornato a ogni input.
+  function promptText({ title, label, value = '', multiline = false, placeholder = '', maxLength = null } = {}) {
     return new Promise((resolve) => {
       const fieldId = 'modal-prompt-field';
       const { overlay, box } = openModal('modal-box', `
         <h2>${title}</h2>
         ${label ? `<label class="modal-field-label" for="${fieldId}">${label}</label>` : ''}
         ${multiline
-          ? `<textarea id="${fieldId}" class="modal-textarea" rows="4"></textarea>`
-          : `<input type="text" id="${fieldId}" class="modal-input">`}
+          ? `<textarea id="${fieldId}" class="modal-textarea" rows="4"${maxLength ? ` maxlength="${maxLength}"` : ''}></textarea>`
+          : `<input type="text" id="${fieldId}" class="modal-input"${maxLength ? ` maxlength="${maxLength}"` : ''}>`}
+        ${maxLength ? `<div class="modal-char-counter"></div>` : ''}
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Cancel</button>
           <button type="button" class="modal-btn-save">Save</button>
@@ -100,6 +103,13 @@
       if (placeholder) field.placeholder = placeholder;
       field.focus();
       field.select();
+
+      const counter = maxLength ? box.querySelector('.modal-char-counter') : null;
+      const updateCounter = () => {
+        if (counter) counter.textContent = `${field.value.length}/${maxLength}`;
+      };
+      updateCounter();
+      if (counter) field.addEventListener('input', updateCounter);
 
       const close = (result) => {
         overlay.remove();
@@ -284,6 +294,28 @@
         ${row('Solution analyst reference', resolveRef(referents.solutionAnalyst))}
         ${row('V&V reference', resolveRef(referents.vvReference))}
         ${row('Notes', referents.note ? escapeHtml(referents.note).replace(/\n/g, '<br>') : '')}
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Close</button>
+        </div>`, { focusBox: true });
+
+      const close = () => {
+        overlay.remove();
+        resolve();
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', close);
+      wireModalDismiss(overlay, box, close);
+    });
+  }
+
+  // Scheda di sola lettura con la nota di un task (icona "i" nella riga Gantt, visibile solo
+  // se il task ha una nota). Per modificare si usa "Add note"/"Edit note" nel menu ⋮ del task
+  // (setTaskNote) — nessun bottone "Modifica" qui, stesso principio di showProjectCard.
+  function showTaskNoteCard({ task }) {
+    return new Promise((resolve) => {
+      const noteHtml = task.note ? escapeHtml(task.note).replace(/\n/g, '<br>') : '—';
+      const { overlay, box } = openModal('modal-box project-card', `
+        <h2>${escapeHtml(task.name)}</h2>
+        <div class="project-card-row"><span class="project-card-label">Note</span><span class="project-card-value">${noteHtml}</span></div>
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Close</button>
         </div>`, { focusBox: true });
@@ -624,5 +656,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showResourceAllocations, showTeamAllocations, showMilestoneList, confirmWithReport, showHelpGuide };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showTaskNoteCard, showResourceAllocations, showTeamAllocations, showMilestoneList, confirmWithReport, showHelpGuide };
 })(window.MP = window.MP || {});

@@ -35,9 +35,9 @@
     "semantic_hash": "bca2be566d7d23d14aab47af4e6e3e11"
   },
   "js/data/schema.js": {
-    "mtime": 1784712893.1495092,
-    "ast_hash": "2b19020d920ae7b505bceeb40d36af56",
-    "semantic_hash": "2b19020d920ae7b505bceeb40d36af56"
+    "mtime": 1785407467.6643567,
+    "ast_hash": "a548e7baccac597e4cfc239a482bb3e2",
+    "semantic_hash": "a548e7baccac597e4cfc239a482bb3e2"
   },
   "js/data/slug.js": {
     "mtime": 1784380788.9496114,
@@ -90,9 +90,9 @@
     "semantic_hash": "1b6b85069c06864b170ae8b89952bd45"
   },
   "js/ui/common/modal.js": {
-    "mtime": 1785164954.6499412,
-    "ast_hash": "fb19a0ad301e62967f15fbfb4ddc950f",
-    "semantic_hash": ""
+    "mtime": 1785407532.6596782,
+    "ast_hash": "6d57e5e1602f1d893f687bd6bafe9b86",
+    "semantic_hash": "6d57e5e1602f1d893f687bd6bafe9b86"
   },
   "js/ui/common/toast.js": {
     "mtime": 1784227177.912881,
@@ -120,9 +120,9 @@
     "semantic_hash": "45a3372fa69b8bede7b87be202eb7f8c"
   },
   "js/ui/crud/task-crud.js": {
-    "mtime": 1784662891.925789,
-    "ast_hash": "60b0499bf995afebb2fb2dd09670fb85",
-    "semantic_hash": "60b0499bf995afebb2fb2dd09670fb85"
+    "mtime": 1785407485.2889616,
+    "ast_hash": "f3fb7befdec68535a41639f17667e57a",
+    "semantic_hash": "f3fb7befdec68535a41639f17667e57a"
   },
   "js/ui/crud/team-crud.js": {
     "mtime": 1784381132.6262596,
@@ -150,9 +150,9 @@
     "semantic_hash": "0ac419fc8ef55ddbb66af8963f60b271"
   },
   "js/ui/gantt/gantt-row.js": {
-    "mtime": 1784666418.0446298,
-    "ast_hash": "90c1e86d5310784b1b587c25db5332df",
-    "semantic_hash": "90c1e86d5310784b1b587c25db5332df"
+    "mtime": 1785407550.5453944,
+    "ast_hash": "dbc653789de4981c33240f3c5a14953a",
+    "semantic_hash": "dbc653789de4981c33240f3c5a14953a"
   },
   "js/ui/gantt/gantt-view.js": {
     "mtime": 1784700569.8558795,
@@ -172,7 +172,7 @@
   "js/ui/milestones/milestones-view.js": {
     "mtime": 1784722537.4351573,
     "ast_hash": "dd01539e668c8ef44d43899c429b82d6",
-    "semantic_hash": ""
+    "semantic_hash": "dd01539e668c8ef44d43899c429b82d6"
   },
   "js/ui/resource-load/resource-load-view.js": {
     "mtime": 1784700190.4050255,
@@ -192,87 +192,87 @@
   "sample-data/manifest.json": {
     "mtime": 1785398253.4077954,
     "ast_hash": "7479e96487804f53c39909d625e88465",
-    "semantic_hash": ""
+    "semantic_hash": "7479e96487804f53c39909d625e88465"
   },
   "sample-data/projects/adventure-works-booking.json": {
     "mtime": 1785398253.414814,
     "ast_hash": "cf96deedafa890dd8e64bab3ecbb02dc",
-    "semantic_hash": ""
+    "semantic_hash": "cf96deedafa890dd8e64bab3ecbb02dc"
   },
   "sample-data/projects/city-power-light-grid-monitor.json": {
     "mtime": 1785398253.4207954,
     "ast_hash": "01be0c44951b61e1c84f74068635f94e",
-    "semantic_hash": ""
+    "semantic_hash": "01be0c44951b61e1c84f74068635f94e"
   },
   "sample-data/projects/coho-winery-supply-chain.json": {
     "mtime": 1785398253.4277968,
     "ast_hash": "5f46c76681ee2dbbcdcebbd4f338068c",
-    "semantic_hash": ""
+    "semantic_hash": "5f46c76681ee2dbbcdcebbd4f338068c"
   },
   "sample-data/projects/contoso-fleet-operations.json": {
     "mtime": 1785398253.4368353,
     "ast_hash": "54ef72650322b34902082ae4b86daf21",
-    "semantic_hash": ""
+    "semantic_hash": "54ef72650322b34902082ae4b86daf21"
   },
   "sample-data/projects/fabrikam-payments-platform.json": {
     "mtime": 1785398253.442829,
     "ast_hash": "5cd664ef5e43abc632706830c83c6d36",
-    "semantic_hash": ""
+    "semantic_hash": "5cd664ef5e43abc632706830c83c6d36"
   },
   "sample-data/projects/graphic-design-institute-lms.json": {
     "mtime": 1785398253.4497962,
     "ast_hash": "6363594073a7db465cc3577a94b2005e",
-    "semantic_hash": ""
+    "semantic_hash": "6363594073a7db465cc3577a94b2005e"
   },
   "sample-data/projects/humongous-insurance-records.json": {
     "mtime": 1785398253.4568565,
     "ast_hash": "fe95a519b1548e1a560cfeb436154cca",
-    "semantic_hash": ""
+    "semantic_hash": "fe95a519b1548e1a560cfeb436154cca"
   },
   "sample-data/projects/litware-claims-system.json": {
     "mtime": 1785398253.462795,
     "ast_hash": "573841f44396440eea1181da8f825d9b",
-    "semantic_hash": ""
+    "semantic_hash": "573841f44396440eea1181da8f825d9b"
   },
   "sample-data/projects/northwind-traders-checkout.json": {
     "mtime": 1785398253.4688313,
     "ast_hash": "10e2f56f7a66a7cd1f1ba6ae1ed1588e",
-    "semantic_hash": ""
+    "semantic_hash": "10e2f56f7a66a7cd1f1ba6ae1ed1588e"
   },
   "sample-data/projects/proseware-media-streaming.json": {
     "mtime": 1785398253.4758456,
     "ast_hash": "db33a2840644b22c6aec4f1970b94857",
-    "semantic_hash": ""
+    "semantic_hash": "db33a2840644b22c6aec4f1970b94857"
   },
   "sample-data/projects/tailspin-toys-inventory.json": {
     "mtime": 1785398253.4818366,
     "ast_hash": "69ee1ebac039f3b5cc75b1d7be8b3195",
-    "semantic_hash": ""
+    "semantic_hash": "69ee1ebac039f3b5cc75b1d7be8b3195"
   },
   "sample-data/projects/trey-research-data-platform.json": {
     "mtime": 1785398253.4883735,
     "ast_hash": "447521a8604cd0a92f3f9526a4808ece",
-    "semantic_hash": ""
+    "semantic_hash": "447521a8604cd0a92f3f9526a4808ece"
   },
   "sample-data/projects/wide-world-importers-legacy-erp.json": {
     "mtime": 1785398253.4944146,
     "ast_hash": "185d6b3224f54a3245f9334c5114b920",
-    "semantic_hash": ""
+    "semantic_hash": "185d6b3224f54a3245f9334c5114b920"
   },
   "sample-data/projects/wingtip-toys-storefront.json": {
     "mtime": 1785398253.5014186,
     "ast_hash": "b084d2ed5dad993bdfdc760b06f43781",
-    "semantic_hash": ""
+    "semantic_hash": "b084d2ed5dad993bdfdc760b06f43781"
   },
   "sample-data/projects/woodgrove-bank-portal.json": {
     "mtime": 1785398253.5074244,
     "ast_hash": "49b470740d48b5f0da8994bd8fdddbb4",
-    "semantic_hash": ""
+    "semantic_hash": "49b470740d48b5f0da8994bd8fdddbb4"
   },
   "sample-data/team-resources.json": {
     "mtime": 1785398253.5093884,
     "ast_hash": "b59e024777d0cb01f19c4e02bde48431",
-    "semantic_hash": ""
+    "semantic_hash": "b59e024777d0cb01f19c4e02bde48431"
   },
   ".github/workflows/release.yml": {
     "mtime": 1784389878.8757987,
@@ -282,7 +282,7 @@
   "CLAUDE.md": {
     "mtime": 1785165001.1400077,
     "ast_hash": "56f646368b3a8ce4e0b6829a7512fc38",
-    "semantic_hash": ""
+    "semantic_hash": "56f646368b3a8ce4e0b6829a7512fc38"
   },
   "README.md": {
     "mtime": 1784699977.0708506,

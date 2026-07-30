@@ -40,6 +40,23 @@
     await persistProject(state, file);
   }
 
+  // A differenza di renameTask, una stringa vuota è un valore valido (svuota la nota) — solo
+  // null/undefined (Cancel sul modal) è "annulla".
+  async function setTaskNote(state, file, task, noteInput) {
+    const nota = noteInput !== undefined
+      ? noteInput
+      : await MP.modal.promptText({
+          title: task.note ? 'Edit note' : 'Add note',
+          label: 'Note',
+          value: task.note || '',
+          multiline: true,
+          maxLength: 200,
+        });
+    if (nota === null || nota === undefined) return;
+    task.note = nota.trim().slice(0, 200);
+    await persistProject(state, file);
+  }
+
   // Sposta un task in una posizione esatta (usato dal drag&drop, vedi
   // task-drag.js): la baseline di destinazione può essere una qualsiasi
   // baseline dello stesso progetto (anche la stessa in cui si trova già il
@@ -57,5 +74,5 @@
     await persistProject(state, file);
   }
 
-  MP.taskCrud = { createTask, renameTask, deleteTask, moveTaskToPosition, toggleCompleted };
+  MP.taskCrud = { createTask, renameTask, deleteTask, moveTaskToPosition, toggleCompleted, setTaskNote };
 })(window.MP = window.MP || {});

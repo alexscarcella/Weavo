@@ -519,6 +519,7 @@ code {
   width: 100%; font: inherit; padding: 0.5rem; border: 1px solid #bbb; border-radius: 4px;
   resize: vertical;
 }
+.modal-char-counter { font-size: 0.75rem; color: #888; text-align: right; margin-top: 0.2rem; }
 .modal-color-row { display: flex; align-items: center; gap: 0.6rem; }
 .modal-color-swatch {
   width: 2.4rem; height: 2.4rem; padding: 0; border: 1px solid #bbb; border-radius: 4px;
@@ -570,13 +571,13 @@ code {
 .modal-copy-icon-btn:disabled { opacity: 0.4; cursor: default; }
 .modal-copy-icon-btn:disabled:hover { background: transparent; }
 
-.project-info-btn {
+.project-info-btn, .task-note-btn {
   flex: none; width: 1.2rem; height: 1.2rem; margin-right: 0.3rem; padding: 0;
   border: 1px solid #999; border-radius: 50%; background: #fff; color: #666;
   font-size: 0.7rem; font-style: italic; font-family: Georgia, serif; line-height: 1;
   cursor: pointer;
 }
-.project-info-btn:hover { color: #2E86FF; border-color: #2E86FF; }
+.project-info-btn:hover, .task-note-btn:hover { color: #2E86FF; border-color: #2E86FF; }
 
 /* --- Toast --- */
 .toast-container {

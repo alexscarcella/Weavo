@@ -129,6 +129,19 @@
       chk.addEventListener('change', () => MP.taskCrud.toggleCompleted(state, file, task));
       col3.appendChild(chk);
 
+      if (task.note && task.note.trim()) {
+        const noteBtn = document.createElement('button');
+        noteBtn.type = 'button';
+        noteBtn.className = 'task-note-btn';
+        noteBtn.textContent = 'i';
+        noteBtn.title = 'Task note';
+        noteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          MP.modal.showTaskNoteCard({ task });
+        });
+        col3.appendChild(noteBtn);
+      }
+
       const taskText = document.createElement('span');
       taskText.className = 'cell-text';
       taskText.textContent = task.name;
@@ -136,7 +149,8 @@
       col3.appendChild(taskText);
 
       col3.appendChild(menuButton([
-        { label: 'Rename task', onClick: () => MP.taskCrud.renameTask(state, file, task) },
+        { label: task.note ? 'Edit note' : 'Add note', onClick: () => MP.taskCrud.setTaskNote(state, file, task) },
+        { label: 'Rename task', separator: true, onClick: () => MP.taskCrud.renameTask(state, file, task) },
         { label: 'Delete task', danger: true, onClick: () => MP.taskCrud.deleteTask(state, file, baseline, task) },
       ]));
     } else if (baseline) {
