@@ -190,89 +190,89 @@
     "semantic_hash": "9c67bf5f171f4e02461d3ef5dc7bbe27"
   },
   "sample-data/manifest.json": {
-    "mtime": 1784666285.712957,
-    "ast_hash": "bff46ce0a82aae154997ab53ddb7c93d",
-    "semantic_hash": "bff46ce0a82aae154997ab53ddb7c93d"
+    "mtime": 1785398253.4077954,
+    "ast_hash": "7479e96487804f53c39909d625e88465",
+    "semantic_hash": ""
   },
   "sample-data/projects/adventure-works-booking.json": {
-    "mtime": 1784666301.5381465,
-    "ast_hash": "908126cb6d2a8ee35a358ad9bea8eb8c",
-    "semantic_hash": "908126cb6d2a8ee35a358ad9bea8eb8c"
+    "mtime": 1785398253.414814,
+    "ast_hash": "cf96deedafa890dd8e64bab3ecbb02dc",
+    "semantic_hash": ""
   },
   "sample-data/projects/city-power-light-grid-monitor.json": {
-    "mtime": 1784666301.5761442,
-    "ast_hash": "71315128982c4e1f46b89a400f4246dd",
-    "semantic_hash": "71315128982c4e1f46b89a400f4246dd"
+    "mtime": 1785398253.4207954,
+    "ast_hash": "01be0c44951b61e1c84f74068635f94e",
+    "semantic_hash": ""
   },
   "sample-data/projects/coho-winery-supply-chain.json": {
-    "mtime": 1784666301.5771468,
-    "ast_hash": "b556fb3e7f4935b26932e638021e40b2",
-    "semantic_hash": "b556fb3e7f4935b26932e638021e40b2"
+    "mtime": 1785398253.4277968,
+    "ast_hash": "5f46c76681ee2dbbcdcebbd4f338068c",
+    "semantic_hash": ""
   },
   "sample-data/projects/contoso-fleet-operations.json": {
-    "mtime": 1784666301.5811472,
-    "ast_hash": "a6e95e2d72599f85ceeae1f3680f2fa3",
-    "semantic_hash": "a6e95e2d72599f85ceeae1f3680f2fa3"
+    "mtime": 1785398253.4368353,
+    "ast_hash": "54ef72650322b34902082ae4b86daf21",
+    "semantic_hash": ""
   },
   "sample-data/projects/fabrikam-payments-platform.json": {
-    "mtime": 1784666301.5841508,
-    "ast_hash": "6ad871e3fd5f1a525c7a74fd6d15d5e1",
-    "semantic_hash": "6ad871e3fd5f1a525c7a74fd6d15d5e1"
+    "mtime": 1785398253.442829,
+    "ast_hash": "5cd664ef5e43abc632706830c83c6d36",
+    "semantic_hash": ""
   },
   "sample-data/projects/graphic-design-institute-lms.json": {
-    "mtime": 1784666301.5851521,
-    "ast_hash": "b45302a4fa09b8a888ddbabeca600f88",
-    "semantic_hash": "b45302a4fa09b8a888ddbabeca600f88"
+    "mtime": 1785398253.4497962,
+    "ast_hash": "6363594073a7db465cc3577a94b2005e",
+    "semantic_hash": ""
   },
   "sample-data/projects/humongous-insurance-records.json": {
-    "mtime": 1784666301.5861502,
-    "ast_hash": "b817ca250e4085425bf659bd9806a730",
-    "semantic_hash": "b817ca250e4085425bf659bd9806a730"
+    "mtime": 1785398253.4568565,
+    "ast_hash": "fe95a519b1548e1a560cfeb436154cca",
+    "semantic_hash": ""
   },
   "sample-data/projects/litware-claims-system.json": {
-    "mtime": 1784666301.5881474,
-    "ast_hash": "42ace069d862aec5877a32b14ffb1740",
-    "semantic_hash": "42ace069d862aec5877a32b14ffb1740"
+    "mtime": 1785398253.462795,
+    "ast_hash": "573841f44396440eea1181da8f825d9b",
+    "semantic_hash": ""
   },
   "sample-data/projects/northwind-traders-checkout.json": {
-    "mtime": 1784666301.5901523,
-    "ast_hash": "9294ca1cc1465a3e460f49bde4cb7acc",
-    "semantic_hash": "9294ca1cc1465a3e460f49bde4cb7acc"
+    "mtime": 1785398253.4688313,
+    "ast_hash": "10e2f56f7a66a7cd1f1ba6ae1ed1588e",
+    "semantic_hash": ""
   },
   "sample-data/projects/proseware-media-streaming.json": {
-    "mtime": 1784666301.5911455,
-    "ast_hash": "70423fbe683eb657613cf6e54afce5f5",
-    "semantic_hash": "70423fbe683eb657613cf6e54afce5f5"
+    "mtime": 1785398253.4758456,
+    "ast_hash": "db33a2840644b22c6aec4f1970b94857",
+    "semantic_hash": ""
   },
   "sample-data/projects/tailspin-toys-inventory.json": {
-    "mtime": 1784666301.592149,
-    "ast_hash": "983df52fa301ab8abf318cd550dbee3c",
-    "semantic_hash": "983df52fa301ab8abf318cd550dbee3c"
+    "mtime": 1785398253.4818366,
+    "ast_hash": "69ee1ebac039f3b5cc75b1d7be8b3195",
+    "semantic_hash": ""
   },
   "sample-data/projects/trey-research-data-platform.json": {
-    "mtime": 1784666301.5941484,
-    "ast_hash": "54e6289a9cb7f745d7a6766c976742d3",
-    "semantic_hash": "54e6289a9cb7f745d7a6766c976742d3"
+    "mtime": 1785398253.4883735,
+    "ast_hash": "447521a8604cd0a92f3f9526a4808ece",
+    "semantic_hash": ""
   },
   "sample-data/projects/wide-world-importers-legacy-erp.json": {
-    "mtime": 1784666301.5951457,
-    "ast_hash": "383d86e2c97af2cf32ac8107bd8b1bed",
-    "semantic_hash": "383d86e2c97af2cf32ac8107bd8b1bed"
+    "mtime": 1785398253.4944146,
+    "ast_hash": "185d6b3224f54a3245f9334c5114b920",
+    "semantic_hash": ""
   },
   "sample-data/projects/wingtip-toys-storefront.json": {
-    "mtime": 1784666301.5961459,
-    "ast_hash": "33972918208e26a41e7d6d243dd30cd8",
-    "semantic_hash": "33972918208e26a41e7d6d243dd30cd8"
+    "mtime": 1785398253.5014186,
+    "ast_hash": "b084d2ed5dad993bdfdc760b06f43781",
+    "semantic_hash": ""
   },
   "sample-data/projects/woodgrove-bank-portal.json": {
-    "mtime": 1784666301.597148,
-    "ast_hash": "13c25a22af81f3c66dd747fa2305312d",
-    "semantic_hash": "13c25a22af81f3c66dd747fa2305312d"
+    "mtime": 1785398253.5074244,
+    "ast_hash": "49b470740d48b5f0da8994bd8fdddbb4",
+    "semantic_hash": ""
   },
   "sample-data/team-resources.json": {
-    "mtime": 1784381753.8646111,
-    "ast_hash": "e4cff11159b01740924d1d58b09f0f4f",
-    "semantic_hash": "e4cff11159b01740924d1d58b09f0f4f"
+    "mtime": 1785398253.5093884,
+    "ast_hash": "b59e024777d0cb01f19c4e02bde48431",
+    "semantic_hash": ""
   },
   ".github/workflows/release.yml": {
     "mtime": 1784389878.8757987,
