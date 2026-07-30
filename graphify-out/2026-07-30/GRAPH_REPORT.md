@@ -1,18 +1,13 @@
-# Graph Report - Weavo - Master Plan  (2026-07-30)
+# Graph Report - E:\Alessandro\Dropbox\Developer\Weavo - Master Plan  (2026-07-30)
 
 ## Corpus Check
-- 72 files · ~56,637 words
+- 23 files · ~56,114 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 434 nodes · 732 edges · 45 communities (27 shown, 18 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.67)
-- Token cost: 0 input · 0 output
-
-## Graph Freshness
-- Built from commit: `427c0129`
-- Run `git rev-parse HEAD` and compare to check if the graph is stale.
-- Run `graphify update .` after code changes (no API cost).
+- 415 nodes · 713 edges · 42 communities (24 shown, 18 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.68)
+- Token cost: 100,000 input · 15,600 output
 
 ## Community Hubs (Navigation)
 - Project docs (docs/, README)
@@ -57,8 +52,6 @@
 - docs/api.md (week-utils)
 - schema.js PATHS
 - schema.js SEED_TEAM
-- load-mp.js
-- package.json
 
 ## God Nodes (most connected - your core abstractions)
 1. `CLAUDE.md — Master Plan project guidance` - 82 edges
@@ -69,8 +62,8 @@
 6. `migrateIfNeeded()` - 9 edges
 7. `renderMilestoneListCard()` - 9 edges
 8. `render()` - 7 edges
-9. `buildAllocationsHtml()` - 7 edges
-10. `persistProject()` - 7 edges
+9. `persistProject()` - 7 edges
+10. `openCellContextMenu()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Single-scrollbar page layout design` --rationale_for--> `render()`  [EXTRACTED]
@@ -94,26 +87,26 @@
 - **docs/ documentation suite** — readme_document, docs_architecture_document, docs_api_document, docs_database_document, docs_deployment_document, docs_security_document, docs_glossary_document [EXTRACTED 1.00]
 - **Conflict detection and remote-change notification mechanism** — docs_database_conflictdetection, docs_database_mp_conflictdiff, docs_database_mp_remotecheck, docs_api_mp_savecoordinator [EXTRACTED 1.00]
 
-## Communities (45 total, 18 thin omitted)
+## Communities (42 total, 18 thin omitted)
 
 ### Community 0 - "Project docs (docs/, README)"
 Cohesion: 0.07
-Nodes (44): MP.cellPopover, MP.cellSelection, MP.contextMenu, MP.fsAccess, MP.ganttView, MP.legacyMigration, MP.modal, MP.overallocation (+36 more)
+Nodes (47): MP.cellPopover, MP.cellSelection, MP.contextMenu, MP.fsAccess, MP.ganttView, MP.legacyMigration, MP.modal, MP.overallocation (+39 more)
 
 ### Community 1 - "CLAUDE.md architecture concepts"
-Cohesion: 0.05
-Nodes (39): CLAUDE.md — Master Plan project guidance, Baseline drag & drop reorder, Boolean (allocated / not allocated) allocation model, Task-level completed semantics (excluded from overallocation/mismatch), English-only UI language and data-model field names sweep, File System Access API dependency (Chrome/Edge only), graphify codebase knowledge graph tool, Master Plan (Weavo) client-side web app (+31 more)
+Cohesion: 0.06
+Nodes (36): CLAUDE.md — Master Plan project guidance, Baseline drag & drop reorder, Boolean (allocated / not allocated) allocation model, Task-level completed semantics (excluded from overallocation/mismatch), English-only UI language and data-model field names sweep, File System Access API dependency (Chrome/Edge only), graphify codebase knowledge graph tool, Master Plan (Weavo) client-side web app (+28 more)
 
 ### Community 2 - "modal.js"
 Cohesion: 0.20
-Nodes (28): buildAllocationsHtml(), buildAllocationsText(), buildMilestoneClipboardText(), confirmConflict(), confirmWithReport(), copyAllocationsToClipboard(), copyMilestoneListToClipboard(), escapeHtml() (+20 more)
+Nodes (29): buildAllocationsHtml(), buildAllocationsText(), buildMilestoneClipboardText(), confirmConflict(), confirmWithReport(), copyAllocationsToClipboard(), copyMilestoneListToClipboard(), escapeHtml() (+21 more)
 
 ### Community 3 - "app.js"
 Cohesion: 0.12
 Nodes (16): No IndexedDB — never fires onsuccess/onerror under file://, Single-scrollbar page layout design, bootstrap(), connectToDirectory(), escapeHtml(), render(), renderError(), renderMessage() (+8 more)
 
 ### Community 4 - "cell-selection.js"
-Cohesion: 0.16
+Cohesion: 0.18
 Nodes (21): Baseline milestone sync across all tasks (single deadline invariant), Shift feature kept out of popover save path (avoids overwrite bug), clearHighlight(), getRangeForAction(), handleCellClick(), relocate(), reset(), setAnchor() (+13 more)
 
 ### Community 5 - "week-shift.js / baseline-crud.js"
@@ -153,7 +146,7 @@ Cohesion: 0.26
 Nodes (11): Reread-before-write save conflict detection (spec §6.4), diffWeeks(), flattenTasks(), summarize(), summarizeManifest(), summarizeProject(), summarizeTeamResources(), saveManifest() (+3 more)
 
 ### Community 14 - "milestones.js / dataset-header.js"
-Cohesion: 0.39
+Cohesion: 0.29
 Nodes (7): computeBaselineMilestones(), computeUpcomingMilestonesByMonth(), countUpcomingBaselines(), fixedCell(), headerCell(), renderHistogram(), renderMilestonesView()
 
 ### Community 15 - "week-utils.js"
@@ -165,8 +158,8 @@ Cohesion: 0.42
 Nodes (9): Week-level completed semantics (per-cell, orthogonal to milestone), closeExisting(), commitAndClose(), detachGlobalListeners(), handleKeydown(), handleOutsideClick(), openPopover(), positionPopover() (+1 more)
 
 ### Community 17 - "project-crud.js"
-Cohesion: 0.36
-Nodes (9): promptProjectForm(), createProject(), deleteProject(), editReferents(), existingSlugs(), moveProject(), persist(), renameProject() (+1 more)
+Cohesion: 0.39
+Nodes (8): createProject(), deleteProject(), editReferents(), existingSlugs(), moveProject(), persist(), renameProject(), toggleCompleted()
 
 ### Community 18 - "team-crud.js"
 Cohesion: 0.43
@@ -192,16 +185,8 @@ Nodes (4): badgeItem(), renderLegend(), staticItem(), swatch()
 Cohesion: 0.70
 Nodes (4): renderResourceRow(), renderTeamCard(), renderTeamResourcesView(), swatch()
 
-### Community 42 - "load-mp.js"
-Cohesion: 0.27
-Nodes (5): { loadMP }, loadMP(), path, { loadMP }, { loadMP }
-
-### Community 43 - "package.json"
-Cohesion: 0.25
-Nodes (7): jest, devDependencies, jest, name, private, scripts, test
-
 ## Knowledge Gaps
-- **57 isolated node(s):** `name`, `private`, `jest`, `test`, `schemaVersion` (+52 more)
+- **49 isolated node(s):** `spike-fsa/index.html (FSA permission spike)`, `FSA directory-permission persistence test protocol`, `Allocation`, `Dataset`, `Initials` (+44 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -209,14 +194,16 @@ Nodes (7): jest, devDependencies, jest, name, private, scripts, test
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `CLAUDE.md — Master Plan project guidance` connect `CLAUDE.md architecture concepts` to `modal.js`, `app.js`, `cell-selection.js`, `week-shift.js / baseline-crud.js`, `validation.js`, `schema.js`, `fs-access.js`, `task-crud.js`, `legacy-migration.js`, `overallocation.js / gantt-cell.js`, `store.js`, `conflict-diff.js`, `milestones.js / dataset-header.js`, `week-utils.js`, `cell-popover.js`, `project-crud.js`, `team-crud.js`, `week-controls.js`, `context-menu.js`, `legend.js`, `team-resources-view.js`?**
-  _High betweenness centrality (0.754) - this node is a cross-community bridge._
-- **What connects `name`, `private`, `jest` to the rest of the system?**
-  _57 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.825) - this node is a cross-community bridge._
+- **Why does `APP_VERSION constant` connect `CLAUDE.md architecture concepts` to `Project docs (docs/, README)`?**
+  _High betweenness centrality (0.215) - this node is a cross-community bridge._
+- **Why does `.github/workflows/release.yml (release workflow)` connect `Project docs (docs/, README)` to `CLAUDE.md architecture concepts`?**
+  _High betweenness centrality (0.208) - this node is a cross-community bridge._
+- **What connects `spike-fsa/index.html (FSA permission spike)`, `FSA directory-permission persistence test protocol`, `Allocation` to the rest of the system?**
+  _49 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Project docs (docs/, README)` be split into smaller, more focused modules?**
-  _Cohesion score 0.07137254901960784 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06568832983927324 - nodes in this community are weakly interconnected._
 - **Should `CLAUDE.md architecture concepts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05353535353535353 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05807200929152149 - nodes in this community are weakly interconnected._
 - **Should `app.js` be split into smaller, more focused modules?**
   _Cohesion score 0.11956521739130435 - nodes in this community are weakly interconnected._
-- **Should `schema.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.1323529411764706 - nodes in this community are weakly interconnected._

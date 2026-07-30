@@ -150,9 +150,9 @@
     "semantic_hash": "0ac419fc8ef55ddbb66af8963f60b271"
   },
   "js/ui/gantt/gantt-row.js": {
-    "mtime": 1785410593.3036592,
-    "ast_hash": "2e684defa9e4f9796b54685b03e93f33",
-    "semantic_hash": ""
+    "mtime": 1785407550.5453944,
+    "ast_hash": "dbc653789de4981c33240f3c5a14953a",
+    "semantic_hash": "dbc653789de4981c33240f3c5a14953a"
   },
   "js/ui/gantt/gantt-view.js": {
     "mtime": 1784700569.8558795,
@@ -328,50 +328,5 @@
     "mtime": 1784223375.4060946,
     "ast_hash": "003af12d7796741b44fc35b928eab154",
     "semantic_hash": "003af12d7796741b44fc35b928eab154"
-  },
-  ".vscode/extensions.json": {
-    "mtime": 1785412736.503928,
-    "ast_hash": "074409ab17b3d0db9fc9b14afe5737af",
-    "semantic_hash": ""
-  },
-  ".vscode/launch.json": {
-    "mtime": 1785412755.433382,
-    "ast_hash": "b44fed67c6b331ae44c4fd08cd173f79",
-    "semantic_hash": ""
-  },
-  ".vscode/settings.json": {
-    "mtime": 1785412744.780776,
-    "ast_hash": "cfce84401eab682df5aed6b51f37d561",
-    "semantic_hash": ""
-  },
-  "jest.config.js": {
-    "mtime": 1785412707.715148,
-    "ast_hash": "defe709046fc619f900d30d6bdaa07df",
-    "semantic_hash": ""
-  },
-  "package.json": {
-    "mtime": 1785412695.4729881,
-    "ast_hash": "26a372e1b5d7e3e0239f5d8c127e1472",
-    "semantic_hash": ""
-  },
-  "unit/data/schema.test.js": {
-    "mtime": 1785413752.429602,
-    "ast_hash": "bd7845e808ae7f0bbb929334b2c641ae",
-    "semantic_hash": ""
-  },
-  "unit/helpers/load-mp.js": {
-    "mtime": 1785412723.366302,
-    "ast_hash": "76b9e9f92507556591734c3dc5076cf9",
-    "semantic_hash": ""
-  },
-  "unit/model/validation.test.js": {
-    "mtime": 1785415008.1271195,
-    "ast_hash": "943d66709af0426a2d528699e2e3afb3",
-    "semantic_hash": ""
-  },
-  "unit/model/week-utils.test.js": {
-    "mtime": 1785413833.6543305,
-    "ast_hash": "96f590e7fbeb010a5c455b5e310897de",
-    "semantic_hash": ""
   }
 }

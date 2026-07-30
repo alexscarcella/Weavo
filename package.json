@@ -1,0 +1,10 @@
+{
+  "name": "weavo-master-plan",
+  "private": true,
+  "devDependencies": {
+    "jest": "^29"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
