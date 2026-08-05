@@ -43,8 +43,5 @@
   "41": "schema.js SEED_TEAM",
   "42": "load-mp.js",
   "43": "package.json",
-  "44": "jest.config.js",
-  "45": "task-crud.js",
-  "46": "milestone-rules.js",
-  "47": "[Unreleased] — 2026-08-05"
+  "44": "jest.config.js"
 }
