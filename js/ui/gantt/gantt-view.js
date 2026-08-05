@@ -74,46 +74,63 @@
     return rows;
   }
 
-  // Un task ammette una sola settimana di milestone: impostandola su una nuova
-  // settimana, l'eventuale flag su un'altra settimana dello stesso task va rimosso
-  // (l'ultima impostata sovrascrive la precedente, mai due milestone residue).
-  function clearOtherMilestones(task, settimana) {
+  const { MILESTONE_TYPES } = MP.schema;
+
+  // Un task ammette al più una settimana per OGNI tipo di milestone (fino a 3
+  // settimane diverse in totale, una per tipo — vedi MP.schema.MILESTONE_TYPES):
+  // impostando `type` su una nuova settimana, l'eventuale settimana dello
+  // stesso task che portava lo STESSO tipo va rimossa (l'ultima impostata
+  // sovrascrive la precedente per quel tipo, mai due residue dello stesso
+  // tipo), lasciando intatte le settimane degli altri 2 tipi.
+  function clearOtherMilestones(task, settimana, type) {
     for (const [iso, entry] of Object.entries(task.weeks || {})) {
-      if (iso === settimana || !entry.milestone) continue;
+      if (iso === settimana || entry.milestone !== type) continue;
       delete entry.milestone;
       if (MP.schema.isWeekEntryEmpty(entry)) delete task.weeks[iso];
     }
   }
 
-  // Tutti i task di una stessa baseline condividono un'unica scadenza: impostando
-  // la milestone su un task, viene ereditata (stessa settimana) da tutti gli
+  // Solo per i 2 tipi condivisi (readyForUat/uat, mai taskDeadline): tutti i
+  // task di una stessa baseline condividono un'unica scadenza per quel tipo —
+  // impostandola su un task, viene ereditata (stessa settimana) da tutti gli
   // altri task non completed della baseline, applicando anche a loro la regola
-  // "una sola milestone per task" — mai due scadenze diverse nella stessa
-  // baseline. I task già completed non vengono toccati automaticamente (stesso
-  // principio del team-mismatch: dati chiusi mai auto-corretti, vedi CLAUDE.md).
-  function syncBaselineMilestone(baseline, task, settimana) {
-    clearOtherMilestones(task, settimana);
+  // "una sola settimana per tipo per task" (vedi clearOtherMilestones). I task
+  // già completed non vengono toccati automaticamente (stesso principio del
+  // team-mismatch: dati chiusi mai auto-corretti, vedi CLAUDE.md).
+  function syncBaselineMilestone(baseline, task, settimana, type) {
+    clearOtherMilestones(task, settimana, type);
     const affected = [task];
     for (const t of baseline.task) {
       if (t === task || t.completed) continue;
-      clearOtherMilestones(t, settimana);
+      clearOtherMilestones(t, settimana, type);
       const existing = t.weeks[settimana];
-      t.weeks[settimana] = existing ? { ...existing, milestone: true } : { milestone: true };
+      const merged = existing ? { ...existing, milestone: type } : { milestone: type };
+      // L'assegnazione di risorse è inibita sulla settimana dell'UAT (vedi
+      // MP.schema.createWeekEntry) — propagando UAT ad altri task della
+      // baseline, un'eventuale loro allocazione preesistente su quella
+      // settimana va rimossa per lo stesso motivo, non solo preservata come
+      // per gli altri tipi.
+      if (type === MILESTONE_TYPES.UAT) {
+        delete merged.team;
+        delete merged.resources;
+      }
+      t.weeks[settimana] = merged;
       affected.push(t);
     }
     return affected;
   }
 
   // Simmetrico a `syncBaselineMilestone`: se l'utente toglie la scadenza
-  // condivisa (checkbox smarcata, non uno spostamento su un'altra settimana),
-  // va rimossa dagli altri task della baseline che la avevano ereditata, non
-  // lasciata residua solo perché il task originario non la mostra più.
-  function clearBaselineMilestone(baseline, task, settimana) {
+  // condivisa di `type` (checkbox smarcata, non uno spostamento su un'altra
+  // settimana), va rimossa dagli altri task della baseline che la avevano
+  // ereditata, non lasciata residua solo perché il task originario non la
+  // mostra più.
+  function clearBaselineMilestone(baseline, task, settimana, type) {
     const affected = [task];
     for (const t of baseline.task) {
       if (t === task || t.completed) continue;
       const entry = (t.weeks || {})[settimana];
-      if (!entry || !entry.milestone) continue;
+      if (!entry || entry.milestone !== type) continue;
       delete entry.milestone;
       if (MP.schema.isWeekEntryEmpty(entry)) delete t.weeks[settimana];
       affected.push(t);
@@ -121,12 +138,35 @@
     return affected;
   }
 
+  function isSharedMilestoneType(type) {
+    return type === MILESTONE_TYPES.READY_FOR_UAT || type === MILESTONE_TYPES.UAT;
+  }
+
   async function handleCellSaved({ state, file, task, baseline, settimana, newEntry }) {
-    const wasMilestone = ((task.weeks || {})[settimana] || {}).milestone === true;
-    const isMilestone = newEntry.milestone === true;
+    const oldType = ((task.weeks || {})[settimana] || {}).milestone || null;
+    const newType = newEntry.milestone || null;
+    if (newType && newType !== oldType) {
+      const check = MP.milestoneRules.checkChange({ task, baseline, type: newType, newIso: settimana });
+      if (!check.ok) {
+        window.alert(check.reason);
+        return; // nessuna mutazione, nessun salvataggio: l'utente deve riaprire e scegliere una data valida
+      }
+    }
     let affectedTasks = [task];
-    if (baseline && isMilestone) affectedTasks = syncBaselineMilestone(baseline, task, settimana);
-    else if (baseline && wasMilestone) affectedTasks = clearBaselineMilestone(baseline, task, settimana);
+    // Un tipo condiviso che viene sostituito da uno NON condiviso (taskDeadline
+    // o nessuno) non resta più sincronizzato su questa settimana per gli altri
+    // task: va rimosso da chi l'aveva ereditato, esattamente come una
+    // cancellazione — a differenza di una conversione fra i 2 tipi condivisi
+    // (readyForUat <-> uat), dove syncBaselineMilestone sotto sovrascrive
+    // direttamente la stessa entry per tutti, senza bisogno di questa pulizia.
+    if (oldType && oldType !== newType && isSharedMilestoneType(oldType) && !isSharedMilestoneType(newType) && baseline) {
+      affectedTasks = clearBaselineMilestone(baseline, task, settimana, oldType);
+    }
+    if (newType === MILESTONE_TYPES.TASK_DEADLINE) {
+      clearOtherMilestones(task, settimana, newType);
+    } else if (newType && isSharedMilestoneType(newType) && baseline) {
+      affectedTasks = syncBaselineMilestone(baseline, task, settimana, newType);
+    }
     if (MP.schema.isWeekEntryEmpty(newEntry)) {
       delete task.weeks[settimana];
     } else {
@@ -181,8 +221,8 @@
   function openShiftMenu({ state, file, task, baseline, weeks, anchorEl }) {
     const el = anchorEl || MP.ganttCell.getCellDiv(task, weeks[0]);
     if (!el) return;
-    const leftCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, -1);
-    const rightCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, 1);
+    const leftCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, -1, baseline);
+    const rightCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, 1, baseline);
     MP.contextMenu.openMenu({
       anchorEl: el,
       placement: 'above',
@@ -222,6 +262,7 @@
       anchorEl,
       dataset: state.dataset,
       task,
+      baseline,
       settimana: isBulk ? undefined : weeks[0],
       weeksRange: isBulk ? weeks : undefined,
       onSave: (newEntry) => {
@@ -248,16 +289,22 @@
   // non il popover di allocazione — per permettere shift ripetuti in sequenza
   // senza dover riselezionare da capo.
   async function handleCellsShift({ state, file, task, baseline, weeks, direction }) {
-    const check = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, direction);
+    const check = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, direction, baseline);
     if (!check.allowed) return; // la voce di menu è già disabilitata in questo caso
 
-    const milestoneWeeks = weeks.filter((w) => ((task.weeks || {})[w] || {}).milestone === true);
+    // Fino a 3 settimane del range spostato possono portare milestone (una per
+    // tipo, vedi clearOtherMilestones) — solo i 2 tipi condivisi richiedono la
+    // ri-sincronizzazione con la baseline dopo lo spostamento; taskDeadline
+    // trasla col resto dell'entry senza bisogno di propagazione.
+    const milestoneWeeks = weeks
+      .map((w) => ({ w, type: ((task.weeks || {})[w] || {}).milestone || null }))
+      .filter((e) => e.type && isSharedMilestoneType(e.type));
     MP.weekShift.shiftWeeksData(task, weeks, direction);
 
     const targets = weeks.map((w) => MP.weekUtils.addWeeks(w, direction));
     let affectedTasks = [task];
-    for (const w of milestoneWeeks) {
-      if (baseline) affectedTasks = syncBaselineMilestone(baseline, task, MP.weekUtils.addWeeks(w, direction));
+    for (const { w, type } of milestoneWeeks) {
+      if (baseline) affectedTasks = syncBaselineMilestone(baseline, task, MP.weekUtils.addWeeks(w, direction), type);
     }
 
     try {

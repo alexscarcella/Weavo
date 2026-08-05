@@ -173,7 +173,7 @@ resources are nested inside their team in `team-resources.json`, never listed in
   by `MP.validation.findTeamMismatches` (see below) for manual fix-up in the cell popover.
   Deleting a resource (`MP.resourceCrud.deleteResource`) similarly cascades: it removes the
   resource's initials from every non-`completed` week entry's `resources` (clearing `team` too if
-  `resources` becomes empty, preserving `milestone: true` if set) before removing the resource
+  `resources` becomes empty, preserving `milestone` if set) before removing the resource
   from `team-resources.json`, showing a copyable plain-text summary of the affected allocations
   first and requiring explicit confirmation. `completed` task allocations are never touched by
   either flow (see below) and become orphan references once the resource is gone. Project-level
@@ -194,9 +194,10 @@ predates the team/resources merge and still describes the old two-file `risorse.
 - Allocation model is **boolean** — a resource is either allocated to a task in a given week or
   not; no percentages/fractions.
 - A week entry (`task.weeks[iso]`) is only meaningful if `team` + non-empty `resources` are
-  both present together, or if `milestone: true` is set, or if `completed: true` is set (see
-  below) — never a partial state like `{team: "dev", resources: []}`. Always construct these via
-  `MP.schema.createWeekEntry(...)`.
+  both present together, or if `milestone` is set to one of `MP.schema.MILESTONE_TYPES`
+  (`taskDeadline`/`readyForUat`/`uat` — see "Milestones" below), or if `completed: true` is set
+  (see below) — never a partial state like `{team: "dev", resources: []}`. Always construct these
+  via `MP.schema.createWeekEntry(...)`.
 - `team` codes and resource `initials` referenced by a task but missing from
   `team-resources.json` are **orphan references**
   (`MP.validation.findOrphanTeam`/`findOrphanResources`); a resource allocated under a `team`
@@ -213,8 +214,9 @@ predates the team/resources merge and still describes the old two-file `risorse.
   task has been finished, without closing the whole task (a task can freely mix completed and
   active weeks). Set via a "Completed" checkbox in `cell-popover.js`
   ([js/ui/gantt/cell-popover.js](js/ui/gantt/cell-popover.js)), available in **both** single-cell
-  and bulk (multi-week range) mode — unlike `milestone`, which stays single-cell-only — where bulk
-  mode applies the same anchor-cell normalization already used for `team`/`resources` (all
+  and bulk (multi-week range) mode — unlike `milestone`, which stays single-cell-only (see
+  "Milestones" below) — where bulk mode applies the same anchor-cell normalization already used
+  for `team`/`resources` (all
   selected weeks end up with the anchor week's `completed` value). A completed week gets the
   exact same treatment as a completed task, just scoped to that one cell instead of the whole
   task: excluded from `MP.overallocation.buildAllocationIndex` and
@@ -228,6 +230,104 @@ predates the team/resources merge and still describes the old two-file `risorse.
   entry below for how a resulting collision is handled. Fully reversible (unchecking the box
   clears the flag) and never destructive — the week's `team`/`resources` are preserved, not
   cleared, while `completed: true` is set.
+
+#### Milestones
+
+`entry.milestone` is a **type string**, one of `MP.schema.MILESTONE_TYPES` — never boolean (a v1
+migration from an earlier boolean-only schema, see "Legacy data migration" below). Three
+mutually-exclusive types, ordered by `MP.schema.MILESTONE_ORDER`:
+
+- **`taskDeadline`** ("Task deadline") — an internal deadline scoped to one task, **never**
+  shared/propagated to other tasks.
+- **`readyForUat`** ("Ready for UAT") and **`uat`** ("UAT") — both baseline-wide: setting either
+  on one task's week propagates it (same week, same type) to every other non-`completed` task of
+  the baseline (`gantt-view.js`'s `syncBaselineMilestone`/`clearBaselineMilestone`, now
+  type-scoped), exactly like the pre-3-type single flag did, but as two fully independent series.
+
+A task can therefore carry **up to 3** milestone weeks simultaneously (one per type, at most one
+week per type per task — `clearOtherMilestones` in `gantt-view.js` is type-scoped so setting a new
+`taskDeadline` week doesn't clear an existing `readyForUat`/`uat` week and vice versa), where the
+old single-flag model allowed only one milestone week total.
+
+**Hard-block ordering invariant**: whichever of a task's 3 dates are present must be strictly
+increasing in `MILESTONE_ORDER`'s order — Task deadline < Ready for UAT < UAT, never the same
+week. Unlike every other consistency rule in this file (orphan references, team mismatches,
+inconsistent cross-task milestone dates below), this one is a genuine **hard block** — reject with
+`window.alert(reason)` and abort, no mutation, no silent auto-correction — because the user
+explicitly asked for it during requirements review, not because it fits the codebase's usual
+non-blocking-warning philosophy. The check lives in one pure, shared module,
+[js/model/milestone-rules.js](js/model/milestone-rules.js) (`MP.milestoneRules`:
+`collectTaskMilestoneDates`, `checkOrdering`, `checkTaskChange`, `checkBaselineChange`,
+`checkChange`, `checkTaskOrderingAfterShift`), loaded right after `week-utils.js` and before
+`week-shift.js` in `index.html` (the latter depends on it) — reused by every write path that can
+move a milestone week instead of duplicating the check 4 times:
+
+- the cell popover save (`gantt-view.js`'s `handleCellSaved`, via `checkChange`);
+- the per-cell ◀/▶ shift (`week-shift.js`'s `canShiftWeeks`, now taking a `baseline` param);
+- the whole-baseline shift (`week-shift.js`'s `canShiftBaseline`, via a second per-task pass
+  calling `checkTaskOrderingAfterShift` — needed because a *stationary* individually-completed
+  milestone week doesn't translate with the rest of the task, so it can go out of order relative
+  to the task's other, moving milestone weeks even when no single week collides with another);
+- dragging a task to a **different** baseline (`MP.taskCrud.moveTaskToPosition`, see the
+  `task-drag.js` entry below) — the one write path where the pre-3-type code never touched
+  milestones at all.
+
+**Converting one type into another** on the same already-milestoned week (pick a different radio
+option in the popover instead of "None" first) is supported directly — the ordering check must
+simulate the resulting state, not just tack the new type on top of the old one still occupying
+that same week, or a same-week conversion (e.g. `readyForUat` → `uat`) would look like two types
+landing on one week and get rejected even though the mutation never actually produces that state.
+`checkTaskChange`/`checkBaselineChange` handle this via a shared `applyTentativeChange` helper: before
+setting `dates[type] = newIso`, it first clears whichever *other* type currently occupies `newIso`
+in the simulated `dates` (mirroring what the real mutation does — `syncBaselineMilestone`'s merge
+unconditionally overwrites `entry.milestone`, and the `TASK_DEADLINE` branch's `clearOtherMilestones`
+removes any pre-existing `taskDeadline` elsewhere on the task). `gantt-view.js`'s `handleCellSaved`
+mirrors this on the mutation side: replacing a shared type with a **non**-shared one (`taskDeadline`
+or clearing to none) calls `clearBaselineMilestone` for the old type first, since those other tasks
+won't get a new shared date to overwrite it with; converting between the 2 shared types needs no
+separate cleanup, since `syncBaselineMilestone` already overwrites the same week's entry for every
+task in one pass.
+
+**Resource assignment is inhibited on a `uat` week** — the customer-facing test date must never
+coincide with an active allocation. Enforced at the single choke point every week entry is built
+through, `MP.schema.createWeekEntry`: if `milestone` resolves to `'uat'`, any `team`/`resources`
+passed in are silently dropped regardless of input (not a rejection — the entry is still built,
+just without the allocation half). The 2 write paths that merge milestone data onto a week entry
+by object-spread rather than through `createWeekEntry` — `syncBaselineMilestone` in
+`gantt-view.js` (propagating `uat` to other tasks of the baseline) and `applyAdoptedSharedDates`
+in `task-crud.js` (adopting a destination baseline's `uat` date on cross-baseline drag) — each
+explicitly strip `team`/`resources` from the merged result too, so the invariant holds
+baseline-wide, not just on the cell the user directly edited. `cell-popover.js` enforces this at
+the UI layer as well, ahead of any save: picking "UAT" in the milestone radio group clears and
+**disables** the Team select and every resource checkbox (`.popover-field-disabled`, `pointer-
+events: none`) with a red hint line ("Resource assignment is disabled for a UAT week"), and the
+non-blocking informational note (see below) additionally warns how many *other* tasks in the
+baseline currently hold an allocation on that week that will be cleared once `uat` propagates to
+them. `taskDeadline`/`readyForUat` weeks are unaffected — only `uat` carries this restriction.
+
+Editable only via the cell popover's milestone field (`cell-popover.js`), single-cell mode only —
+a 4-option radio group (None / Task deadline / Ready for UAT / UAT) replacing what used to be a
+single "Delivery milestone" checkbox; bulk (multi-week range) mode never touches milestones, same
+restriction as before. Picking a shared type that would also update other tasks in the baseline
+shows a **non-blocking** informational note in the popover (distinct from the hard block above,
+which only surfaces at save time). All 3 types render **red** (deliberate, explicit requirement —
+never any other hue), differentiated by weight/fill instead of color, plus a small badge glyph in
+the cell's bottom-left corner (the one corner not already used by the orphan-team/orphan-
+resource/mismatch badges): **Task deadline** — 2px red inset border (`#d32f2f`, same red as the
+old single-flag model, for visual continuity), red ◆ badge on a white circle; **Ready for UAT** —
+same red but a **thicker** 4px inset border, same red R badge style; **UAT** — 2px red border
+**plus a solid red cell background** (`div.style.background` forced to `#d32f2f` in
+`gantt-cell.js`, overriding whatever team-color/completed background the cell would otherwise
+show — the strongest of the 3 signals), white U badge on a red circle
+(`gantt-cell.js`/`css/styles.css`). The Milestones report page reuses red for its "Ready for UAT"
+series too but a **dark** red (`#b71c1c`) for its "UAT" series in the parts of that page that need
+the 2 shared types tellable apart at a glance outside the per-cell border/fill distinction (total
+row text color, histogram segment color, upcoming-list item border) — see the
+`milestones-view.js` entry below. `js/model/milestones.js` derives the "effective" release week
+**per baseline per shared type** (`computeBaselineMilestones` returns independent
+`row.readyForUat`/`row.uat` sub-results, each `{settimana, distinctDates, taskName, inconsistent}`
+— `taskDeadline` is deliberately excluded from this aggregate, gantt-cell/popover only) — see the
+`milestones.js`/`milestones-view.js` entries below for how the 2 series are reported.
 
 ### Project team/referents
 
@@ -270,21 +370,24 @@ Each project's `referents` field (`projects/<slug>.json`) is a structured object
 
 Every field name described above is a deliberate, one-time rename from an earlier Italian-named
 schema (`nome`, `sigla`, `settimane`, `codice`, `versione`, `risorse`, `archiviato`/`archiviata`,
-`concluso`, the file `team-risorse.json`, the directory `progetti/`), plus a later, narrower rename
+`concluso`, the file `team-risorse.json`, the directory `progetti/`), a later, narrower rename
 of `archived` → `completed` on `project`/`baseline` — done to unify that concept with task-level
 `completed` (checkbox in the row, not a menu action; see "Where to make common changes" and
-`gantt-row.js` below). Because real data folders on a shared OneDrive/network location can't be
-migrated by hand, `manifest.schemaVersion` gates automatic, one-time upgrades:
+`gantt-row.js` below) — and a still-later, equally narrow rename of `week.milestone` from a plain
+boolean to one of `MP.schema.MILESTONE_TYPES` (see "Milestones" under Key rules above). Because
+real data folders on a shared OneDrive/network location can't be migrated by hand,
+`manifest.schemaVersion` gates automatic, one-time upgrades:
 `MP.legacyMigration.migrateIfNeeded` ([js/data/legacy-migration.js](js/data/legacy-migration.js)),
 called as the first step of `repository.loadDataset`, checks the version on every folder connect
-and dispatches to one of two incremental transforms based on what it finds (both converge on the
-current `SCHEMA_VERSION`, currently `3`):
+and dispatches to one of three incremental transforms based on what it finds (all converge on the
+current `SCHEMA_VERSION`, currently `4`):
 
 - **v1 (or missing) → current**: the folder is legacy Italian-named data — old-shaped files are
   read (following `manifest.progetti`, the old field name, since the manifest itself hasn't been
   transformed yet), transformed in memory via the module's pure `transformManifest`/
   `transformTeamResources`/`transformProject` functions (which now also emit `completed` instead of
-  `archiviato`/`archiviata`, so a v1 folder lands directly on the current shape in one pass), and
+  `archiviato`/`archiviata`, and map any truthy legacy `milestone` straight to `'readyForUat'`, so a
+  v1 folder lands directly on the current shape in one pass), and
   written under the current names (`team-resources.json`, `projects/`) — `manifest.json` is written
   **last**, so it doubles as the commit point: an interrupted migration just retries from scratch
   on the next connect, no partial state to reconcile. The old `team-risorse.json` file and
@@ -292,8 +395,15 @@ current `SCHEMA_VERSION`, currently `3`):
 - **v2 → current**: the folder is already English-named (current `PATHS`, no file/directory
   renaming needed) but still has `archived` instead of `completed` on project/baseline —
   `renameArchivedToCompletedProject`/`renameArchivedToCompletedBaseline` do a narrower rewrite of
-  just the project files, `manifest.json` written last as the commit point, same as above.
-  `team-resources.json` is untouched by this step.
+  just the project files, plus the same `milestone` boolean → type conversion as the v3 step below
+  (chained into the same write pass, not a separate migration run), `manifest.json` written last as
+  the commit point, same as above. `team-resources.json` is untouched by this step.
+- **v3 → current**: the folder is already on every current field name, but `week.milestone` is
+  still the pre-3-type boolean (`true`) instead of a `MILESTONE_TYPES` string —
+  `applyMilestoneTypeMigration`/`transformWeekEntryMilestoneType` rewrite every `milestone: true` to
+  `milestone: 'readyForUat'` (the shared, customer-facing deadline is the closest match to the old
+  single-flag concept) across every project file, `manifest.json` written last as the commit point,
+  same as above. `team-resources.json` is untouched by this step.
 
 A folder already on the current `schemaVersion` is detected cheaply (one small JSON parse) and
 skips migration entirely.
@@ -384,37 +494,47 @@ inserted at the right point in that list. Layers, low → high:
    used both by the cell popover warning and the gantt/resource-load highlighting),
    `validation.js` (orphan `team`/`initials` detection, plus `findTeamMismatches` for resources
    allocated under a team they no longer belong to), `milestones.js`
-   (`computeBaselineMilestones`: for each baseline, derives the single "effective" release week
-   from the (possibly duplicated/inconsistent) `milestone: true` flags across its tasks — the mode
-   across all tasks that have one set, reading completed tasks too since this is read-only
-   derivation, not the write-side sync in `gantt-view.js`; flags a baseline `inconsistent` if its
-   tasks disagree on the week, without correcting the underlying data — feeds the milestones page;
-   each row also carries `distinctDates` (every distinct ISO week found with `milestone: true`
-   across the baseline's tasks, sorted — not just the "winning" one), used by the function below to
-   surface the other dates of an inconsistent baseline rather than silently picking one.
-   `countUpcomingBaselines` filters those same rows to `settimana >= getTodayIso()` — a simple ISO
-   string compare, valid since both sides are `YYYY-MM-DD` — and feeds the "upcoming baselines"
-   count in the shared `dataset-header.js`, so gantt/resource-load users see it without opening
-   the Milestones page. `computeUpcomingMilestonesByMonth(dataset, showCompletedProjects)` is the pure
-   derivation behind the Milestones page's copyable list (see below): filters to the same
-   `settimana >= getTodayIso()` upcoming rows, then — for an `inconsistent` baseline — picks the
-   *most recent* of `distinctDates` as `displayDate` (deliberately different from
-   `computeBaselineMilestones`'s own "most frequent, earliest on tie" pick, which stays unchanged
-   for the grid/histogram/upcoming-count) and keeps the rest as `otherDates`; groups rows by
-   calendar month (`YYYY-MM` of `displayDate`), sorted ascending, rows within a month sorted by
-   date then project name. Returns plain data (no formatted strings, no DOM) — date/month display
-   formatting is the UI layer's job, kept out of this pure-derivation module). `week-utils.js` also
-   exports `getTodayIso()` (today's date, recomputed from the browser clock on every call, never
-   persisted) alongside the pre-existing `getCurrentWeekIso()` (the Monday of the week containing
-   today) — `countUpcomingBaselines` uses the former since a release date is a specific day, not a
-   week-column highlight.
+   (`computeBaselineMilestones`: for each baseline, derives the "effective" release week
+   **independently for each of the 2 baseline-shared milestone types** — see "Milestones" under
+   Key rules above — from the (possibly duplicated/inconsistent) `readyForUat`/`uat` weeks across
+   its tasks — the mode across all tasks that have one set for that type, reading completed tasks
+   too since this is read-only derivation, not the write-side sync in `gantt-view.js`; flags that
+   type `inconsistent` on a baseline if its tasks disagree on the week, without correcting the
+   underlying data — feeds the milestones page. Each row is `{file, progetto, baseline,
+   showProgetto, baselineIndex, readyForUat: {...}, uat: {...}}`, with `readyForUat`/`uat` each
+   `{settimana, distinctDates, taskName, inconsistent}` — `distinctDates` is every distinct ISO
+   week found for that type across the baseline's tasks, sorted (not just the "winning" one), used
+   by the function below to surface the other dates of an inconsistent series rather than silently
+   picking one. `taskDeadline` (the 3rd, per-task type) is deliberately excluded from this whole
+   module — it stays visible only on the gantt cell and in the popover, never aggregated here.
+   `countUpcomingBaselines` returns `{readyForUat, uat}` (each a count of rows whose `settimana`
+   for that type is `>= getTodayIso()` — a simple ISO string compare, valid since both sides are
+   `YYYY-MM-DD`) and feeds the "Upcoming: N Ready for UAT, M UAT" line in the shared
+   `dataset-header.js`, so gantt/resource-load users see it without opening the Milestones page.
+   `computeUpcomingMilestonesByMonth(dataset, showCompletedProjects)` is the pure derivation behind
+   the Milestones page's copyable list (see below): iterates both shared types per baseline row,
+   filters to the same `settimana >= getTodayIso()` upcoming rows, then — for an `inconsistent`
+   series — picks the *most recent* of `distinctDates` as `displayDate` (deliberately different
+   from `computeBaselineMilestones`'s own "most frequent, earliest on tie" pick, which stays
+   unchanged for the grid/histogram/upcoming-count) and keeps the rest as `otherDates`; each
+   resulting item also carries `type`/`label` so a baseline can legitimately appear twice in the
+   list (once per shared type, normally on two different dates thanks to the ordering invariant);
+   groups rows by calendar month (`YYYY-MM` of `displayDate`), sorted ascending, rows within a
+   month sorted by date then project name. Returns plain data (no formatted strings, no DOM) —
+   date/month display formatting is the UI layer's job, kept out of this pure-derivation module).
+   `week-utils.js` also exports `getTodayIso()` (today's date, recomputed from the browser clock on
+   every call, never persisted) alongside the pre-existing `getCurrentWeekIso()` (the Monday of the
+   week containing today) — `countUpcomingBaselines` uses the former since a release date is a
+   specific day, not a week-column highlight.
    `week-shift.js` is a small, self-contained pure module for the "shift" feature (see
-   `gantt/` below): `canShiftWeeks(dataset, task, weeks, direction)` is the ammissibility
+   `gantt/` below): `canShiftWeeks(dataset, task, weeks, direction, baseline)` is the ammissibility
    predicate (blocks on `task.completed`, on any *source* week in the selected range itself
    carrying `completed: true` — per-week completion, see the Key rules section above, is "closed
    data" just like a completed task and is never moved — on the shift crossing
-   `manifest.weeks.first`/`last`, or on the one destination week that falls outside the selected
-   block already holding a non-empty entry in *this* task — reused both to enable/disable the
+   `manifest.weeks.first`/`last`, on the one destination week that falls outside the selected
+   block already holding a non-empty entry in *this* task, or on shifting a milestone week in a way
+   that would break the ordering invariant from "Milestones" above (`baseline` is only needed for
+   this last check, via `MP.milestoneRules.checkChange`) — reused both to enable/disable the
    shift menu items and as a safety re-check before mutating) and `shiftWeeksData(task, weeks,
    direction)` is the mutation, which snapshots every entry in `weeks` before deleting any of them
    so the write pass is never order-dependent — this preserves each cell's own content when
@@ -436,16 +556,22 @@ inserted at the right point in that list. Layers, low → high:
    `skippedCompletedCount`; individual stationary/completed weeks left in place inside an
    otherwise-active task are reported separately via `skippedCompletedWeeksCount` — both feed the
    `MP.baselineCrud.shiftBaseline` confirmation prompt so the user knows what was left untouched.
-   Milestones need no dedicated re-sync (unlike `syncBaselineMilestone` in `gantt-view.js`, which
-   *propagates* a milestone across a baseline's tasks): here every moving task moves by the same
-   delta, so a milestone already shared across tasks stays shared after the shift — the only
-   edge case is a milestone that lived solely on a `completed` task or on a stationary completed
-   week, which then diverges from the (now-shifted) rest of the baseline; this simply shows up as
-   `inconsistent` on the Milestones page like any other pre-existing disagreement, self-healing
-   the next time a milestone in that baseline is touched via the popover. If shifting would push
-   even one *moving* week outside `manifest.weeks.first`/`last`, the whole operation is blocked
-   (no partial shift, no auto-extension of the manifest range) — `MP.baselineCrud.shiftBaseline`
-   (see `crud/` below) surfaces the reason via `window.alert`.
+   Milestones need no dedicated re-sync for staying *shared* (unlike `syncBaselineMilestone` in
+   `gantt-view.js`, which *propagates* a milestone across a baseline's tasks): here every moving
+   task moves by the same delta, so a `readyForUat`/`uat` week already shared across tasks stays
+   shared after the shift — the only edge case is a milestone that lived solely on a `completed`
+   task or on a stationary completed week, which then diverges from the (now-shifted) rest of the
+   baseline; if that divergence is otherwise harmless it simply shows up as `inconsistent` on the
+   Milestones page like any other pre-existing disagreement, self-healing the next time a milestone
+   in that baseline is touched via the popover — but if it would additionally break the strict
+   ordering invariant from "Milestones" under Key rules above (e.g. a stationary `readyForUat` week
+   ending up *after* a moving `uat` week for the same task), `canShiftBaseline`'s second per-task
+   pass (`MP.milestoneRules.checkTaskOrderingAfterShift`, see the `milestone-rules.js` entry above)
+   blocks the **whole** operation with a reason naming the task, same "no partial shift" principle
+   as the collision/range checks. If shifting would push even one *moving* week outside
+   `manifest.weeks.first`/`last`, the whole operation is likewise blocked (no partial shift, no
+   auto-extension of the manifest range) — `MP.baselineCrud.shiftBaseline` (see `crud/` below)
+   surfaces every one of these reasons via `window.alert`.
 4. **`js/ui/`** — rendering + event wiring, organized by concern:
    - `common/`: generic building blocks reused across views — `modal.js` (blocking dialogs:
      `confirmConflict` for save conflicts, `promptText`/`promptColor` single-field prompts, plus
@@ -514,8 +640,9 @@ inserted at the right point in that list. Layers, low → high:
      line — connected folder name (`state.dirHandle.name`; the File System Access API never
      exposes an absolute filesystem path, see Hard Constraints/`app.js` — this is the closest
      available proxy for "which data folder is this") + week range + task-row count + project
-     count + upcoming-baseline count (`MP.milestones.countUpcomingBaselines`, release week ≥ today —
-     see `milestones.js` above), computed via `MP.ganttView.buildRows` so all pages report the exact
+     count + upcoming-milestone counts (`MP.milestones.countUpcomingBaselines`, returns
+     `{readyForUat, uat}`, release week ≥ today per type — see `milestones.js` above), rendered as
+     "Upcoming: N Ready for UAT, M UAT", computed via `MP.ganttView.buildRows` so all pages report the exact
      same numbers — plus the team-color legend from `legend.js`; takes
      an optional extra element to append to the info line, used by the gantt page for its
      completed toggles (the "+ New project" button that used to live here moved to
@@ -557,8 +684,9 @@ inserted at the right point in that list. Layers, low → high:
      disappearing entirely. A project's own `completed` still wins first — a completed project
      hides regardless of its baselines' individual flags. `MP.milestones.computeBaselineMilestones`
      applies the same per-baseline filter (same `showCompletedProjects` flag, no separate toggle),
-     so a completed baseline's release also drops out of the milestones page and the header's
-     "upcoming baselines" count. Completing a baseline never touches its tasks/data, and does
+     so a completed baseline's releases (both shared milestone types) also drop out of the
+     milestones page and the header's "Upcoming: …" counts. Completing a baseline never touches its
+     tasks/data, and does
      **not** exclude them from overallocation/team-mismatch checks either (unlike task-level
      `completed`) — same no-destructive-auto-correction principle as project completion, purely a
      visibility change. `gantt-row.js` renders one task row; `gantt-cell.js` renders one
@@ -577,26 +705,33 @@ inserted at the right point in that list. Layers, low → high:
      reopening the dropdown — then multi-select resources restricted to that team and sorted
      alphabetically by `name` (`localeCompare`, computed on a copy so `team.resources`'s stored
      order in `team-resources.json` is never mutated), then a "Completed" checkbox — single-cell
-     **and** bulk mode alike, see "Key rules" above — then the milestone flag — milestone only in
-     single-cell mode, see below — autosave on close, non-blocking double-allocation warning),
+     **and** bulk mode alike, see "Key rules" above — then a milestone type selector (a 4-option
+     radio group: None / Task deadline / Ready for UAT / UAT — single-cell mode only, see
+     "Milestones" under Key rules above and below) — autosave on close, non-blocking
+     double-allocation warning, plus a separate non-blocking informational note when the chosen
+     shared type would also update other tasks in the baseline),
      opened only from the right-click handler
      (`gantt-view.js`'s `openCellContextMenu`, see `cell-selection.js` below), never from a plain
-     click; a task admits only **one** milestone week, and all
-     tasks of the same baseline share a single milestone: `gantt-view.js`'s `handleCellSaved`
-     calls `syncBaselineMilestone` when a saved entry has `milestone: true` — it clears the flag
+     click; a task admits only **one** week per milestone type (up to 3 total, see "Milestones"
+     under Key rules above), and the 2 shared types (`readyForUat`/`uat`) are each shared by all
+     tasks of the same baseline: `gantt-view.js`'s `handleCellSaved` first runs the hard-block
+     ordering check (`MP.milestoneRules.checkChange` — `window.alert` + abort with no mutation on
+     failure), then, for a shared type, calls `syncBaselineMilestone` — it clears that same type
      from every other week of every non-`completed` task in `baseline.task` (including the edited
      task itself) and sets it on the new week for all of them, preserving any existing
-     `team`/`resources` on that week rather than overwriting it; unchecking the milestone
+     `team`/`resources` on that week rather than overwriting it; unchecking a shared type
      (`clearBaselineMilestone`) is symmetric, removing it from the other tasks that had inherited
-     it too — otherwise the "shared deadline" invariant would silently drift. `completed` tasks
+     it too — otherwise the "shared deadline" invariant would silently drift. `taskDeadline`, being
+     never shared, only ever touches the edited task itself. `completed` tasks
      are skipped in both directions (same "closed tasks are never auto-touched" principle as
      team-mismatch handling above). This still uses the existing per-cell `cell-popover.js` as the
      only UI — no dedicated baseline-deadline popover — and the field stays duplicated on each
      `task.weeks[iso]` rather than moving to `baseline` itself; pre-existing datasets with
-     inconsistent milestones across a baseline's tasks are **not** migrated automatically — they
-     self-heal only the next time any task in that baseline has its milestone touched via the
-     popover. This resolves the "Milestone unica per baseline" item in
-     `requirements/backlog.md`, which should be removed/marked done there.
+     inconsistent shared-type dates across a baseline's tasks are **not** migrated automatically —
+     they self-heal only the next time any task in that baseline has that milestone type touched
+     via the popover (a rejected hard-block save never self-heals anything, since it never
+     mutates). This supersedes the "Milestone unica per baseline" item in
+     `requirements/backlog.md`, now marked `[Superato]` there in favor of the 3-type model.
      `cell-selection.js` is the **single** range-selection controller for the whole grid,
      confined to one task row at a time (module-singleton state, highlighted via the
      `cell-selected` CSS class rather than the app store, since it doesn't need to survive a full
@@ -609,8 +744,8 @@ inserted at the right point in that list. Layers, low → high:
      array to `gantt-view.js`'s `openCellContextMenu`, which:
      - always opens `cell-popover.js` **below** the cell (single-cell mode for a lone week,
        bulk mode — same team+resources+`completed` applied to every selected week, no milestone
-       field, see `requirements/backlog.md` on why milestone stays a single-cell/single-baseline
-       concept — for a multi-week range);
+       field, see "Milestones" under Key rules above on why milestones stay a single-cell concept
+       — for a multi-week range);
      - additionally opens the shift menu (see below) **above** the cell, at the same time, but
        only if at least one week in the range already has an allocation (`MP.schema.isWeekEntryEmpty`
        checked per week) — an empty range has nothing to shift.
@@ -646,7 +781,8 @@ inserted at the right point in that list. Layers, low → high:
      resolved) — before running `handleCellsShift`, so a pending edit is always committed first
      and the shift never runs against stale data or races the popover's own save on the same file.
      `handleCellsShift` does the actual mutation + baseline-milestone resync (reuses
-     `syncBaselineMilestone` for any shifted week that carried `milestone: true`) + save, then —
+     `syncBaselineMilestone`, per type, for any shifted week that carried a shared-type milestone —
+     `taskDeadline` weeks just move with the entry, no resync needed) + save, then —
      mirroring the `lastEdited` re-render problem above — re-finds the destination cell's div via
      `gantt-cell.js`'s `getCellDiv(task, settimana)` (a `WeakMap<task, Map<settimana, div>>`
      rebuilt on every `renderWeekCell` call), calls `MP.cellSelection.relocate` to move the
@@ -677,11 +813,20 @@ inserted at the right point in that list. Layers, low → high:
      projects (`gantt-row.js`'s "⋮" menu still has ↑/↓ for those), the task-level ↑/↓
      menu entries and `MP.taskCrud.moveTask` were removed as redundant once drag&drop covered the
      same ground (including the cross-baseline case ↑/↓ used to handle via adjacent-swap-or-append).
-     If the dragged task's week carried `milestone: true`, it is **not** resynced against the
-     destination baseline's milestone (same non-auto-correction principle as elsewhere) — any
-     resulting disagreement is only surfaced passively via `MP.milestones.computeBaselineMilestones`'s
-     existing `inconsistent` marker on the Milestones page, and self-heals the next time a
-     milestone in that baseline is touched through `cell-popover.js`.
+     Unlike every other mutation in `moveTaskToPosition`, a cross-baseline move (`sourceBaseline
+     !== targetBaseline`) is **not** unconditionally allowed when the dragged task carries any
+     milestone: it first adopts the destination baseline's current `readyForUat`/`uat` dates onto
+     the task (`findBaselineSharedMilestoneDates`/`applyAdoptedSharedDates` in `task-crud.js`,
+     reusing the same non-destructive `{...existing, milestone: type}` merge `syncBaselineMilestone`
+     uses elsewhere — the task's own `taskDeadline`, if any, is left untouched), then validates the
+     resulting triple via `MP.milestoneRules.checkOrdering` — on failure, `window.alert(reason)` and
+     the whole move is aborted **before** the `splice`/persist, so the task visually stays put (no
+     `setState` fires). This is a deliberate behavior change from the pre-3-type model, where a
+     dragged task's milestone was never touched at all and any resulting mismatch just surfaced
+     passively as `inconsistent`; a same-baseline reorder (pure position change, no baseline
+     crossed) still skips all of this — no date can change by definition. `task-drag.js`'s
+     `handleDrop` calls `moveTaskToPosition` without awaiting/checking a return value, which is safe
+     precisely because a rejected move never mutates or calls `setState`.
 
      **Baseline drag&drop** (reorder a project's baselines): `js/ui/gantt/baseline-drag.js`
      mirrors `task-drag.js`'s module-singleton pattern, simplified since a baseline only ever
@@ -739,25 +884,30 @@ inserted at the right point in that list. Layers, low → high:
    - `team-resources/team-resources-view.js`: the dedicated CRUD page for teams and their
      resources (create/rename/recolor/delete team; create/rename/move/delete resource within a
      team) — the only place in the UI where `team-resources.json` is edited.
-   - `milestones/milestones-view.js`: read-only report on the density of baseline release
-     milestones across the calendar. Renders, top to bottom: the shared header (with a
-     "📋 Upcoming milestones" button and the "Total releases in period" counter appended to its
-     info line), a bar-chart histogram, and the full-period calendar grid — the list itself is
-     opened on demand rather than rendered in-page (see below), so only these two sections are
-     scoped to the whole dataset period.
+   - `milestones/milestones-view.js`: read-only report on the density of the 2 baseline-shared
+     milestone types (Ready for UAT / UAT — `taskDeadline` is deliberately out of scope, see
+     "Milestones" under Key rules above) across the calendar. Renders, top to bottom: the shared
+     header (with a "📋 Upcoming milestones" button and a "Total releases in period: N Ready for
+     UAT, M UAT" counter appended to its info line), a bar-chart histogram, and the full-period
+     calendar grid — the list itself is opened on demand rather than rendered in-page (see below),
+     so only these two sections are scoped to the whole dataset period.
      - The **upcoming-releases list** is a popover (`MP.modal.showMilestoneList`, in
        `js/ui/common/modal.js`, same header-with-copy-icon style as the workload/allocations
        card, `renderMilestoneListCard`/`.milestone-list-card`), opened by the header's
        "📋 Upcoming milestones" button rather than rendered as a fixed in-page section — kept out
        of the page flow so a long list can't squeeze the histogram/grid below it (see `js/app.js`'s
        single-scrollbar layout below). It's backed by
-       `MP.milestones.computeUpcomingMilestonesByMonth` (only future releases, grouped by calendar
-       month) and rendered as a plain `<h4>`/`<ul>` per month, one `<li>` per baseline formatted as
-       `"<day Mon year> — <project> — <baseline version>"` (plus `" (other dates: …)"` when the
-       baseline's milestone is `inconsistent`, using the *most recent* of the tasks' distinct dates
-       as the shown one — see `distinctDates` on `js/model/milestones.js` above). Its copy-icon
-       button (disabled when the list is empty) builds the same text as plain lines (`"- "`
-       bullets, month names as their own line, blank line between months) and calls
+       `MP.milestones.computeUpcomingMilestonesByMonth` (only future releases of both shared types,
+       grouped by calendar month — a baseline can appear twice, once per type) and rendered as a
+       plain `<h4>`/`<ul>` per month, one `<li>` per row formatted as
+       `"<day Mon year> — <type label> — <project> — <baseline version>"` (plus
+       `" (other dates: …)"` when that type is `inconsistent` for the baseline, using the *most
+       recent* of the tasks' distinct dates as the shown one — see `distinctDates` on
+       `js/model/milestones.js` above), each `<li>` also carrying a
+       `.milestone-list-item-ready-for-uat`/`-uat` class (colored left border matching the type's
+       gantt-cell border color) so the two series stay visually distinguishable in the flat list.
+       Its copy-icon button (disabled when the list is empty) builds the same text as plain lines
+       (`"- "` bullets, month names as their own line, blank line between months) and calls
        `navigator.clipboard.writeText` — the first use of the Clipboard API in this codebase;
        wrapped in try/catch with a `MP.toast.showToast` success/error message, same non-blocking
        feedback pattern as the Backup action in `toolbar.js`. Date/month display formatting
@@ -768,21 +918,35 @@ inserted at the right point in that list. Layers, low → high:
        on a long list.
      - The **grid** is one row per baseline (fixed columns "Project"/"Baseline" only — no per-task
        row, since `MP.milestones.computeBaselineMilestones` already collapses each baseline to its
-       single effective release week) instead of the gantt's per-task rows; same week columns/range
-       as gantt and resource-load (`MP.weekUtils.getWeeksInRange`) and the same shared
-       `dataset-header.js`, filtered by the same `state.ui.showCompletedProjects` flag (no dedicated toggle
-       on this page, so its row set always matches the project count shown in the shared header). A
-       row whose baseline has inconsistent milestone dates across its tasks gets a `row-inconsistent`
-       amber marker (never auto-corrected, same non-blocking-warning principle as team mismatches).
+       2 independent effective release weeks, `row.readyForUat`/`row.uat`) instead of the gantt's
+       per-task rows; a week cell gets the matching `.milestone-ready-for-uat`/`.milestone-uat`
+       border class (reused from `gantt-cell.js`) whichever series lands on that iso — the ordering
+       invariant means the two normally land on different columns for a consistent baseline; same
+       week columns/range as gantt and resource-load (`MP.weekUtils.getWeeksInRange`) and the same
+       shared `dataset-header.js`, filtered by the same `state.ui.showCompletedProjects` flag (no
+       dedicated toggle on this page, so its row set always matches the project count shown in the
+       shared header). A row where *either* type is inconsistent across its tasks gets a
+       `row-inconsistent` amber marker (never auto-corrected, same non-blocking-warning principle
+       as team mismatches). The **2** total rows (one per type, `.milestone-total-cell-
+       ready-for-uat`/`-uat` for distinct text color, replacing what used to be a single
+       "Total/week" row) live in their own small `.milestone-totals-grid` — a second `.gantt-grid`
+       (same `gridTemplateColumns` as the main one, so columns stay aligned) positioned between the
+       histogram and the main calendar grid, boxed with its own border/background so it reads as a
+       summary rather than as the tail end of the baseline grid below it.
      - The **histogram** — inside the same `.gantt-scroll` as the grid so it scrolls horizontally in
-       sync without any dedicated sync code, placed *before* the grid in DOM order — is a bar-chart
-       row (`.milestone-histogram`) of releases per week, outside the `.gantt-grid` itself because
-       CSS Grid's `grid-auto-rows: 24px` is too short for readable bars.
-     - The total release count (whole period) feeds the "Total releases in period" counter passed
-       as `dataset-header.js`'s extra element (distinct from the header's own "upcoming baselines"
-       count, which is scoped to today-and-later rather than the whole period — same scope as the
-       list above, but computed independently via `countUpcomingBaselines` for the header vs.
-       `computeUpcomingMilestonesByMonth` for the list, since the header only needs a count).
+       sync without any dedicated sync code, placed *before* the totals grid and the main grid in
+       DOM order — is a bar-chart row (`.milestone-histogram`) of releases per week, outside the
+       `.gantt-grid` itself because CSS Grid's `grid-auto-rows: 24px` is too short for readable
+       bars. Each week's bar is a single column stacked into 2 colored segments
+       (`.milestone-hist-seg-ready`/`-uat`, sized via `flexGrow` proportional to each type's count
+       within `flex-direction: column-reverse`) rather than two side-by-side bars, since a 46px
+       week column has no room for two.
+     - The total release counts (whole period, one per type) feed the "Total releases in period: …"
+       counter passed as `dataset-header.js`'s extra element (distinct from the header's own
+       "Upcoming: …" counts, which are scoped to today-and-later rather than the whole period —
+       same scope as the list above, but computed independently via `countUpcomingBaselines` for
+       the header vs. `computeUpcomingMilestonesByMonth` for the list, since the header only needs
+       counts).
    - `weeks/week-controls.js`: exports two standalone edge-button renderers (no combined control
      bar, no count input). `gantt-view.js` places them **inside the weeks grid itself**, in an
      extra row above the column-label row (`.gantt-cell.week-edge-row`, class `has-week-edge-row`
@@ -861,13 +1025,3 @@ inserted at the right point in that list. Layers, low → high:
   (a new conflict check, a new soft "did this change" probe, …) should reuse
   `MP.repository.readTextFileOrNull(dirHandle, path)` rather than reimplementing the try/catch —
   see `save-coordinator.js` and `remote-check.js` for the two existing consumers.
-
-## graphify
-
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
-
-Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

@@ -19,6 +19,24 @@
   // ormai eliminati non trattengono i div in memoria.
   const cellRegistry = new WeakMap();
 
+  // Le 3 tipologie di milestone (MP.schema.MILESTONE_TYPES) sono reciprocamente
+  // esclusive su una stessa cella (al più un `entry.milestone` per settimana),
+  // quindi condividono un'unica posizione di badge (in basso a sinistra, l'unico
+  // angolo ancora libero — orphan-team/orphan-resource stanno in alto a destra,
+  // team-mismatch in basso a destra, vedi sotto e css/styles.css) mentre restano
+  // distinte fra loro per colore del bordo + glifo del badge.
+  const MILESTONE_CELL_CLASS = {
+    taskDeadline: 'milestone-task-deadline',
+    readyForUat: 'milestone-ready-for-uat',
+    uat: 'milestone-uat',
+  };
+  const MILESTONE_BADGE_CLASS = {
+    taskDeadline: 'badge-milestone-task-deadline',
+    readyForUat: 'badge-milestone-ready-for-uat',
+    uat: 'badge-milestone-uat',
+  };
+  const MILESTONE_BADGE_GLYPH = { taskDeadline: '◆', readyForUat: 'R', uat: 'U' };
+
   function registerCell(task, settimana, div) {
     let perSettimana = cellRegistry.get(task);
     if (!perSettimana) {
@@ -61,9 +79,20 @@
       }
     }
 
-    if (entry && entry.milestone) {
-      div.classList.add('milestone');
-      titleParts.push('Delivery milestone');
+    if (entry && entry.milestone && MILESTONE_CELL_CLASS[entry.milestone]) {
+      div.classList.add(MILESTONE_CELL_CLASS[entry.milestone]);
+      titleParts.push(MP.schema.MILESTONE_LABELS[entry.milestone]);
+      // UAT è l'unico tipo con sfondo pieno rosso (richiesta esplicita: "bordo
+      // rosso e fondo rosso e simbolo bianco") — sovrascrive volutamente lo
+      // sfondo team/completed impostato sopra, sempre, così resta il segnale
+      // visivo più forte dei 3 tipi.
+      if (entry.milestone === MP.schema.MILESTONE_TYPES.UAT) {
+        div.style.background = '#d32f2f';
+      }
+      const badge = document.createElement('span');
+      badge.className = `badge-milestone-type ${MILESTONE_BADGE_CLASS[entry.milestone]}`;
+      badge.textContent = MILESTONE_BADGE_GLYPH[entry.milestone];
+      div.appendChild(badge);
     }
 
     if (entry && entry.completed) {

@@ -25,7 +25,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -61,7 +61,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -80,7 +80,7 @@
               "resources": [
                 "RP"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-02-23": {
               "team": "vv",
@@ -123,7 +123,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -152,7 +152,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -165,7 +165,7 @@
               "resources": [
                 "JA"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-01-26": {
               "team": "run",
@@ -208,7 +208,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -224,7 +224,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -253,7 +253,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -269,7 +269,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -297,7 +297,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -311,7 +311,7 @@
                 "MF",
                 "KK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -347,7 +347,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -382,7 +382,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -411,7 +411,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -440,7 +440,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -467,7 +467,7 @@
                 "WH",
                 "CK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -490,7 +490,7 @@
               ]
             },
             "2026-07-13": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -512,7 +512,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -539,7 +539,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -554,7 +554,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -569,7 +569,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -591,7 +591,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -607,7 +607,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }

@@ -12,15 +12,20 @@
 
   // `weeks` è l'array ordinato di iso settimana coinvolte (una singola cella o
   // l'intero range selezionato), `direction` è -1 (indietro) o +1 (avanti).
-  // Blocca se: il task è completed, una qualunque delle settimane sorgente è
-  // marcata completed (completamento parziale — stesso principio "dato chiuso
-  // mai toccato" del task interamente completed), lo spostamento uscirebbe dal
+  // `baseline` (opzionale) è necessaria solo per il controllo d'ordine delle
+  // milestone qui sotto — se assente quel controllo viene saltato. Blocca se:
+  // il task è completed, una qualunque delle settimane sorgente è marcata
+  // completed (completamento parziale — stesso principio "dato chiuso mai
+  // toccato" del task interamente completed), lo spostamento uscirebbe dal
   // range di settimane esistente (manifest.weeks.first/last, mai esteso
-  // automaticamente), oppure la (sola) cella di destinazione che cade fuori
-  // dal blocco selezionato contiene già un'allocazione non vuota nello stesso
-  // task — le altre celle di destinazione coincidono con celle già dentro il
-  // blocco e vengono sovrascritte intenzionalmente come parte dello shift.
-  function canShiftWeeks(dataset, task, weeks, direction) {
+  // automaticamente), la (sola) cella di destinazione che cade fuori dal
+  // blocco selezionato contiene già un'allocazione non vuota nello stesso
+  // task (le altre celle di destinazione coincidono con celle già dentro il
+  // blocco e vengono sovrascritte intenzionalmente come parte dello shift),
+  // oppure lo spostamento di una settimana con milestone violerebbe il
+  // vincolo d'ordine taskDeadline < readyForUat < uat (vedi
+  // js/model/milestone-rules.js) — un blocco genuino, non solo un warning.
+  function canShiftWeeks(dataset, task, weeks, direction, baseline) {
     if (task.completed) {
       return { allowed: false, reason: 'Completed task: shifting not allowed' };
     }
@@ -39,6 +44,12 @@
       if (!isWeekEntryEmpty(existing)) {
         return { allowed: false, reason: `The destination week (${targets[i]}) already has an allocation` };
       }
+    }
+    for (let i = 0; i < weeks.length; i++) {
+      const entry = (task.weeks || {})[weeks[i]];
+      if (!entry || !entry.milestone) continue;
+      const check = MP.milestoneRules.checkChange({ task, baseline, type: entry.milestone, newIso: targets[i] });
+      if (!check.ok) return { allowed: false, reason: check.reason };
     }
     return { allowed: true };
   }
@@ -116,6 +127,21 @@
         movedWeeksCount++;
       }
       if (taskHasMove) affectedTasksCount++;
+    }
+    // Secondo giro, per task: anche se nessuna settimana in movimento collide con
+    // un'altra (vedi sopra), una milestone STAZIONARIA (settimana completed, mai
+    // traslata — vedi shiftBaselineData sotto) può comunque rompere il vincolo
+    // d'ordine taskDeadline < readyForUat < uat rispetto alle altre milestone del
+    // task che invece si spostano. Non rilevabile dal solo controllo di
+    // collisione sopra: va verificato esplicitamente (vedi
+    // js/model/milestone-rules.js). Blocca l'intera operazione, stesso principio
+    // "nessuno shift parziale" del resto di questa funzione.
+    for (const task of baseline.task) {
+      if (task.completed) continue;
+      const check = MP.milestoneRules.checkTaskOrderingAfterShift(task, deltaWeeks);
+      if (!check.ok) {
+        return { allowed: false, reason: `${check.reason} (task "${task.name}")` };
+      }
     }
     return { allowed: true, affectedTasksCount, skippedCompletedCount, skippedCompletedWeeksCount, movedWeeksCount };
   }

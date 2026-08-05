@@ -43,7 +43,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -64,7 +64,7 @@
                 "DR",
                 "MH"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-02-16": {
               "team": "build",
@@ -104,7 +104,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -125,7 +125,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -145,7 +145,7 @@
                 "DR",
                 "DK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -161,7 +161,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -197,7 +197,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -211,7 +211,7 @@
                 "FA",
                 "RP"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-02-16": {
               "team": "devops",
@@ -247,7 +247,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -269,7 +269,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -290,7 +290,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -324,7 +324,7 @@
                 "KB",
                 "MF"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -360,7 +360,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -389,7 +389,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -423,7 +423,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -464,7 +464,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -492,7 +492,7 @@
                 "JR",
                 "WV"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-08-31": {
               "team": "run",
@@ -534,7 +534,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }

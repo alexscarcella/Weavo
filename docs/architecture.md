@@ -48,6 +48,7 @@ flowchart TB
         overalloc["overallocation.js"]
         validation["validation.js"]
         milestones["milestones.js"]
+        msrules["milestone-rules.js"]
         weekshift["week-shift.js"]
     end
     subgraph ui["js/ui — rendering + events"]
@@ -81,10 +82,11 @@ flowchart TB
    patch and notifies every subscriber synchronously.
 3. **`js/model/`** — pure functions over an in-memory dataset: week arithmetic, the
    cross-project overallocation index, non-blocking validation (orphan references, team
-   mismatches), baseline-release-milestone derivation (`milestones.js`, used by the
-   milestones page), and the ammissibility check + mutation behind shifting an allocation one
-   week back/forward (`week-shift.js`, used by the gantt view's shift feature). No I/O, no DOM
-   access, so these are trivially unit-testable in isolation.
+   mismatches), baseline-release-milestone derivation for the 2 shared milestone types
+   (`milestones.js`, used by the milestones page), the strict-ordering hard-block check shared by
+   every milestone write path (`milestone-rules.js`), and the ammissibility check + mutation
+   behind shifting an allocation one week back/forward (`week-shift.js`, used by the gantt view's
+   shift feature). No I/O, no DOM access, so these are trivially unit-testable in isolation.
 4. **`js/ui/`** — rendering and event wiring, split by concern rather than by component
    framework conventions: `common/` (modal, toast, context menu, toolbar — including the current
    page's title next to the hamburger button — dataset-header, app-header), `crud/` (one file per
@@ -92,8 +94,9 @@ flowchart TB
    team/resource management, milestones density report, week-range controls). The gantt and
    resource-load pages share a header (week range, task/project/upcoming-baseline counts, color
    legend) via `common/dataset-header.js`, so the two views always report identical numbers; the
-   upcoming-baseline count is `MP.milestones.countUpcomingBaselines` (release week ≥ today) and the
-   milestones page reuses the same header component.
+   upcoming-baseline counts come from `MP.milestones.countUpcomingBaselines` (release week ≥ today,
+   returns `{ readyForUat, uat }` — the 2 shared milestone types are tracked as independent series
+   throughout `milestones.js`) and the milestones page reuses the same header component.
 5. **`js/app.js`** — the entry point. Subscribes to the store, maps `state.status` to a render
    function, and owns the initial directory-picker flow. Also renders the static brand header
    (`MP.appHeader`) once at startup into `#app-header`, a sibling of `#app` — it sits outside the

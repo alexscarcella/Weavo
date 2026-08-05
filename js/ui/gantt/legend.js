@@ -46,7 +46,9 @@
     });
 
     div.appendChild(staticItem('#d9d9d9', null, 'Closed'));
-    div.appendChild(staticItem(null, 'legend-milestone', 'Milestone'));
+    div.appendChild(staticItem(null, 'legend-milestone-task-deadline', MP.schema.MILESTONE_LABELS.taskDeadline));
+    div.appendChild(staticItem(null, 'legend-milestone-ready-for-uat', MP.schema.MILESTONE_LABELS.readyForUat));
+    div.appendChild(staticItem(null, 'legend-milestone-uat', MP.schema.MILESTONE_LABELS.uat));
     div.appendChild(staticItem(null, 'legend-overallocated', 'Overallocated'));
     div.appendChild(staticItem(null, 'legend-mismatch', 'Team to regularize'));
     div.appendChild(badgeItem('', '?', 'Team not defined'));

@@ -30,7 +30,7 @@
                 "CT",
                 "GS"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-03-09": {
               "team": "dev",
@@ -71,7 +71,7 @@
               ]
             },
             "2026-04-06": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -105,7 +105,7 @@
               ]
             },
             "2026-07-20": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -127,7 +127,7 @@
               ]
             },
             "2026-07-20": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -147,7 +147,7 @@
                 "CT",
                 "GS"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-07-13": {
               "team": "run",
@@ -181,7 +181,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -202,7 +202,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -225,7 +225,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -248,7 +248,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -264,7 +264,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -279,7 +279,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }

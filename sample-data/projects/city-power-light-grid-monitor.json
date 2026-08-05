@@ -25,7 +25,7 @@
               ]
             },
             "2026-03-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -60,7 +60,7 @@
               ]
             },
             "2026-03-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -96,7 +96,7 @@
               ]
             },
             "2026-03-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -117,7 +117,7 @@
                 "RP",
                 "CK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -139,7 +139,7 @@
               ]
             },
             "2026-03-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -159,7 +159,7 @@
                 "AK",
                 "CT"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-01-26": {
               "team": "build",
@@ -182,7 +182,7 @@
               ]
             },
             "2026-03-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -198,7 +198,7 @@
               ]
             },
             "2026-03-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -239,7 +239,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -254,7 +254,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -268,7 +268,7 @@
                 "KK",
                 "MF"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-08": {
               "team": "vv",
@@ -296,7 +296,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -330,7 +330,7 @@
               ]
             },
             "2026-09-28": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -353,7 +353,7 @@
               ]
             },
             "2026-09-28": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -367,7 +367,7 @@
                 "MH",
                 "DR"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-09-07": {
               "team": "run",

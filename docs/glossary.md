@@ -68,11 +68,17 @@ document (Italian field names, `team-risorse.json`, `progetti/`), triggered on c
 week range (`weeks.first`/`weeks.last`). See [database.md](database.md).
 
 ### Milestone
-A flag (`milestone: true`) on a specific week entry within a task, meaning that week is a
-deadline/checkpoint. Stored per task-per-week in the schema, but the gantt UI enforces it as a
-baseline-wide concept: setting it on one task propagates it to every other non-`completed` task of
-the same baseline (same week), and only one milestone week exists per baseline at a time. See
-[database.md](database.md).
+A typed deadline/checkpoint (`milestone: '<type>'`) on a specific week entry within a task, one of
+3 mutually-exclusive types (`MP.schema.MILESTONE_TYPES`): **Task deadline** (`taskDeadline`), an
+internal deadline scoped to that one task, never shared; **Ready for UAT** (`readyForUat`) and
+**UAT** (`uat`), both baseline-wide — setting either on one task propagates it (same week) to every
+other non-`completed` task of the same baseline, exactly one week per type per baseline. Whichever
+of the 3 dates a task carries must be strictly increasing in that order (Task deadline < Ready for
+UAT < UAT, never the same week) — a genuine hard block, enforced on every write path that can move
+a milestone week (cell save, per-cell shift, whole-baseline shift, cross-baseline task drag). A
+`uat` week additionally never carries a resource allocation — `team`/`resources` are stripped
+wherever a `uat` entry is built or merged, and the cell popover disables the Team/Resources
+fields once "UAT" is picked. See [database.md](database.md).
 
 ### Orphan reference
 A `team` code or resource `initials` value used in a task's week entry, or in a project's

@@ -251,13 +251,27 @@ js/state/        a minimal in-memory store (pub/sub, no framework)
 js/model/        pure derivations: week arithmetic, overallocation, data validation
 js/ui/           rendering: the gantt view, team/resource management, popovers, toolbars
 sample-data/     a full example dataset to try the app with
+unit/            unit tests (Jest), mirroring the js/ layout 1:1
 ```
 
 ## Development
 
-There's no build step or test runner by design — it's plain classic-script JavaScript (a global
-`window` namespace, no ES modules, no TypeScript, no framework), which is what lets it run
-straight from a `file://` URL with zero setup.
+There's no build step by design — it's plain classic-script JavaScript (a global `window`
+namespace, no ES modules, no TypeScript, no framework), which is what lets it run straight from a
+`file://` URL with zero setup. That constraint applies to the app itself, not to development
+tooling: a Jest-based unit test suite lives under [`unit/`](unit/), mirroring `js/`'s folder
+structure (e.g. `js/data/schema.js` → `unit/data/schema.test.js`). It's a dev-only, npm-based
+tool (own `package.json`, gitignored `node_modules/`) — running it requires Node, running the app
+never does.
+
+```
+npm install   # once, installs Jest as a dev dependency
+npm test      # runs the suite (unit/**/*.test.js)
+```
+
+VS Code integration: the recommended [Jest extension](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest)
+(`.vscode/extensions.json`) adds a Testing panel and inline run/debug affordances; `.vscode/launch.json`
+provides a manual "Jest: current file" debug config as a fallback.
 
 Deeper documentation lives in [`docs/`](docs/):
 

@@ -28,7 +28,7 @@ filesystem *is* the database.
 
 ```json
 {
-  "schemaVersion": 2,
+  "schemaVersion": 4,
   "weeks": { "first": "2025-11-24", "last": "2027-01-11" },
   "projects": [
     { "file": "projects/example-project.json", "name": "Example Project" }
@@ -82,8 +82,10 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
           "completed": false,
           "weeks": {
             "2026-01-05": { "team": "dev", "resources": ["AB"] },
-            "2026-01-12": { "milestone": true },
-            "2025-12-29": { "team": "dev", "resources": ["AB"], "completed": true }
+            "2025-12-29": { "team": "dev", "resources": ["AB"], "completed": true },
+            "2026-01-08": { "milestone": "taskDeadline" },
+            "2026-01-12": { "milestone": "readyForUat" },
+            "2026-01-19": { "milestone": "uat" }
           }
         }
       ]
@@ -105,16 +107,26 @@ app: everything (legend, edit popovers, filters) renders dynamically from this f
 - Allocation is **boolean**, per task per week — a resource is either on a task that week, or it
   isn't. There's no percentage/fractional-effort field anywhere in the schema.
 - A week entry (`task.weeks[iso]`) is only meaningful with `team` + non-empty `resources`
-  together, or with `milestone: true` set — never a partial state like `{ "team": "dev",
-  "resources": [] }`. Entries are always built through `MP.schema.createWeekEntry(...)` to enforce
-  this.
-- A task admits only **one** milestone week, and all tasks of the same baseline share a single
-  milestone deadline: setting `milestone: true` on one task's week propagates it (same week) to
-  every other non-`completed` task of that baseline, clearing it from any other week on all of
-  them (last one set wins, never two milestones in the same baseline); unsetting it removes it
-  from the others too. Enforced in the gantt UI when saving a cell (`gantt-view.js`), not in the
-  schema itself — the flag stays duplicated per `task.weeks[iso]` rather than living on
-  `baseline` directly.
+  together, or with `milestone` set to one of 3 types, or with `completed: true` — never a partial
+  state like `{ "team": "dev", "resources": [] }`. Entries are always built through
+  `MP.schema.createWeekEntry(...)` to enforce this.
+- `milestone` is one of `MP.schema.MILESTONE_TYPES`: `taskDeadline` (per task, internal, never
+  shared), `readyForUat`, or `uat` (both baseline-wide). A task admits at most **one** week per
+  type (up to 3 milestone weeks total, one of each). Setting `readyForUat`/`uat` on one task's week
+  propagates it (same week, same type) to every other non-`completed` task of that baseline,
+  clearing that type from any other week on all of them (last one set wins per type, never two
+  weeks of the same type in one baseline); unsetting it removes it from the others too.
+  `taskDeadline` is never propagated. Whichever of the 3 types a task carries must be strictly
+  increasing in that order — Task deadline < Ready for UAT < UAT, never the same week — a hard
+  block (`js/model/milestone-rules.js`) enforced on every write path that can move a milestone week:
+  cell save, per-cell ◀/▶ shift, whole-baseline shift, and dragging a task to another baseline
+  (which adopts the destination baseline's `readyForUat`/`uat` dates before validating). Enforced in
+  the gantt UI when saving a cell (`gantt-view.js`), not in the schema itself — the flag stays
+  duplicated per `task.weeks[iso]` rather than living on `baseline` directly. A `uat` week can never
+  also carry `team`/`resources` — resource assignment is inhibited on the UAT week, enforced in
+  `MP.schema.createWeekEntry` (silently drops any allocation passed alongside `milestone: 'uat'`)
+  and mirrored at the UI layer (the cell popover disables the Team/Resources fields once "UAT" is
+  selected).
 - `completed: true` marks a task as finished: it's excluded from overallocation counting and from
   team-mismatch detection, but its data is never deleted or rewritten automatically. Toggled via
   the checkbox next to the task name, no confirmation.
@@ -184,14 +196,20 @@ scope boundary, not an oversight.
 below the current version, converts the folder in place — the exact transform depends on the
 detected version:
 
-- **v1 (or missing) → v3**: the oldest shape, with Italian JSON field names (`nome`, `sigla`,
+- **v1 (or missing) → v4**: the oldest shape, with Italian JSON field names (`nome`, `sigla`,
   `settimane`, `codice`, `versione`, `risorse`, `archiviato`, `concluso`, …), the file
   `team-risorse.json`, and the directory `progetti/`. Old-shaped files are read, transformed in
-  memory to the current shape, and written under the current names (`team-resources.json`,
-  `projects/`); the old `team-risorse.json` file and `progetti/` directory are then removed.
-- **v2 → v3**: data already in the current English-named shape (same `team-resources.json`/
+  memory to the current shape (including the milestone-type conversion below), and written under
+  the current names (`team-resources.json`, `projects/`); the old `team-risorse.json` file and
+  `progetti/` directory are then removed.
+- **v2 → v4**: data already in the current English-named shape (same `team-resources.json`/
   `projects/` paths, no file/directory renaming needed) but with `archived` instead of `completed`
-  on `project` and `baseline` — a narrower, field-rename-only pass over the project files.
+  on `project` and `baseline` — a field-rename-only pass over the project files, plus the same
+  milestone-type conversion below.
+- **v3 → v4**: data already on the current field names, but `week.milestone` is still the old
+  boolean (`true`) instead of one of `MP.schema.MILESTONE_TYPES` — every `milestone: true` becomes
+  `milestone: 'readyForUat'` (the shared, customer-facing deadline is the closest match to the old
+  single-flag concept). `team-resources.json` is untouched by this step.
 
 Either way, `manifest.json` is written last, so it acts as the commit point: an interrupted
 migration simply retries from scratch on the next connect, with no partial state to reconcile. A

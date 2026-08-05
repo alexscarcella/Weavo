@@ -16,13 +16,29 @@
 (function (MP) {
   'use strict';
 
-  const SCHEMA_VERSION = 3;
+  const SCHEMA_VERSION = 4;
 
   const PATHS = {
     manifest: 'manifest.json',
     teamResources: 'team-resources.json',
     projectsDir: 'projects',
     backupDir: 'backup',
+  };
+
+  // Le 3 tipologie di milestone (vedi requirements): "taskDeadline" è una
+  // scadenza interna, per singolo task, mai propagata; "readyForUat"/"uat"
+  // sono scadenze condivise a livello di baseline, propagate a tutti i task
+  // non completed della baseline (stesso meccanismo, vedi gantt-view.js). Una
+  // week entry porta al più UNA di queste tre. MILESTONE_ORDER è la sequenza
+  // cronologica obbligatoria (taskDeadline < readyForUat < uat, mai sulla
+  // stessa settimana) — ogni controllo d'ordine itera questo array invece di
+  // hardcodare la sequenza altrove, così la regola vive in un solo posto.
+  const MILESTONE_TYPES = { TASK_DEADLINE: 'taskDeadline', READY_FOR_UAT: 'readyForUat', UAT: 'uat' };
+  const MILESTONE_ORDER = [MILESTONE_TYPES.TASK_DEADLINE, MILESTONE_TYPES.READY_FOR_UAT, MILESTONE_TYPES.UAT];
+  const MILESTONE_LABELS = {
+    taskDeadline: 'Task deadline',
+    readyForUat: 'Ready for UAT',
+    uat: 'UAT',
   };
 
   const SEED_TEAM = [
@@ -174,36 +190,42 @@
    * coerenza decisa per il popover di editing: un'allocazione (team + resources)
    * è valida solo se entrambe le parti sono presenti; altrimenti resta solo
    * l'eventuale flag milestone (mai uno stato parziale tipo {team:"dev", resources:[]}).
+   * L'assegnazione di risorse è inoltre inibita sulla settimana dell'UAT (milestone
+   * 'uat'): `team`/`resources` vengono scartati anche se passati, qualunque sia
+   * l'input — la scadenza cliente-facing non deve mai coincidere con un'allocazione.
    * Va sempre usata al posto di costruire l'oggetto a mano.
    * @param {Object} [options]
    * @param {string} [options.team] - code team dell'allocazione.
    * @param {string[]} [options.resources] - initials delle risorse allocate.
-   * @param {boolean} [options.milestone] - flag di rilascio baseline su questa settimana.
+   * @param {string} [options.milestone] - tipo di milestone su questa settimana, uno dei
+   *   valori di MILESTONE_TYPES ('taskDeadline'|'readyForUat'|'uat'), o falsy per nessuna.
    * @param {boolean} [options.completed] - flag di completamento parziale di questa singola
    *   settimana (indipendente da task.completed) — vedi isWeekEntryEmpty.
-   * @returns {{team?: string, resources?: string[], milestone?: boolean, completed?: boolean}}
+   * @returns {{team?: string, resources?: string[], milestone?: string, completed?: boolean}}
    */
   function createWeekEntry({ team, resources, milestone, completed } = {}) {
     const entry = {};
-    if (team && Array.isArray(resources) && resources.length > 0) {
+    const validMilestone = milestone && MILESTONE_ORDER.includes(milestone) ? milestone : undefined;
+    const allowsAllocation = validMilestone !== MILESTONE_TYPES.UAT;
+    if (allowsAllocation && team && Array.isArray(resources) && resources.length > 0) {
       entry.team = team;
       entry.resources = resources;
     }
-    if (milestone) entry.milestone = true;
+    if (validMilestone) entry.milestone = validMilestone;
     if (completed) entry.completed = true;
     return entry;
   }
 
   /**
    * Indica se una week entry è vuota, cioè priva sia di un'allocazione
-   * (team + resources non vuoto) sia del flag milestone sia del flag completed.
-   * @param {{team?: string, resources?: string[], milestone?: boolean, completed?: boolean}|null|undefined} entry
+   * (team + resources non vuoto) sia di un tipo di milestone sia del flag completed.
+   * @param {{team?: string, resources?: string[], milestone?: string, completed?: boolean}|null|undefined} entry
    * @returns {boolean}
    */
   function isWeekEntryEmpty(entry) {
     if (!entry) return true;
     const hasAllocation = !!entry.team && Array.isArray(entry.resources) && entry.resources.length > 0;
-    const hasMilestone = entry.milestone === true;
+    const hasMilestone = !!entry.milestone;
     const hasCompleted = entry.completed === true;
     return !hasAllocation && !hasMilestone && !hasCompleted;
   }
@@ -212,6 +234,9 @@
     SCHEMA_VERSION,
     PATHS,
     SEED_TEAM,
+    MILESTONE_TYPES,
+    MILESTONE_ORDER,
+    MILESTONE_LABELS,
     createEmptyManifest,
     createEmptyTeamResources,
     findResourceEntry,

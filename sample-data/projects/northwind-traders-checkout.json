@@ -38,7 +38,7 @@
               ]
             },
             "2026-03-23": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -60,7 +60,7 @@
               ]
             },
             "2026-03-23": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -85,7 +85,7 @@
               "resources": [
                 "FA"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -114,7 +114,7 @@
               ]
             },
             "2026-03-23": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -128,7 +128,7 @@
                 "KB",
                 "JH"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-02-02": {
               "team": "devops",
@@ -157,7 +157,7 @@
               ]
             },
             "2026-07-27": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -171,7 +171,7 @@
                 "JA",
                 "MN"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-29": {
               "team": "devops",
@@ -211,7 +211,7 @@
               ]
             },
             "2026-07-27": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -232,7 +232,7 @@
               ]
             },
             "2026-09-21": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -248,7 +248,7 @@
               ]
             },
             "2026-09-21": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -275,7 +275,7 @@
                 "RP",
                 "WH"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-09-07": {
               "team": "run",
@@ -301,7 +301,7 @@
               "resources": [
                 "JA"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-08-03": {
               "team": "vv",
@@ -351,7 +351,7 @@
               "resources": [
                 "JR"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-08-31": {
               "team": "vv",
@@ -402,7 +402,7 @@
               ]
             },
             "2026-09-21": {
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-08": {
               "team": "dev",
@@ -454,7 +454,7 @@
               ]
             },
             "2026-09-21": {
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-15": {
               "team": "parc",
@@ -500,7 +500,7 @@
               ]
             },
             "2026-09-21": {
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-08": {
               "team": "dev",
@@ -547,7 +547,7 @@
               ]
             },
             "2026-09-21": {
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-08": {
               "team": "dev",
@@ -572,7 +572,7 @@
               "resources": [
                 "JR"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-08-31": {
               "team": "vv",

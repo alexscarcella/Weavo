@@ -32,7 +32,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -59,7 +59,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -82,7 +82,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -111,7 +111,7 @@
               ]
             },
             "2026-04-27": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -132,7 +132,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -158,7 +158,7 @@
               "resources": [
                 "DR"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -180,7 +180,7 @@
               ]
             },
             "2026-04-27": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -217,7 +217,7 @@
               ]
             },
             "2026-03-30": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -233,7 +233,7 @@
               ]
             },
             "2026-04-27": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -261,7 +261,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -276,7 +276,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -292,7 +292,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -313,7 +313,7 @@
               ]
             },
             "2026-07-20": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -334,7 +334,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -360,7 +360,7 @@
                 "GH",
                 "DR"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -396,7 +396,7 @@
               ]
             },
             "2026-07-20": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -422,7 +422,7 @@
                 "JA",
                 "GK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2025-12-08": {
               "team": "devops",
@@ -462,7 +462,7 @@
               ]
             },
             "2026-06-15": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -504,7 +504,7 @@
               ]
             },
             "2026-07-20": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -531,7 +531,7 @@
               ]
             },
             "2026-09-14": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -552,7 +552,7 @@
               ]
             },
             "2026-11-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -567,7 +567,7 @@
               ]
             },
             "2026-11-09": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }

@@ -46,7 +46,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -72,7 +72,7 @@
               "resources": [
                 "WV"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -99,7 +99,7 @@
                 "PD",
                 "GK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-02-02": {
               "team": "parc",
@@ -126,7 +126,7 @@
               ]
             },
             "2026-03-16": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -145,7 +145,7 @@
               "resources": [
                 "CT"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-01": {
               "team": "dev",
@@ -180,7 +180,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -193,7 +193,7 @@
               "resources": [
                 "CK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-06-08": {
               "team": "vv",
@@ -243,7 +243,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -270,7 +270,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -285,7 +285,7 @@
               ]
             },
             "2026-06-22": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -326,7 +326,7 @@
                 "GH",
                 "AL"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -354,7 +354,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -369,7 +369,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -385,7 +385,7 @@
               ]
             },
             "2026-10-05": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }

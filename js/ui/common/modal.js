@@ -470,7 +470,7 @@
   }
 
   function formatMilestoneLine(row) {
-    let line = `${formatReadableDate(row.displayDate)} — ${row.progettoName} — ${row.baselineVersion}`;
+    let line = `${formatReadableDate(row.displayDate)} — ${row.label} — ${row.progettoName} — ${row.baselineVersion}`;
     if (row.inconsistent && row.otherDates.length > 0) {
       line += ` (other dates: ${row.otherDates.map(formatReadableDate).join(', ')})`;
     }
@@ -501,7 +501,7 @@
       const body = monthGroups.length === 0
         ? '<p class="hint">No upcoming milestones.</p>'
         : monthGroups
-            .map((group) => `<h4 class="milestone-list-month">${escapeHtml(formatMonthLabel(group.monthKey))}</h4><ul class="milestone-list-items">${group.rows.map((row) => `<li>${escapeHtml(formatMilestoneLine(row))}</li>`).join('')}</ul>`)
+            .map((group) => `<h4 class="milestone-list-month">${escapeHtml(formatMonthLabel(group.monthKey))}</h4><ul class="milestone-list-items">${group.rows.map((row) => `<li class="milestone-list-item-${row.type === 'uat' ? 'uat' : 'ready-for-uat'}">${escapeHtml(formatMilestoneLine(row))}</li>`).join('')}</ul>`)
             .join('');
 
       const { overlay, box } = openModal('modal-box modal-box-wide milestone-list-card', `
@@ -549,8 +549,9 @@
       <ul>
         <li><strong>Right-click</strong> the selected cell (or range) to open the
         editor below it: pick a team, then the resources (only from that team),
-        then — single cell only — the delivery milestone flag. For a range, the
-        same team and resources are applied to every selected week in one go.</li>
+        then — single cell only — a milestone type (None / Task deadline / Ready
+        for UAT / UAT). For a range, the same team and resources are applied to
+        every selected week in one go.</li>
         <li>Closing the editor (click outside or <kbd>Esc</kbd>) saves automatically —
         there's no separate "Save" button.</li>
       </ul>
@@ -576,10 +577,20 @@
         first/last week of the sheet.</li>
       </ul>
 
-      <h3>Delivery milestones</h3>
+      <h3>Milestones</h3>
       <ul>
-        <li>All tasks in the same baseline share one milestone week — setting it on
-        one task's cell applies it to the others automatically.</li>
+        <li>3 types, each shown with its own border color and badge on the cell:
+        <strong>Ready for UAT</strong> and <strong>UAT</strong> are shared across the
+        whole baseline — setting one on any task's cell applies it to every other
+        non-completed task automatically — while <strong>Task deadline</strong> is a
+        purely internal deadline for that one task, never shared.</li>
+        <li>Whichever of the 3 dates a task has set must fall in this order: Task
+        deadline &lt; Ready for UAT &lt; UAT, never on the same week. Saving, shifting,
+        or dragging a task to another baseline is blocked (with an explanation) if it
+        would break this order.</li>
+        <li>A UAT week can never have a resource allocation — picking "UAT" disables the
+        Team/Resources fields, and any existing allocation on that week (here or on other
+        tasks the deadline propagates to) is cleared.</li>
       </ul>
 
       <h3>Rows: rename, reorder, delete…</h3>

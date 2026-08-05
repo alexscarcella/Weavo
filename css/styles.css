@@ -135,8 +135,16 @@ code {
   width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.15);
   display: inline-block;
 }
-.legend-swatch.legend-milestone {
+.legend-swatch.legend-milestone-task-deadline {
   background: #fff;
+  box-shadow: inset 0 0 0 2px #d32f2f;
+}
+.legend-swatch.legend-milestone-ready-for-uat {
+  background: #fff;
+  box-shadow: inset 0 0 0 4px #d32f2f;
+}
+.legend-swatch.legend-milestone-uat {
+  background: #d32f2f;
   box-shadow: inset 0 0 0 2px #d32f2f;
 }
 .legend-badge { position: static !important; display: inline-flex !important; }
@@ -244,7 +252,14 @@ code {
 .gantt-cell.header.current-week { background: #cfe1fb; }
 .gantt-cell.current-week-line { border-left: 3px solid #1a5fb4; }
 
-.gantt-cell.milestone { box-shadow: inset 0 0 0 2px #d32f2f; }
+/* --- Milestone: 3 tipologie reciprocamente esclusive per settimana (vedi
+   MP.schema.MILESTONE_TYPES) — sempre rosse (richiesta esplicita), distinte fra
+   loro per spessore del bordo e, solo per UAT, sfondo pieno invece che bordo
+   soltanto (vedi gantt-cell.js) — più il badge badge-milestone-type sotto (in
+   basso a sinistra, l'unico angolo libero). --- */
+.gantt-cell.milestone-task-deadline { box-shadow: inset 0 0 0 2px #d32f2f; }
+.gantt-cell.milestone-ready-for-uat { box-shadow: inset 0 0 0 4px #d32f2f; }
+.gantt-cell.milestone-uat { box-shadow: inset 0 0 0 2px #d32f2f; }
 
 /* --- Separatori visivi progetto/baseline --- */
 .gantt-cell.row-project-start { border-top: 3px solid #4a5768; }
@@ -281,6 +296,36 @@ code {
   line-height: 1;
 }
 .badge-orphan-resource { background: #ff8a65; color: #4a1c00; }
+
+/* In basso a sinistra: unico angolo ancora libero rispetto a badge-orphan
+   (alto destra) e badge-mismatch (basso destra) — vedi gantt-cell.js. Sempre
+   rosso (richiesta esplicita): simbolo rosso su fondo bianco per Task
+   deadline/Ready for UAT (anello rosso via box-shadow per restare leggibile
+   su qualunque sfondo cella), simbolo bianco su fondo rosso per UAT — dove lo
+   sfondo pieno della cella è già rosso, vedi gantt-cell.js/.gantt-cell.milestone-uat. */
+.badge-milestone-type {
+  position: absolute;
+  top: auto;
+  right: auto;
+  bottom: 1px;
+  left: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.badge-milestone-task-deadline,
+.badge-milestone-ready-for-uat {
+  background: #fff;
+  color: #d32f2f;
+  box-shadow: inset 0 0 0 1px #d32f2f;
+}
+.badge-milestone-uat { background: #d32f2f; color: #fff; }
 
 .toggle-completed { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
 
@@ -319,6 +364,11 @@ code {
   padding: 0.75rem;
   width: 260px;
   font-size: 0.85rem;
+  /* Rete di sicurezza per contenuto più alto della viewport stessa (es. molte
+     righe di conflitto/milestone): scrolla internamente invece di uscire dallo
+     schermo — vedi cell-popover.js:positionPopover per il posizionamento. */
+  max-height: calc(100vh - 16px);
+  overflow-y: auto;
 }
 .popover-field { margin-bottom: 0.6rem; }
 .popover-field label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
@@ -332,8 +382,20 @@ code {
   display: flex; align-items: center; gap: 0.4rem; font-weight: 400 !important;
   padding: 0.15rem 0; cursor: pointer;
 }
-.popover-milestone-field label,
-.popover-completed-field label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; cursor: pointer; }
+/* Team/Resources disabilitati sulla settimana dell'UAT (vedi cell-popover.js) —
+   stesso trattamento visivo dei controlli nativi disabled, sull'intero blocco. */
+.popover-field-disabled { opacity: 0.45; pointer-events: none; }
+.popover-uat-hint {
+  display: none; margin: -0.3rem 0 0.6rem; font-size: 0.75rem; color: #b71c1c;
+}
+.popover-uat-hint.popover-uat-hint-visible { display: block; }
+.popover-milestone-field > label:first-child { margin-bottom: 0.3rem; }
+.popover-milestone-option,
+.popover-completed-field label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400 !important; cursor: pointer; margin-bottom: 0.15rem; }
+.popover-info {
+  background: #e8f1ff; border: 1px solid #bcd8ff; border-radius: 4px;
+  padding: 0.4rem 0.5rem; font-size: 0.78rem; margin-top: 0.3rem;
+}
 .popover-warning {
   background: #fff3e0; border: 1px solid #ffb74d; border-radius: 4px;
   padding: 0.4rem 0.5rem; font-size: 0.78rem; margin-top: 0.3rem;
@@ -363,6 +425,25 @@ code {
 .legend-swatch.load-3plus { background: #ffcdd2; }
 
 /* --- Vista milestone --- */
+/* Colonna "Baseline" dedicata (non riusa .col-2 del gantt, condivisa con
+   quella pagina) perché qui è larga il doppio (234px invece di 117px) per
+   ospitare versioni di baseline più lunghe senza troncare il testo. */
+.gantt-cell.ms-col-baseline { left: 170px; width: 234px; color: #555; }
+
+/* Mini-griglia separata per le 2 righe di totali (Ready for UAT / UAT
+   releases/week), tra istogramma e calendario: riquadro + sfondo propri così
+   non si confonde visivamente con le righe di baseline della griglia
+   sottostante, pur riusando .gantt-cell/col-1/ms-col-baseline/week-cell per
+   restare allineata alle stesse colonne. */
+.milestone-totals-grid {
+  margin-bottom: 10px;
+  border: 1px solid #b9c2cc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.milestone-totals-grid .gantt-cell { background: #eef1f5; border-bottom-color: #dde3ea; }
+.milestone-totals-grid .gantt-cell.col-fixed { background: #e3e8ee; }
+
 .milestone-counter { font-weight: 600; color: #2a3542; }
 
 .milestone-header-extra { display: flex; align-items: center; gap: 0.75rem; }
@@ -370,8 +451,12 @@ code {
 .milestone-list-month { margin: 0.6rem 0 0.2rem; font-size: 0.8rem; color: #555; }
 .milestone-list-items { margin: 0; padding-left: 1.4rem; font-size: 0.85rem; }
 .milestone-list-items li { margin: 0.15rem 0; }
+.milestone-list-item-ready-for-uat { border-left: 3px solid #d32f2f; padding-left: 0.35rem; }
+.milestone-list-item-uat { border-left: 3px solid #b71c1c; padding-left: 0.35rem; }
 .gantt-cell.col-fixed.row-inconsistent { box-shadow: inset 3px 0 0 #ffb300; }
-.gantt-cell.week-cell.milestone-total-cell { font-weight: 700; color: #b71c1c; }
+.gantt-cell.week-cell.milestone-total-cell { font-weight: 700; }
+.gantt-cell.week-cell.milestone-total-cell-ready-for-uat { color: #d32f2f; }
+.gantt-cell.week-cell.milestone-total-cell-uat { color: #b71c1c; }
 
 .milestone-histogram {
   display: flex;
@@ -381,7 +466,7 @@ code {
   border-top: none;
   background: #fff;
 }
-.milestone-hist-spacer { flex: 0 0 260px; }
+.milestone-hist-spacer { flex: 0 0 377px; }
 .milestone-hist-cell {
   flex: 0 0 46px;
   display: flex;
@@ -396,9 +481,13 @@ code {
 .milestone-hist-bar {
   width: 22px;
   min-height: 4px;
-  background: #d32f2f;
   border-radius: 4px 4px 0 0;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: hidden;
 }
+.milestone-hist-seg-ready { background: #d32f2f; }
+.milestone-hist-seg-uat { background: #b71c1c; }
 
 /* Colonne fisse dedicate alla vista Workload (Initials/Name): non riusano
    col-1/col-2 come il gantt perché lì quelle classi sono legate a larghezze

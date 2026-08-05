@@ -11,7 +11,7 @@
   function renderDatasetHeader(state, extraActionsEl) {
     const { dataset } = state;
     const rows = MP.ganttView.buildRows(dataset, state.ui.showCompletedProjects, state.ui.showCompleted);
-    const upcomingBaselines = MP.milestones.countUpcomingBaselines(dataset, state.ui.showCompletedProjects);
+    const upcoming = MP.milestones.countUpcomingBaselines(dataset, state.ui.showCompletedProjects);
 
     const fragment = document.createDocumentFragment();
 
@@ -23,7 +23,7 @@
     // (sandboxing di piattaforma — vedi CLAUDE.md/app.js), solo il nome della
     // cartella selezionata: è il meglio disponibile come "percorso" dei dati.
     const cartella = state.dirHandle ? state.dirHandle.name : '';
-    info.textContent = `${cartella} — ${dataset.manifest.weeks.first} → ${dataset.manifest.weeks.last} — ${rows.length} task rows — ${dataset.projects.size} projects — ${upcomingBaselines} upcoming baselines`;
+    info.textContent = `${cartella} — ${dataset.manifest.weeks.first} → ${dataset.manifest.weeks.last} — ${rows.length} task rows — ${dataset.projects.size} projects — Upcoming: ${upcoming.readyForUat} Ready for UAT, ${upcoming.uat} UAT`;
     toolbar.appendChild(info);
     if (extraActionsEl) toolbar.appendChild(extraActionsEl);
     fragment.appendChild(toolbar);

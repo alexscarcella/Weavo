@@ -1,19 +1,24 @@
 // Popover di editing per una cella settimana×task, o per un range di settimane
 // selezionato sulla stessa riga (vedi cell-selection.js): prima si sceglie il
 // team, poi si selezionano multiple risorse (solo tra quelle di quel team),
-// poi l'eventuale flag milestone (solo modalità singola cella — un range
-// applica solo team+resources, la milestone resta un concetto per singola
-// settimana). Salvataggio automatico alla chiusura (nessun bottone "salva"
-// separato), con avviso non bloccante su doppia allocazione. Aperto solo dal
-// click destro (gantt-view.js:openCellContextMenu), mai dal click semplice —
-// `whenIdle()` espone il salvataggio pendente in corso in modo che il menu di
-// shift (che può apparire insieme, sopra questo popover) possa attendere che
-// un'eventuale modifica non ancora salvata sia commessa prima di agire.
+// poi l'eventuale tipo di milestone — None/Task deadline/Ready for UAT/UAT,
+// solo modalità singola cella — un range applica solo team+resources, la
+// milestone resta un concetto per singola settimana). Il blocco duro sul
+// vincolo d'ordine delle 3 milestone (js/model/milestone-rules.js) avviene
+// solo alla chiusura, in gantt-view.js:handleCellSaved — questo popover mostra
+// solo un avviso informativo non bloccante quando un tipo condiviso
+// (readyForUat/uat) aggiornerebbe anche altri task della baseline. Salvataggio
+// automatico alla chiusura (nessun bottone "salva" separato), con avviso non
+// bloccante anche su doppia allocazione. Aperto solo dal click destro
+// (gantt-view.js:openCellContextMenu), mai dal click semplice — `whenIdle()`
+// espone il salvataggio pendente in corso in modo che il menu di shift (che
+// può apparire insieme, sopra questo popover) possa attendere che un'eventuale
+// modifica non ancora salvata sia commessa prima di agire.
 (function (MP) {
   'use strict';
 
   const { buildAllocationIndex, findAllocations } = MP.overallocation;
-  const { createWeekEntry } = MP.schema;
+  const { createWeekEntry, MILESTONE_TYPES, MILESTONE_LABELS } = MP.schema;
   const { formatWeekLabel } = MP.weekUtils;
 
   let activeContext = null;
@@ -56,13 +61,33 @@
     return pendingSave;
   }
 
+  // Posiziona il popover in modo che resti sempre interamente visibile,
+  // qualunque sia la posizione della cella cliccata (bordo destro/sinistro/
+  // alto/basso della viewport): misura le dimensioni reali del popover (già
+  // nel DOM con tutto il contenuto quando questa funzione viene chiamata,
+  // vedi openPopover) invece di assumere un'altezza/larghezza fissa, poi
+  // sceglie sopra/sotto la cella in base a dove c'è più spazio e chiude ogni
+  // coordinata dentro i margini della viewport.
   function positionPopover(pop, anchorEl) {
+    const margin = 8;
     const rect = anchorEl.getBoundingClientRect();
+    const popRect = pop.getBoundingClientRect();
+    const width = popRect.width;
+    const height = popRect.height;
+
     pop.style.position = 'fixed';
-    const top = Math.min(rect.bottom + 4, window.innerHeight - 280);
-    const left = Math.min(rect.left, window.innerWidth - 280);
-    pop.style.top = `${Math.max(8, top)}px`;
-    pop.style.left = `${Math.max(8, left)}px`;
+
+    const spaceBelow = window.innerHeight - rect.bottom - margin;
+    const spaceAbove = rect.top - margin;
+    let top = (height <= spaceBelow || spaceBelow >= spaceAbove)
+      ? rect.bottom + 4
+      : rect.top - height - 4;
+    top = Math.max(margin, Math.min(top, window.innerHeight - height - margin));
+
+    let left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin));
+
+    pop.style.top = `${top}px`;
+    pop.style.left = `${left}px`;
   }
 
   // `weeksRange` (opzionale): array di iso settimana quando il popover è
@@ -70,7 +95,7 @@
   // singola `settimana`. In quel caso i valori iniziali vengono presi dalla
   // prima settimana del range ("cella ancora") e propagati identici a tutte
   // le settimane del range al salvataggio — la milestone resta esclusa.
-  function openPopover({ anchorEl, dataset, task, settimana, weeksRange, onSave }) {
+  function openPopover({ anchorEl, dataset, task, baseline, settimana, weeksRange, onSave }) {
     closeExisting();
 
     const weeks = weeksRange && weeksRange.length ? weeksRange : [settimana];
@@ -80,8 +105,15 @@
     const entry = (task.weeks || {})[anchorWeek] || {};
     let selectedTeam = entry.team || '';
     const selectedResources = new Set(entry.resources || []);
-    let selectedMilestone = entry.milestone === true;
+    let selectedMilestoneType = entry.milestone || '';
     let selectedCompleted = entry.completed === true;
+    // L'assegnazione di risorse è inibita sulla settimana dell'UAT (vedi
+    // MP.schema.createWeekEntry) — difensivo, per un'eventuale entry preesistente
+    // che la violasse (dati legacy): non precompilare team/resources in quel caso.
+    if (selectedMilestoneType === MILESTONE_TYPES.UAT) {
+      selectedTeam = '';
+      selectedResources.clear();
+    }
 
     const index = buildAllocationIndex(dataset);
 
@@ -106,22 +138,28 @@
     pop.innerHTML = `
       ${isBulk ? `<p class="popover-bulk-hint">Allocation over ${weeks.length} weeks, from ${formatWeekLabel(weeks[0])}
         to ${formatWeekLabel(weeks[weeks.length - 1])}${altreDiverse ? ` — overwrites ${altreDiverse} weeks with different data` : ''}.</p>` : ''}
-      <div class="popover-field">
+      <div class="popover-field popover-team-field">
         <label>Team</label>
         <select class="popover-team">
           <option value="">— none —</option>
           ${teamOptions}
         </select>
       </div>
-      <div class="popover-field">
+      <div class="popover-field popover-resources-field">
         <label>Resources</label>
         <div class="popover-resources-list"></div>
       </div>
+      <p class="hint popover-uat-hint">Resource assignment is disabled for a UAT week.</p>
       <div class="popover-field popover-completed-field">
         <label><input type="checkbox" class="popover-completed" ${selectedCompleted ? 'checked' : ''}> Completed</label>
       </div>
       ${isBulk ? '' : `<div class="popover-field popover-milestone-field">
-        <label><input type="checkbox" class="popover-milestone" ${selectedMilestone ? 'checked' : ''}> Delivery milestone</label>
+        <label>Milestone</label>
+        <label class="popover-milestone-option"><input type="radio" name="popover-milestone" value="" ${!selectedMilestoneType ? 'checked' : ''}> None</label>
+        <label class="popover-milestone-option"><input type="radio" name="popover-milestone" value="${MILESTONE_TYPES.TASK_DEADLINE}" ${selectedMilestoneType === MILESTONE_TYPES.TASK_DEADLINE ? 'checked' : ''}> ${MILESTONE_LABELS.taskDeadline}</label>
+        <label class="popover-milestone-option"><input type="radio" name="popover-milestone" value="${MILESTONE_TYPES.READY_FOR_UAT}" ${selectedMilestoneType === MILESTONE_TYPES.READY_FOR_UAT ? 'checked' : ''}> ${MILESTONE_LABELS.readyForUat}</label>
+        <label class="popover-milestone-option"><input type="radio" name="popover-milestone" value="${MILESTONE_TYPES.UAT}" ${selectedMilestoneType === MILESTONE_TYPES.UAT ? 'checked' : ''}> ${MILESTONE_LABELS.uat}</label>
+        <div class="popover-milestone-info"></div>
       </div>`}
       <div class="popover-conflicts"></div>
       <p class="hint popover-hint">Close (click outside or Esc) to save.</p>
@@ -193,25 +231,86 @@
       refreshConflicts();
     });
     syncTeamSelectColor();
-    const milestoneCheckbox = pop.querySelector('.popover-milestone');
-    if (milestoneCheckbox) {
-      milestoneCheckbox.addEventListener('change', (e) => {
-        selectedMilestone = e.target.checked;
+
+    // L'assegnazione di risorse è inibita sulla settimana dell'UAT (vedi
+    // MP.schema.createWeekEntry): quando questo tipo è selezionato, i campi
+    // Team/Resources vengono disabilitati (non solo rifiutati al salvataggio)
+    // così l'utente non può nemmeno provare a impostarli.
+    const teamFieldEl = pop.querySelector('.popover-team-field');
+    const resourcesFieldEl = pop.querySelector('.popover-resources-field');
+    const uatHintEl = pop.querySelector('.popover-uat-hint');
+    function updateAllocationAvailability() {
+      const isUat = selectedMilestoneType === MILESTONE_TYPES.UAT;
+      teamSelectEl.disabled = isUat;
+      teamFieldEl.classList.toggle('popover-field-disabled', isUat);
+      resourcesFieldEl.classList.toggle('popover-field-disabled', isUat);
+      resourcesListEl.querySelectorAll('.popover-resource input').forEach((cb) => {
+        cb.disabled = isUat;
       });
+      uatHintEl.classList.toggle('popover-uat-hint-visible', isUat);
     }
+
+    // Avviso informativo, MAI bloccante (il blocco vero e proprio sul vincolo
+    // d'ordine avviene alla chiusura, in gantt-view.js:handleCellSaved — vedi
+    // commento in testa al file): quando si sceglie un tipo condiviso
+    // (readyForUat/uat), segnala quanti ALTRI task non completed della
+    // baseline verranno aggiornati alla stessa settimana.
+    const milestoneInfoEl = pop.querySelector('.popover-milestone-info');
+    function refreshMilestoneInfo() {
+      if (!milestoneInfoEl) return;
+      const type = selectedMilestoneType;
+      const isShared = type === MILESTONE_TYPES.READY_FOR_UAT || type === MILESTONE_TYPES.UAT;
+      if (!baseline || !isShared) {
+        milestoneInfoEl.innerHTML = '';
+        return;
+      }
+      const otherTasks = baseline.task.filter((t) => t !== task && !t.completed);
+      const count = otherTasks.filter((t) => MP.milestoneRules.collectTaskMilestoneDates(t)[type] !== anchorWeek).length;
+      const parts = [];
+      if (count > 0) {
+        parts.push(`Setting this will also update ${count} other task${count > 1 ? 's' : ''} in this baseline to this week (${MILESTONE_LABELS[type]})`);
+      }
+      if (type === MILESTONE_TYPES.UAT) {
+        const withAllocation = otherTasks.filter((t) => {
+          const e = (t.weeks || {})[anchorWeek];
+          return e && e.team && (e.resources || []).length;
+        }).length;
+        if (withAllocation > 0) {
+          parts.push(`${withAllocation} of them currently ${withAllocation > 1 ? 'have' : 'has'} a resource allocation this week — it will be cleared, since resource assignment is disabled for a UAT week`);
+        }
+      }
+      milestoneInfoEl.innerHTML = parts.length ? `<div class="popover-info">ℹ ${parts.join('; ')}.</div>` : '';
+    }
+    pop.querySelectorAll('input[name="popover-milestone"]').forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        selectedMilestoneType = e.target.value;
+        if (selectedMilestoneType === MILESTONE_TYPES.UAT) {
+          selectedTeam = '';
+          selectedResources.clear();
+          syncTeamSelectColor();
+          renderResourcesList();
+          refreshConflicts();
+        }
+        updateAllocationAvailability();
+        refreshMilestoneInfo();
+      });
+    });
+    refreshMilestoneInfo();
+
     pop.querySelector('.popover-completed').addEventListener('change', (e) => {
       selectedCompleted = e.target.checked;
     });
 
     renderResourcesList();
     refreshConflicts();
+    updateAllocationAvailability();
 
     activeContext = {
       save() {
         const newEntry = createWeekEntry({
           team: selectedTeam,
           resources: [...selectedResources],
-          milestone: isBulk ? false : selectedMilestone,
+          milestone: isBulk ? '' : selectedMilestoneType,
           completed: selectedCompleted,
         });
         return onSave(newEntry);

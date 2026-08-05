@@ -1,14 +1,23 @@
 // Migrazione lazy di un data folder ancora su uno schemaVersion precedente.
-// Due step incrementali, entrambi scatenati da un unico ingresso
-// (migrateIfNeeded) in base alla versione rilevata:
-// - v1 (o assente) -> v3: vecchio formato con campi italiani, cartella
+// Tre step incrementali, tutti scatenati da un unico ingresso
+// (migrateIfNeeded) in base alla versione rilevata, tutti convergenti
+// sull'attuale MP.schema.SCHEMA_VERSION (4) in un solo giro di scritture:
+// - v1 (o assente) -> v4: vecchio formato con campi italiani, cartella
 //   "progetti/" + file "team-risorse.json", verso il formato inglese attuale
 //   ("projects/" + "team-resources.json", campo "completed" al posto di
-//   "archiviata"/"archiviato"). Vedi CLAUDE.md "Migrazione dati legacy".
-// - v2 -> v3: dati già nel formato inglese attuale (stessi PATHS, nessun
+//   "archiviata"/"archiviato", milestone tipizzata invece di booleana). Vedi
+//   CLAUDE.md "Migrazione dati legacy".
+// - v2 -> v4: dati già nel formato inglese attuale (stessi PATHS, nessun
 //   rename di file/cartelle) ma con "archived" invece di "completed" su
 //   project/baseline — rename di campo introdotto per omogeneizzare il
-//   concetto con "completed" a livello task.
+//   concetto con "completed" a livello task — più la stessa tipizzazione
+//   della milestone del passo successivo.
+// - v3 -> v4: dati già nel formato inglese attuale con "completed" corretto,
+//   ma con `week.milestone` ancora booleano (`true`) invece di uno dei
+//   MP.schema.MILESTONE_TYPES: ogni `milestone: true` esistente diventa
+//   `milestone: 'readyForUat'` (scelto perché rappresentava la scadenza
+//   condivisa cliente-facing, la più vicina allo spirito del vecchio flag
+//   unico). team-resources.json non è toccato da questo step.
 //
 // I dati non sono critici (rigenerabili da import.js/xlsx o da un backup
 // manuale/automatico già esistente nell'app), quindi qui non c'è un backup
@@ -29,7 +38,7 @@
     return MP.schema.createWeekEntry({
       team: oldEntry && oldEntry.team,
       resources: oldEntry && oldEntry.risorse,
-      milestone: oldEntry && oldEntry.milestone,
+      milestone: oldEntry && oldEntry.milestone ? MP.schema.MILESTONE_TYPES.READY_FOR_UAT : undefined,
     });
   }
 
@@ -66,8 +75,10 @@
     };
   }
 
-  // v2 -> v3: dati già inglesi (PATHS invariati), solo rename di campo su
-  // project/baseline. team-resources.json non è toccato da questo step.
+  // v2 -> v4: dati già inglesi (PATHS invariati), solo rename di campo su
+  // project/baseline (la tipizzazione della milestone è un passo separato,
+  // vedi applyMilestoneTypeMigration sotto). team-resources.json non è
+  // toccato da questo step.
   function renameArchivedToCompletedBaseline(oldBaseline) {
     const { archived, ...rest } = oldBaseline;
     return { ...rest, completed: !!archived };
@@ -79,6 +90,32 @@
       ...rest,
       completed: !!archived,
       baseline: (oldProjectData.baseline || []).map(renameArchivedToCompletedBaseline),
+    };
+  }
+
+  // v3 -> v4 (e riusato dentro v2 -> v4): converte una singola week entry già
+  // nel formato campi inglesi da `milestone: true` a `milestone: 'readyForUat'`.
+  // Passa inalterata ogni altra entry (nessuna milestone, o già una stringa
+  // valida se la funzione viene applicata due volte per errore — idempotente).
+  function transformWeekEntryMilestoneType(oldEntry) {
+    if (oldEntry && oldEntry.milestone === true) {
+      return { ...oldEntry, milestone: MP.schema.MILESTONE_TYPES.READY_FOR_UAT };
+    }
+    return oldEntry;
+  }
+
+  function applyMilestoneTypeMigration(oldProjectData) {
+    return {
+      ...oldProjectData,
+      baseline: (oldProjectData.baseline || []).map((baseline) => ({
+        ...baseline,
+        task: (baseline.task || []).map((task) => ({
+          ...task,
+          weeks: Object.fromEntries(
+            Object.entries(task.weeks || {}).map(([iso, entry]) => [iso, transformWeekEntryMilestoneType(entry)])
+          ),
+        })),
+      })),
     };
   }
 
@@ -108,8 +145,8 @@
     };
   }
 
-  // v1 (o schemaVersion assente) -> v3: vecchio formato italiano, file/cartelle legacy.
-  async function migrateV1ToV3(dirHandle, oldManifest) {
+  // v1 (o schemaVersion assente) -> v4: vecchio formato italiano, file/cartelle legacy.
+  async function migrateV1ToV4(dirHandle, oldManifest) {
     const oldTeamRisorsaText = await MP.fsAccess.readTextFile(dirHandle, LEGACY_TEAM_RESOURCES_FILE);
     const oldTeamRisorsa = JSON.parse(oldTeamRisorsaText);
 
@@ -145,10 +182,11 @@
     await MP.fsAccess.removeDirectory(dirHandle, LEGACY_PROJECTS_DIR);
   }
 
-  // v2 -> v3: dati già inglesi, stessi PATHS/file — solo rename di campo
-  // (archived -> completed) su ogni progetto e le sue baseline. team-resources.json
-  // non è toccato da questo step.
-  async function migrateV2ToV3(dirHandle, oldManifest) {
+  // v2 -> v4: dati già inglesi, stessi PATHS/file — rename di campo
+  // (archived -> completed) su ogni progetto e le sue baseline, più la stessa
+  // tipizzazione della milestone del passo v3 -> v4 (v2 non aveva ancora
+  // quella conversione). team-resources.json non è toccato da questo step.
+  async function migrateV2ToV4(dirHandle, oldManifest) {
     const oldProjects = [];
     for (const voce of oldManifest.projects || []) {
       const rawText = await MP.fsAccess.readTextFile(dirHandle, voce.file);
@@ -157,7 +195,34 @@
 
     const newProjects = oldProjects.map(({ file, data }) => ({
       file,
-      data: renameArchivedToCompletedProject(data),
+      data: applyMilestoneTypeMigration(renameArchivedToCompletedProject(data)),
+    }));
+    const newManifest = { ...oldManifest, schemaVersion: MP.schema.SCHEMA_VERSION };
+
+    for (const { file, data } of newProjects) {
+      await MP.fsAccess.writeTextFile(dirHandle, file, JSON.stringify(data, null, 2) + '\n');
+    }
+    // manifest.json per ultimo: è il commit point, vedi commento in testa al file.
+    await MP.fsAccess.writeTextFile(
+      dirHandle,
+      MP.schema.PATHS.manifest,
+      JSON.stringify(newManifest, null, 2) + '\n'
+    );
+  }
+
+  // v3 -> v4: dati già nel formato corrente (PATHS + "completed" invariati),
+  // solo `week.milestone: true` -> `milestone: 'readyForUat'` su ogni
+  // progetto. team-resources.json non è toccato da questo step.
+  async function migrateV3ToV4(dirHandle, oldManifest) {
+    const oldProjects = [];
+    for (const voce of oldManifest.projects || []) {
+      const rawText = await MP.fsAccess.readTextFile(dirHandle, voce.file);
+      oldProjects.push({ file: voce.file, data: JSON.parse(rawText) });
+    }
+
+    const newProjects = oldProjects.map(({ file, data }) => ({
+      file,
+      data: applyMilestoneTypeMigration(data),
     }));
     const newManifest = { ...oldManifest, schemaVersion: MP.schema.SCHEMA_VERSION };
 
@@ -185,10 +250,12 @@
     const oldManifest = JSON.parse(manifestText);
     if (oldManifest.schemaVersion >= MP.schema.SCHEMA_VERSION) return false;
 
-    if (oldManifest.schemaVersion === 2) {
-      await migrateV2ToV3(dirHandle, oldManifest);
+    if (oldManifest.schemaVersion === 3) {
+      await migrateV3ToV4(dirHandle, oldManifest);
+    } else if (oldManifest.schemaVersion === 2) {
+      await migrateV2ToV4(dirHandle, oldManifest);
     } else {
-      await migrateV1ToV3(dirHandle, oldManifest);
+      await migrateV1ToV4(dirHandle, oldManifest);
     }
 
     return true;

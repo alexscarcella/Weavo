@@ -31,7 +31,7 @@
               ]
             },
             "2026-04-06": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -60,7 +60,7 @@
               ]
             },
             "2026-04-06": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -82,7 +82,7 @@
               ]
             },
             "2026-04-06": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -105,7 +105,7 @@
               ]
             },
             "2026-04-06": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -139,7 +139,7 @@
               ]
             },
             "2026-04-06": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -167,7 +167,7 @@
               ]
             },
             "2026-04-06": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
@@ -203,7 +203,7 @@
               ]
             },
             "2026-10-19": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -237,7 +237,7 @@
               ]
             },
             "2026-10-19": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -251,7 +251,7 @@
                 "GK",
                 "JA"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-09-14": {
               "team": "dev",
@@ -292,7 +292,7 @@
               ]
             },
             "2026-10-19": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -306,7 +306,7 @@
                 "AK",
                 "BT"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-10-05": {
               "team": "parc",
@@ -333,7 +333,7 @@
                 "GH",
                 "DK"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-09-14": {
               "team": "vv",
@@ -359,7 +359,7 @@
               "resources": [
                 "BL"
               ],
-              "milestone": true
+              "milestone": "readyForUat"
             },
             "2026-08-24": {
               "team": "build",
@@ -403,7 +403,7 @@
               ]
             },
             "2026-10-19": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         },
@@ -425,7 +425,7 @@
               ]
             },
             "2026-10-19": {
-              "milestone": true
+              "milestone": "readyForUat"
             }
           }
         }
