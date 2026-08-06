@@ -280,8 +280,8 @@
     "semantic_hash": "d2ca65978802c89db2010fc7b303f182"
   },
   "CLAUDE.md": {
-    "mtime": 1785955321.5683503,
-    "ast_hash": "bce669e34ffbd27e1fc4cafc72b7f1bc",
+    "mtime": 1785996511.5277317,
+    "ast_hash": "09da4dd5374ea1ba4b3034e7a0b70169",
     "semantic_hash": ""
   },
   "docs/api.md": {
@@ -375,13 +375,13 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1785996383.346168,
-    "ast_hash": "a77874a798fb7ed23a821c8f392213ef",
+    "mtime": 1785996531.7895675,
+    "ast_hash": "25d10589bfa070b5b682a1527388cf03",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785996383.4256802,
-    "ast_hash": "eb57336ed27ccf02d0f1ad9afaa61688",
+    "mtime": 1785996546.294915,
+    "ast_hash": "c210a096e9cb9773c3fb3aaa8993644d",
     "semantic_hash": ""
   }
 }
