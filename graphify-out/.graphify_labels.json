@@ -46,5 +46,8 @@
   "44": "jest.config.js",
   "45": "task-crud.js",
   "46": "milestone-rules.js",
-  "47": "[Unreleased] — 2026-08-05"
+  "47": "[Unreleased] — 2026-08-05",
+  "48": "week-drag.js",
+  "49": "week-shift.test.js",
+  "50": "week-utils.test.js"
 }

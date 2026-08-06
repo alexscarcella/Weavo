@@ -60,13 +60,13 @@
     "semantic_hash": "9ea4e293b8d9c6c9872cc3c6ee99672f"
   },
   "js/model/week-shift.js": {
-    "mtime": 1785951028.828437,
-    "ast_hash": "62c8520b6b5b7b5ffc89d6d6d538d82f",
+    "mtime": 1786034175.4365594,
+    "ast_hash": "822bd36151ceb610ea0b540b05a51f8e",
     "semantic_hash": ""
   },
   "js/model/week-utils.js": {
-    "mtime": 1785995923.7699468,
-    "ast_hash": "f98da29f5caeae6aeeaa9a1f32ee85b5",
+    "mtime": 1786034158.206515,
+    "ast_hash": "5f0d0dec3a3cc0cf5b604b86e4242351",
     "semantic_hash": ""
   },
   "js/state/store.js": {
@@ -75,8 +75,8 @@
     "semantic_hash": "00a0be072a3fad16dfa2005ffab67fe1"
   },
   "js/ui/common/app-header.js": {
-    "mtime": 1785955627.0047927,
-    "ast_hash": "cfc502175a030f618becaafb169cdecf",
+    "mtime": 1786035454.043937,
+    "ast_hash": "78b98a4b31ec1d42c83f49a1b832ba12",
     "semantic_hash": ""
   },
   "js/ui/common/context-menu.js": {
@@ -145,8 +145,8 @@
     "semantic_hash": "126305b884a7e9103025570babcb7f21"
   },
   "js/ui/gantt/gantt-cell.js": {
-    "mtime": 1785952654.197299,
-    "ast_hash": "26e3777d7dcf681d861a70c55b35ef9a",
+    "mtime": 1786034285.0855577,
+    "ast_hash": "07b769e94f8045a44f552029bc7b4104",
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-row.js": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-view.js": {
-    "mtime": 1785994983.4720323,
-    "ast_hash": "2bf3e51d99050d2572eaa640ceff4900",
+    "mtime": 1786034210.6130652,
+    "ast_hash": "e1f44994907a696813588de1d3ef9da2",
     "semantic_hash": ""
   },
   "js/ui/gantt/legend.js": {
@@ -315,8 +315,8 @@
     "semantic_hash": "26342c52653e84faebbf464e03d683bd"
   },
   "index.html": {
-    "mtime": 1785950773.8009262,
-    "ast_hash": "bfa4df3e8ed0387ae3596bfc4f453533",
+    "mtime": 1786034323.3762798,
+    "ast_hash": "24c9cff7498d314419c61cd33717d508",
     "semantic_hash": ""
   },
   "spike-fsa/index.html": {
@@ -365,8 +365,8 @@
     "semantic_hash": ""
   },
   "unit/model/week-utils.test.js": {
-    "mtime": 1785413833.6543305,
-    "ast_hash": "96f590e7fbeb010a5c455b5e310897de",
+    "mtime": 1786034336.0155869,
+    "ast_hash": "65cd19f5fae5627c94568faa5a3246f9",
     "semantic_hash": ""
   },
   "js/model/milestone-rules.js": {
@@ -382,6 +382,16 @@
   "README.md": {
     "mtime": 1785996546.294915,
     "ast_hash": "c210a096e9cb9773c3fb3aaa8993644d",
+    "semantic_hash": ""
+  },
+  "js/ui/gantt/week-drag.js": {
+    "mtime": 1786034262.9593618,
+    "ast_hash": "d2cb2add276977f0adbb5822a0799d87",
+    "semantic_hash": ""
+  },
+  "unit/model/week-shift.test.js": {
+    "mtime": 1786034565.3761065,
+    "ast_hash": "0afa79600f0726742aefb7e789797629",
     "semantic_hash": ""
   }
 }
