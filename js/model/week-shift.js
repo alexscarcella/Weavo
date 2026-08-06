@@ -69,6 +69,27 @@
     });
   }
 
+  // Calcola il delta massimo (con lo stesso segno di `rawDelta`) raggiungibile da
+  // `weeks` senza violare `canShiftWeeks` — usata dal drag&drop (vedi
+  // js/ui/gantt/week-drag.js) per implementare "scorri finché non incontri un
+  // ostacolo": scandisce un passo alla volta dalla sorgente verso `rawDelta` e si
+  // ferma al PRIMO passo bloccato (non al delta più lontano raggiungibile in
+  // assoluto, che in teoria potrebbe non essere monotono), restituendo l'ultimo
+  // delta valido incontrato (0 se già il primo passo è bloccato, es. task/
+  // settimana completed). Pura, riusa canShiftWeeks invariata: eredita
+  // automaticamente tutti i suoi blocchi.
+  function findMaxShift(dataset, task, weeks, rawDelta, baseline) {
+    if (rawDelta === 0) return 0;
+    const dir = rawDelta > 0 ? 1 : -1;
+    let lastValid = 0;
+    for (let mag = 1; mag <= Math.abs(rawDelta); mag++) {
+      const delta = dir * mag;
+      if (!canShiftWeeks(dataset, task, weeks, delta, baseline).allowed) break;
+      lastValid = delta;
+    }
+    return lastValid;
+  }
+
   // Shift dell'intera baseline (tutti i task non-completed, tutte le settimane non
   // vuote di ciascuno) di `deltaWeeks` (intero con segno, non necessariamente ±1).
   // A differenza di canShiftWeeks/shiftWeeksData non serve, in generale, un controllo
@@ -169,5 +190,5 @@
     }
   }
 
-  MP.weekShift = { canShiftWeeks, shiftWeeksData, canShiftBaseline, shiftBaselineData };
+  MP.weekShift = { canShiftWeeks, shiftWeeksData, findMaxShift, canShiftBaseline, shiftBaselineData };
 })(window.MP = window.MP || {});

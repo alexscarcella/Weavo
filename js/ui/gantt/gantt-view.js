@@ -280,17 +280,15 @@
     }
   }
 
-  // Sposta di una settimana (avanti/indietro) l'allocazione di una cella
-  // singola o dell'intero range selezionato (vedi js/model/week-shift.js
-  // per il predicato di ammissibilità e la mutazione, che preserva il
-  // contenuto individuale di ciascuna cella). Dopo il salvataggio riapre SOLO
-  // il menu di shift sulla nuova posizione (stesso meccanismo già usato per
-  // `lastEdited`: il div va ritrovato dopo il re-render completo del DOM) —
-  // non il popover di allocazione — per permettere shift ripetuti in sequenza
-  // senza dover riselezionare da capo.
-  async function handleCellsShift({ state, file, task, baseline, weeks, direction }) {
+  // Muta+salva lo spostamento di `weeks` di `direction` settimane (predicato di
+  // ammissibilità e mutazione in js/model/week-shift.js, che preserva il
+  // contenuto individuale di ciascuna cella), sincronizzando le milestone
+  // condivise della baseline e rilocando la selezione sul nuovo blocco. Non fa
+  // alcuna assunzione sulla UI che l'ha invocata (menu ◀/▶ vs drag&drop) — quella
+  // parte resta a carico del chiamante. Ritorna `true`/`false` in base all'esito.
+  async function applyWeeksShift({ state, file, task, baseline, weeks, direction }) {
     const check = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, direction, baseline);
-    if (!check.allowed) return; // la voce di menu è già disabilitata in questo caso
+    if (!check.allowed) return false;
 
     // Fino a 3 settimane del range spostato possono portare milestone (una per
     // tipo, vedi clearOtherMilestones) — solo i 2 tipi condivisi richiedono la
@@ -312,10 +310,25 @@
       markLastEdited(affectedTasks, [...weeks, ...targets]);
       MP.store.setState({});
       MP.cellSelection.relocate(file, task, targets);
-      openShiftMenu({ state, file, task, baseline, weeks: targets });
+      return true;
     } catch (e) {
       window.alert(`Error saving "${file}": ${e.message}`);
+      return false;
     }
+  }
+
+  // Sposta di una settimana (avanti/indietro) l'allocazione di una cella singola
+  // o dell'intero range selezionato, invocata dal menu ◀/▶. Dopo il salvataggio
+  // riapre SOLO il menu di shift sulla nuova posizione (stesso meccanismo già
+  // usato per `lastEdited`: il div va ritrovato dopo il re-render completo del
+  // DOM) — non il popover di allocazione — per permettere shift ripetuti in
+  // sequenza senza dover riselezionare da capo. Il drag&drop (week-drag.js)
+  // invoca invece `applyWeeksShift` direttamente (esportata come
+  // `commitWeeksShift`), senza riaprire questo menu.
+  async function handleCellsShift({ state, file, task, baseline, weeks, direction }) {
+    const targets = weeks.map((w) => MP.weekUtils.addWeeks(w, direction));
+    const ok = await applyWeeksShift({ state, file, task, baseline, weeks, direction });
+    if (ok) openShiftMenu({ state, file, task, baseline, weeks: targets });
   }
 
   function headerCell(text, colClass, title, extraClass) {
@@ -487,5 +500,5 @@
     return page;
   }
 
-  MP.ganttView = { renderGanttView, buildRows };
+  MP.ganttView = { renderGanttView, buildRows, commitWeeksShift: applyWeeksShift };
 })(window.MP = window.MP || {});

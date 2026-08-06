@@ -155,6 +155,16 @@
       onCellContextMenu({ state, file, task, baseline, weeks, anchorEl: div });
     });
 
+    // Drag&drop di un blocco di settimane allocate (vedi js/ui/gantt/week-drag.js):
+    // solo le celle non vuote sono sorgenti trascinabili, ma TUTTE le celle
+    // (comprese quelle vuote) restano target di dragover/drop, dato che la
+    // destinazione è spesso una cella libera.
+    div.draggable = !MP.schema.isWeekEntryEmpty(entry);
+    div.addEventListener('dragstart', (e) => MP.weekDrag.handleDragStart(e, { state, file, task, baseline, settimana, div }));
+    div.addEventListener('dragover', (e) => MP.weekDrag.handleDragOver(e, { task, settimana }));
+    div.addEventListener('drop', (e) => MP.weekDrag.handleDrop(e, { task, settimana }));
+    div.addEventListener('dragend', () => MP.weekDrag.handleDragEnd());
+
     registerCell(task, settimana, div);
     return div;
   }

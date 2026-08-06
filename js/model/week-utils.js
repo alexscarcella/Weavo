@@ -25,6 +25,13 @@
     return addDays(iso, weeks * 7);
   }
 
+  // Differenza in settimane, con segno, tra due iso (lunedì) — usata per tradurre
+  // "cella sotto il cursore" in un delta durante il drag&drop di un blocco di
+  // settimane (vedi js/ui/gantt/week-drag.js).
+  function weeksBetween(fromIso, toIso) {
+    return Math.round((toDate(toIso) - toDate(fromIso)) / (7 * 24 * 60 * 60 * 1000));
+  }
+
   function getWeeksInRange(first, last) {
     const weeks = [];
     let current = first;
@@ -97,6 +104,7 @@
     isMonday,
     addDays,
     addWeeks,
+    weeksBetween,
     getWeeksInRange,
     formatWeekLabel,
     getTodayIso,
