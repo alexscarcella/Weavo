@@ -198,8 +198,8 @@ code {
   font-weight: 500;
 }
 .gantt-cell.col-1 { left: 0; width: 170px; }
-.gantt-cell.col-2 { left: 170px; width: 117px; color: #555; }
-.gantt-cell.col-3 { left: 287px; width: 300px; font-weight: 400; }
+.gantt-cell.col-2 { left: 170px; width: 234px; color: #555; }
+.gantt-cell.col-3 { left: 404px; width: 300px; font-weight: 400; }
 .gantt-cell.completed-dim { color: #888; }
 
 .gantt-cell.header {
@@ -251,6 +251,21 @@ code {
 /* --- Settimana corrente (oggi) --- */
 .gantt-cell.header.current-week { background: #cfe1fb; }
 .gantt-cell.current-week-line { border-left: 3px solid #1a5fb4; }
+
+/* --- Separatore inizio mese: solo orientamento nella timeline, deliberatamente
+   tratteggiato/grigio invece che pieno/blu come current-week-line, così le due
+   linee restano distinguibili anche quando ricadono sulla stessa colonna (la
+   settimana corrente può essere anche la prima del mese). Applicato a
+   gantt/resource-load/milestones — vedi gantt-view.js/resource-load-view.js/
+   milestones-view.js. */
+.gantt-cell.month-boundary { border-left: 2px dashed #9aa5b1; }
+.milestone-hist-cell.month-boundary { border-left: 2px dashed #9aa5b1; }
+/* Quando le due linee ricadono sulla stessa colonna, vince quella "oggi" (piena/blu,
+   il segnale a cui l'utente si orienta di più) — selettore più specifico per
+   sovrascrivere il tratteggiato del separatore mese indipendentemente dall'ordine
+   di dichiarazione delle 2 regole sopra. */
+.gantt-cell.current-week-line.month-boundary { border-left: 3px solid #1a5fb4; }
+.milestone-hist-cell.current-week-line.month-boundary { border-left: 3px solid #1a5fb4; }
 
 /* --- Milestone: 3 tipologie reciprocamente esclusive per settimana (vedi
    MP.schema.MILESTONE_TYPES) — sempre rosse (richiesta esplicita), distinte fra
@@ -439,7 +454,6 @@ code {
   margin-bottom: 10px;
   border: 1px solid #b9c2cc;
   border-radius: 4px;
-  overflow: hidden;
 }
 .milestone-totals-grid .gantt-cell { background: #eef1f5; border-bottom-color: #dde3ea; }
 .milestone-totals-grid .gantt-cell.col-fixed { background: #e3e8ee; }
@@ -594,6 +608,11 @@ code {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 .modal-box-wide { max-width: 560px; max-height: 85vh; overflow-y: auto; }
+/* Riepilogo eliminazione settimana: niente barra verticale interna alla
+   textarea (rows alto abbastanza per il contenuto tipico), box più largo per
+   leggere le righe "progetto / BL / task / settimana" senza andare a capo. */
+.week-remove-report-card { max-width: 672px; }
+.week-remove-report-card .modal-textarea { overflow-y: hidden; }
 .allocations-card { max-width: 820px; }
 .milestone-list-card { max-width: 728px; }
 .allocations-card .project-card-label { flex: 0 0 8rem; }

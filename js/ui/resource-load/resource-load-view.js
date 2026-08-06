@@ -41,7 +41,7 @@
 
   // Riga separatrice piena larghezza che apre un gruppo team: colonne initials+nome
   // sticky con nome team e swatch colore, il resto della riga come banda tinteggiata.
-  function teamHeaderRow(dataset, team, weeksCount, currentWeekIndex) {
+  function teamHeaderRow(dataset, team, weeks, currentWeekIndex) {
     const cells = [];
     const header = document.createElement('div');
     header.className = 'gantt-cell col-fixed team-group-header';
@@ -69,12 +69,13 @@
     header.appendChild(label);
     cells.push(header);
 
-    for (let i = 0; i < weeksCount; i++) {
+    weeks.forEach((settimana, i) => {
       const band = document.createElement('div');
       band.className = 'gantt-cell week-cell team-group-header-band';
       if (i === currentWeekIndex) band.classList.add('current-week-line');
+      if (i > 0 && MP.weekUtils.isMonthBoundary(settimana)) band.classList.add('month-boundary');
       cells.push(band);
-    }
+    });
     return cells;
   }
 
@@ -124,12 +125,15 @@
 
     grid.appendChild(headerCell('Initials', 'rl-col-initials'));
     grid.appendChild(headerCell('Name', 'rl-col-name'));
-    for (const settimana of weeks) {
-      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
-    }
+    weeks.forEach((settimana, i) => {
+      const classes = [];
+      if (settimana === currentWeek) classes.push('current-week', 'current-week-line');
+      if (i > 0 && MP.weekUtils.isMonthBoundary(settimana)) classes.push('month-boundary');
+      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, classes.length ? classes.join(' ') : null));
+    });
 
     for (const team of teams) {
-      teamHeaderRow(dataset, team, weeks.length, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
+      teamHeaderRow(dataset, team, weeks, currentWeekIndex).forEach((cell) => grid.appendChild(cell));
 
       const sortedResources = [...team.resources].sort((a, b) => a.name.localeCompare(b.name));
       for (const risorsa of sortedResources) {
@@ -163,6 +167,7 @@
             cell.classList.add(loadClass(refs.length));
           }
           if (i === currentWeekIndex) cell.classList.add('current-week-line');
+          if (i > 0 && MP.weekUtils.isMonthBoundary(settimana)) cell.classList.add('month-boundary');
           grid.appendChild(cell);
         });
       }

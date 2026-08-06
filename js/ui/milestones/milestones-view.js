@@ -28,6 +28,8 @@
   const SHARED_TYPES = [READY_FOR_UAT, UAT];
   const CELL_CLASS = { readyForUat: 'milestone-ready-for-uat', uat: 'milestone-uat' };
   const TOTAL_CELL_CLASS = { readyForUat: 'milestone-total-cell-ready-for-uat', uat: 'milestone-total-cell-uat' };
+  const BADGE_CLASS = { readyForUat: 'badge-milestone-ready-for-uat', uat: 'badge-milestone-uat' };
+  const BADGE_GLYPH = { readyForUat: 'R', uat: 'U' };
 
   function headerCell(text, colClass, title, extraClass) {
     const div = document.createElement('div');
@@ -46,6 +48,15 @@
     span.title = text;
     div.appendChild(span);
     return div;
+  }
+
+  // Linea "oggi" (esclusiva/blu) + separatore di inizio mese (tratteggiato
+  // grigio, mai in colonna 0) — stesso criterio di gantt-view.js/resource-load-view.js.
+  function weekExtraClass(settimana, i, currentWeek) {
+    const classes = [];
+    if (settimana === currentWeek) classes.push('current-week', 'current-week-line');
+    if (i > 0 && MP.weekUtils.isMonthBoundary(settimana)) classes.push('month-boundary');
+    return classes.length ? classes.join(' ') : null;
   }
 
   function buildMilestoneTooltip(row, type, iso) {
@@ -113,9 +124,9 @@
 
     grid.appendChild(headerCell('Project', 'col-1'));
     grid.appendChild(headerCell('Baseline', 'ms-col-baseline'));
-    for (const settimana of weeks) {
-      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
-    }
+    weeks.forEach((settimana, i) => {
+      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, weekExtraClass(settimana, i, currentWeek)));
+    });
 
     rows.forEach((row) => {
       const rowInconsistent = row.readyForUat.inconsistent || row.uat.inconsistent;
@@ -135,10 +146,18 @@
           if (row[type].settimana === iso) {
             cell.classList.add(CELL_CLASS[type]);
             titleParts.push(buildMilestoneTooltip(row, type, iso));
+            // UAT: stesso trattamento di gantt-cell.js — sfondo pieno rosso,
+            // il segnale visivo più forte dei 2 tipi condivisi.
+            if (type === UAT) cell.style.background = '#d32f2f';
+            const badge = document.createElement('span');
+            badge.className = `badge-milestone-type ${BADGE_CLASS[type]}`;
+            badge.textContent = BADGE_GLYPH[type];
+            cell.appendChild(badge);
           }
         }
         if (titleParts.length) cell.title = titleParts.join(' | ');
         if (i === currentWeekIndex) cell.classList.add('current-week-line');
+        if (i > 0 && MP.weekUtils.isMonthBoundary(iso)) cell.classList.add('month-boundary');
         grid.appendChild(cell);
       });
     });
@@ -158,6 +177,7 @@
           cell.classList.add('milestone-total-cell', TOTAL_CELL_CLASS[type]);
         }
         if (i === currentWeekIndex) cell.classList.add('current-week-line');
+        if (i > 0 && MP.weekUtils.isMonthBoundary(iso)) cell.classList.add('month-boundary');
         totalsGrid.appendChild(cell);
       });
     }
@@ -192,7 +212,7 @@
       const uatCount = weekCounts.uat.get(iso) || 0;
       const total = readyCount + uatCount;
       const cell = document.createElement('div');
-      cell.className = `milestone-hist-cell${i === currentWeekIndex ? ' current-week-line' : ''}`;
+      cell.className = `milestone-hist-cell${i === currentWeekIndex ? ' current-week-line' : ''}${i > 0 && MP.weekUtils.isMonthBoundary(iso) ? ' month-boundary' : ''}`;
       if (total > 0) {
         const label = document.createElement('span');
         label.className = 'milestone-hist-count';

@@ -2,7 +2,32 @@
 
 All notable changes to Master Plan are documented in this file.
 
-## [Unreleased] — 2026-08-05
+## [Unreleased] — 2026-08-06
+
+### Added
+
+- **Month-boundary separator line** — the gantt, Workload, and Milestones grids now draw a
+  dashed grey vertical line (`.month-boundary`) on the first week column of every calendar month,
+  a lightweight orientation aid alongside the existing solid blue "today" line
+  (`current-week-line`); when both would land on the same column, "today" wins.
+  (`js/model/week-utils.js`'s `isMonthBoundary`, applied in `gantt-view.js`,
+  `resource-load-view.js`, and `milestones-view.js`, plus a matching badge/border on the
+  Milestones grid's histogram cells.)
+
+### Changed
+
+- **Week-removal confirmation** (`week-controls.js`'s `handleRemoveWeek`) — deleting a
+  non-empty week from the head of the sheet now opens a copyable report
+  (`MP.modal.confirmWithReport`) splitting affected allocations into "ACTIVE (still binding)" and
+  "Completed/closed (no longer binding)" sections, instead of a flat list capped at 10 items
+  inside a plain `window.confirm`. `MP.weekUtils.findAllocationsInWeeks` now returns a `completed`
+  flag per allocation (true if the project, baseline, task, or that single week is already
+  closed) to drive the split. `MP.modal.confirmWithReport` gained two optional params,
+  `boxClass`/`rows`, to size this particular report's dialog without affecting its other caller.
+- **Gantt grid columns** — the Baseline column (`col-2`) widened from 117px to 234px (Task,
+  `col-3`, shifts right accordingly) so longer baseline/version labels no longer truncate.
+
+## 2026-08-05
 
 ### Added — 3-type milestone model
 

@@ -157,10 +157,12 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 - **Reorder a task, or move it to a different baseline:** drag it by the handle (⠿) next to its
   name and drop it on another row — above or below to position it there, including a row that
   belongs to a different baseline of the same project.
-- **Allocate a resource to a task for a given week:** double-click the corresponding cell in the
+- **Allocate a resource to a task for a given week:** right-click the corresponding cell in the
   grid. A popup opens: pick the team first, then the resources belonging to that team, and
-  optionally check *"Delivery milestone"* if that week is the baseline's release date. The popup
-  saves itself when closed — there's no "Confirm" button.
+  optionally pick a milestone type ("Task deadline", "Ready for UAT", or "UAT") if that week
+  marks a deadline or release date. The popup saves itself when closed — there's no "Confirm"
+  button. A dashed grey line marks the first week of each calendar month across the grid, to help
+  you keep your bearings alongside the solid blue "today" line.
 - **Select several weeks at once:** click the first cell, then shift-click the last one on the
   same row, to apply the same allocation to the whole range in a single save.
 - **Shift an allocation by one week:** right-click the cell and pick *"Shift one week back"* or

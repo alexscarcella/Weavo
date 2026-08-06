@@ -58,9 +58,22 @@
     return addDays(todayIso, -diffFromMonday);
   }
 
+  // True se la settimana `iso` è la prima del gantt il cui lunedì cade in un
+  // mese diverso da quello della settimana precedente — usato per disegnare un
+  // separatore verticale di orientamento nella timeline (gantt/resource-load/
+  // milestones), distinto dalla linea "oggi" (current-week-line).
+  function isMonthBoundary(iso) {
+    const date = toDate(iso);
+    const prev = toDate(addDays(iso, -7));
+    return date.getUTCMonth() !== prev.getUTCMonth() || date.getUTCFullYear() !== prev.getUTCFullYear();
+  }
+
   // Elenco (progetto/baseline/task/settimana) di ogni allocazione non vuota che
   // cade in uno degli iso presenti in weekIsoSet — usato per avvisare prima di
-  // eliminare settimane in coda (§6.3 della spec).
+  // eliminare settimane in coda (§6.3 della spec). `completed` è true se il
+  // progetto, la baseline, il task o la singola settimana sono già chiusi —
+  // permette al chiamante di distinguere allocazioni ancora vincolanti da
+  // quelle ormai storiche.
   function findAllocationsInWeeks(dataset, weekIsoSet) {
     const risultati = [];
     for (const [, { data: progetto }] of dataset.projects) {
@@ -68,7 +81,8 @@
         baseline.task.forEach((task) => {
           for (const [settimana, entry] of Object.entries(task.weeks || {})) {
             if (weekIsoSet.has(settimana) && entry && (entry.team || entry.milestone)) {
-              risultati.push({ progetto: progetto.name, baseline: baseline.version, task: task.name, settimana });
+              const completed = !!(progetto.completed || baseline.completed || task.completed || entry.completed);
+              risultati.push({ progetto: progetto.name, baseline: baseline.version, task: task.name, settimana, completed });
             }
           }
         });
@@ -87,6 +101,7 @@
     formatWeekLabel,
     getTodayIso,
     getCurrentWeekIso,
+    isMonthBoundary,
     findAllocationsInWeeks,
   };
 })(window.MP = window.MP || {});

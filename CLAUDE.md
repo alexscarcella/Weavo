@@ -490,7 +490,15 @@ inserted at the right point in that list. Layers, low → high:
    the real-world current week — used by both the gantt and resource-load views to highlight
    today's column header, class `current-week`, and to draw a bold left-border "today" line down
    the whole column, class `current-week-line`, computed from the browser's local clock so it's
-   never persisted/stored), `overallocation.js` (cross-project initials×week allocation index,
+   never persisted/stored; `isMonthBoundary(iso)` flags the first gantt week whose Monday falls in
+   a different calendar month than the previous week — a second, purely visual orientation aid,
+   class `month-boundary` (dashed grey left border, `css/styles.css`), applied by the gantt,
+   resource-load, and milestones views alike wherever they render a week column, but never on the
+   very first column so the separator never sits flush against the 2/3 frozen columns' own border;
+   when a month boundary and the "today" line land on the same column, `current-week-line` wins —
+   a more specific CSS selector (`.current-week-line.month-boundary`) keeps the solid blue border
+   instead of the dashed grey one, since "today" is the stronger signal), `overallocation.js`
+   (cross-project initials×week allocation index,
    used both by the cell popover warning and the gantt/resource-load highlighting),
    `validation.js` (orphan `team`/`initials` detection, plus `findTeamMismatches` for resources
    allocated under a team they no longer belong to), `milestones.js`
@@ -965,8 +973,16 @@ inserted at the right point in that list. Layers, low → high:
      as the user scrolls right, unlike the 3 real frozen columns to its left (whose row-1 corner
      cells are blank filler, frozen on both axes like the header row's corner, never containing a
      button); it removes `manifest.weeks.first` (head, past) after an always-shown explicit
-     `window.confirm`, with allocation detail in the message when the week being removed isn't
-     empty. `renderAddWeekButton` sits in the dedicated track right after the last week — also not
+     confirmation, with allocation detail when the week being removed isn't empty. An empty week
+     still confirms via a plain `window.confirm`, but a non-empty one instead opens
+     `MP.modal.confirmWithReport` (`boxClass: 'week-remove-report-card'`, `rows: 20`) showing a
+     copyable, readonly report built by `buildRemovalReport`: every affected allocation
+     (`MP.weekUtils.findAllocationsInWeeks`, whose per-record `completed` flag is true if the
+     project, baseline, task, *or* that single week is already closed) split into an "ACTIVE
+     allocations (still binding)" section and a "Completed/closed allocations (no longer binding)"
+     section, instead of the old flat, 10-item-capped bullet list inside a plain confirm dialog —
+     lets the user tell at a glance whether deleting the week actually destroys live commitments or
+     only historical/closed ones. `renderAddWeekButton` sits in the dedicated track right after the last week — also not
      sticky, so it only scrolls into view once the user has scrolled all the way past the real
      last week — and extends `manifest.weeks.last` by one week (tail, future) with no
      confirmation needed. Always exactly one week per click; never trims from the tail or adds at

@@ -65,9 +65,9 @@
     "semantic_hash": ""
   },
   "js/model/week-utils.js": {
-    "mtime": 1785995923.7699468,
-    "ast_hash": "f98da29f5caeae6aeeaa9a1f32ee85b5",
-    "semantic_hash": ""
+    "mtime": 1784380914.9720147,
+    "ast_hash": "6f5ac45998cf54c8b5d4cffd98ccfbf4",
+    "semantic_hash": "6f5ac45998cf54c8b5d4cffd98ccfbf4"
   },
   "js/state/store.js": {
     "mtime": 1784666520.4292142,
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "js/ui/common/modal.js": {
-    "mtime": 1785996133.2535198,
-    "ast_hash": "640728818c9a61e1fe7a64c3ad9a0976",
+    "mtime": 1785954818.9353178,
+    "ast_hash": "fb95f9e6a3dfe1189e81065d65718db6",
     "semantic_hash": ""
   },
   "js/ui/common/toast.js": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-view.js": {
-    "mtime": 1785994983.4720323,
-    "ast_hash": "2bf3e51d99050d2572eaa640ceff4900",
+    "mtime": 1785955153.5984063,
+    "ast_hash": "4b9328b4ec881b03f18b2f14c5f5c128",
     "semantic_hash": ""
   },
   "js/ui/gantt/legend.js": {
@@ -170,14 +170,14 @@
     "semantic_hash": "2351048a1f2223493f53a9ad3563f23b"
   },
   "js/ui/milestones/milestones-view.js": {
-    "mtime": 1785995099.7068224,
-    "ast_hash": "8e35138a8cffbcafd57e7581321800d3",
+    "mtime": 1785954606.7169228,
+    "ast_hash": "896ddc907893f3ad7843ab7dacfcf386",
     "semantic_hash": ""
   },
   "js/ui/resource-load/resource-load-view.js": {
-    "mtime": 1785995029.001706,
-    "ast_hash": "62caccd6cb577bb115f48c4267c564cc",
-    "semantic_hash": ""
+    "mtime": 1784700190.4050255,
+    "ast_hash": "d37b56b2202f0706a5971bd264ca3599",
+    "semantic_hash": "d37b56b2202f0706a5971bd264ca3599"
   },
   "js/ui/team-resources/team-resources-view.js": {
     "mtime": 1784700189.2944987,
@@ -185,9 +185,9 @@
     "semantic_hash": "c28d6fe69b4c93daf2fc16b1f95c347c"
   },
   "js/ui/weeks/week-controls.js": {
-    "mtime": 1785996163.8134694,
-    "ast_hash": "e9496b4e05338cb53b0abbf2813b022a",
-    "semantic_hash": ""
+    "mtime": 1784381403.4836838,
+    "ast_hash": "9c67bf5f171f4e02461d3ef5dc7bbe27",
+    "semantic_hash": "9c67bf5f171f4e02461d3ef5dc7bbe27"
   },
   "sample-data/manifest.json": {
     "mtime": 1785951527.224481,
@@ -375,13 +375,8 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1785996383.346168,
+    "mtime": 1785955626.8859124,
     "ast_hash": "a77874a798fb7ed23a821c8f392213ef",
-    "semantic_hash": ""
-  },
-  "README.md": {
-    "mtime": 1785996383.4256802,
-    "ast_hash": "eb57336ed27ccf02d0f1ad9afaa61688",
     "semantic_hash": ""
   }
 }

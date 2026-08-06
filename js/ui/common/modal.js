@@ -128,12 +128,12 @@
   // (textarea readonly) prima di un'azione distruttiva, richiedendo comunque un click esplicito
   // di conferma (chiudere/Escape/click fuori equivalgono ad annullare) — a differenza di
   // promptText non è editabile e risolve con l'esito della scelta (bool), non col testo.
-  function confirmWithReport({ title, message = '', reportText = '', confirmLabel = 'Confirm', cancelLabel = 'Cancel', danger = false } = {}) {
+  function confirmWithReport({ title, message = '', reportText = '', confirmLabel = 'Confirm', cancelLabel = 'Cancel', danger = false, boxClass = '', rows = 12 } = {}) {
     return new Promise((resolve) => {
-      const { overlay, box } = openModal(`modal-box modal-box-wide${danger ? ' modal-danger-confirm' : ''}`, `
+      const { overlay, box } = openModal(`modal-box modal-box-wide${danger ? ' modal-danger-confirm' : ''}${boxClass ? ` ${boxClass}` : ''}`, `
         <h2>${escapeHtml(title)}</h2>
         ${message ? `<p>${escapeHtml(message)}</p>` : ''}
-        <textarea class="modal-textarea" rows="12" readonly></textarea>
+        <textarea class="modal-textarea" rows="${rows}" readonly></textarea>
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">${escapeHtml(cancelLabel)}</button>
           <button type="button" class="modal-btn-save">${escapeHtml(confirmLabel)}</button>

@@ -326,6 +326,17 @@
     return div;
   }
 
+  // Classi extra per la colonna-settimana `i`-esima: linea "oggi" (current-week,
+  // esclusiva/blu) + separatore di inizio mese (month-boundary, tratteggiato
+  // grigio) — mai la stessa settimana in colonna 0, per non disegnare una linea
+  // subito a ridosso del bordo delle 3 colonne fisse. Vedi css/styles.css.
+  function weekExtraClass(settimana, i, currentWeek) {
+    const classes = [];
+    if (settimana === currentWeek) classes.push('current-week', 'current-week-line');
+    if (i > 0 && MP.weekUtils.isMonthBoundary(settimana)) classes.push('month-boundary');
+    return classes.length ? classes.join(' ') : null;
+  }
+
   function renderWarnings(dataset) {
     const orfaniTeam = findOrphanTeam(dataset);
     const orfaniRisorsa = findOrphanResources(dataset);
@@ -399,7 +410,7 @@
     // delle settimane invece di restare bloccate. `renderTaskRow`/`gantt-row.js`
     // non sanno nulla di queste 2 colonne (restituiscono sempre 3+weeks.length
     // celle): sono `gantt-view.js` a inserire i filler prima/dopo, riga per riga.
-    grid.style.gridTemplateColumns = `170px 117px 300px repeat(${weeks.length + 2}, 46px)`;
+    grid.style.gridTemplateColumns = `170px 234px 300px repeat(${weeks.length + 2}, 46px)`;
 
     // Riga pulsanti "a bordo tabella" in stile Excel, sopra le etichette di
     // colonna: sacrifica un'intera riga di altezza (24px, come le altre)
@@ -434,9 +445,9 @@
     grid.appendChild(headerCell('Baseline', 'col-2'));
     grid.appendChild(headerCell('Task', 'col-3'));
     grid.appendChild(headerCell('', null));
-    for (const settimana of weeks) {
-      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, settimana === currentWeek ? 'current-week current-week-line' : null));
-    }
+    weeks.forEach((settimana, i) => {
+      grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, weekExtraClass(settimana, i, currentWeek)));
+    });
     grid.appendChild(headerCell('', null));
 
     for (const row of rows) {
@@ -452,6 +463,9 @@
         lastEdited,
       });
       if (currentWeekIndex !== -1) cells[3 + currentWeekIndex].classList.add('current-week-line');
+      weeks.forEach((settimana, i) => {
+        if (i > 0 && MP.weekUtils.isMonthBoundary(settimana)) cells[3 + i].classList.add('month-boundary');
+      });
 
       const rowFillerClass = row.showProgetto ? ' row-project-start' : row.showBaseline ? ' row-baseline-start' : '';
       const altClass = row.baselineIndex % 2 === 1 ? ' row-baseline-alt' : '';

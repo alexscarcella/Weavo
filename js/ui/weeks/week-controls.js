@@ -22,6 +22,21 @@
     await persistManifest(state);
   }
 
+  function buildRemovalReport(etichetta, attive, chiuse) {
+    const riga = (a) => `${a.progetto} / BL ${a.baseline} / ${a.task}`;
+    const sezione = (titolo, records) => [
+      `${titolo} (${records.length}):`,
+      ...(records.length ? records.map(riga) : ['(none)']),
+    ].join('\n');
+    return [
+      `Week: ${etichetta}`,
+      '',
+      sezione('ACTIVE allocations (still binding)', attive),
+      '',
+      sezione('Completed/closed allocations (no longer binding)', chiuse),
+    ].join('\n');
+  }
+
   async function handleRemoveWeek(state) {
     const { dataset } = state;
     const manifest = dataset.manifest;
@@ -37,16 +52,23 @@
     const allocazioni = findAllocationsInWeeks(dataset, weeksToRemove);
     const etichetta = formatWeekLabel(settimanaDaRimuovere);
 
-    let messaggio = `Remove the week of ${etichetta}?`;
     if (allocazioni.length > 0) {
-      const dettaglio = allocazioni
-        .slice(0, 10)
-        .map((a) => `- ${a.progetto} / BL ${a.baseline} / ${a.task}`)
-        .join('\n');
-      const extra = allocazioni.length > 10 ? `\n… and ${allocazioni.length - 10} more allocations.` : '';
-      messaggio = `The week of ${etichetta} contains ${allocazioni.length} allocations that will be permanently deleted:\n\n${dettaglio}${extra}\n\nProceed anyway?`;
+      const attive = allocazioni.filter((a) => !a.completed);
+      const chiuse = allocazioni.filter((a) => a.completed);
+      const confermato = await MP.modal.confirmWithReport({
+        title: `Remove the week of ${etichetta}?`,
+        message: `${allocazioni.length} allocations will be permanently deleted (${attive.length} active, ${chiuse.length} completed/closed). The text below is pre-selected: copy it if you want to keep it elsewhere.`,
+        reportText: buildRemovalReport(etichetta, attive, chiuse),
+        confirmLabel: 'Proceed with deletion',
+        cancelLabel: 'Cancel',
+        danger: true,
+        boxClass: 'week-remove-report-card',
+        rows: 20,
+      });
+      if (!confermato) return;
+    } else if (!window.confirm(`Remove the week of ${etichetta}?`)) {
+      return;
     }
-    if (!window.confirm(messaggio)) return;
 
     const fileDaSalvare = [];
     for (const [file, { data: progetto }] of dataset.projects) {
