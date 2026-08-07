@@ -1,7 +1,7 @@
-# Graph Report - Weavo - Master Plan  (2026-08-07)
+# Graph Report - Weavo - Master Plan  (2026-08-06)
 
 ## Corpus Check
-- 76 files · ~66,010 words
+- 76 files · ~65,503 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c8ca50be`
+- Built from commit: `76d18e4a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -74,9 +74,9 @@
 5. `renderAllocationsCard()` - 11 edges
 6. `Weavo` - 10 edges
 7. `migrateIfNeeded()` - 10 edges
-8. `renderMilestoneListCard()` - 9 edges
-9. `Guide for non-technical users (first install, setup, and daily use)` - 9 edges
-10. `buildAllocationsHtml()` - 7 edges
+8. `Guide for non-technical users (first install, setup, and daily use)` - 9 edges
+9. `renderMilestoneListCard()` - 9 edges
+10. `toDate()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Shift feature kept out of popover save path (avoids overwrite bug)` --rationale_for--> `openShiftMenu()`  [EXTRACTED]

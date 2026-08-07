@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "js/ui/common/modal.js": {
-    "mtime": 1786085691.3440807,
-    "ast_hash": "6997e2033c0a025852266da47584df42",
+    "mtime": 1785996133.2535198,
+    "ast_hash": "640728818c9a61e1fe7a64c3ad9a0976",
     "semantic_hash": ""
   },
   "js/ui/common/toast.js": {
@@ -280,8 +280,8 @@
     "semantic_hash": "d2ca65978802c89db2010fc7b303f182"
   },
   "CLAUDE.md": {
-    "mtime": 1786085664.3623233,
-    "ast_hash": "dfbaab5b8211694fa8bbe70e7726e504",
+    "mtime": 1785996511.5277317,
+    "ast_hash": "09da4dd5374ea1ba4b3034e7a0b70169",
     "semantic_hash": ""
   },
   "docs/api.md": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "docs/architecture.md": {
-    "mtime": 1786085680.9853976,
-    "ast_hash": "38ae0bf985a241be2716044aa1e27a34",
+    "mtime": 1785951696.4331002,
+    "ast_hash": "57f14256a994544c5bb868e7cdf791e8",
     "semantic_hash": ""
   },
   "docs/database.md": {

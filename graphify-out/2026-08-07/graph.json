@@ -63,345 +63,15 @@
   },
   "nodes": [
     {
-      "label": "modal.js",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "js_ui_common_modal",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "modal.js"
-    },
-    {
-      "label": "openModal()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_openmodal",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "openmodal()"
-    },
-    {
-      "label": "wireModalDismiss()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_wiremodaldismiss",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "wiremodaldismiss()"
-    },
-    {
-      "label": "confirmConflict()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_confirmconflict",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "confirmconflict()"
-    },
-    {
-      "label": "promptText()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L86",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_prompttext",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "prompttext()"
-    },
-    {
-      "label": "confirmWithReport()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L131",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_confirmwithreport",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "confirmwithreport()"
-    },
-    {
-      "label": "promptSelect()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L160",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_promptselect",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "promptselect()"
-    },
-    {
-      "label": "escapeHtml()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L187",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_escapehtml",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "escapehtml()"
-    },
-    {
-      "label": "promptProjectForm()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L197",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_promptprojectform",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "promptprojectform()"
-    },
-    {
-      "label": "showProjectCard()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L274",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_showprojectcard",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "showprojectcard()"
-    },
-    {
-      "label": "showTaskNoteCard()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L313",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_showtasknotecard",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "showtasknotecard()"
-    },
-    {
-      "label": "formatWeekRange()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L337",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_formatweekrange",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "formatweekrange()"
-    },
-    {
-      "label": "formatMonthLabel()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L342",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_formatmonthlabel",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "formatmonthlabel()"
-    },
-    {
-      "label": "groupRowsByMonth()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L350",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_grouprowsbymonth",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "grouprowsbymonth()"
-    },
-    {
-      "label": "formatRowText()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L361",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_formatrowtext",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "formatrowtext()"
-    },
-    {
-      "label": "formatRowBodyHtml()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L369",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_formatrowbodyhtml",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "formatrowbodyhtml()"
-    },
-    {
-      "label": "buildAllocationsText()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L378",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_buildallocationstext",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "buildallocationstext()"
-    },
-    {
-      "label": "buildAllocationsHtml()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L389",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_buildallocationshtml",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "buildallocationshtml()"
-    },
-    {
-      "label": "copyAllocationsToClipboard()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L400",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_copyallocationstoclipboard",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "copyallocationstoclipboard()"
-    },
-    {
-      "label": "renderAllocationsCard()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L425",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_renderallocationscard",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "renderallocationscard()"
-    },
-    {
-      "label": "showResourceAllocations()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L460",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_showresourceallocations",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "showresourceallocations()"
-    },
-    {
-      "label": "showTeamAllocations()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L464",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_showteamallocations",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "showteamallocations()"
-    },
-    {
-      "label": "formatReadableDate()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L468",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_formatreadabledate",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "formatreadabledate()"
-    },
-    {
-      "label": "formatMilestoneLine()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L472",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_formatmilestoneline",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "formatmilestoneline()"
-    },
-    {
-      "label": "buildMilestoneClipboardText()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L480",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "buildmilestoneclipboardtext()"
-    },
-    {
-      "label": "copyMilestoneListToClipboard()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L486",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_copymilestonelisttoclipboard",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "copymilestonelisttoclipboard()"
-    },
-    {
-      "label": "renderMilestoneListCard()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L499",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_rendermilestonelistcard",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "rendermilestonelistcard()"
-    },
-    {
-      "label": "showMilestoneList()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L528",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_showmilestonelist",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "showmilestonelist()"
-    },
-    {
-      "label": "showHelpGuide()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L536",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_showhelpguide",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "showhelpguide()"
-    },
-    {
-      "label": "promptColor()",
-      "file_type": "code",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L637",
-      "_origin": "ast",
-      "id": "js_ui_common_modal_promptcolor",
-      "community": 2,
-      "community_name": "modal.js",
-      "norm_label": "promptcolor()"
-    },
-    {
       "label": "week-shift.js",
       "file_type": "code",
       "source_file": "js/model/week-shift.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "js_model_week_shift",
       "community": 5,
       "community_name": "week-shift.js / baseline-crud.js",
-      "norm_label": "week-shift.js",
-      "id": "js_model_week_shift"
+      "norm_label": "week-shift.js"
     },
     {
       "label": "canShiftWeeks()",
@@ -409,10 +79,10 @@
       "source_file": "js/model/week-shift.js",
       "source_location": "L28",
       "_origin": "ast",
+      "id": "js_model_week_shift_canshiftweeks",
       "community": 5,
       "community_name": "week-shift.js / baseline-crud.js",
-      "norm_label": "canshiftweeks()",
-      "id": "js_model_week_shift_canshiftweeks"
+      "norm_label": "canshiftweeks()"
     },
     {
       "label": "shiftWeeksData()",
@@ -420,10 +90,10 @@
       "source_file": "js/model/week-shift.js",
       "source_location": "L61",
       "_origin": "ast",
+      "id": "js_model_week_shift_shiftweeksdata",
       "community": 5,
       "community_name": "week-shift.js / baseline-crud.js",
-      "norm_label": "shiftweeksdata()",
-      "id": "js_model_week_shift_shiftweeksdata"
+      "norm_label": "shiftweeksdata()"
     },
     {
       "label": "findMaxShift()",
@@ -431,10 +101,10 @@
       "source_file": "js/model/week-shift.js",
       "source_location": "L81",
       "_origin": "ast",
+      "id": "js_model_week_shift_findmaxshift",
       "community": 5,
       "community_name": "week-shift.js / baseline-crud.js",
-      "norm_label": "findmaxshift()",
-      "id": "js_model_week_shift_findmaxshift"
+      "norm_label": "findmaxshift()"
     },
     {
       "label": "canShiftBaseline()",
@@ -442,10 +112,10 @@
       "source_file": "js/model/week-shift.js",
       "source_location": "L110",
       "_origin": "ast",
+      "id": "js_model_week_shift_canshiftbaseline",
       "community": 5,
       "community_name": "week-shift.js / baseline-crud.js",
-      "norm_label": "canshiftbaseline()",
-      "id": "js_model_week_shift_canshiftbaseline"
+      "norm_label": "canshiftbaseline()"
     },
     {
       "label": "shiftBaselineData()",
@@ -453,10 +123,10 @@
       "source_file": "js/model/week-shift.js",
       "source_location": "L176",
       "_origin": "ast",
+      "id": "js_model_week_shift_shiftbaselinedata",
       "community": 5,
       "community_name": "week-shift.js / baseline-crud.js",
-      "norm_label": "shiftbaselinedata()",
-      "id": "js_model_week_shift_shiftbaselinedata"
+      "norm_label": "shiftbaselinedata()"
     },
     {
       "label": "week-utils.js",
@@ -464,10 +134,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "js_model_week_utils",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "week-utils.js",
-      "id": "js_model_week_utils"
+      "norm_label": "week-utils.js"
     },
     {
       "label": "toDate()",
@@ -475,10 +145,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L5",
       "_origin": "ast",
+      "id": "js_model_week_utils_todate",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "todate()",
-      "id": "js_model_week_utils_todate"
+      "norm_label": "todate()"
     },
     {
       "label": "toIso()",
@@ -486,10 +156,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L10",
       "_origin": "ast",
+      "id": "js_model_week_utils_toiso",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "toiso()",
-      "id": "js_model_week_utils_toiso"
+      "norm_label": "toiso()"
     },
     {
       "label": "isMonday()",
@@ -497,10 +167,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L14",
       "_origin": "ast",
+      "id": "js_model_week_utils_ismonday",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "ismonday()",
-      "id": "js_model_week_utils_ismonday"
+      "norm_label": "ismonday()"
     },
     {
       "label": "addDays()",
@@ -508,10 +178,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L18",
       "_origin": "ast",
+      "id": "js_model_week_utils_adddays",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "adddays()",
-      "id": "js_model_week_utils_adddays"
+      "norm_label": "adddays()"
     },
     {
       "label": "addWeeks()",
@@ -519,10 +189,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L24",
       "_origin": "ast",
+      "id": "js_model_week_utils_addweeks",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "addweeks()",
-      "id": "js_model_week_utils_addweeks"
+      "norm_label": "addweeks()"
     },
     {
       "label": "weeksBetween()",
@@ -530,10 +200,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L31",
       "_origin": "ast",
+      "id": "js_model_week_utils_weeksbetween",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "weeksbetween()",
-      "id": "js_model_week_utils_weeksbetween"
+      "norm_label": "weeksbetween()"
     },
     {
       "label": "getWeeksInRange()",
@@ -541,10 +211,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L35",
       "_origin": "ast",
+      "id": "js_model_week_utils_getweeksinrange",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "getweeksinrange()",
-      "id": "js_model_week_utils_getweeksinrange"
+      "norm_label": "getweeksinrange()"
     },
     {
       "label": "formatWeekLabel()",
@@ -552,10 +222,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L45",
       "_origin": "ast",
+      "id": "js_model_week_utils_formatweeklabel",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "formatweeklabel()",
-      "id": "js_model_week_utils_formatweeklabel"
+      "norm_label": "formatweeklabel()"
     },
     {
       "label": "getTodayIso()",
@@ -563,10 +233,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L54",
       "_origin": "ast",
+      "id": "js_model_week_utils_gettodayiso",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "gettodayiso()",
-      "id": "js_model_week_utils_gettodayiso"
+      "norm_label": "gettodayiso()"
     },
     {
       "label": "getCurrentWeekIso()",
@@ -574,10 +244,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L61",
       "_origin": "ast",
+      "id": "js_model_week_utils_getcurrentweekiso",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "getcurrentweekiso()",
-      "id": "js_model_week_utils_getcurrentweekiso"
+      "norm_label": "getcurrentweekiso()"
     },
     {
       "label": "isMonthBoundary()",
@@ -585,10 +255,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L72",
       "_origin": "ast",
+      "id": "js_model_week_utils_ismonthboundary",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "ismonthboundary()",
-      "id": "js_model_week_utils_ismonthboundary"
+      "norm_label": "ismonthboundary()"
     },
     {
       "label": "findAllocationsInWeeks()",
@@ -596,10 +266,10 @@
       "source_file": "js/model/week-utils.js",
       "source_location": "L84",
       "_origin": "ast",
+      "id": "js_model_week_utils_findallocationsinweeks",
       "community": 15,
       "community_name": "week-utils.js",
-      "norm_label": "findallocationsinweeks()",
-      "id": "js_model_week_utils_findallocationsinweeks"
+      "norm_label": "findallocationsinweeks()"
     },
     {
       "label": "app-header.js",
@@ -607,10 +277,10 @@
       "source_file": "js/ui/common/app-header.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "js_ui_common_app_header",
       "community": 3,
       "community_name": "app.js",
-      "norm_label": "app-header.js",
-      "id": "js_ui_common_app_header"
+      "norm_label": "app-header.js"
     },
     {
       "label": "renderHeader()",
@@ -618,10 +288,10 @@
       "source_file": "js/ui/common/app-header.js",
       "source_location": "L19",
       "_origin": "ast",
+      "id": "js_ui_common_app_header_renderheader",
       "community": 3,
       "community_name": "app.js",
-      "norm_label": "renderheader()",
-      "id": "js_ui_common_app_header_renderheader"
+      "norm_label": "renderheader()"
     },
     {
       "label": "gantt-cell.js",
@@ -629,10 +299,10 @@
       "source_file": "js/ui/gantt/gantt-cell.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_cell",
       "community": 11,
       "community_name": "overallocation.js / gantt-cell.js",
-      "norm_label": "gantt-cell.js",
-      "id": "js_ui_gantt_gantt_cell"
+      "norm_label": "gantt-cell.js"
     },
     {
       "label": "registerCell()",
@@ -640,10 +310,10 @@
       "source_file": "js/ui/gantt/gantt-cell.js",
       "source_location": "L40",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_cell_registercell",
       "community": 11,
       "community_name": "overallocation.js / gantt-cell.js",
-      "norm_label": "registercell()",
-      "id": "js_ui_gantt_gantt_cell_registercell"
+      "norm_label": "registercell()"
     },
     {
       "label": "getCellDiv()",
@@ -651,10 +321,10 @@
       "source_file": "js/ui/gantt/gantt-cell.js",
       "source_location": "L49",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_cell_getcelldiv",
       "community": 11,
       "community_name": "overallocation.js / gantt-cell.js",
-      "norm_label": "getcelldiv()",
-      "id": "js_ui_gantt_gantt_cell_getcelldiv"
+      "norm_label": "getcelldiv()"
     },
     {
       "label": "renderWeekCell()",
@@ -662,10 +332,10 @@
       "source_file": "js/ui/gantt/gantt-cell.js",
       "source_location": "L54",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_cell_renderweekcell",
       "community": 11,
       "community_name": "overallocation.js / gantt-cell.js",
-      "norm_label": "renderweekcell()",
-      "id": "js_ui_gantt_gantt_cell_renderweekcell"
+      "norm_label": "renderweekcell()"
     },
     {
       "label": "gantt-view.js",
@@ -673,10 +343,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "gantt-view.js",
-      "id": "js_ui_gantt_gantt_view"
+      "norm_label": "gantt-view.js"
     },
     {
       "label": "markLastEdited()",
@@ -684,10 +354,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L23",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_marklastedited",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "marklastedited()",
-      "id": "js_ui_gantt_gantt_view_marklastedited"
+      "norm_label": "marklastedited()"
     },
     {
       "label": "buildRows()",
@@ -695,10 +365,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L37",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_buildrows",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "buildrows()",
-      "id": "js_ui_gantt_gantt_view_buildrows"
+      "norm_label": "buildrows()"
     },
     {
       "label": "clearOtherMilestones()",
@@ -706,10 +376,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L85",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_clearothermilestones",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "clearothermilestones()",
-      "id": "js_ui_gantt_gantt_view_clearothermilestones"
+      "norm_label": "clearothermilestones()"
     },
     {
       "label": "syncBaselineMilestone()",
@@ -717,10 +387,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L100",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_syncbaselinemilestone",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "syncbaselinemilestone()",
-      "id": "js_ui_gantt_gantt_view_syncbaselinemilestone"
+      "norm_label": "syncbaselinemilestone()"
     },
     {
       "label": "clearBaselineMilestone()",
@@ -728,10 +398,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L128",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_clearbaselinemilestone",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "clearbaselinemilestone()",
-      "id": "js_ui_gantt_gantt_view_clearbaselinemilestone"
+      "norm_label": "clearbaselinemilestone()"
     },
     {
       "label": "isSharedMilestoneType()",
@@ -739,10 +409,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L141",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_issharedmilestonetype",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "issharedmilestonetype()",
-      "id": "js_ui_gantt_gantt_view_issharedmilestonetype"
+      "norm_label": "issharedmilestonetype()"
     },
     {
       "label": "handleCellSaved()",
@@ -750,10 +420,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L145",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_handlecellsaved",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "handlecellsaved()",
-      "id": "js_ui_gantt_gantt_view_handlecellsaved"
+      "norm_label": "handlecellsaved()"
     },
     {
       "label": "handleBulkCellsSaved()",
@@ -761,10 +431,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L188",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_handlebulkcellssaved",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "handlebulkcellssaved()",
-      "id": "js_ui_gantt_gantt_view_handlebulkcellssaved"
+      "norm_label": "handlebulkcellssaved()"
     },
     {
       "label": "openShiftMenu()",
@@ -772,10 +442,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L221",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_openshiftmenu",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "openshiftmenu()",
-      "id": "js_ui_gantt_gantt_view_openshiftmenu"
+      "norm_label": "openshiftmenu()"
     },
     {
       "label": "openCellContextMenu()",
@@ -783,10 +453,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L259",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_opencellcontextmenu",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "opencellcontextmenu()",
-      "id": "js_ui_gantt_gantt_view_opencellcontextmenu"
+      "norm_label": "opencellcontextmenu()"
     },
     {
       "label": "applyWeeksShift()",
@@ -794,10 +464,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L289",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_applyweeksshift",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "applyweeksshift()",
-      "id": "js_ui_gantt_gantt_view_applyweeksshift"
+      "norm_label": "applyweeksshift()"
     },
     {
       "label": "handleCellsShift()",
@@ -805,10 +475,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L328",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_handlecellsshift",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "handlecellsshift()",
-      "id": "js_ui_gantt_gantt_view_handlecellsshift"
+      "norm_label": "handlecellsshift()"
     },
     {
       "label": "headerCell()",
@@ -816,10 +486,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L334",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_headercell",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "headercell()",
-      "id": "js_ui_gantt_gantt_view_headercell"
+      "norm_label": "headercell()"
     },
     {
       "label": "weekExtraClass()",
@@ -827,10 +497,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L346",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_weekextraclass",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "weekextraclass()",
-      "id": "js_ui_gantt_gantt_view_weekextraclass"
+      "norm_label": "weekextraclass()"
     },
     {
       "label": "renderWarnings()",
@@ -838,10 +508,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L353",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_renderwarnings",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "renderwarnings()",
-      "id": "js_ui_gantt_gantt_view_renderwarnings"
+      "norm_label": "renderwarnings()"
     },
     {
       "label": "renderGanttView()",
@@ -849,10 +519,10 @@
       "source_file": "js/ui/gantt/gantt-view.js",
       "source_location": "L372",
       "_origin": "ast",
+      "id": "js_ui_gantt_gantt_view_renderganttview",
       "community": 4,
       "community_name": "cell-selection.js",
-      "norm_label": "renderganttview()",
-      "id": "js_ui_gantt_gantt_view_renderganttview"
+      "norm_label": "renderganttview()"
     },
     {
       "label": "week-drag.js",
@@ -860,10 +530,10 @@
       "source_file": "js/ui/gantt/week-drag.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "js_ui_gantt_week_drag",
       "community": 48,
       "community_name": "week-drag.js",
-      "norm_label": "week-drag.js",
-      "id": "js_ui_gantt_week_drag"
+      "norm_label": "week-drag.js"
     },
     {
       "label": "clearTargetClasses()",
@@ -871,10 +541,10 @@
       "source_file": "js/ui/gantt/week-drag.js",
       "source_location": "L17",
       "_origin": "ast",
+      "id": "js_ui_gantt_week_drag_cleartargetclasses",
       "community": 48,
       "community_name": "week-drag.js",
-      "norm_label": "cleartargetclasses()",
-      "id": "js_ui_gantt_week_drag_cleartargetclasses"
+      "norm_label": "cleartargetclasses()"
     },
     {
       "label": "reset()",
@@ -882,10 +552,10 @@
       "source_file": "js/ui/gantt/week-drag.js",
       "source_location": "L22",
       "_origin": "ast",
+      "id": "js_ui_gantt_week_drag_reset",
       "community": 48,
       "community_name": "week-drag.js",
-      "norm_label": "reset()",
-      "id": "js_ui_gantt_week_drag_reset"
+      "norm_label": "reset()"
     },
     {
       "label": "handleDragStart()",
@@ -893,10 +563,10 @@
       "source_file": "js/ui/gantt/week-drag.js",
       "source_location": "L29",
       "_origin": "ast",
+      "id": "js_ui_gantt_week_drag_handledragstart",
       "community": 48,
       "community_name": "week-drag.js",
-      "norm_label": "handledragstart()",
-      "id": "js_ui_gantt_week_drag_handledragstart"
+      "norm_label": "handledragstart()"
     },
     {
       "label": "handleDragOver()",
@@ -904,10 +574,10 @@
       "source_file": "js/ui/gantt/week-drag.js",
       "source_location": "L39",
       "_origin": "ast",
+      "id": "js_ui_gantt_week_drag_handledragover",
       "community": 48,
       "community_name": "week-drag.js",
-      "norm_label": "handledragover()",
-      "id": "js_ui_gantt_week_drag_handledragover"
+      "norm_label": "handledragover()"
     },
     {
       "label": "handleDrop()",
@@ -915,10 +585,10 @@
       "source_file": "js/ui/gantt/week-drag.js",
       "source_location": "L70",
       "_origin": "ast",
+      "id": "js_ui_gantt_week_drag_handledrop",
       "community": 48,
       "community_name": "week-drag.js",
-      "norm_label": "handledrop()",
-      "id": "js_ui_gantt_week_drag_handledrop"
+      "norm_label": "handledrop()"
     },
     {
       "label": "handleDragEnd()",
@@ -926,10 +596,10 @@
       "source_file": "js/ui/gantt/week-drag.js",
       "source_location": "L91",
       "_origin": "ast",
+      "id": "js_ui_gantt_week_drag_handledragend",
       "community": 48,
       "community_name": "week-drag.js",
-      "norm_label": "handledragend()",
-      "id": "js_ui_gantt_week_drag_handledragend"
+      "norm_label": "handledragend()"
     },
     {
       "label": "week-shift.test.js",
@@ -937,10 +607,10 @@
       "source_file": "unit/model/week-shift.test.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "unit_model_week_shift_test",
       "community": 49,
       "community_name": "week-shift.test.js",
-      "norm_label": "week-shift.test.js",
-      "id": "unit_model_week_shift_test"
+      "norm_label": "week-shift.test.js"
     },
     {
       "label": "{ loadMP }",
@@ -948,10 +618,10 @@
       "source_file": "unit/model/week-shift.test.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "unit_model_week_shift_test_loadmp",
       "community": 49,
       "community_name": "week-shift.test.js",
-      "norm_label": "{ loadmp }",
-      "id": "unit_model_week_shift_test_loadmp"
+      "norm_label": "{ loadmp }"
     },
     {
       "label": "buildTask()",
@@ -959,10 +629,10 @@
       "source_file": "unit/model/week-shift.test.js",
       "source_location": "L14",
       "_origin": "ast",
+      "id": "unit_model_week_shift_test_buildtask",
       "community": 49,
       "community_name": "week-shift.test.js",
-      "norm_label": "buildtask()",
-      "id": "unit_model_week_shift_test_buildtask"
+      "norm_label": "buildtask()"
     },
     {
       "label": "buildDataset()",
@@ -970,10 +640,10 @@
       "source_file": "unit/model/week-shift.test.js",
       "source_location": "L21",
       "_origin": "ast",
+      "id": "unit_model_week_shift_test_builddataset",
       "community": 49,
       "community_name": "week-shift.test.js",
-      "norm_label": "builddataset()",
-      "id": "unit_model_week_shift_test_builddataset"
+      "norm_label": "builddataset()"
     },
     {
       "label": "week-utils.test.js",
@@ -981,10 +651,10 @@
       "source_file": "unit/model/week-utils.test.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "unit_model_week_utils_test",
       "community": 50,
       "community_name": "week-utils.test.js",
-      "norm_label": "week-utils.test.js",
-      "id": "unit_model_week_utils_test"
+      "norm_label": "week-utils.test.js"
     },
     {
       "label": "{ loadMP }",
@@ -992,10 +662,10 @@
       "source_file": "unit/model/week-utils.test.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "unit_model_week_utils_test_loadmp",
       "community": 50,
       "community_name": "week-utils.test.js",
-      "norm_label": "{ loadmp }",
-      "id": "unit_model_week_utils_test_loadmp"
+      "norm_label": "{ loadmp }"
     },
     {
       "label": "CHANGELOG.md",
@@ -1315,6 +985,336 @@
       "community_name": "Weavo",
       "norm_label": "status",
       "id": "readme_status"
+    },
+    {
+      "label": "modal.js",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "modal.js",
+      "id": "js_ui_common_modal"
+    },
+    {
+      "label": "openModal()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "openmodal()",
+      "id": "js_ui_common_modal_openmodal"
+    },
+    {
+      "label": "wireModalDismiss()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L40",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "wiremodaldismiss()",
+      "id": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "label": "confirmConflict()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "confirmconflict()",
+      "id": "js_ui_common_modal_confirmconflict"
+    },
+    {
+      "label": "promptText()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L86",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "prompttext()",
+      "id": "js_ui_common_modal_prompttext"
+    },
+    {
+      "label": "confirmWithReport()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L131",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "confirmwithreport()",
+      "id": "js_ui_common_modal_confirmwithreport"
+    },
+    {
+      "label": "promptSelect()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L160",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "promptselect()",
+      "id": "js_ui_common_modal_promptselect"
+    },
+    {
+      "label": "escapeHtml()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L187",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "escapehtml()",
+      "id": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "label": "promptProjectForm()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L197",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "promptprojectform()",
+      "id": "js_ui_common_modal_promptprojectform"
+    },
+    {
+      "label": "showProjectCard()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L274",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "showprojectcard()",
+      "id": "js_ui_common_modal_showprojectcard"
+    },
+    {
+      "label": "showTaskNoteCard()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L313",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "showtasknotecard()",
+      "id": "js_ui_common_modal_showtasknotecard"
+    },
+    {
+      "label": "formatWeekRange()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L337",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "formatweekrange()",
+      "id": "js_ui_common_modal_formatweekrange"
+    },
+    {
+      "label": "formatMonthLabel()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L342",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "formatmonthlabel()",
+      "id": "js_ui_common_modal_formatmonthlabel"
+    },
+    {
+      "label": "groupRowsByMonth()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L350",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "grouprowsbymonth()",
+      "id": "js_ui_common_modal_grouprowsbymonth"
+    },
+    {
+      "label": "formatRowText()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L361",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "formatrowtext()",
+      "id": "js_ui_common_modal_formatrowtext"
+    },
+    {
+      "label": "formatRowBodyHtml()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L369",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "formatrowbodyhtml()",
+      "id": "js_ui_common_modal_formatrowbodyhtml"
+    },
+    {
+      "label": "buildAllocationsText()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L378",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "buildallocationstext()",
+      "id": "js_ui_common_modal_buildallocationstext"
+    },
+    {
+      "label": "buildAllocationsHtml()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L389",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "buildallocationshtml()",
+      "id": "js_ui_common_modal_buildallocationshtml"
+    },
+    {
+      "label": "copyAllocationsToClipboard()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L400",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "copyallocationstoclipboard()",
+      "id": "js_ui_common_modal_copyallocationstoclipboard"
+    },
+    {
+      "label": "renderAllocationsCard()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L425",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "renderallocationscard()",
+      "id": "js_ui_common_modal_renderallocationscard"
+    },
+    {
+      "label": "showResourceAllocations()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L460",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "showresourceallocations()",
+      "id": "js_ui_common_modal_showresourceallocations"
+    },
+    {
+      "label": "showTeamAllocations()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L464",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "showteamallocations()",
+      "id": "js_ui_common_modal_showteamallocations"
+    },
+    {
+      "label": "formatReadableDate()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L468",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "formatreadabledate()",
+      "id": "js_ui_common_modal_formatreadabledate"
+    },
+    {
+      "label": "formatMilestoneLine()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L472",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "formatmilestoneline()",
+      "id": "js_ui_common_modal_formatmilestoneline"
+    },
+    {
+      "label": "buildMilestoneClipboardText()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L480",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "buildmilestoneclipboardtext()",
+      "id": "js_ui_common_modal_buildmilestoneclipboardtext"
+    },
+    {
+      "label": "copyMilestoneListToClipboard()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L486",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "copymilestonelisttoclipboard()",
+      "id": "js_ui_common_modal_copymilestonelisttoclipboard"
+    },
+    {
+      "label": "renderMilestoneListCard()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L499",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "rendermilestonelistcard()",
+      "id": "js_ui_common_modal_rendermilestonelistcard"
+    },
+    {
+      "label": "showMilestoneList()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L528",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "showmilestonelist()",
+      "id": "js_ui_common_modal_showmilestonelist"
+    },
+    {
+      "label": "showHelpGuide()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L536",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "showhelpguide()",
+      "id": "js_ui_common_modal_showhelpguide"
+    },
+    {
+      "label": "promptColor()",
+      "file_type": "code",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L629",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "modal.js",
+      "norm_label": "promptcolor()",
+      "id": "js_ui_common_modal_promptcolor"
     },
     {
       "label": "milestones-view.js",
@@ -5885,1047 +5885,6 @@
       "source_location": null,
       "weight": 1.0,
       "source": "claude_overview",
-      "target": "js_ui_common_modal"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L389",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_buildallocationshtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L378",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_buildallocationstext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L480",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_confirmconflict",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L131",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_confirmwithreport",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L400",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_copyallocationstoclipboard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L486",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_copymilestonelisttoclipboard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L187",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L472",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatmilestoneline",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L342",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L468",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatreadabledate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L369",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatrowbodyhtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L361",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatrowtext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L337",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L350",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L637",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_promptcolor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L197",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_promptprojectform",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L160",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_promptselect",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L86",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_prompttext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L425",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_renderallocationscard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L499",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_rendermilestonelistcard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L536",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showhelpguide",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L528",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showmilestonelist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L274",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showprojectcard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L460",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showresourceallocations",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L313",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showtasknotecard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L464",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showteamallocations",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L58",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmconflict",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L640",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptcolor",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L209",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L164",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L89",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_prompttext",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L438",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L507",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L537",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showhelpguide",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L288",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L316",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showtasknotecard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L153",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L671",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptcolor",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L267",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L183",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L120",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_prompttext",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L456",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L524",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L629",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showhelpguide",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L306",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L328",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showtasknotecard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "CLAUDE.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "js_ui_common_modal_confirmconflict",
-      "target": "js_data_save_coordinator"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L56",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmconflict",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L134",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L163",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L391",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L370",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_formatrowbodyhtml",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L202",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L430",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L504",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L280",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L315",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showtasknotecard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "CLAUDE.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "js_ui_crud_project_crud_createproject",
-      "target": "js_ui_common_modal_promptprojectform"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "CLAUDE.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "js_ui_crud_project_crud_editreferents",
-      "target": "js_ui_common_modal_promptprojectform"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L393",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L362",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_formatrowtext",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L428",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L393",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L382",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationstext",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L482",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L432",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L504",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L392",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L381",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationstext",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L431",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L382",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationstext",
-      "target": "js_ui_common_modal_formatrowtext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L393",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_formatrowbodyhtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L428",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_formatrowbodyhtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L401",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_copyallocationstoclipboard",
-      "target": "js_ui_common_modal_buildallocationstext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L404",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_copyallocationstoclipboard",
-      "target": "js_ui_common_modal_buildallocationshtml",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L449",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_copyallocationstoclipboard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L461",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showresourceallocations",
-      "target": "js_ui_common_modal_renderallocationscard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L465",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showteamallocations",
-      "target": "js_ui_common_modal_renderallocationscard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L473",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_formatmilestoneline",
-      "target": "js_ui_common_modal_formatreadabledate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L482",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "target": "js_ui_common_modal_formatmilestoneline",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L504",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_formatmilestoneline",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L517",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L517",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_copymilestonelisttoclipboard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "js/ui/common/modal.js",
-      "source_location": "L529",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "js_ui_common_modal_showmilestonelist",
-      "target": "js_ui_common_modal_rendermilestonelistcard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "CLAUDE.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "js_ui_common_modal_showmilestonelist",
-      "target": "js_model_milestones_computeupcomingmilestonesbymonth"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "CLAUDE.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "claude_overview",
       "target": "js_model_week_shift"
     },
     {
@@ -6935,9 +5894,9 @@
       "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_shift",
-      "target": "js_model_week_shift_canshiftbaseline"
+      "target": "js_model_week_shift_canshiftbaseline",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6946,9 +5905,9 @@
       "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_shift",
-      "target": "js_model_week_shift_canshiftweeks"
+      "target": "js_model_week_shift_canshiftweeks",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6957,9 +5916,9 @@
       "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_shift",
-      "target": "js_model_week_shift_findmaxshift"
+      "target": "js_model_week_shift_findmaxshift",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6968,9 +5927,9 @@
       "source_location": "L176",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_shift",
-      "target": "js_model_week_shift_shiftbaselinedata"
+      "target": "js_model_week_shift_shiftbaselinedata",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6979,9 +5938,9 @@
       "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_shift",
-      "target": "js_model_week_shift_shiftweeksdata"
+      "target": "js_model_week_shift_shiftweeksdata",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -6991,9 +5950,9 @@
       "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_shift_findmaxshift",
-      "target": "js_model_week_shift_canshiftweeks"
+      "target": "js_model_week_shift_canshiftweeks",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7042,9 +6001,9 @@
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_adddays"
+      "target": "js_model_week_utils_adddays",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7053,9 +6012,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_addweeks"
+      "target": "js_model_week_utils_addweeks",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7064,9 +6023,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_findallocationsinweeks"
+      "target": "js_model_week_utils_findallocationsinweeks",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7075,9 +6034,9 @@
       "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_formatweeklabel"
+      "target": "js_model_week_utils_formatweeklabel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7086,9 +6045,9 @@
       "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_getcurrentweekiso"
+      "target": "js_model_week_utils_getcurrentweekiso",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7097,9 +6056,9 @@
       "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_gettodayiso"
+      "target": "js_model_week_utils_gettodayiso",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7108,9 +6067,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_getweeksinrange"
+      "target": "js_model_week_utils_getweeksinrange",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7119,9 +6078,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_ismonday"
+      "target": "js_model_week_utils_ismonday",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7130,9 +6089,9 @@
       "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_ismonthboundary"
+      "target": "js_model_week_utils_ismonthboundary",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7141,9 +6100,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_todate"
+      "target": "js_model_week_utils_todate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7152,9 +6111,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_toiso"
+      "target": "js_model_week_utils_toiso",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7163,9 +6122,9 @@
       "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils",
-      "target": "js_model_week_utils_weeksbetween"
+      "target": "js_model_week_utils_weeksbetween",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7175,9 +6134,9 @@
       "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_adddays",
-      "target": "js_model_week_utils_todate"
+      "target": "js_model_week_utils_todate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7187,9 +6146,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_formatweeklabel",
-      "target": "js_model_week_utils_todate"
+      "target": "js_model_week_utils_todate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7199,9 +6158,9 @@
       "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_getcurrentweekiso",
-      "target": "js_model_week_utils_todate"
+      "target": "js_model_week_utils_todate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7211,9 +6170,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_ismonday",
-      "target": "js_model_week_utils_todate"
+      "target": "js_model_week_utils_todate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7223,9 +6182,9 @@
       "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_ismonthboundary",
-      "target": "js_model_week_utils_todate"
+      "target": "js_model_week_utils_todate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7235,9 +6194,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_weeksbetween",
-      "target": "js_model_week_utils_todate"
+      "target": "js_model_week_utils_todate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7247,9 +6206,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_adddays",
-      "target": "js_model_week_utils_toiso"
+      "target": "js_model_week_utils_toiso",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7259,9 +6218,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_gettodayiso",
-      "target": "js_model_week_utils_toiso"
+      "target": "js_model_week_utils_toiso",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7271,9 +6230,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_addweeks",
-      "target": "js_model_week_utils_adddays"
+      "target": "js_model_week_utils_adddays",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7283,9 +6242,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_getcurrentweekiso",
-      "target": "js_model_week_utils_adddays"
+      "target": "js_model_week_utils_adddays",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7295,9 +6254,9 @@
       "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_ismonthboundary",
-      "target": "js_model_week_utils_adddays"
+      "target": "js_model_week_utils_adddays",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7307,9 +6266,9 @@
       "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_getweeksinrange",
-      "target": "js_model_week_utils_addweeks"
+      "target": "js_model_week_utils_addweeks",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7319,9 +6278,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_model_week_utils_getcurrentweekiso",
-      "target": "js_model_week_utils_gettodayiso"
+      "target": "js_model_week_utils_gettodayiso",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7350,9 +6309,9 @@
       "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_common_app_header",
-      "target": "js_ui_common_app_header_renderheader"
+      "target": "js_ui_common_app_header_renderheader",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7381,9 +6340,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_cell",
-      "target": "js_ui_gantt_gantt_cell_getcelldiv"
+      "target": "js_ui_gantt_gantt_cell_getcelldiv",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7392,9 +6351,9 @@
       "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_cell",
-      "target": "js_ui_gantt_gantt_cell_registercell"
+      "target": "js_ui_gantt_gantt_cell_registercell",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7403,9 +6362,9 @@
       "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_cell",
-      "target": "js_ui_gantt_gantt_cell_renderweekcell"
+      "target": "js_ui_gantt_gantt_cell_renderweekcell",
+      "confidence_score": 1.0
     },
     {
       "relation": "semantically_similar_to",
@@ -7425,9 +6384,9 @@
       "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_cell_renderweekcell",
-      "target": "js_ui_gantt_gantt_cell_registercell"
+      "target": "js_ui_gantt_gantt_cell_registercell",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7456,9 +6415,9 @@
       "source_location": "L289",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_applyweeksshift"
+      "target": "js_ui_gantt_gantt_view_applyweeksshift",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7467,9 +6426,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_buildrows"
+      "target": "js_ui_gantt_gantt_view_buildrows",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7478,9 +6437,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_clearbaselinemilestone"
+      "target": "js_ui_gantt_gantt_view_clearbaselinemilestone",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7489,9 +6448,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_clearothermilestones"
+      "target": "js_ui_gantt_gantt_view_clearothermilestones",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7500,9 +6459,9 @@
       "source_location": "L188",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_handlebulkcellssaved"
+      "target": "js_ui_gantt_gantt_view_handlebulkcellssaved",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7511,9 +6470,9 @@
       "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_handlecellsaved"
+      "target": "js_ui_gantt_gantt_view_handlecellsaved",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7522,9 +6481,9 @@
       "source_location": "L328",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_handlecellsshift"
+      "target": "js_ui_gantt_gantt_view_handlecellsshift",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7533,9 +6492,9 @@
       "source_location": "L334",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_headercell"
+      "target": "js_ui_gantt_gantt_view_headercell",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7544,9 +6503,9 @@
       "source_location": "L141",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_issharedmilestonetype"
+      "target": "js_ui_gantt_gantt_view_issharedmilestonetype",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7555,9 +6514,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_marklastedited"
+      "target": "js_ui_gantt_gantt_view_marklastedited",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7566,9 +6525,9 @@
       "source_location": "L259",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_opencellcontextmenu"
+      "target": "js_ui_gantt_gantt_view_opencellcontextmenu",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7577,9 +6536,9 @@
       "source_location": "L221",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_openshiftmenu"
+      "target": "js_ui_gantt_gantt_view_openshiftmenu",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7588,9 +6547,9 @@
       "source_location": "L372",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_renderganttview"
+      "target": "js_ui_gantt_gantt_view_renderganttview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7599,9 +6558,9 @@
       "source_location": "L353",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_renderwarnings"
+      "target": "js_ui_gantt_gantt_view_renderwarnings",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7610,9 +6569,9 @@
       "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_syncbaselinemilestone"
+      "target": "js_ui_gantt_gantt_view_syncbaselinemilestone",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7621,9 +6580,9 @@
       "source_location": "L346",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view",
-      "target": "js_ui_gantt_gantt_view_weekextraclass"
+      "target": "js_ui_gantt_gantt_view_weekextraclass",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7633,9 +6592,9 @@
       "source_location": "L310",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_applyweeksshift",
-      "target": "js_ui_gantt_gantt_view_marklastedited"
+      "target": "js_ui_gantt_gantt_view_marklastedited",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7645,9 +6604,9 @@
       "source_location": "L198",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_handlebulkcellssaved",
-      "target": "js_ui_gantt_gantt_view_marklastedited"
+      "target": "js_ui_gantt_gantt_view_marklastedited",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7657,9 +6616,9 @@
       "source_location": "L177",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_handlecellsaved",
-      "target": "js_ui_gantt_gantt_view_marklastedited"
+      "target": "js_ui_gantt_gantt_view_marklastedited",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7679,9 +6638,9 @@
       "source_location": "L380",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_renderganttview",
-      "target": "js_ui_gantt_gantt_view_buildrows"
+      "target": "js_ui_gantt_gantt_view_buildrows",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7691,9 +6650,9 @@
       "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_handlecellsaved",
-      "target": "js_ui_gantt_gantt_view_clearothermilestones"
+      "target": "js_ui_gantt_gantt_view_clearothermilestones",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7703,9 +6662,9 @@
       "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_syncbaselinemilestone",
-      "target": "js_ui_gantt_gantt_view_clearothermilestones"
+      "target": "js_ui_gantt_gantt_view_clearothermilestones",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7715,9 +6674,9 @@
       "source_location": "L305",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_applyweeksshift",
-      "target": "js_ui_gantt_gantt_view_syncbaselinemilestone"
+      "target": "js_ui_gantt_gantt_view_syncbaselinemilestone",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7771,9 +6730,9 @@
       "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_handlecellsaved",
-      "target": "js_ui_gantt_gantt_view_clearbaselinemilestone"
+      "target": "js_ui_gantt_gantt_view_clearbaselinemilestone",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7783,9 +6742,9 @@
       "source_location": "L299",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_applyweeksshift",
-      "target": "js_ui_gantt_gantt_view_issharedmilestonetype"
+      "target": "js_ui_gantt_gantt_view_issharedmilestonetype",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7795,9 +6754,9 @@
       "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_handlecellsaved",
-      "target": "js_ui_gantt_gantt_view_issharedmilestonetype"
+      "target": "js_ui_gantt_gantt_view_issharedmilestonetype",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7807,9 +6766,9 @@
       "source_location": "L271",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_opencellcontextmenu",
-      "target": "js_ui_gantt_gantt_view_handlecellsaved"
+      "target": "js_ui_gantt_gantt_view_handlecellsaved",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7819,9 +6778,9 @@
       "source_location": "L270",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_opencellcontextmenu",
-      "target": "js_ui_gantt_gantt_view_handlebulkcellssaved"
+      "target": "js_ui_gantt_gantt_view_handlebulkcellssaved",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -7841,9 +6800,9 @@
       "source_location": "L331",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_handlecellsshift",
-      "target": "js_ui_gantt_gantt_view_openshiftmenu"
+      "target": "js_ui_gantt_gantt_view_openshiftmenu",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7895,9 +6854,9 @@
       "source_location": "L475",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "js_ui_gantt_gantt_view_renderganttview",
-      "target": "js_ui_gantt_gantt_view_opencellcontextmenu"
+      "target": "js_ui_gantt_gantt_view_opencellcontextmenu",
+      "confidence_score": 0.5
     },
     {
       "relation": "calls",
@@ -7907,9 +6866,9 @@
       "source_location": "L330",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_handlecellsshift",
-      "target": "js_ui_gantt_gantt_view_applyweeksshift"
+      "target": "js_ui_gantt_gantt_view_applyweeksshift",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7929,9 +6888,9 @@
       "source_location": "L457",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_renderganttview",
-      "target": "js_ui_gantt_gantt_view_headercell"
+      "target": "js_ui_gantt_gantt_view_headercell",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7941,9 +6900,9 @@
       "source_location": "L462",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_renderganttview",
-      "target": "js_ui_gantt_gantt_view_weekextraclass"
+      "target": "js_ui_gantt_gantt_view_weekextraclass",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7953,9 +6912,9 @@
       "source_location": "L406",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_gantt_view_renderganttview",
-      "target": "js_ui_gantt_gantt_view_renderwarnings"
+      "target": "js_ui_gantt_gantt_view_renderwarnings",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7964,9 +6923,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag",
-      "target": "js_ui_gantt_week_drag_cleartargetclasses"
+      "target": "js_ui_gantt_week_drag_cleartargetclasses",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7975,9 +6934,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag",
-      "target": "js_ui_gantt_week_drag_handledragend"
+      "target": "js_ui_gantt_week_drag_handledragend",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7986,9 +6945,9 @@
       "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag",
-      "target": "js_ui_gantt_week_drag_handledragover"
+      "target": "js_ui_gantt_week_drag_handledragover",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7997,9 +6956,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag",
-      "target": "js_ui_gantt_week_drag_handledragstart"
+      "target": "js_ui_gantt_week_drag_handledragstart",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8008,9 +6967,9 @@
       "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag",
-      "target": "js_ui_gantt_week_drag_handledrop"
+      "target": "js_ui_gantt_week_drag_handledrop",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8019,9 +6978,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag",
-      "target": "js_ui_gantt_week_drag_reset"
+      "target": "js_ui_gantt_week_drag_reset",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8031,9 +6990,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag_handledragover",
-      "target": "js_ui_gantt_week_drag_cleartargetclasses"
+      "target": "js_ui_gantt_week_drag_cleartargetclasses",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8043,9 +7002,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag_reset",
-      "target": "js_ui_gantt_week_drag_cleartargetclasses"
+      "target": "js_ui_gantt_week_drag_cleartargetclasses",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8055,9 +7014,9 @@
       "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag_handledragend",
-      "target": "js_ui_gantt_week_drag_reset"
+      "target": "js_ui_gantt_week_drag_reset",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8067,9 +7026,9 @@
       "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "js_ui_gantt_week_drag_handledrop",
-      "target": "js_ui_gantt_week_drag_reset"
+      "target": "js_ui_gantt_week_drag_reset",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8078,9 +7037,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "unit_model_week_shift_test",
-      "target": "unit_model_week_shift_test_builddataset"
+      "target": "unit_model_week_shift_test_builddataset",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8089,9 +7048,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "unit_model_week_shift_test",
-      "target": "unit_model_week_shift_test_buildtask"
+      "target": "unit_model_week_shift_test_buildtask",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8100,9 +7059,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "unit_model_week_shift_test",
-      "target": "unit_model_week_shift_test_loadmp"
+      "target": "unit_model_week_shift_test_loadmp",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8111,9 +7070,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "unit_model_week_utils_test",
-      "target": "unit_model_week_utils_test_loadmp"
+      "target": "unit_model_week_utils_test_loadmp",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8411,6 +7370,1047 @@
       "confidence_score": 1.0,
       "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
       "target": "readme_how_it_works_in_short"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "claude_overview",
+      "target": "js_ui_common_modal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L389",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_buildallocationshtml"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L378",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_buildallocationstext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L480",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_buildmilestoneclipboardtext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_confirmconflict"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_confirmwithreport"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L400",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_copyallocationstoclipboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L486",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_copymilestonelisttoclipboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L472",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_formatmilestoneline"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L342",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_formatmonthlabel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L468",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_formatreadabledate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L369",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_formatrowbodyhtml"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L361",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_formatrowtext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L337",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_formatweekrange"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L350",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_grouprowsbymonth"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L629",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_promptcolor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L197",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_promptprojectform"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_promptselect"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_prompttext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L425",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_renderallocationscard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L499",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_rendermilestonelistcard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L536",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_showhelpguide"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L528",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_showmilestonelist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L274",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_showprojectcard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L460",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_showresourceallocations"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L313",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_showtasknotecard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L464",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_showteamallocations"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_confirmconflict",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_confirmwithreport",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L632",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptcolor",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L209",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptprojectform",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptselect",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_prompttext",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L438",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L507",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_rendermilestonelistcard",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L537",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showhelpguide",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L288",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showprojectcard",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L316",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showtasknotecard",
+      "target": "js_ui_common_modal_openmodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L153",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_confirmwithreport",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L663",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptcolor",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L267",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptprojectform",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L183",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptselect",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_prompttext",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L456",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L524",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_rendermilestonelistcard",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L621",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showhelpguide",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L306",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showprojectcard",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L328",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showtasknotecard",
+      "target": "js_ui_common_modal_wiremodaldismiss"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "js_ui_common_modal_confirmconflict",
+      "target": "js_data_save_coordinator"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_confirmconflict",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L134",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_confirmwithreport",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptselect",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L391",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationshtml",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L370",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_formatrowbodyhtml",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L202",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_promptprojectform",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L430",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L504",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_rendermilestonelistcard",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L280",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showprojectcard",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L315",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showtasknotecard",
+      "target": "js_ui_common_modal_escapehtml"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "js_ui_crud_project_crud_createproject",
+      "target": "js_ui_common_modal_promptprojectform"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "js_ui_crud_project_crud_editreferents",
+      "target": "js_ui_common_modal_promptprojectform"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L393",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationshtml",
+      "target": "js_ui_common_modal_formatweekrange"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L362",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_formatrowtext",
+      "target": "js_ui_common_modal_formatweekrange"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L428",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_formatweekrange"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L393",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationshtml",
+      "target": "js_ui_common_modal_formatmonthlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L382",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationstext",
+      "target": "js_ui_common_modal_formatmonthlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L482",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildmilestoneclipboardtext",
+      "target": "js_ui_common_modal_formatmonthlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L432",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_formatmonthlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L504",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_rendermilestonelistcard",
+      "target": "js_ui_common_modal_formatmonthlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L392",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationshtml",
+      "target": "js_ui_common_modal_grouprowsbymonth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L381",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationstext",
+      "target": "js_ui_common_modal_grouprowsbymonth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L431",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_grouprowsbymonth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L382",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationstext",
+      "target": "js_ui_common_modal_formatrowtext"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L393",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildallocationshtml",
+      "target": "js_ui_common_modal_formatrowbodyhtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L428",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_formatrowbodyhtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L401",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_copyallocationstoclipboard",
+      "target": "js_ui_common_modal_buildallocationstext"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L404",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_copyallocationstoclipboard",
+      "target": "js_ui_common_modal_buildallocationshtml"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L449",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_renderallocationscard",
+      "target": "js_ui_common_modal_copyallocationstoclipboard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L461",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showresourceallocations",
+      "target": "js_ui_common_modal_renderallocationscard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L465",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showteamallocations",
+      "target": "js_ui_common_modal_renderallocationscard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L473",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_formatmilestoneline",
+      "target": "js_ui_common_modal_formatreadabledate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L482",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_buildmilestoneclipboardtext",
+      "target": "js_ui_common_modal_formatmilestoneline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L504",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_rendermilestonelistcard",
+      "target": "js_ui_common_modal_formatmilestoneline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L517",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_rendermilestonelistcard",
+      "target": "js_ui_common_modal_buildmilestoneclipboardtext"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L517",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_rendermilestonelistcard",
+      "target": "js_ui_common_modal_copymilestonelisttoclipboard"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "js/ui/common/modal.js",
+      "source_location": "L529",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "js_ui_common_modal_showmilestonelist",
+      "target": "js_ui_common_modal_rendermilestonelistcard"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "js_ui_common_modal_showmilestonelist",
+      "target": "js_model_milestones_computeupcomingmilestonesbymonth"
     },
     {
       "relation": "references",
@@ -14925,5 +14925,5 @@
       "source_file": "docs/database.md"
     }
   ],
-  "built_at_commit": "c8ca50beeeeb36bd9952658577228be3b809228b"
+  "built_at_commit": "76d18e4a3cd45dd439c1dba25addfc0f8284f8cf"
 }
