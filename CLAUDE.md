@@ -82,17 +82,50 @@ data migration" below for how it's upgraded automatically.
 
 ## Running / testing
 
-There is no build, dev server, or automated test suite in this repo. To run the app: open
-[index.html](index.html) directly in Chrome or Edge (`file://` path). Sample data for manual
-testing lives in [sample-data/](sample-data/) (a full dataset: `manifest.json`,
-`team-resources.json`, `projects/*.json`) — point the app's folder picker at that directory.
+There is no build or dev server. To run the app: open [index.html](index.html) directly in
+Chrome or Edge (`file://` path). Sample data for manual testing lives in
+[sample-data/](sample-data/) (a full dataset: `manifest.json`, `team-resources.json`,
+`projects/*.json`) — point the app's folder picker at that directory.
 
-For quick non-interactive checks (no real directory handle available headlessly, since
-`showDirectoryPicker()` needs a user gesture), load the plain-script modules into a Node `vm`
-sandbox with a stubbed `window`/`document` and call their exported `MP.*` functions directly
-against JSON read from `sample-data/` — this exercises the real `schema.js`/`validation.js`/etc.
-logic without a browser. Combine with the headless-Chrome check below for script-loading/console
-errors.
+### Automated unit tests (Jest)
+
+There **is** an automated test suite, under [`unit/`](unit/) — a dev-only, npm-based Jest setup
+(own `package.json`, gitignored `node_modules/`; `jest.config.js` restricts `testMatch` to
+`unit/**/*.test.js`). It mirrors `js/`'s folder layout 1:1 (`js/model/week-shift.js` →
+`unit/model/week-shift.test.js`), and covers exactly the layer that's cheap to test this way:
+`js/data/` and `js/model/` — pure logic with no I/O and no DOM. `js/ui/` has no test coverage
+convention (no jsdom in this stack); verify UI changes by actually running the app (see "Doing
+tasks" — start the dev server equivalent, i.e. open `index.html`, or use the headless-Chrome
+check below) rather than reaching for Jest.
+
+[`unit/helpers/load-mp.js`](unit/helpers/load-mp.js)'s `loadMP(relativePath)` is the shared
+fixture: it stubs a bare `global.window` (and `global.window.MP`) before `require()`-ing a
+classic-script IIFE file, which then attaches itself to that stub exactly like it would to the
+browser's real `window` — this is what makes `js/data/schema.js`/`js/model/validation.js`/etc.
+runnable under Node with zero mocking of application logic, only of the one global they expect
+to exist. When a test needs a module's own dependencies (e.g. `week-shift.js` needs
+`week-utils.js` and `milestone-rules.js` already attached to `MP`), `loadMP` each one first, in
+the same order `index.html`'s `<script>` list uses — see the existing tests under `unit/model/`
+for the pattern.
+
+**Working practice: a change to `js/data/schema.js` or anything under `js/model/` should come
+with a new or updated test under `unit/` covering it** — these modules are exactly the ones this
+harness was built to make cheap to test, and they carry the app's sharpest edge-case logic
+(milestone ordering, week-shift collision detection, orphan/mismatch detection). Run `npm test`
+(after a one-time `npm install`) before considering such a change done. This is a norm, not a
+gate — there's no CI enforcing it yet — but don't skip writing the test just because nothing will
+stop you.
+
+```
+npm install   # once, installs Jest as a dev dependency
+npm test      # runs the suite (unit/**/*.test.js)
+```
+
+For a one-off, throwaway check that doesn't belong in `unit/` (e.g. poking at a function's
+behavior while debugging), the same `loadMP` trick works directly in a scratch script — load the
+plain-script modules into a Node `vm`/`require` sandbox with a stubbed `window` and call their
+exported `MP.*` functions directly, optionally against JSON read from `sample-data/`. Combine
+with the headless-Chrome check below for script-loading/console errors.
 
 To verify a change headlessly (e.g. checking for console errors after opening the page), use
 headless Chrome with an explicit `--user-data-dir` and a native Windows path:
@@ -1041,3 +1074,6 @@ inserted at the right point in that list. Layers, low → high:
   (a new conflict check, a new soft "did this change" probe, …) should reuse
   `MP.repository.readTextFileOrNull(dirHandle, path)` rather than reimplementing the try/catch —
   see `save-coordinator.js` and `remote-check.js` for the two existing consumers.
+- Touching `js/data/` or `js/model/` logic: add/update the matching test under `unit/` (see
+  "Automated unit tests (Jest)" above) as part of the change, not as a follow-up — `npm test`
+  should stay green.

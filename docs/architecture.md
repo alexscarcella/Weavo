@@ -86,7 +86,8 @@ flowchart TB
    (`milestones.js`, used by the milestones page), the strict-ordering hard-block check shared by
    every milestone write path (`milestone-rules.js`), and the ammissibility check + mutation
    behind shifting an allocation one week back/forward (`week-shift.js`, used by the gantt view's
-   shift feature). No I/O, no DOM access, so these are trivially unit-testable in isolation.
+   shift feature). No I/O, no DOM access, so this layer (plus `js/data/schema.js`) is exactly what
+   the [`unit/`](../unit/) Jest suite covers — see "Testing" below.
 4. **`js/ui/`** — rendering and event wiring, split by concern rather than by component
    framework conventions: `common/` (modal, toast, context menu, toolbar — including the current
    page's title next to the hamburger button — dataset-header, app-header), `crud/` (one file per
@@ -145,6 +146,18 @@ restores the scroll offset of the gantt/resource-load grid's scroll container ac
 and the gantt view separately tracks which cell was last saved so it can be briefly
 re-highlighted after the rebuild, so that editing a week cell doesn't visually "jump" the grid
 away from the cell just edited.
+
+## Testing
+
+[`unit/`](../unit/) is a Jest suite mirroring `js/`'s folder layout 1:1
+(`js/model/week-shift.js` → `unit/model/week-shift.test.js`), scoped to `js/data/` and
+`js/model/` — the layers with no I/O and no DOM, so they run under plain Node with no browser and
+no mocking of application logic. [`unit/helpers/load-mp.js`](../unit/helpers/load-mp.js)'s
+`loadMP()` is the shared fixture: it stubs a bare `global.window` and `require()`s a classic-
+script IIFE file, which attaches itself to that stub exactly as it would to a real browser
+`window`. `js/ui/` has no equivalent convention (no jsdom in this stack) — UI changes are verified
+by running the app directly. See `CLAUDE.md`'s "Running / testing" for the working practice
+(`js/data/`/`js/model/` changes should come with a matching test) and `npm test` usage.
 
 ## Where to look for a given change
 

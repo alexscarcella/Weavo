@@ -612,6 +612,14 @@
         week, or a resource that changed team since it was allocated here.</li>
       </ul>
 
+      <h3>For developers</h3>
+      <ul>
+        <li>This repo has an automated Jest unit-test suite under <code>unit/</code>,
+        mirroring the <code>js/</code> folder layout — run <code>npm install</code>
+        once, then <code>npm test</code>. See the README's "Development" section for
+        details.</li>
+      </ul>
+
       <div class="modal-actions">
         <button type="button" class="modal-btn-cancel">Close</button>
       </div>`, { focusBox: true });
