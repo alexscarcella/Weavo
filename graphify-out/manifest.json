@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785996546.294915,
-    "ast_hash": "c210a096e9cb9773c3fb3aaa8993644d",
+    "mtime": 1786395124.3021426,
+    "ast_hash": "ba74bd77f7149600d50e42bb0142aeaa",
     "semantic_hash": ""
   },
   "js/ui/gantt/week-drag.js": {
@@ -392,6 +392,11 @@
   "unit/model/week-shift.test.js": {
     "mtime": 1786034565.3761065,
     "ast_hash": "0afa79600f0726742aefb7e789797629",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1786395371.398877,
+    "ast_hash": "a16366329b819390f6b54f9cb4f767b0",
     "semantic_hash": ""
   }
 }

@@ -63,15 +63,312 @@
   },
   "nodes": [
     {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "agents",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "agents.md"
+    },
+    {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "agents_agents_md",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "agents.md"
+    },
+    {
+      "label": "Hard constraints (verified, non-negotiable)",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "agents_hard_constraints_verified_non_negotiable",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "hard constraints (verified, non-negotiable)"
+    },
+    {
+      "label": "Commands",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "agents_commands",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "commands"
+    },
+    {
+      "label": "Conventions",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "agents_conventions",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "conventions"
+    },
+    {
+      "label": "Local-only paths \u2014 never commit, never `git add -f`",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "agents_local_only_paths_never_commit_never_git_add_f",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "local-only paths \u2014 never commit, never `git add -f`"
+    },
+    {
+      "label": "Releases",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "agents_releases",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "releases"
+    },
+    {
+      "label": "Common-change pointers",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "agents_common_change_pointers",
+      "community": 51,
+      "community_name": "AGENTS.md",
+      "norm_label": "common-change pointers"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "readme.md",
+      "id": "readme"
+    },
+    {
+      "label": "Weavo",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "weavo",
+      "id": "readme_weavo"
+    },
+    {
+      "label": "What it is",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "what it is",
+      "id": "readme_what_it_is"
+    },
+    {
+      "label": "Why it's different",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L22",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "why it's different",
+      "id": "readme_why_it_s_different"
+    },
+    {
+      "label": "Requirements",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L30",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "requirements",
+      "id": "readme_requirements"
+    },
+    {
+      "label": "Getting started",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "getting started",
+      "id": "readme_getting_started"
+    },
+    {
+      "label": "Guide for non-technical users (first install, setup, and daily use)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L52",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "guide for non-technical users (first install, setup, and daily use)",
+      "id": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use"
+    },
+    {
+      "label": "How it works, in short",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L58",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "how it works, in short",
+      "id": "readme_how_it_works_in_short"
+    },
+    {
+      "label": "1. Installation",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L76",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "1. installation",
+      "id": "readme_1_installation"
+    },
+    {
+      "label": "2. Requirements",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L88",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "2. requirements",
+      "id": "readme_2_requirements"
+    },
+    {
+      "label": "3. Set up the data folder (one-time setup)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L95",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "3. set up the data folder (one-time setup)",
+      "id": "readme_3_set_up_the_data_folder_one_time_setup"
+    },
+    {
+      "label": "4. Open the app and connect it to the data folder",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L132",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "4. open the app and connect it to the data folder",
+      "id": "readme_4_open_the_app_and_connect_it_to_the_data_folder"
+    },
+    {
+      "label": "5. Daily use",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L147",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "5. daily use",
+      "id": "readme_5_daily_use"
+    },
+    {
+      "label": "6. Backups",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L204",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "6. backups",
+      "id": "readme_6_backups"
+    },
+    {
+      "label": "7. FAQ / things to know",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L227",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "7. faq / things to know",
+      "id": "readme_7_faq_things_to_know"
+    },
+    {
+      "label": "Data model",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L248",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "data model",
+      "id": "readme_data_model"
+    },
+    {
+      "label": "Project layout",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L261",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "project layout",
+      "id": "readme_project_layout"
+    },
+    {
+      "label": "Development",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L274",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "development",
+      "id": "readme_development"
+    },
+    {
+      "label": "Status",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L307",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "Weavo",
+      "norm_label": "status",
+      "id": "readme_status"
+    },
+    {
       "label": "modal.js",
       "file_type": "code",
       "source_file": "js/ui/common/modal.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "js_ui_common_modal",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "modal.js"
+      "norm_label": "modal.js",
+      "id": "js_ui_common_modal"
     },
     {
       "label": "openModal()",
@@ -79,10 +376,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "js_ui_common_modal_openmodal",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "openmodal()"
+      "norm_label": "openmodal()",
+      "id": "js_ui_common_modal_openmodal"
     },
     {
       "label": "wireModalDismiss()",
@@ -90,10 +387,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "js_ui_common_modal_wiremodaldismiss",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "wiremodaldismiss()"
+      "norm_label": "wiremodaldismiss()",
+      "id": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "label": "confirmConflict()",
@@ -101,10 +398,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L53",
       "_origin": "ast",
-      "id": "js_ui_common_modal_confirmconflict",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "confirmconflict()"
+      "norm_label": "confirmconflict()",
+      "id": "js_ui_common_modal_confirmconflict"
     },
     {
       "label": "promptText()",
@@ -112,10 +409,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L86",
       "_origin": "ast",
-      "id": "js_ui_common_modal_prompttext",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "prompttext()"
+      "norm_label": "prompttext()",
+      "id": "js_ui_common_modal_prompttext"
     },
     {
       "label": "confirmWithReport()",
@@ -123,10 +420,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L131",
       "_origin": "ast",
-      "id": "js_ui_common_modal_confirmwithreport",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "confirmwithreport()"
+      "norm_label": "confirmwithreport()",
+      "id": "js_ui_common_modal_confirmwithreport"
     },
     {
       "label": "promptSelect()",
@@ -134,10 +431,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L160",
       "_origin": "ast",
-      "id": "js_ui_common_modal_promptselect",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "promptselect()"
+      "norm_label": "promptselect()",
+      "id": "js_ui_common_modal_promptselect"
     },
     {
       "label": "escapeHtml()",
@@ -145,10 +442,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L187",
       "_origin": "ast",
-      "id": "js_ui_common_modal_escapehtml",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "escapehtml()"
+      "norm_label": "escapehtml()",
+      "id": "js_ui_common_modal_escapehtml"
     },
     {
       "label": "promptProjectForm()",
@@ -156,10 +453,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L197",
       "_origin": "ast",
-      "id": "js_ui_common_modal_promptprojectform",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "promptprojectform()"
+      "norm_label": "promptprojectform()",
+      "id": "js_ui_common_modal_promptprojectform"
     },
     {
       "label": "showProjectCard()",
@@ -167,10 +464,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L274",
       "_origin": "ast",
-      "id": "js_ui_common_modal_showprojectcard",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "showprojectcard()"
+      "norm_label": "showprojectcard()",
+      "id": "js_ui_common_modal_showprojectcard"
     },
     {
       "label": "showTaskNoteCard()",
@@ -178,10 +475,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L313",
       "_origin": "ast",
-      "id": "js_ui_common_modal_showtasknotecard",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "showtasknotecard()"
+      "norm_label": "showtasknotecard()",
+      "id": "js_ui_common_modal_showtasknotecard"
     },
     {
       "label": "formatWeekRange()",
@@ -189,10 +486,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L337",
       "_origin": "ast",
-      "id": "js_ui_common_modal_formatweekrange",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "formatweekrange()"
+      "norm_label": "formatweekrange()",
+      "id": "js_ui_common_modal_formatweekrange"
     },
     {
       "label": "formatMonthLabel()",
@@ -200,10 +497,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L342",
       "_origin": "ast",
-      "id": "js_ui_common_modal_formatmonthlabel",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "formatmonthlabel()"
+      "norm_label": "formatmonthlabel()",
+      "id": "js_ui_common_modal_formatmonthlabel"
     },
     {
       "label": "groupRowsByMonth()",
@@ -211,10 +508,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L350",
       "_origin": "ast",
-      "id": "js_ui_common_modal_grouprowsbymonth",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "grouprowsbymonth()"
+      "norm_label": "grouprowsbymonth()",
+      "id": "js_ui_common_modal_grouprowsbymonth"
     },
     {
       "label": "formatRowText()",
@@ -222,10 +519,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L361",
       "_origin": "ast",
-      "id": "js_ui_common_modal_formatrowtext",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "formatrowtext()"
+      "norm_label": "formatrowtext()",
+      "id": "js_ui_common_modal_formatrowtext"
     },
     {
       "label": "formatRowBodyHtml()",
@@ -233,10 +530,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L369",
       "_origin": "ast",
-      "id": "js_ui_common_modal_formatrowbodyhtml",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "formatrowbodyhtml()"
+      "norm_label": "formatrowbodyhtml()",
+      "id": "js_ui_common_modal_formatrowbodyhtml"
     },
     {
       "label": "buildAllocationsText()",
@@ -244,10 +541,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L378",
       "_origin": "ast",
-      "id": "js_ui_common_modal_buildallocationstext",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "buildallocationstext()"
+      "norm_label": "buildallocationstext()",
+      "id": "js_ui_common_modal_buildallocationstext"
     },
     {
       "label": "buildAllocationsHtml()",
@@ -255,10 +552,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L389",
       "_origin": "ast",
-      "id": "js_ui_common_modal_buildallocationshtml",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "buildallocationshtml()"
+      "norm_label": "buildallocationshtml()",
+      "id": "js_ui_common_modal_buildallocationshtml"
     },
     {
       "label": "copyAllocationsToClipboard()",
@@ -266,10 +563,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L400",
       "_origin": "ast",
-      "id": "js_ui_common_modal_copyallocationstoclipboard",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "copyallocationstoclipboard()"
+      "norm_label": "copyallocationstoclipboard()",
+      "id": "js_ui_common_modal_copyallocationstoclipboard"
     },
     {
       "label": "renderAllocationsCard()",
@@ -277,10 +574,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L425",
       "_origin": "ast",
-      "id": "js_ui_common_modal_renderallocationscard",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "renderallocationscard()"
+      "norm_label": "renderallocationscard()",
+      "id": "js_ui_common_modal_renderallocationscard"
     },
     {
       "label": "showResourceAllocations()",
@@ -288,10 +585,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L460",
       "_origin": "ast",
-      "id": "js_ui_common_modal_showresourceallocations",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "showresourceallocations()"
+      "norm_label": "showresourceallocations()",
+      "id": "js_ui_common_modal_showresourceallocations"
     },
     {
       "label": "showTeamAllocations()",
@@ -299,10 +596,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L464",
       "_origin": "ast",
-      "id": "js_ui_common_modal_showteamallocations",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "showteamallocations()"
+      "norm_label": "showteamallocations()",
+      "id": "js_ui_common_modal_showteamallocations"
     },
     {
       "label": "formatReadableDate()",
@@ -310,10 +607,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L468",
       "_origin": "ast",
-      "id": "js_ui_common_modal_formatreadabledate",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "formatreadabledate()"
+      "norm_label": "formatreadabledate()",
+      "id": "js_ui_common_modal_formatreadabledate"
     },
     {
       "label": "formatMilestoneLine()",
@@ -321,10 +618,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L472",
       "_origin": "ast",
-      "id": "js_ui_common_modal_formatmilestoneline",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "formatmilestoneline()"
+      "norm_label": "formatmilestoneline()",
+      "id": "js_ui_common_modal_formatmilestoneline"
     },
     {
       "label": "buildMilestoneClipboardText()",
@@ -332,10 +629,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L480",
       "_origin": "ast",
-      "id": "js_ui_common_modal_buildmilestoneclipboardtext",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "buildmilestoneclipboardtext()"
+      "norm_label": "buildmilestoneclipboardtext()",
+      "id": "js_ui_common_modal_buildmilestoneclipboardtext"
     },
     {
       "label": "copyMilestoneListToClipboard()",
@@ -343,10 +640,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L486",
       "_origin": "ast",
-      "id": "js_ui_common_modal_copymilestonelisttoclipboard",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "copymilestonelisttoclipboard()"
+      "norm_label": "copymilestonelisttoclipboard()",
+      "id": "js_ui_common_modal_copymilestonelisttoclipboard"
     },
     {
       "label": "renderMilestoneListCard()",
@@ -354,10 +651,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L499",
       "_origin": "ast",
-      "id": "js_ui_common_modal_rendermilestonelistcard",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "rendermilestonelistcard()"
+      "norm_label": "rendermilestonelistcard()",
+      "id": "js_ui_common_modal_rendermilestonelistcard"
     },
     {
       "label": "showMilestoneList()",
@@ -365,10 +662,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L528",
       "_origin": "ast",
-      "id": "js_ui_common_modal_showmilestonelist",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "showmilestonelist()"
+      "norm_label": "showmilestonelist()",
+      "id": "js_ui_common_modal_showmilestonelist"
     },
     {
       "label": "showHelpGuide()",
@@ -376,10 +673,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L536",
       "_origin": "ast",
-      "id": "js_ui_common_modal_showhelpguide",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "showhelpguide()"
+      "norm_label": "showhelpguide()",
+      "id": "js_ui_common_modal_showhelpguide"
     },
     {
       "label": "promptColor()",
@@ -387,10 +684,10 @@
       "source_file": "js/ui/common/modal.js",
       "source_location": "L637",
       "_origin": "ast",
-      "id": "js_ui_common_modal_promptcolor",
       "community": 2,
       "community_name": "modal.js",
-      "norm_label": "promptcolor()"
+      "norm_label": "promptcolor()",
+      "id": "js_ui_common_modal_promptcolor"
     },
     {
       "label": "week-shift.js",
@@ -1106,215 +1403,6 @@
       "community_name": "[Unreleased] \u2014 2026-08-05",
       "norm_label": "other",
       "id": "changelog_other"
-    },
-    {
-      "label": "README.md",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "readme.md",
-      "id": "readme"
-    },
-    {
-      "label": "Weavo",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "weavo",
-      "id": "readme_weavo"
-    },
-    {
-      "label": "What it is",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "what it is",
-      "id": "readme_what_it_is"
-    },
-    {
-      "label": "Why it's different",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L21",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "why it's different",
-      "id": "readme_why_it_s_different"
-    },
-    {
-      "label": "Requirements",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "requirements",
-      "id": "readme_requirements"
-    },
-    {
-      "label": "Getting started",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "getting started",
-      "id": "readme_getting_started"
-    },
-    {
-      "label": "Guide for non-technical users (first install, setup, and daily use)",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L51",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "guide for non-technical users (first install, setup, and daily use)",
-      "id": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use"
-    },
-    {
-      "label": "How it works, in short",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L57",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "how it works, in short",
-      "id": "readme_how_it_works_in_short"
-    },
-    {
-      "label": "1. Installation",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L75",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "1. installation",
-      "id": "readme_1_installation"
-    },
-    {
-      "label": "2. Requirements",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L87",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "2. requirements",
-      "id": "readme_2_requirements"
-    },
-    {
-      "label": "3. Set up the data folder (one-time setup)",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L94",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "3. set up the data folder (one-time setup)",
-      "id": "readme_3_set_up_the_data_folder_one_time_setup"
-    },
-    {
-      "label": "4. Open the app and connect it to the data folder",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L131",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "4. open the app and connect it to the data folder",
-      "id": "readme_4_open_the_app_and_connect_it_to_the_data_folder"
-    },
-    {
-      "label": "5. Daily use",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L146",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "5. daily use",
-      "id": "readme_5_daily_use"
-    },
-    {
-      "label": "6. Backups",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L193",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "6. backups",
-      "id": "readme_6_backups"
-    },
-    {
-      "label": "7. FAQ / things to know",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L212",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "7. faq / things to know",
-      "id": "readme_7_faq_things_to_know"
-    },
-    {
-      "label": "Data model",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L233",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "data model",
-      "id": "readme_data_model"
-    },
-    {
-      "label": "Project layout",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L246",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "project layout",
-      "id": "readme_project_layout"
-    },
-    {
-      "label": "Development",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L259",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "development",
-      "id": "readme_development"
-    },
-    {
-      "label": "Status",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L292",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "Weavo",
-      "norm_label": "status",
-      "id": "readme_status"
     },
     {
       "label": "milestones-view.js",
@@ -2411,8 +2499,8 @@
       "source_file": "js/data/schema.js",
       "source_location": "L206",
       "_origin": "ast",
-      "community": 10,
-      "community_name": "legacy-migration.js",
+      "community": 7,
+      "community_name": "schema.js",
       "norm_label": "createweekentry()",
       "id": "js_data_schema_createweekentry"
     },
@@ -5534,9 +5622,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 7,
       "norm_label": "projects/<slug>.json schema (baseline/task/week)",
-      "community_name": "legacy-migration.js",
+      "community_name": "schema.js",
       "id": "project_json_schema"
     },
     {
@@ -5878,6 +5966,281 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "agents",
+      "target": "agents_agents_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "agents_agents_md",
+      "target": "agents_commands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "agents_agents_md",
+      "target": "agents_common_change_pointers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "agents_agents_md",
+      "target": "agents_conventions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "agents_agents_md",
+      "target": "agents_hard_constraints_verified_non_negotiable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "agents_agents_md",
+      "target": "agents_local_only_paths_never_commit_never_git_add_f",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "agents_agents_md",
+      "target": "agents_releases",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme",
+      "target": "readme_weavo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L248",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_data_model"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L274",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_development"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_getting_started"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L261",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_project_layout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_requirements"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L307",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_status"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_what_it_is"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_weavo",
+      "target": "readme_why_it_s_different"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_1_installation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_2_requirements"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_3_set_up_the_data_folder_one_time_setup"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L132",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_4_open_the_app_and_connect_it_to_the_data_folder"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L147",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_5_daily_use"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_6_backups"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L227",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_7_faq_things_to_know"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
+      "target": "readme_how_it_works_in_short"
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -5894,9 +6257,9 @@
       "source_location": "L389",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_buildallocationshtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_buildallocationshtml"
     },
     {
       "relation": "contains",
@@ -5905,9 +6268,9 @@
       "source_location": "L378",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_buildallocationstext",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_buildallocationstext"
     },
     {
       "relation": "contains",
@@ -5916,9 +6279,9 @@
       "source_location": "L480",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_buildmilestoneclipboardtext"
     },
     {
       "relation": "contains",
@@ -5927,9 +6290,9 @@
       "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_confirmconflict",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_confirmconflict"
     },
     {
       "relation": "contains",
@@ -5938,9 +6301,9 @@
       "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_confirmwithreport",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_confirmwithreport"
     },
     {
       "relation": "contains",
@@ -5949,9 +6312,9 @@
       "source_location": "L400",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_copyallocationstoclipboard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_copyallocationstoclipboard"
     },
     {
       "relation": "contains",
@@ -5960,9 +6323,9 @@
       "source_location": "L486",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_copymilestonelisttoclipboard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_copymilestonelisttoclipboard"
     },
     {
       "relation": "contains",
@@ -5971,9 +6334,9 @@
       "source_location": "L187",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "contains",
@@ -5982,9 +6345,9 @@
       "source_location": "L472",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatmilestoneline",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmilestoneline"
     },
     {
       "relation": "contains",
@@ -5993,9 +6356,9 @@
       "source_location": "L342",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmonthlabel"
     },
     {
       "relation": "contains",
@@ -6004,9 +6367,9 @@
       "source_location": "L468",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatreadabledate",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatreadabledate"
     },
     {
       "relation": "contains",
@@ -6015,9 +6378,9 @@
       "source_location": "L369",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatrowbodyhtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatrowbodyhtml"
     },
     {
       "relation": "contains",
@@ -6026,9 +6389,9 @@
       "source_location": "L361",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatrowtext",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatrowtext"
     },
     {
       "relation": "contains",
@@ -6037,9 +6400,9 @@
       "source_location": "L337",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatweekrange"
     },
     {
       "relation": "contains",
@@ -6048,9 +6411,9 @@
       "source_location": "L350",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_grouprowsbymonth"
     },
     {
       "relation": "contains",
@@ -6059,9 +6422,9 @@
       "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "contains",
@@ -6070,9 +6433,9 @@
       "source_location": "L637",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_promptcolor",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_promptcolor"
     },
     {
       "relation": "contains",
@@ -6081,9 +6444,9 @@
       "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_promptprojectform",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_promptprojectform"
     },
     {
       "relation": "contains",
@@ -6092,9 +6455,9 @@
       "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_promptselect",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_promptselect"
     },
     {
       "relation": "contains",
@@ -6103,9 +6466,9 @@
       "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_prompttext",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_prompttext"
     },
     {
       "relation": "contains",
@@ -6114,9 +6477,9 @@
       "source_location": "L425",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_renderallocationscard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_renderallocationscard"
     },
     {
       "relation": "contains",
@@ -6125,9 +6488,9 @@
       "source_location": "L499",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_rendermilestonelistcard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_rendermilestonelistcard"
     },
     {
       "relation": "contains",
@@ -6136,9 +6499,9 @@
       "source_location": "L536",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showhelpguide",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_showhelpguide"
     },
     {
       "relation": "contains",
@@ -6147,9 +6510,9 @@
       "source_location": "L528",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showmilestonelist",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_showmilestonelist"
     },
     {
       "relation": "contains",
@@ -6158,9 +6521,9 @@
       "source_location": "L274",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showprojectcard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_showprojectcard"
     },
     {
       "relation": "contains",
@@ -6169,9 +6532,9 @@
       "source_location": "L460",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showresourceallocations",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_showresourceallocations"
     },
     {
       "relation": "contains",
@@ -6180,9 +6543,9 @@
       "source_location": "L313",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showtasknotecard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_showtasknotecard"
     },
     {
       "relation": "contains",
@@ -6191,9 +6554,9 @@
       "source_location": "L464",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_showteamallocations",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_showteamallocations"
     },
     {
       "relation": "contains",
@@ -6202,9 +6565,9 @@
       "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6214,9 +6577,9 @@
       "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_confirmconflict",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6226,9 +6589,9 @@
       "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6238,9 +6601,9 @@
       "source_location": "L640",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptcolor",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6250,9 +6613,9 @@
       "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6262,9 +6625,9 @@
       "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6274,9 +6637,9 @@
       "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_prompttext",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6286,9 +6649,9 @@
       "source_location": "L438",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6298,9 +6661,9 @@
       "source_location": "L507",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6310,9 +6673,9 @@
       "source_location": "L537",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showhelpguide",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6322,9 +6685,9 @@
       "source_location": "L288",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6334,9 +6697,9 @@
       "source_location": "L316",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showtasknotecard",
-      "target": "js_ui_common_modal_openmodal",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_openmodal"
     },
     {
       "relation": "calls",
@@ -6346,9 +6709,9 @@
       "source_location": "L153",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6358,9 +6721,9 @@
       "source_location": "L671",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptcolor",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6370,9 +6733,9 @@
       "source_location": "L267",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6382,9 +6745,9 @@
       "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6394,9 +6757,9 @@
       "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_prompttext",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6406,9 +6769,9 @@
       "source_location": "L456",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6418,9 +6781,9 @@
       "source_location": "L524",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6430,9 +6793,9 @@
       "source_location": "L629",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showhelpguide",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6442,9 +6805,9 @@
       "source_location": "L306",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "calls",
@@ -6454,9 +6817,9 @@
       "source_location": "L328",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showtasknotecard",
-      "target": "js_ui_common_modal_wiremodaldismiss",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_wiremodaldismiss"
     },
     {
       "relation": "references",
@@ -6476,9 +6839,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_confirmconflict",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6488,9 +6851,9 @@
       "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_confirmwithreport",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6500,9 +6863,9 @@
       "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptselect",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6512,9 +6875,9 @@
       "source_location": "L391",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6524,9 +6887,9 @@
       "source_location": "L370",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_formatrowbodyhtml",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6536,9 +6899,9 @@
       "source_location": "L202",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_promptprojectform",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6548,9 +6911,9 @@
       "source_location": "L430",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6560,9 +6923,9 @@
       "source_location": "L504",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6572,9 +6935,9 @@
       "source_location": "L280",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showprojectcard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6584,9 +6947,9 @@
       "source_location": "L315",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showtasknotecard",
-      "target": "js_ui_common_modal_escapehtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_escapehtml"
     },
     {
       "relation": "calls",
@@ -6616,9 +6979,9 @@
       "source_location": "L393",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatweekrange"
     },
     {
       "relation": "calls",
@@ -6628,9 +6991,9 @@
       "source_location": "L362",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_formatrowtext",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatweekrange"
     },
     {
       "relation": "calls",
@@ -6640,9 +7003,9 @@
       "source_location": "L428",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_formatweekrange",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatweekrange"
     },
     {
       "relation": "calls",
@@ -6652,9 +7015,9 @@
       "source_location": "L393",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmonthlabel"
     },
     {
       "relation": "calls",
@@ -6664,9 +7027,9 @@
       "source_location": "L382",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationstext",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmonthlabel"
     },
     {
       "relation": "calls",
@@ -6676,9 +7039,9 @@
       "source_location": "L482",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmonthlabel"
     },
     {
       "relation": "calls",
@@ -6688,9 +7051,9 @@
       "source_location": "L432",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmonthlabel"
     },
     {
       "relation": "calls",
@@ -6700,9 +7063,9 @@
       "source_location": "L504",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_formatmonthlabel",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmonthlabel"
     },
     {
       "relation": "calls",
@@ -6712,9 +7075,9 @@
       "source_location": "L392",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_grouprowsbymonth"
     },
     {
       "relation": "calls",
@@ -6724,9 +7087,9 @@
       "source_location": "L381",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationstext",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_grouprowsbymonth"
     },
     {
       "relation": "calls",
@@ -6736,9 +7099,9 @@
       "source_location": "L431",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_grouprowsbymonth",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_grouprowsbymonth"
     },
     {
       "relation": "calls",
@@ -6748,9 +7111,9 @@
       "source_location": "L382",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationstext",
-      "target": "js_ui_common_modal_formatrowtext",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatrowtext"
     },
     {
       "relation": "calls",
@@ -6760,9 +7123,9 @@
       "source_location": "L393",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildallocationshtml",
-      "target": "js_ui_common_modal_formatrowbodyhtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatrowbodyhtml"
     },
     {
       "relation": "calls",
@@ -6772,9 +7135,9 @@
       "source_location": "L428",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_formatrowbodyhtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatrowbodyhtml"
     },
     {
       "relation": "calls",
@@ -6784,9 +7147,9 @@
       "source_location": "L401",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_copyallocationstoclipboard",
-      "target": "js_ui_common_modal_buildallocationstext",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_buildallocationstext"
     },
     {
       "relation": "calls",
@@ -6796,9 +7159,9 @@
       "source_location": "L404",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_copyallocationstoclipboard",
-      "target": "js_ui_common_modal_buildallocationshtml",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_buildallocationshtml"
     },
     {
       "relation": "calls",
@@ -6808,9 +7171,9 @@
       "source_location": "L449",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_renderallocationscard",
-      "target": "js_ui_common_modal_copyallocationstoclipboard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_copyallocationstoclipboard"
     },
     {
       "relation": "calls",
@@ -6820,9 +7183,9 @@
       "source_location": "L461",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showresourceallocations",
-      "target": "js_ui_common_modal_renderallocationscard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_renderallocationscard"
     },
     {
       "relation": "calls",
@@ -6832,9 +7195,9 @@
       "source_location": "L465",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showteamallocations",
-      "target": "js_ui_common_modal_renderallocationscard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_renderallocationscard"
     },
     {
       "relation": "calls",
@@ -6844,9 +7207,9 @@
       "source_location": "L473",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_formatmilestoneline",
-      "target": "js_ui_common_modal_formatreadabledate",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatreadabledate"
     },
     {
       "relation": "calls",
@@ -6856,9 +7219,9 @@
       "source_location": "L482",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "target": "js_ui_common_modal_formatmilestoneline",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmilestoneline"
     },
     {
       "relation": "calls",
@@ -6868,9 +7231,9 @@
       "source_location": "L504",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_formatmilestoneline",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_formatmilestoneline"
     },
     {
       "relation": "calls",
@@ -6880,9 +7243,9 @@
       "source_location": "L517",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_buildmilestoneclipboardtext",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_buildmilestoneclipboardtext"
     },
     {
       "relation": "calls",
@@ -6892,9 +7255,9 @@
       "source_location": "L517",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_rendermilestonelistcard",
-      "target": "js_ui_common_modal_copymilestonelisttoclipboard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_copymilestonelisttoclipboard"
     },
     {
       "relation": "calls",
@@ -6904,9 +7267,9 @@
       "source_location": "L529",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "js_ui_common_modal_showmilestonelist",
-      "target": "js_ui_common_modal_rendermilestonelistcard",
-      "confidence_score": 1.0
+      "target": "js_ui_common_modal_rendermilestonelistcard"
     },
     {
       "relation": "calls",
@@ -8213,204 +8576,6 @@
       "confidence_score": 1.0,
       "source": "changelog_2026_08_05",
       "target": "changelog_other"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme",
-      "target": "readme_weavo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L233",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_data_model"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L259",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_development"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_getting_started"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L246",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_project_layout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_requirements"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L292",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_what_it_is"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_weavo",
-      "target": "readme_why_it_s_different"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L75",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_1_installation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L87",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_2_requirements"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L94",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_3_set_up_the_data_folder_one_time_setup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L131",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_4_open_the_app_and_connect_it_to_the_data_folder"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L146",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_5_daily_use"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L193",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_6_backups"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L212",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_7_faq_things_to_know"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L57",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "readme_guide_for_non_technical_users_first_install_setup_and_daily_use",
-      "target": "readme_how_it_works_in_short"
     },
     {
       "relation": "references",
@@ -14925,5 +15090,5 @@
       "source_file": "docs/database.md"
     }
   ],
-  "built_at_commit": "c8ca50beeeeb36bd9952658577228be3b809228b"
+  "built_at_commit": "feb43193d1c4f48b35cce10d1c0bcd6903a4ed68"
 }
