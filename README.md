@@ -10,7 +10,8 @@ across a portfolio of projects. It models:
 - **Projects**, each with one or more **baselines** (releases/versions).
 - Each baseline made of **tasks**.
 - Each task with a per-week allocation: a **team** and the **resources** from that team working
-  on it that week, plus an optional milestone flag.
+  on it that week, plus an optional milestone — one of three ordered deadline types: **Task
+  deadline**, **Ready for UAT**, and **UAT**.
 
 Allocation is intentionally **boolean** — a resource is either on a task in a given week, or
 not. No percentages, no fractional effort.
@@ -108,7 +109,7 @@ Create an empty shared folder containing:
 
   ```json
   {
-    "schemaVersion": 2,
+    "schemaVersion": 4,
     "weeks": { "first": "2026-01-05", "last": "2026-12-28" },
     "projects": []
   }
@@ -147,8 +148,9 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 
 - The **☰** menu in the top-left corner is the entry point for every function: switching pages
   ("Master Plan" / "Workload" / "Milestones" / "Team & resources"), creating a new project
-  ("**+ New project**"), running a backup ("**💾 Backup**"), and closing the current data folder to
-  pick another one ("**Change data folder…**").
+  ("**+ New project**"), running a backup ("**💾 Backup**"), two optional toggles ("**Backup on
+  exit**" and "**Notify me of changes on disk**"), and closing the current data folder to pick
+  another one ("**Change data folder…**").
 - **Create a project:** ☰ menu → *"+ New project"* → fill in the name and, optionally, the
   project's referents.
 - **Add a baseline/release to a project:** click the "⋮" icon on the project's row →
@@ -163,15 +165,24 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
   marks a deadline or release date. The popup saves itself when closed — there's no "Confirm"
   button. A dashed grey line marks the first week of each calendar month across the grid, to help
   you keep your bearings alongside the solid blue "today" line.
+- **Mark a single week as done without closing the whole task:** in the allocation popup, tick
+  the "Completed" checkbox. That week turns grey, stops counting toward workload and
+  overallocation checks, and is left untouched by shifts; the allocation itself is preserved, so
+  unticking the box simply reopens the week.
 - **Select several weeks at once:** click the first cell, then shift-click the last one on the
   same row, to apply the same allocation to the whole range in a single save.
 - **Shift an allocation by one week:** right-click the cell and pick *"Shift one week back"* or
   *"Shift one week forward"* — this moves the allocation, it doesn't open the editor, so it never
   overwrites what's in the cell. To shift several weeks together while keeping each cell's own
-  content, first Ctrl+click two cells on the same row to select the range (the menu's top line
+  content, first shift-click two cells on the same row to select the range (the menu's top line
   confirms how many weeks are selected), then right-click inside it. Shifting is blocked — with a
   tooltip explaining why — if the destination already has an allocation, the task is marked
   completed, or you'd go past the first/last week of the sheet.
+- **Move an allocation by dragging:** drag a week cell (or a selected range of weeks on the same
+  task) onto another week column and drop it there — the whole block slides forward or back by
+  as many weeks as the drag covers, keeping each cell's own content, and stops automatically at
+  the first obstacle (an already-occupied week, a completed task or week, or the edge of the
+  sheet).
 - **Need a reminder of how any of this works?** Click the **"?"** button in the top-right corner
   of the top bar for a short built-in guide covering editing, clearing, and shifting allocations.
 - **Manage teams and resources** (create/rename/recolor a team; create/rename/move/delete a
@@ -192,7 +203,11 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
 
 ### 6. Backups
 
-- Backups are **not automatic**: you have to trigger one by hand from ☰ menu → **💾 Backup**.
+- Backups are **not automatic by default**: you have to trigger one by hand from ☰ menu →
+  **💾 Backup**. The same ☰ menu also has a *"Backup on exit"* toggle that, when on, runs a backup
+  automatically every time you close the app's browser tab. That automatic run is **best-effort
+  only** — a browser doesn't guarantee background work finishes while a page is closing — so still
+  run a manual backup before any large or risky change.
 - Each backup creates a new `backup/YYYYMMDD_HHMMSS/` subfolder (backup date and time) inside the
   same data folder, containing a copy of every file at that moment (`manifest.json`,
   `team-resources.json`, and every project).
@@ -291,4 +306,5 @@ repo so it travels with the code; it's a dev-exploration aid, not part of the ap
 
 ## Status
 
-Early-stage personal project — expect rough edges.
+Active personal project — versioned and released via GitHub Releases (v1.4.2 at the time of
+writing), with unit tests and an automated packaging pipeline. Expect the occasional rough edge.
