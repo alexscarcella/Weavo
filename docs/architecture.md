@@ -149,15 +149,78 @@ away from the cell just edited.
 
 ## Testing
 
-[`unit/`](../unit/) is a Jest suite mirroring `js/`'s folder layout 1:1
-(`js/model/week-shift.js` → `unit/model/week-shift.test.js`), scoped to `js/data/` and
-`js/model/` — the layers with no I/O and no DOM, so they run under plain Node with no browser and
-no mocking of application logic. [`unit/helpers/load-mp.js`](../unit/helpers/load-mp.js)'s
-`loadMP()` is the shared fixture: it stubs a bare `global.window` and `require()`s a classic-
-script IIFE file, which attaches itself to that stub exactly as it would to a real browser
-`window`. `js/ui/` has no equivalent convention (no jsdom in this stack) — UI changes are verified
-by running the app directly. See `CLAUDE.md`'s "Running / testing" for the working practice
-(`js/data/`/`js/model/` changes should come with a matching test) and `npm test` usage.
+[`unit/`](../unit/) is a dev-only, npm-based Jest suite (own `package.json`, gitignored
+`node_modules/`) mirroring `js/`'s folder layout 1:1 (`js/model/week-shift.js` →
+`unit/model/week-shift.test.js`), scoped to `js/data/` and `js/model/` — the layers with no I/O
+and no DOM, so they run under plain Node with no browser and no mocking of application logic.
+[`unit/helpers/load-mp.js`](../unit/helpers/load-mp.js)'s `loadMP(relativePath)` is the shared
+fixture: it stubs a bare `global.window`/`global.window.MP` before `require()`-ing a
+classic-script IIFE file, which attaches itself to that stub exactly as it would to a real browser
+`window` — this is what makes files like `schema.js`/`validation.js` runnable under Node with zero
+mocking of application logic, only of the one global they expect to exist. A test needing a
+module's own dependencies (e.g. `week-shift.js` needs `week-utils.js` and `milestone-rules.js`
+already attached to `MP`) `loadMP`s each one first, in the same order `index.html`'s `<script>`
+list uses.
+
+```bash
+npm install   # once, installs Jest as a dev dependency
+npm test      # runs unit/**/*.test.js
+```
+
+**Working practice**: a change to `js/data/schema.js` or anything under `js/model/` should come
+with a new or updated test under `unit/` — these are exactly the modules this harness makes cheap
+to test, and they carry the app's sharpest edge-case logic (milestone ordering, week-shift
+collision detection, orphan/mismatch detection). This is a norm, not an enforced CI gate.
+
+`js/ui/` has no equivalent convention (no jsdom in this stack) — verify UI changes by actually
+running the app (open `index.html`) rather than reaching for Jest. To check headlessly for
+console errors after a change, run headless Chrome with an explicit `--user-data-dir` and a
+**native Windows path** (a Git-Bash style `/tmp/...` path resolves incorrectly):
+
+```bash
+chrome.exe --headless=new --disable-gpu --no-sandbox --user-data-dir=<writable dir> --enable-logging=stderr --v=1 --virtual-time-budget=3000 --dump-dom "file:///<absolute Windows path>"
+```
+
+then grep the stderr output for `CONSOLE` to see `console.log`/errors from the page. For a
+one-off, throwaway check that doesn't belong in `unit/`, the same `loadMP` trick works directly in
+a scratch script — load the plain-script modules into a Node sandbox with a stubbed `window` and
+call their exported `MP.*` functions directly, optionally against JSON read from
+[sample-data/](../sample-data/).
+
+[spike-fsa/index.html](../spike-fsa/index.html) is a standalone throwaway page (not part of the
+app) for manually checking whether File System Access API directory permissions survive a
+browser/PC restart on a real network/OneDrive folder.
+
+## Hard-won lessons
+
+A few non-obvious decisions and bugs worth knowing before touching the same code again:
+
+- **Shift feature is deliberately not part of the cell popover's save path.** An early version put
+  the ◀/▶ shift arrows inside `cell-popover.js` and reopened the popover (reseeded at the shifted
+  position) after each shift. Closing that reopened popover without touching anything still ran
+  the popover's own autosave-on-close bulk path, silently overwriting the whole selected range with
+  the anchor week's single value — destroying the very per-cell heterogeneity the shift had just
+  preserved. The fix is architectural: `js/model/week-shift.js`'s mutation never goes through
+  `MP.schema.createWeekEntry`/the popover's save path, so the two can never overwrite each other's
+  data, even now that both panels can be visible at once (the shift menu above the cell, the
+  popover below it).
+- **A `position: sticky` element's CSS `width` — not its grid track size — governs what actually
+  paints.** `resource-load-view.js` once reused the gantt page's `col-1`/`col-2` CSS classes for
+  its own frozen initials/name columns; its `grid-template-columns` declared different track
+  widths than what those classes render at, which doesn't error, it just silently misaligns —
+  produced a ~20px overlap with the first week column, hidden behind the sticky column's
+  background. Found by rendering the grid in isolation in headless Chrome and reading
+  `getBoundingClientRect()` on every cell, not from the CSS/JS alone. Fixed by giving that view its
+  own dedicated column classes (`rl-col-initials`, `rl-col-name`) sized to match its own grid.
+- **Single-scrollbar page layout.** The outer document (`html body`) never scrolls
+  (`overflow: hidden`); the gantt/resource-load/milestones pages are flex columns stretched to
+  fill the viewport, with everything except the grid pinned `flex: 0 0 auto` so only the grid's own
+  scroll container absorbs remaining space and produces the page's one scrollbar, both axes.
+- **Full DOM rebuild loses anything not in `state`.** Since every `setState` clears and rebuilds
+  `#app` from scratch (see "Render flow" above), `js/app.js`'s `render()` explicitly saves/restores
+  the grid's `scrollLeft`/`scrollTop` across a rebuild, and the gantt view tracks the last-edited
+  cell outside `state` so it can be briefly re-highlighted after the rebuild — otherwise every edit
+  would snap the grid back to the top-left and visually lose the cell just changed.
 
 ## Where to look for a given change
 

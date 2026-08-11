@@ -59,6 +59,25 @@ nested inside it, never listed independently. Resource `initials` values are uni
 *entire* dataset, not just within a team. Nothing about team names or colors is hardcoded in the
 app: everything (legend, edit popovers, filters) renders dynamically from this file.
 
+All CRUD for teams/resources goes through `js/ui/team-resources/team-resources-view.js`
+(`MP.teamCrud` + `MP.resourceCrud`) — the gantt legend and the resource-load view are read-only.
+Two of those operations cascade into every project file, not just `team-resources.json`:
+
+- **Moving** a resource to a different team (`MP.resourceCrud.moveResource`) scans every
+  non-`completed` week entry referencing the resource and, where the move leaves every allocated
+  resource on that cell belonging to a single team, rewrites the cell's `team` to match (after a
+  confirmation showing the affected-cell count) — so the cell's color follows the resource
+  automatically. A cell left spanning more than one team after the move is an "ambiguous" case,
+  left untouched and surfaced as a **team mismatch** for manual fix-up.
+- **Deleting** a resource (`MP.resourceCrud.deleteResource`) removes its initials from every
+  non-`completed` week entry's `resources` (clearing `team` too if `resources` becomes empty),
+  after showing a copyable summary of affected allocations and requiring confirmation.
+
+Both leave `completed` tasks/weeks and project-level `referents.solutionAnalyst`/`vvReference`
+references untouched — same "closed/other data is never auto-touched" principle used throughout
+this schema. A resource `initials` left behind by either flow becomes an **orphan reference**.
+Deleting a team is blocked while it still has resources assigned (move or delete them first).
+
 ### `projects/<slug>.json`
 
 ```json
@@ -221,7 +240,10 @@ the Excel import script, or restored from the app's own manual/automatic backup 
 
 Beyond these versioned upgrades, there is no other migration tooling: a future schema change means
 updating `js/data/schema.js`, adding a new incremental step to `legacy-migration.js`, and updating
-every reader of the changed shape in the same pass. The `project.referents` legacy-string self-heal
+every reader of the changed shape in the same pass. The v1 step's own legacy path literals
+(`'team-risorse.json'`, `'progetti'`) are intentionally hardcoded rather than sourced from
+`MP.schema.PATHS` — those constants point at the *current* names, and a legacy folder by
+definition doesn't have those yet. The `project.referents` legacy-string self-heal
 (`MP.schema.normalizeProjectReferents`, called from `repository.loadDataset`) predates and is
 orthogonal to the shape migrations above — it upgrades a legacy free-text `referents` value in
 memory on load regardless of `schemaVersion`, rewriting the file to the structured shape the next

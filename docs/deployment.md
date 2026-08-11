@@ -74,6 +74,21 @@ require serving the app from a real origin (`http(s)://`, even a trivial local s
 instead of opening `index.html` directly — an explicit scope change per `CLAUDE.md`, not
 something to assume.
 
+## Release packaging (GitHub Actions)
+
+[.github/workflows/release.yml](../.github/workflows/release.yml) builds the versioned zip
+mentioned above: pushing a git tag `vX.Y` triggers the workflow, which (1) fails the build if
+`APP_VERSION` in `js/ui/common/app-header.js` doesn't match the pushed tag, (2) builds
+`weavo-vX.Y.zip` via `git archive` scoped to `index.html favicon.svg css js sample-data` (so
+untracked/gitignored content like `sample-data/backup/` can never end up in it), and (3) creates a
+GitHub Release with that zip attached via `softprops/action-gh-release`. `docs/`, `README.md`,
+`requirements/`, and `spike-fsa/` are deliberately excluded — dev-facing, not needed to run the
+app.
+
+Per-release steps are manual: bump `APP_VERSION`, commit, then
+`git tag -a vX.Y -m vX.Y && git push origin vX.Y`. Never reuse or force-push an existing tag to fix
+a bad release — delete it (local + remote) and the GitHub Release, then re-tag.
+
 ## Backups
 
 The toolbar exposes a manual "💾 Backup" action that snapshots `manifest.json`,

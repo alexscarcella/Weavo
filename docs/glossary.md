@@ -97,8 +97,8 @@ don't count toward it.
 ### Project
 The top-level planning unit (`projects/<slug>.json`), containing one or more **baselines**. Has a
 name, a `referents` object (project manager/engineer, solution analyst/V&V reference, free-text
-notes — see `MP.schema.normalizeProjectReferents` for the legacy-plain-string self-heal), and an
-`archived` flag.
+notes — see `MP.schema.normalizeProjectReferents` for the legacy-plain-string self-heal), and a
+`completed` flag (see [Completed task](#completed-task-completed)).
 
 ### Resource
 An individual (`{ initials, name }`) who belongs to exactly one **team**, nested inside it in
@@ -122,7 +122,7 @@ only) and surfaced as a non-blocking warning; the user resolves it by hand.
 
 ### Week entry
 The value at `task.weeks[iso]` for a given ISO Monday date: an allocation
-(`{ team, resources }`), a milestone (`{ milestone: true }`), a per-week
+(`{ team, resources }`), a [milestone](#milestone) (`{ milestone: '<type>' }`), a per-week
 [completed](#completed-week-completed-on-a-week-entry) flag (`{ completed: true }`), any
 combination of the three together, or absent entirely. Never a partial state like a `team` with no
 `resources`. Always constructed through `MP.schema.createWeekEntry(...)`.
