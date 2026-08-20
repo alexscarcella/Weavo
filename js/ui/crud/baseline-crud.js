@@ -106,5 +106,22 @@
     await persistProject(state, file);
   }
 
-  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaselineToPosition, toggleCompleted, shiftBaseline };
+  // A differenza di renameBaseline, una stringa vuota è un valore valido (svuota la nota) — solo
+  // null/undefined (Cancel sul modal) è "annulla".
+  async function setBaselineNote(state, file, baseline, noteInput) {
+    const nota = noteInput !== undefined
+      ? noteInput
+      : await MP.modal.promptText({
+          title: baseline.note ? 'Edit note' : 'Add note',
+          label: 'Note',
+          value: baseline.note || '',
+          multiline: true,
+          maxLength: 200,
+        });
+    if (nota === null || nota === undefined) return;
+    baseline.note = nota.trim().slice(0, 200);
+    await persistProject(state, file);
+  }
+
+  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaselineToPosition, toggleCompleted, shiftBaseline, setBaselineNote };
 })(window.MP = window.MP || {});

@@ -99,7 +99,22 @@
       if (versionSpan) col2.insertBefore(completedChk, versionSpan);
       else col2.appendChild(completedChk);
 
+      if (baseline.note && baseline.note.trim()) {
+        const noteBtn = document.createElement('button');
+        noteBtn.type = 'button';
+        noteBtn.className = 'task-note-btn';
+        noteBtn.textContent = 'i';
+        noteBtn.title = 'Baseline note';
+        noteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          MP.modal.showBaselineNoteCard({ baseline });
+        });
+        if (versionSpan) col2.insertBefore(noteBtn, versionSpan);
+        else col2.appendChild(noteBtn);
+      }
+
       col2.appendChild(menuButton([
+        { label: baseline.note ? 'Edit note' : 'Add note', onClick: () => MP.baselineCrud.setBaselineNote(state, file, baseline) },
         { label: 'Rename baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
         { label: 'Shift baseline…', onClick: () => MP.baselineCrud.shiftBaseline(state, file, baseline) },
         { label: '+ New task', onClick: () => MP.taskCrud.createTask(state, file, baseline) },

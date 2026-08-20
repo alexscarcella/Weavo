@@ -95,10 +95,12 @@ Deleting a team is blocked while it still has resources assigned (move or delete
     {
       "version": "1.0",
       "completed": false,
+      "note": "",
       "task": [
         {
           "name": "Integration Testing",
           "completed": false,
+          "note": "",
           "weeks": {
             "2026-01-05": { "team": "dev", "resources": ["AB"] },
             "2025-12-29": { "team": "dev", "resources": ["AB"], "completed": true },
@@ -157,6 +159,12 @@ Deleting a team is blocked while it still has resources assigned (move or delete
   back/forward" action — while leaving `team`/`resources` on that week untouched and fully
   reversible. Set via a checkbox in the cell's editing popover, available for a single cell or a
   multi-week selection alike.
+- `baseline.note`/`task.note` are free multi-line text (default `''`), independent of
+  `project.referents.note`. Both follow the same UI pattern: an "i" icon on the row, shown only
+  when the note is non-empty, opens a read-only card; editing is exclusively via "Add note"/"Edit
+  note" in the row's "⋮" menu (`MP.baselineCrud.setBaselineNote`/`MP.taskCrud.setTaskNote`), which
+  trims the input and caps it at 200 characters. An empty string is a valid save that clears the
+  note — only cancelling the prompt leaves the existing value untouched.
 - Projects and baselines share the same `completed` field/concept, toggled via a checkbox to the
   left of the name (project row's col1 / baseline row's col2) rather than a menu action — same "no
   destructive auto-correction" principle as tasks, but marking either one asks for confirmation

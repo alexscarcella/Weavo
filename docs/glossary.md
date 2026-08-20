@@ -11,8 +11,8 @@ Always **boolean** — either allocated or not, never a percentage or fraction o
 
 ### Baseline
 A **project**'s release/version line (e.g. `"1.0"`, `"2.0"`). A project has one or more baselines;
-each baseline owns its own list of **tasks**. In the JSON, the field is `version`. Can
-independently be marked **completed** (`completed: true`, checkbox to the left of the version,
+each baseline owns its own list of **tasks**. In the JSON, the field is `version`. Can carry a
+free-text [Note](#note-note-on-a-taskbaseline) (`note`). Can independently be marked **completed** (`completed: true`, checkbox to the left of the version,
 confirmed before marking — same "no destructive auto-correction" principle as
 [completed task](#completed-task-completed)) — hidden from the gantt/milestones views unless the
 "Show completed projects/baselines" toggle is on, but never deleted or rewritten.
@@ -80,6 +80,14 @@ a milestone week (cell save, per-cell shift, whole-baseline shift, cross-baselin
 wherever a `uat` entry is built or merged, and the cell popover disables the Team/Resources
 fields once "UAT" is picked. See [database.md](database.md).
 
+### Note (`note` on a task/baseline)
+A free-text, multi-line field on a **task** or a **baseline** (`task.note`/`baseline.note`, default
+`''`), distinct from a project's `referents.note`. Shown as an "i" icon in the row — visible only
+when non-empty — opening a read-only card; edited exclusively via "Add note"/"Edit note" in the
+row's "⋮" menu (`MP.taskCrud.setTaskNote`/`MP.baselineCrud.setBaselineNote`), trimmed and capped at
+200 characters. An empty string is a valid save (clears the note); only cancelling the prompt
+leaves it untouched.
+
 ### Orphan reference
 A `team` code or resource `initials` value used in a task's week entry, or in a project's
 `referents.solutionAnalyst`/`referents.vvReference`, that no longer exists in
@@ -106,8 +114,8 @@ An individual (`{ initials, name }`) who belongs to exactly one **team**, nested
 reference the resource from task week entries.
 
 ### Task
-A unit of work inside a **baseline**, with a name, a `completed` flag, and a map of ISO week →
-week entry (`weeks`).
+A unit of work inside a **baseline**, with a name, a `completed` flag, a map of ISO week → week
+entry (`weeks`), and a free-text [Note](#note-note-on-a-taskbaseline) (`note`).
 
 ### Team
 The single grouping entity for resources (e.g. "Development", "QA"). Has a `code` (stable

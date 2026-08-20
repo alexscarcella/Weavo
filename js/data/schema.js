@@ -170,10 +170,10 @@
   /**
    * Crea una nuova baseline/release vuota (nessun task).
    * @param {string} version - identificativo/versione della baseline.
-   * @returns {{version: string, completed: boolean, task: Array}}
+   * @returns {{version: string, completed: boolean, task: Array, note: string}}
    */
   function createBaseline(version) {
-    return { version, completed: false, task: [] };
+    return { version, completed: false, task: [], note: '' };
   }
 
   /**

@@ -329,6 +329,29 @@
     });
   }
 
+  // Scheda di sola lettura con la nota di una baseline (icona "i" nella riga Gantt, visibile
+  // solo se la baseline ha una nota). Per modificare si usa "Add note"/"Edit note" nel menu
+  // ⋮ della baseline (setBaselineNote) — nessun bottone "Modifica" qui, stesso principio di
+  // showTaskNoteCard.
+  function showBaselineNoteCard({ baseline }) {
+    return new Promise((resolve) => {
+      const noteHtml = baseline.note ? escapeHtml(baseline.note).replace(/\n/g, '<br>') : '—';
+      const { overlay, box } = openModal('modal-box project-card', `
+        <h2>${escapeHtml(baseline.version)}</h2>
+        <div class="project-card-row"><span class="project-card-label">Note</span><span class="project-card-value">${noteHtml}</span></div>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Close</button>
+        </div>`, { focusBox: true });
+
+      const close = () => {
+        overlay.remove();
+        resolve();
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', close);
+      wireModalDismiss(overlay, box, close);
+    });
+  }
+
   // Icona "copy" (due rettangoli sovrapposti), stroke-only cosicché erediti il colore via
   // currentColor/CSS invece di un'emoji — usata dal bottone di copia del popover allocazioni
   // risorsa sotto.
@@ -675,5 +698,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showTaskNoteCard, showResourceAllocations, showTeamAllocations, showMilestoneList, confirmWithReport, showHelpGuide };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showTaskNoteCard, showBaselineNoteCard, showResourceAllocations, showTeamAllocations, showMilestoneList, confirmWithReport, showHelpGuide };
 })(window.MP = window.MP || {});
