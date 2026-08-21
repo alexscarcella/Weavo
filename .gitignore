@@ -22,11 +22,12 @@ import-output/
 # those stay as-is since they also apply elsewhere.
 scripts/import-excel/
 
-# /graphify knowledge-graph build of the repo — regenerable, not source material
-# graphify-out/
-/graphify-out/*
-!/graphify-out/graph.html
-!/graphify-out/graph.json
-!/graphify-out/GRAPH_REPORT.md
-!/graphify-out/manifest.json
-TODO.md
+# graphify knowledge graph — commit only the graph deliverables (HTML viz,
+# GraphRAG JSON, plain-language report, manifest). Everything else
+# (.graphify_* caches, cost.json, cache/, dated snapshot dirs) is regenerable
+# via `graphify update .` and may embed excerpts of real data it indexed.
+graphify-out/*
+!graphify-out/graph.html
+!graphify-out/graph.json
+!graphify-out/GRAPH_REPORT.md
+!graphify-out/manifest.json
