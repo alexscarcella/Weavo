@@ -1,4 +1,4 @@
-# Graph Report - Weavo - Master Plan  (2026-08-20)
+# Graph Report - Weavo - Master Plan  (2026-08-21)
 
 ## Corpus Check
 - 77 files · ~57,316 words
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9f273d90`
+- Built from commit: `a491fe8e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -71,35 +71,35 @@
 ## God Nodes (most connected - your core abstractions)
 1. `CLAUDE.md — Master Plan project guidance` - 82 edges
 2. `openModal()` - 13 edges
-3. `wireModalDismiss()` - 12 edges
-4. `escapeHtml()` - 12 edges
+3. `escapeHtml()` - 12 edges
+4. `wireModalDismiss()` - 12 edges
 5. `renderAllocationsCard()` - 11 edges
-6. `Weavo` - 10 edges
-7. `migrateIfNeeded()` - 10 edges
+6. `migrateIfNeeded()` - 10 edges
+7. `Weavo` - 10 edges
 8. `renderMilestoneListCard()` - 9 edges
 9. `Guide for non-technical users (first install, setup, and daily use)` - 9 edges
 10. `persistProject()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Shift feature kept out of popover save path (avoids overwrite bug)` --rationale_for--> `openShiftMenu()`  [EXTRACTED]
-  CLAUDE.md → js/ui/gantt/gantt-view.js
-- `Single-scrollbar page layout design` --rationale_for--> `render()`  [EXTRACTED]
-  CLAUDE.md → js/app.js
-- `transformProject()` --shares_data_with--> `projects/<slug>.json schema (baseline/task/week)`  [EXTRACTED]
-  js/data/legacy-migration.js → CLAUDE.md
 - `transformManifest()` --shares_data_with--> `manifest.json schema (project index, week range, schemaVersion)`  [EXTRACTED]
   js/data/legacy-migration.js → CLAUDE.md
-- `normalizeProjectReferents()` --references--> `Project referents structured field (PM/PE/solutionAnalyst/vvReference/note)`  [EXTRACTED]
+- `transformProject()` --shares_data_with--> `projects/<slug>.json schema (baseline/task/week)`  [EXTRACTED]
+  js/data/legacy-migration.js → CLAUDE.md
+- `Single-scrollbar page layout design` --rationale_for--> `render()`  [EXTRACTED]
+  CLAUDE.md → js/app.js
+- `Shift feature kept out of popover save path (avoids overwrite bug)` --rationale_for--> `openShiftMenu()`  [EXTRACTED]
+  CLAUDE.md → js/ui/gantt/gantt-view.js
+- `createWeekEntry()` --shares_data_with--> `projects/<slug>.json schema (baseline/task/week)`  [EXTRACTED]
   js/data/schema.js → CLAUDE.md
 
 ## Import Cycles
 - None detected.
 
 ## Hyperedges (group relationships)
-- **Save-time and remote-change conflict detection flow** — js_data_save_coordinator, js_data_conflict_diff, js_data_repository_readtextfileornull, js_data_remote_check [EXTRACTED 1.00]
 - **Per-cell/range week shift interaction flow** — js_model_week_shift, js_ui_gantt_gantt_view_openshiftmenu, js_ui_gantt_gantt_view_handlecellsshift, js_ui_gantt_cell_popover_whenidle, js_ui_crud_baseline_crud_shiftbaseline [EXTRACTED 0.90]
-- **Module-singleton UI state controllers (outside the store)** — js_ui_gantt_cell_selection, js_ui_gantt_task_drag, js_ui_gantt_baseline_drag [INFERRED 0.85]
 - **Conflict detection and remote-change notification mechanism** — docs_database_conflictdetection, docs_database_mp_conflictdiff, docs_database_mp_remotecheck, docs_api_mp_savecoordinator [EXTRACTED 1.00]
+- **Save-time and remote-change conflict detection flow** — js_data_save_coordinator, js_data_conflict_diff, js_data_repository_readtextfileornull, js_data_remote_check [EXTRACTED 1.00]
+- **Module-singleton UI state controllers (outside the store)** — js_ui_gantt_cell_selection, js_ui_gantt_task_drag, js_ui_gantt_baseline_drag [INFERRED 0.85]
 
 ## Communities (53 total, 20 thin omitted)
 
@@ -232,7 +232,7 @@ Cohesion: 0.43
 Nodes (7): 1-team-to-N-resources relationship model, createTeam(), deleteTeam(), existingCodici(), persist(), recolorTeam(), renameTeam()
 
 ## Knowledge Gaps
-- **86 isolated node(s):** `{ loadMP }`, `Hard constraints (verified, non-negotiable)`, `Commands`, `Conventions`, `Local-only paths — never commit, never `git add -f`` (+81 more)
+- **86 isolated node(s):** `1. Installation`, `2. Requirements`, `3. Set up the data folder (one-time setup)`, `4. Open the app and connect it to the data folder`, `5. Daily use` (+81 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -241,7 +241,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `CLAUDE.md — Master Plan project guidance` connect `CLAUDE.md — Master Plan project guidance` to `modal.js`, `app.js`, `gantt-view.js`, `baseline-drag.js`, `validation.js`, `schema.js`, `fs-access.js`, `task-drag.js`, `legacy-migration.js`, `resource-load-view.js`, `toolbar.js`, `save-coordinator.js`, `milestones-view.js`, `week-utils.js`, `cell-popover.js`, `project-crud.js`, `week-controls.js`, `context-menu.js`, `legend.js`, `team-resources-view.js`, `task-crud.js`, `team-crud.js`?**
   _High betweenness centrality (0.602) - this node is a cross-community bridge._
-- **What connects `{ loadMP }`, `Hard constraints (verified, non-negotiable)`, `Commands` to the rest of the system?**
+- **What connects `1. Installation`, `2. Requirements`, `3. Set up the data folder (one-time setup)` to the rest of the system?**
   _86 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `docs/glossary.md` be split into smaller, more focused modules?**
   _Cohesion score 0.06938775510204082 - nodes in this community are weakly interconnected._
