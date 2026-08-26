@@ -25,9 +25,9 @@
     "semantic_hash": "b40181c3ea2e21d3df93af27a1f1c1eb"
   },
   "js/data/repository.js": {
-    "mtime": 1784401980.263379,
-    "ast_hash": "4134b3908d0a073285844b6dca8bf194",
-    "semantic_hash": "4134b3908d0a073285844b6dca8bf194"
+    "mtime": 1787755848.1289546,
+    "ast_hash": "626c27503881486647eb0b1f0db7d7c6",
+    "semantic_hash": ""
   },
   "js/data/save-coordinator.js": {
     "mtime": 1784402013.0219276,
@@ -35,8 +35,8 @@
     "semantic_hash": "bca2be566d7d23d14aab47af4e6e3e11"
   },
   "js/data/schema.js": {
-    "mtime": 1787243368.7886426,
-    "ast_hash": "500e0182a0ce15f03b93e41693ba2691",
+    "mtime": 1787756666.5984788,
+    "ast_hash": "1d09fe3854a95fee71c489789a934355",
     "semantic_hash": ""
   },
   "js/data/slug.js": {
@@ -55,9 +55,9 @@
     "semantic_hash": "abb9f618ebb70a66e5ddbc2ef80869b5"
   },
   "js/model/validation.js": {
-    "mtime": 1784712893.1530106,
-    "ast_hash": "9ea4e293b8d9c6c9872cc3c6ee99672f",
-    "semantic_hash": "9ea4e293b8d9c6c9872cc3c6ee99672f"
+    "mtime": 1787756001.4648242,
+    "ast_hash": "80995f013f7a63fa9087376ed134eadd",
+    "semantic_hash": ""
   },
   "js/model/week-shift.js": {
     "mtime": 1786034175.4365594,
@@ -75,8 +75,8 @@
     "semantic_hash": "00a0be072a3fad16dfa2005ffab67fe1"
   },
   "js/ui/common/app-header.js": {
-    "mtime": 1787290507.0312042,
-    "ast_hash": "cccd6d3895c1189d47e992297e101823",
+    "mtime": 1787761368.1269522,
+    "ast_hash": "61d9e8809a6cb2ce84f455a2ec37fba1",
     "semantic_hash": ""
   },
   "js/ui/common/context-menu.js": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "js/ui/common/modal.js": {
-    "mtime": 1787243395.2215726,
-    "ast_hash": "4f02c7c8a0f60c0b4f2090ef8a6e8097",
+    "mtime": 1787758927.2179117,
+    "ast_hash": "aea99ee9fd47e1c66ef4d70cf774e67e",
     "semantic_hash": ""
   },
   "js/ui/common/toast.js": {
@@ -105,8 +105,8 @@
     "semantic_hash": "706bbe2725e749263dfd70aab3cb868b"
   },
   "js/ui/crud/baseline-crud.js": {
-    "mtime": 1787243375.0833087,
-    "ast_hash": "e1faafa38c09399c3c38dd8508ff50c5",
+    "mtime": 1787755937.8942716,
+    "ast_hash": "f73be0ba3ea488c0ee2dcb3390f68393",
     "semantic_hash": ""
   },
   "js/ui/crud/project-crud.js": {
@@ -135,8 +135,8 @@
     "semantic_hash": "c333f4af6906eab273c652a04f1ff84a"
   },
   "js/ui/gantt/cell-popover.js": {
-    "mtime": 1785955123.249358,
-    "ast_hash": "5d9eac8739133fd0acbe1b049bc7873a",
+    "mtime": 1787562276.6595087,
+    "ast_hash": "497dab51b7eedf763aca0564529b73c5",
     "semantic_hash": ""
   },
   "js/ui/gantt/cell-selection.js": {
@@ -150,13 +150,13 @@
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-row.js": {
-    "mtime": 1787243401.5589836,
-    "ast_hash": "1ef8590c2b43803907f50f8aa202e913",
+    "mtime": 1787758962.0781243,
+    "ast_hash": "73e4692692a789e07fcc988570225380",
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-view.js": {
-    "mtime": 1786034210.6130652,
-    "ast_hash": "e1f44994907a696813588de1d3ef9da2",
+    "mtime": 1787756009.571662,
+    "ast_hash": "cc5ce543483bb2b9cb1e9db23a822220",
     "semantic_hash": ""
   },
   "js/ui/gantt/legend.js": {
@@ -285,8 +285,8 @@
     "semantic_hash": ""
   },
   "docs/api.md": {
-    "mtime": 1785951727.331458,
-    "ast_hash": "f86d1123da1dfc654b925c82b585697e",
+    "mtime": 1787756699.4068267,
+    "ast_hash": "88032a70cbda5472385aa7b3c25e0d72",
     "semantic_hash": ""
   },
   "docs/architecture.md": {
@@ -295,8 +295,8 @@
     "semantic_hash": ""
   },
   "docs/database.md": {
-    "mtime": 1787244468.3593276,
-    "ast_hash": "a6ee67337b189c411210836b1aea9182",
+    "mtime": 1787759024.1975958,
+    "ast_hash": "9519dc87eddf65c83e4a0f6707736378",
     "semantic_hash": ""
   },
   "docs/deployment.md": {
@@ -305,8 +305,8 @@
     "semantic_hash": ""
   },
   "docs/glossary.md": {
-    "mtime": 1787244456.2260969,
-    "ast_hash": "2610bb2f96708f0166e3482ac783dcde",
+    "mtime": 1787759047.3622344,
+    "ast_hash": "a20a08b23e009242ff955a380ccec523",
     "semantic_hash": ""
   },
   "docs/security.md": {
@@ -350,8 +350,8 @@
     "semantic_hash": ""
   },
   "unit/data/schema.test.js": {
-    "mtime": 1787244475.4611163,
-    "ast_hash": "b2afd668f47d8819c03314c3b35ab5cd",
+    "mtime": 1787756683.232998,
+    "ast_hash": "60d6f028e6b0ec42a554072fa44bc858",
     "semantic_hash": ""
   },
   "unit/helpers/load-mp.js": {
