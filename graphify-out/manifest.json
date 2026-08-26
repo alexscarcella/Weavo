@@ -75,14 +75,14 @@
     "semantic_hash": "00a0be072a3fad16dfa2005ffab67fe1"
   },
   "js/ui/common/app-header.js": {
-    "mtime": 1787761368.1269522,
-    "ast_hash": "61d9e8809a6cb2ce84f455a2ec37fba1",
+    "mtime": 1787765600.5072048,
+    "ast_hash": "b53ef6cd5c9fbd62198ffd187638c797",
     "semantic_hash": ""
   },
   "js/ui/common/context-menu.js": {
-    "mtime": 1784661521.592017,
-    "ast_hash": "e5d6078a9aef303f03413117a0a73ba1",
-    "semantic_hash": "e5d6078a9aef303f03413117a0a73ba1"
+    "mtime": 1787763556.9332104,
+    "ast_hash": "9dea5070b8ba590de46de606278fcf0d",
+    "semantic_hash": ""
   },
   "js/ui/common/dataset-header.js": {
     "mtime": 1785951316.9792025,
@@ -135,8 +135,8 @@
     "semantic_hash": "c333f4af6906eab273c652a04f1ff84a"
   },
   "js/ui/gantt/cell-popover.js": {
-    "mtime": 1787562276.6595087,
-    "ast_hash": "497dab51b7eedf763aca0564529b73c5",
+    "mtime": 1787763601.235092,
+    "ast_hash": "0b76432d9f61c8d44a0556073d0ae229",
     "semantic_hash": ""
   },
   "js/ui/gantt/cell-selection.js": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-view.js": {
-    "mtime": 1787756009.571662,
-    "ast_hash": "cc5ce543483bb2b9cb1e9db23a822220",
+    "mtime": 1787763632.15718,
+    "ast_hash": "7ccdab3ca5d327fab8e4623da71506f4",
     "semantic_hash": ""
   },
   "js/ui/gantt/legend.js": {
@@ -285,13 +285,13 @@
     "semantic_hash": ""
   },
   "docs/api.md": {
-    "mtime": 1787756699.4068267,
-    "ast_hash": "88032a70cbda5472385aa7b3c25e0d72",
+    "mtime": 1787765557.2874146,
+    "ast_hash": "935d96804a67a8636a8b2547a7898280",
     "semantic_hash": ""
   },
   "docs/architecture.md": {
-    "mtime": 1786429813.3399777,
-    "ast_hash": "396a0e09ee2832bbbafa7e45628065e9",
+    "mtime": 1787765566.683353,
+    "ast_hash": "df491bf3313a8900a3322c31159dea32",
     "semantic_hash": ""
   },
   "docs/database.md": {
@@ -315,8 +315,8 @@
     "semantic_hash": "26342c52653e84faebbf464e03d683bd"
   },
   "index.html": {
-    "mtime": 1786034323.3762798,
-    "ast_hash": "24c9cff7498d314419c61cd33717d508",
+    "mtime": 1787763535.9225457,
+    "ast_hash": "c1209376f7f2afe3b15b5fbd9743b95a",
     "semantic_hash": ""
   },
   "spike-fsa/index.html": {
@@ -375,8 +375,8 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1785996531.7895675,
-    "ast_hash": "25d10589bfa070b5b682a1527388cf03",
+    "mtime": 1787765540.4740384,
+    "ast_hash": "c9f1680c5d35a532d2ce062e0aaa7c3d",
     "semantic_hash": ""
   },
   "README.md": {
@@ -397,6 +397,11 @@
   "AGENTS.md": {
     "mtime": 1786395371.398877,
     "ast_hash": "a16366329b819390f6b54f9cb4f767b0",
+    "semantic_hash": ""
+  },
+  "js/ui/common/floating-position.js": {
+    "mtime": 1787765351.3450315,
+    "ast_hash": "14b64bb540b214e5d3e4579cdc24190a",
     "semantic_hash": ""
   }
 }

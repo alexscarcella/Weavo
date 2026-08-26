@@ -20,6 +20,7 @@
   "18": "Weavo",
   "19": "week-controls.js",
   "20": "manifest.json",
+  "21": "context-menu.js",
   "22": "legend.js",
   "23": "team-resources-view.js",
   "24": "MP.datasetHeader",
@@ -50,5 +51,6 @@
   "49": "week-shift.test.js",
   "50": "week-utils.test.js",
   "51": "AGENTS.md",
-  "52": "team-crud.js"
+  "52": "team-crud.js",
+  "53": "floating-position.js"
 }

@@ -1,16 +1,16 @@
 # Graph Report - Weavo - Master Plan  (2026-08-26)
 
 ## Corpus Check
-- 77 files · ~59,337 words
+- 78 files · ~60,259 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 516 nodes · 857 edges · 52 communities (32 shown, 20 thin omitted)
+- 520 nodes · 861 edges · 54 communities (34 shown, 20 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.67)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b47b58e5`
+- Built from commit: `46650ac2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -36,6 +36,7 @@
 - Weavo
 - week-controls.js
 - manifest.json
+- context-menu.js
 - legend.js
 - team-resources-view.js
 - MP.datasetHeader
@@ -66,6 +67,7 @@
 - week-utils.test.js
 - AGENTS.md
 - team-crud.js
+- floating-position.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `CLAUDE.md — Master Plan project guidance` - 82 edges
@@ -84,12 +86,12 @@
   CLAUDE.md → js/ui/gantt/gantt-view.js
 - `transformManifest()` --shares_data_with--> `manifest.json schema (project index, week range, schemaVersion)`  [EXTRACTED]
   js/data/legacy-migration.js → CLAUDE.md
-- `transformProject()` --shares_data_with--> `projects/<slug>.json schema (baseline/task/week)`  [EXTRACTED]
-  js/data/legacy-migration.js → CLAUDE.md
 - `Single-scrollbar page layout design` --rationale_for--> `render()`  [EXTRACTED]
   CLAUDE.md → js/app.js
-- `normalizeProjectReferents()` --references--> `Project referents structured field (PM/PE/solutionAnalyst/vvReference/note)`  [EXTRACTED]
-  js/data/schema.js → CLAUDE.md
+- `syncBaselineMilestone()` --references--> `Baseline milestone sync across all tasks (single deadline invariant)`  [EXTRACTED]
+  js/ui/gantt/gantt-view.js → CLAUDE.md
+- `clearBaselineMilestone()` --references--> `Baseline milestone sync across all tasks (single deadline invariant)`  [EXTRACTED]
+  js/ui/gantt/gantt-view.js → CLAUDE.md
 
 ## Import Cycles
 - None detected.
@@ -100,15 +102,15 @@
 - **Save-time and remote-change conflict detection flow** — js_data_save_coordinator, js_data_conflict_diff, js_data_repository_readtextfileornull, js_data_remote_check [EXTRACTED 1.00]
 - **Module-singleton UI state controllers (outside the store)** — js_ui_gantt_cell_selection, js_ui_gantt_task_drag, js_ui_gantt_baseline_drag [INFERRED 0.85]
 
-## Communities (52 total, 20 thin omitted)
+## Communities (54 total, 20 thin omitted)
 
 ### Community 0 - "docs/glossary.md"
 Cohesion: 0.07
 Nodes (44): MP.cellPopover, MP.cellSelection, MP.contextMenu, MP.fsAccess, MP.ganttView, MP.legacyMigration, MP.modal, MP.overallocation (+36 more)
 
 ### Community 1 - "CLAUDE.md — Master Plan project guidance"
-Cohesion: 0.05
-Nodes (41): CLAUDE.md — Master Plan project guidance, Baseline drag & drop reorder, Boolean (allocated / not allocated) allocation model, Task-level completed semantics (excluded from overallocation/mismatch), File System Access API dependency (Chrome/Edge only), graphify codebase knowledge graph tool, Master Plan (Weavo) client-side web app, Module-singleton UI state pattern (outside the store) (+33 more)
+Cohesion: 0.06
+Nodes (37): CLAUDE.md — Master Plan project guidance, Baseline drag & drop reorder, Boolean (allocated / not allocated) allocation model, Task-level completed semantics (excluded from overallocation/mismatch), File System Access API dependency (Chrome/Edge only), graphify codebase knowledge graph tool, Master Plan (Weavo) client-side web app, Module-singleton UI state pattern (outside the store) (+29 more)
 
 ### Community 2 - "modal.js"
 Cohesion: 0.17
@@ -119,8 +121,8 @@ Cohesion: 0.12
 Nodes (16): No IndexedDB — never fires onsuccess/onerror under file://, Single-scrollbar page layout design, bootstrap(), connectToDirectory(), escapeHtml(), render(), renderError(), renderMessage() (+8 more)
 
 ### Community 4 - "gantt-view.js"
-Cohesion: 0.23
-Nodes (18): Baseline milestone sync across all tasks (single deadline invariant), Shift feature kept out of popover save path (avoids overwrite bug), applyWeeksShift(), buildRows(), clearBaselineMilestone(), clearOtherMilestones(), handleBulkCellsSaved(), handleCellSaved() (+10 more)
+Cohesion: 0.17
+Nodes (24): Baseline milestone sync across all tasks (single deadline invariant), Shift feature kept out of popover save path (avoids overwrite bug), clearHighlight(), getRangeForAction(), handleCellClick(), relocate(), reset(), setAnchor() (+16 more)
 
 ### Community 5 - "baseline-crud.js"
 Cohesion: 0.20
@@ -131,20 +133,20 @@ Cohesion: 0.17
 Nodes (18): Assisted bulk regularization on resource move, Orphan team/resource/project-referent references, Team mismatch detection (entry.team vs resource's current team), findOrphanProjectReferents(), findOrphanResources(), findOrphanTeam(), findResourceAllocations(), findTeamMismatches() (+10 more)
 
 ### Community 7 - "schema.js"
-Cohesion: 0.12
-Nodes (10): Project referents structured field (PM/PE/solutionAnalyst/vvReference/note), loadDataset(), createProjectReferents(), createWeekEntry(), existingInitials(), flattenResources(), normalizeBaselineTeam(), normalizeProjectReferents() (+2 more)
+Cohesion: 0.14
+Nodes (8): Project referents structured field (PM/PE/solutionAnalyst/vvReference/note), loadDataset(), createProjectReferents(), existingInitials(), flattenResources(), normalizeBaselineTeam(), normalizeProjectReferents(), resolveBaselineTeam()
 
 ### Community 8 - "fs-access.js"
 Cohesion: 0.19
 Nodes (9): ensurePermission(), fileExists(), getFileHandle(), queryPermissionSilently(), readTextFile(), removeFile(), resolveDirHandle(), splitPath() (+1 more)
 
 ### Community 9 - "task-drag.js"
-Cohesion: 0.15
-Nodes (18): clearIndicator(), handleDragEnd(), handleDragLeave(), handleDragOver(), handleDrop(), reset(), clearHighlight(), getRangeForAction() (+10 more)
+Cohesion: 0.21
+Nodes (12): clearIndicator(), handleDragEnd(), handleDragLeave(), handleDragOver(), handleDrop(), reset(), clearIndicator(), handleDragEnd() (+4 more)
 
 ### Community 10 - "legacy-migration.js"
-Cohesion: 0.22
-Nodes (19): English-only UI language and data-model field names sweep, Legacy data migration (Italian-named schema to current), applyMilestoneTypeMigration(), legacyToNewProjectPath(), migrateIfNeeded(), migrateV1ToV4(), migrateV2ToV4(), migrateV3ToV4() (+11 more)
+Cohesion: 0.19
+Nodes (21): English-only UI language and data-model field names sweep, Legacy data migration (Italian-named schema to current), applyMilestoneTypeMigration(), legacyToNewProjectPath(), migrateIfNeeded(), migrateV1ToV4(), migrateV2ToV4(), migrateV3ToV4() (+13 more)
 
 ### Community 11 - "resource-load-view.js"
 Cohesion: 0.20
@@ -167,8 +169,8 @@ Cohesion: 0.32
 Nodes (11): addDays(), addWeeks(), formatWeekLabel(), getCurrentWeekIso(), getTodayIso(), getWeeksInRange(), isMonday(), isMonthBoundary() (+3 more)
 
 ### Community 16 - "cell-popover.js"
-Cohesion: 0.42
-Nodes (9): Week-level completed semantics (per-cell, orthogonal to milestone), closeExisting(), commitAndClose(), detachGlobalListeners(), handleKeydown(), handleOutsideClick(), openPopover(), positionPopover() (+1 more)
+Cohesion: 0.47
+Nodes (8): Week-level completed semantics (per-cell, orthogonal to milestone), closeExisting(), commitAndClose(), detachGlobalListeners(), handleKeydown(), handleOutsideClick(), openPopover(), whenIdle()
 
 ### Community 17 - "project-crud.js"
 Cohesion: 0.39
@@ -185,6 +187,10 @@ Nodes (6): buildRemovalReport(), handleAddWeek(), handleRemoveWeek(), persistMan
 ### Community 20 - "manifest.json"
 Cohesion: 0.33
 Nodes (5): projects, schemaVersion, weeks, first, last
+
+### Community 21 - "context-menu.js"
+Cohesion: 0.80
+Nodes (4): closeExisting(), createMenuButton(), onOutsideClick(), openMenu()
 
 ### Community 22 - "legend.js"
 Cohesion: 0.80
@@ -211,8 +217,8 @@ Cohesion: 0.61
 Nodes (7): applyTentativeChange(), checkBaselineChange(), checkChange(), checkOrdering(), checkTaskChange(), checkTaskOrderingAfterShift(), collectTaskMilestoneDates()
 
 ### Community 47 - "2026-08-05"
-Cohesion: 0.20
-Nodes (9): 2026-08-05, Added, Added — 3-type milestone model, Changed, Changed, Changelog, Docs, Other (+1 more)
+Cohesion: 0.18
+Nodes (10): 2026-08-05, Added, Added — 3-type milestone model, Changed, Changed, Changelog, Docs, Fixed (+2 more)
 
 ### Community 48 - "week-drag.js"
 Cohesion: 0.48
@@ -226,25 +232,29 @@ Nodes (6): Commands, Common-change pointers, Conventions, Hard constraints (veri
 Cohesion: 0.43
 Nodes (7): 1-team-to-N-resources relationship model, createTeam(), deleteTeam(), existingCodici(), persist(), recolorTeam(), renameTeam()
 
+### Community 53 - "floating-position.js"
+Cohesion: 0.83
+Nodes (3): clampHorizontal(), positionSingle(), positionStack()
+
 ## Knowledge Gaps
-- **86 isolated node(s):** `{ loadMP }`, `1. Installation`, `2. Requirements`, `3. Set up the data folder (one-time setup)`, `4. Open the app and connect it to the data folder` (+81 more)
+- **87 isolated node(s):** `Added`, `Changed`, `Fixed`, `Added — 3-type milestone model`, `Changed` (+82 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `CLAUDE.md — Master Plan project guidance` connect `CLAUDE.md — Master Plan project guidance` to `modal.js`, `app.js`, `gantt-view.js`, `baseline-crud.js`, `validation.js`, `schema.js`, `fs-access.js`, `task-drag.js`, `legacy-migration.js`, `resource-load-view.js`, `toolbar.js`, `save-coordinator.js`, `milestones-view.js`, `week-utils.js`, `cell-popover.js`, `project-crud.js`, `week-controls.js`, `legend.js`, `team-resources-view.js`, `task-crud.js`, `team-crud.js`?**
-  _High betweenness centrality (0.607) - this node is a cross-community bridge._
-- **What connects `{ loadMP }`, `1. Installation`, `2. Requirements` to the rest of the system?**
-  _86 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `CLAUDE.md — Master Plan project guidance` connect `CLAUDE.md — Master Plan project guidance` to `modal.js`, `app.js`, `gantt-view.js`, `baseline-crud.js`, `validation.js`, `schema.js`, `fs-access.js`, `task-drag.js`, `legacy-migration.js`, `resource-load-view.js`, `toolbar.js`, `save-coordinator.js`, `milestones-view.js`, `week-utils.js`, `cell-popover.js`, `project-crud.js`, `week-controls.js`, `context-menu.js`, `legend.js`, `team-resources-view.js`, `task-crud.js`, `team-crud.js`?**
+  _High betweenness centrality (0.595) - this node is a cross-community bridge._
+- **What connects `Added`, `Changed`, `Fixed` to the rest of the system?**
+  _87 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `docs/glossary.md` be split into smaller, more focused modules?**
   _Cohesion score 0.06938775510204082 - nodes in this community are weakly interconnected._
 - **Should `CLAUDE.md — Master Plan project guidance` be split into smaller, more focused modules?**
-  _Cohesion score 0.05230496453900709 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05537098560354374 - nodes in this community are weakly interconnected._
 - **Should `app.js` be split into smaller, more focused modules?**
   _Cohesion score 0.11956521739130435 - nodes in this community are weakly interconnected._
 - **Should `schema.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.12105263157894737 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13725490196078433 - nodes in this community are weakly interconnected._
 - **Should `Weavo` be split into smaller, more focused modules?**
   _Cohesion score 0.10526315789473684 - nodes in this community are weakly interconnected._
