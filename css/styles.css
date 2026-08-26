@@ -729,6 +729,10 @@ code {
   min-width: 170px;
   display: flex;
   flex-direction: column;
+  /* Rete di sicurezza se lo stack combinato con .cell-popover eccede comunque
+     l'altezza della viewport — vedi js/ui/common/floating-position.js. */
+  max-height: calc(100vh - 16px);
+  overflow-y: auto;
 }
 .context-menu-item {
   text-align: left;

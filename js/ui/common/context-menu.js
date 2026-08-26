@@ -1,10 +1,12 @@
 // Piccolo menu contestuale generico (elenco di azioni), usato dalle icone "⋮"
 // di riga per le operazioni CRUD su progetti/baseline/task, e dal menu di
-// shift della griglia (gantt-view.js). `openMenu` posiziona di default sotto
-// `anchorEl`; passando `placement: 'above'` lo posiziona invece sopra,
-// misurando l'altezza reale del menu appena renderizzato (usato quando il
-// menu di shift deve comparire sopra la cella, mentre il popover di
-// allocazione compare sotto — vedi gantt-view.js:openCellContextMenu).
+// shift della griglia (gantt-view.js). Il posizionamento (sopra/sotto
+// `anchorEl` in base allo spazio reale disponibile, clampato al viewport) è
+// delegato a MP.floatingPosition — vedi quel modulo per i dettagli. Passando
+// `deferPosition: true` il menu viene creato e aggiunto al DOM ma non
+// posizionato: usato quando il chiamante deve posizionarlo insieme ad altri
+// box come un unico blocco (vedi gantt-view.js:openCellContextMenu, dove il
+// menu di shift può comparire insieme al popover di allocazione).
 (function (MP) {
   'use strict';
 
@@ -19,7 +21,7 @@
     document.removeEventListener('mousedown', onOutsideClick, true);
   }
 
-  function openMenu({ anchorEl, actions, placement }) {
+  function openMenu({ anchorEl, actions, deferPosition }) {
     closeExisting();
     const menu = document.createElement('div');
     menu.className = 'context-menu';
@@ -56,17 +58,12 @@
     });
     document.body.appendChild(menu);
 
-    const rect = anchorEl.getBoundingClientRect();
-    menu.style.position = 'fixed';
-    if (placement === 'above') {
-      const menuHeight = menu.getBoundingClientRect().height;
-      menu.style.top = `${Math.max(8, rect.top - menuHeight - 2)}px`;
-    } else {
-      menu.style.top = `${Math.min(rect.bottom + 2, window.innerHeight - 220)}px`;
+    if (!deferPosition) {
+      MP.floatingPosition.positionSingle(menu, anchorEl.getBoundingClientRect());
     }
-    menu.style.left = `${Math.min(rect.left, window.innerWidth - 190)}px`;
 
     setTimeout(() => document.addEventListener('mousedown', onOutsideClick, true), 0);
+    return menu;
   }
 
   function createMenuButton(actions, extraClass) {

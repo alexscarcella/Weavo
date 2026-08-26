@@ -12,7 +12,8 @@
 // bloccante anche su doppia allocazione. Aperto solo dal click destro
 // (gantt-view.js:openCellContextMenu), mai dal click semplice — `whenIdle()`
 // espone il salvataggio pendente in corso in modo che il menu di shift (che
-// può apparire insieme, sopra questo popover) possa attendere che un'eventuale
+// può apparire insieme, impilato accanto a questo popover — vedi
+// js/ui/common/floating-position.js) possa attendere che un'eventuale
 // modifica non ancora salvata sia commessa prima di agire.
 (function (MP) {
   'use strict';
@@ -61,41 +62,16 @@
     return pendingSave;
   }
 
-  // Posiziona il popover in modo che resti sempre interamente visibile,
-  // qualunque sia la posizione della cella cliccata (bordo destro/sinistro/
-  // alto/basso della viewport): misura le dimensioni reali del popover (già
-  // nel DOM con tutto il contenuto quando questa funzione viene chiamata,
-  // vedi openPopover) invece di assumere un'altezza/larghezza fissa, poi
-  // sceglie sopra/sotto la cella in base a dove c'è più spazio e chiude ogni
-  // coordinata dentro i margini della viewport.
-  function positionPopover(pop, anchorEl) {
-    const margin = 8;
-    const rect = anchorEl.getBoundingClientRect();
-    const popRect = pop.getBoundingClientRect();
-    const width = popRect.width;
-    const height = popRect.height;
-
-    pop.style.position = 'fixed';
-
-    const spaceBelow = window.innerHeight - rect.bottom - margin;
-    const spaceAbove = rect.top - margin;
-    let top = (height <= spaceBelow || spaceBelow >= spaceAbove)
-      ? rect.bottom + 4
-      : rect.top - height - 4;
-    top = Math.max(margin, Math.min(top, window.innerHeight - height - margin));
-
-    let left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin));
-
-    pop.style.top = `${top}px`;
-    pop.style.left = `${left}px`;
-  }
-
   // `weeksRange` (opzionale): array di iso settimana quando il popover è
   // aperto su un range multi-cella (vedi cell-selection.js) invece che sulla
   // singola `settimana`. In quel caso i valori iniziali vengono presi dalla
   // prima settimana del range ("cella ancora") e propagati identici a tutte
   // le settimane del range al salvataggio — la milestone resta esclusa.
-  function openPopover({ anchorEl, dataset, task, baseline, settimana, weeksRange, onSave }) {
+  // `deferPosition` (opzionale): se true, il popover viene creato e aggiunto
+  // al DOM ma non posizionato — usato quando il chiamante deve posizionarlo
+  // insieme al menu di shift come un unico blocco (vedi
+  // gantt-view.js:openCellContextMenu e js/ui/common/floating-position.js).
+  function openPopover({ anchorEl, dataset, task, baseline, settimana, weeksRange, onSave, deferPosition }) {
     closeExisting();
 
     const weeks = weeksRange && weeksRange.length ? weeksRange : [settimana];
@@ -166,7 +142,9 @@
     `;
 
     document.body.appendChild(pop);
-    positionPopover(pop, anchorEl);
+    if (!deferPosition) {
+      MP.floatingPosition.positionSingle(pop, anchorEl.getBoundingClientRect());
+    }
 
     const resourcesListEl = pop.querySelector('.popover-resources-list');
     const conflictsEl = pop.querySelector('.popover-conflicts');
@@ -326,6 +304,8 @@
       document.addEventListener('mousedown', handleOutsideClick, true);
       document.addEventListener('keydown', handleKeydown, true);
     }, 0);
+
+    return pop;
   }
 
   MP.cellPopover = { openPopover, closeExisting, commitAndClose, whenIdle };

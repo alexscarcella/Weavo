@@ -27,6 +27,27 @@ All notable changes to Master Plan are documented in this file.
 - **Gantt grid columns** — the Baseline column (`col-2`) widened from 117px to 234px (Task,
   `col-3`, shifts right accordingly) so longer baseline/version labels no longer truncate.
 
+### Fixed
+
+- **Cell-edit popovers off-screen or overlapping near page edges** — right-clicking an already
+  allocated week cell near the bottom/top/left/right of the viewport (e.g. the last row after
+  scrolling all the way down) could open the allocation popover and the shift menu clipped outside
+  the page or overlapping each other, since each positioned itself independently — the shift menu
+  in particular used hardcoded height/width guesses instead of measuring the rendered box, and
+  never clamped its left edge. New shared module
+  [js/ui/common/floating-position.js](js/ui/common/floating-position.js) (`positionSingle`/
+  `positionStack`) measures each box's real rendered size and treats the popover + shift menu as
+  one non-overlapping stack that flips above/below the cell based on actual available space, while
+  keeping their DOM/save logic fully separate (they were split in the first place to fix a
+  data-overwrite bug — see `docs/architecture.md`'s "hard-won lessons"). Both boxes are switched to
+  `position: fixed` *before* being measured, not after — a box with no explicit CSS `width` (like
+  `.context-menu`, which only sets `min-width`) stretches to fill its container while still in
+  normal flow, and only shrinks to its real content width once taken out of flow; measuring too
+  early was an intermediate regression caught during manual testing, pinning the shift menu to the
+  viewport's left edge. `js/ui/common/context-menu.js` and `js/ui/gantt/cell-popover.js` now
+  delegate to the shared module; `.context-menu` gained the same `max-height`/`overflow-y`
+  viewport safety net `.cell-popover` already had.
+
 ## 2026-08-05
 
 ### Added — 3-type milestone model

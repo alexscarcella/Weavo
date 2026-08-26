@@ -52,7 +52,7 @@ flowchart TB
         weekshift["week-shift.js"]
     end
     subgraph ui["js/ui — rendering + events"]
-        common["common/\nmodal, toast, context-menu, toolbar, dataset-header, app-header"]
+        common["common/\nmodal, toast, context-menu, floating-position, toolbar, dataset-header, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
         gantt["gantt/\nmain view, cell popover, shift, task/baseline drag&amp;drop, legend"]
         other["resource-load/, team-resources/, milestones/, weeks/"]
@@ -202,8 +202,11 @@ A few non-obvious decisions and bugs worth knowing before touching the same code
   the anchor week's single value — destroying the very per-cell heterogeneity the shift had just
   preserved. The fix is architectural: `js/model/week-shift.js`'s mutation never goes through
   `MP.schema.createWeekEntry`/the popover's save path, so the two can never overwrite each other's
-  data, even now that both panels can be visible at once (the shift menu above the cell, the
-  popover below it).
+  data, even now that both panels can be visible at once. Their DOM/save logic stays split for that
+  reason, but their on-screen geometry is coordinated: `js/ui/common/floating-position.js`'s
+  `positionStack()` treats both as one block that flips above/below the cell based on real measured
+  space, so they stack without overlapping instead of each independently guessing where the other
+  landed (the original failure mode near the top/bottom edge of a scrolled page).
 - **A `position: sticky` element's CSS `width` — not its grid track size — governs what actually
   paints.** `resource-load-view.js` once reused the gantt page's `col-1`/`col-2` CSS classes for
   its own frozen initials/name columns; its `grid-template-columns` declared different track

@@ -203,29 +203,30 @@
   }
 
   // Apre il menu contestuale di shift (due voci ◀/▶, riuso di MP.contextMenu —
-  // vedi js/ui/common/context-menu.js), posizionato SOPRA la cella
-  // (`placement: 'above'`) per `weeks` (una cella singola o il range
-  // selezionato, vedi cell-selection.js). Chiamato sia da
+  // vedi js/ui/common/context-menu.js) per `weeks` (una cella singola o il
+  // range selezionato, vedi cell-selection.js). Chiamato sia da
   // `openCellContextMenu` (click destro iniziale, quando il range ha già
-  // un'allocazione — vedi sotto) sia da `handleCellsShift` stesso per
-  // riaprirsi sulla nuova posizione dopo uno shift riuscito. Azione
-  // indipendente dal popover di allocazione quanto a dati mutati (nessun
-  // campo condiviso, nessun rischio di sovrascrittura incrociata — vedi il
-  // bug della prima versione, che le mescolava in un'unica UI), ma se il
-  // popover è aperto contemporaneamente sopra un salvataggio pendente, ogni
-  // voce attende `MP.cellPopover.whenIdle()` prima di agire, così un'eventuale
-  // modifica non ancora commessa nel popover non va persa né viene applicato
-  // lo shift su dati non ancora salvati. `anchorEl` è opzionale: se assente
-  // (riapertura dopo uno shift), viene ritrovato via `MP.ganttCell.getCellDiv`
-  // (popolato ad ogni render).
-  function openShiftMenu({ state, file, task, baseline, weeks, anchorEl }) {
+  // un'allocazione — vedi sotto, `deferPosition: true` perché il posizionamento
+  // viene coordinato lì insieme al popover) sia da `handleCellsShift` stesso
+  // per riaprirsi da solo sulla nuova posizione dopo uno shift riuscito (in tal
+  // caso si posiziona subito, nessun popover aperto contemporaneamente). Azione
+  // indipendente dal popover di allocazione quanto a dati mutati (nessun campo
+  // condiviso, nessun rischio di sovrascrittura incrociata — vedi il bug della
+  // prima versione, che le mescolava in un'unica UI), ma se il popover è
+  // aperto contemporaneamente con un salvataggio pendente, ogni voce attende
+  // `MP.cellPopover.whenIdle()` prima di agire, così un'eventuale modifica non
+  // ancora commessa nel popover non va persa né viene applicato lo shift su
+  // dati non ancora salvati. `anchorEl` è opzionale: se assente (riapertura
+  // dopo uno shift), viene ritrovato via `MP.ganttCell.getCellDiv` (popolato ad
+  // ogni render). Ritorna l'elemento del menu creato.
+  function openShiftMenu({ state, file, task, baseline, weeks, anchorEl, deferPosition }) {
     const el = anchorEl || MP.ganttCell.getCellDiv(task, weeks[0]);
-    if (!el) return;
+    if (!el) return null;
     const leftCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, -1, baseline);
     const rightCheck = MP.weekShift.canShiftWeeks(state.dataset, task, weeks, 1, baseline);
-    MP.contextMenu.openMenu({
+    return MP.contextMenu.openMenu({
       anchorEl: el,
-      placement: 'above',
+      deferPosition,
       actions: [
         { header: true, label: weeks.length > 1 ? `${weeks.length} weeks selected` : '1 week selected' },
         {
@@ -253,18 +254,28 @@
   // Punto d'ingresso del click destro su una cella (gantt-cell.js): risolve
   // sempre entrambe le azioni possibili sul range restituito da
   // `MP.cellSelection.getRangeForAction` (una cella singola o l'intera
-  // selezione corrente). Apre sempre il popover di allocazione sotto la
-  // cella; se il range ha già un'allocazione in una qualunque delle sue
-  // settimane, apre anche il menu di shift sopra la cella, contemporaneamente.
+  // selezione corrente). Apre sempre il popover di allocazione; se il range
+  // ha già un'allocazione in una qualunque delle sue settimane, apre anche il
+  // menu di shift. Quando entrambi sono presenti, il posizionamento di ognuno
+  // viene rimandato (`deferPosition: true`) e poi risolto in un unico passo
+  // con `MP.floatingPosition.positionStack`, così i due box (DOM/dati restano
+  // separati, vedi openShiftMenu) vengono trattati come un solo blocco che si
+  // capovolge sopra/sotto la cella in base allo spazio reale disponibile,
+  // senza mai sovrapporsi né uscire dal viewport (bug storico vicino ai bordi
+  // della pagina). Il popover resta il box più vicino alla cella, il menu di
+  // shift si impila oltre.
   function openCellContextMenu({ state, file, task, baseline, weeks, anchorEl }) {
     const isBulk = weeks.length > 1;
-    MP.cellPopover.openPopover({
+    const hasAllocation = weeks.some((w) => !MP.schema.isWeekEntryEmpty((task.weeks || {})[w]));
+
+    const pop = MP.cellPopover.openPopover({
       anchorEl,
       dataset: state.dataset,
       task,
       baseline,
       settimana: isBulk ? undefined : weeks[0],
       weeksRange: isBulk ? weeks : undefined,
+      deferPosition: hasAllocation,
       onSave: (newEntry) => {
         const promise = isBulk
           ? handleBulkCellsSaved({ state, file, task, weeksRange: weeks, newEntry })
@@ -274,9 +285,9 @@
       },
     });
 
-    const hasAllocation = weeks.some((w) => !MP.schema.isWeekEntryEmpty((task.weeks || {})[w]));
     if (hasAllocation) {
-      openShiftMenu({ state, file, task, baseline, weeks, anchorEl });
+      const menu = openShiftMenu({ state, file, task, baseline, weeks, anchorEl, deferPosition: true });
+      MP.floatingPosition.positionStack([pop, menu], anchorEl.getBoundingClientRect());
     }
   }
 
