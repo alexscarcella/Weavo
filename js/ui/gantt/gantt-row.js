@@ -15,7 +15,7 @@
   const PROJECT_BAR_COLORS = ['#5b8def', '#e0965a', '#6fb37c', '#b073c9', '#d4886e', '#4fb0b0', '#c9a227', '#e07e97'];
 
   // Riepilogo breve dei referenti di progetto per il tooltip nativo sul nome (la scheda
-  // completa, con i riferimenti risorsa risolti a nome, è dietro l'icona "i" — vedi sotto).
+  // completa, con i riferimenti risorsa risolti a nome, è dietro l'icona "T" — vedi sotto).
   function formatTeamTooltip(referents) {
     if (!referents) return '';
     const righe = [
@@ -53,12 +53,12 @@
 
       const infoBtn = document.createElement('button');
       infoBtn.type = 'button';
-      infoBtn.className = 'project-info-btn';
-      infoBtn.textContent = 'i';
-      infoBtn.title = 'Project info';
+      infoBtn.className = 'project-team-btn';
+      infoBtn.textContent = 'T';
+      infoBtn.title = 'Project team';
       infoBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        MP.modal.showProjectCard({ progetto, teamResources: state.dataset.teamResources });
+        MP.modal.showProjectCard({ progetto, teamResources: state.dataset.teamResources, state, file });
       });
       if (nomeSpan) col1.insertBefore(infoBtn, nomeSpan);
       else col1.appendChild(infoBtn);
@@ -99,6 +99,24 @@
       if (versionSpan) col2.insertBefore(completedChk, versionSpan);
       else col2.appendChild(completedChk);
 
+      // Icona "T" del BL team: visibile solo quando la baseline ha un BL team specifico E popolato
+      // (almeno un campo valorizzato) — come l'icona "i" della nota, che appare solo se la nota è
+      // non vuota. Quando la baseline eredita il project team non serve un'icona dedicata. Viene
+      // inserita PRIMA dell'eventuale icona "i" della nota (la "T" precede sempre la "i").
+      if (!MP.schema.isBaselineTeamEmpty(baseline.team)) {
+        const teamBtn = document.createElement('button');
+        teamBtn.type = 'button';
+        teamBtn.className = 'project-team-btn';
+        teamBtn.textContent = 'T';
+        teamBtn.title = 'BL team';
+        teamBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          MP.modal.showBaselineTeamCard({ progetto, baseline, teamResources: state.dataset.teamResources, state, file });
+        });
+        if (versionSpan) col2.insertBefore(teamBtn, versionSpan);
+        else col2.appendChild(teamBtn);
+      }
+
       if (baseline.note && baseline.note.trim()) {
         const noteBtn = document.createElement('button');
         noteBtn.type = 'button';
@@ -107,13 +125,15 @@
         noteBtn.title = 'Baseline note';
         noteBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          MP.modal.showBaselineNoteCard({ baseline });
+          MP.modal.showBaselineNoteCard({ baseline, state, file });
         });
         if (versionSpan) col2.insertBefore(noteBtn, versionSpan);
         else col2.appendChild(noteBtn);
       }
 
       col2.appendChild(menuButton([
+        { label: 'BL team…', onClick: () => MP.baselineCrud.setBaselineTeam(state, file, baseline) },
+        ...(baseline.team ? [{ label: 'Revert to project team', onClick: () => MP.baselineCrud.revertBaselineTeam(state, file, baseline) }] : []),
         { label: baseline.note ? 'Edit note' : 'Add note', onClick: () => MP.baselineCrud.setBaselineNote(state, file, baseline) },
         { label: 'Rename baseline', onClick: () => MP.baselineCrud.renameBaseline(state, file, baseline) },
         { label: 'Shift baseline…', onClick: () => MP.baselineCrud.shiftBaseline(state, file, baseline) },
@@ -152,7 +172,7 @@
         noteBtn.title = 'Task note';
         noteBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          MP.modal.showTaskNoteCard({ task });
+          MP.modal.showTaskNoteCard({ task, state, file });
         });
         col3.appendChild(noteBtn);
       }

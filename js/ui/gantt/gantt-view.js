@@ -360,7 +360,7 @@
       ...orfaniTeam.map((o) => `Team "${o.valore}" not defined — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
       ...orfaniRisorsa.map((o) => `Initials "${o.valore}" not in team-resources.json — ${o.progetto} / BL ${o.baseline} / ${o.task} / ${o.settimana}`),
       ...mismatch.map((m) => `Resource "${m.sigla}" belongs to team "${m.teamAssegnato}" but is allocated here as "${m.teamCella}" — needs regularizing — ${m.progetto} / BL ${m.baseline} / ${m.task} / ${m.settimana}`),
-      ...orfaniRiferimenti.map((o) => `Initials "${o.valore}" (${o.campo}) not in team-resources.json — project reference ${o.progetto}`),
+      ...orfaniRiferimenti.map((o) => `Initials "${o.valore}" (${o.campo}) not in team-resources.json — project reference ${o.progetto}${o.baseline ? ` / BL ${o.baseline}` : ''}`),
     ];
     if (!righe.length) return null;
     const div = document.createElement('div');

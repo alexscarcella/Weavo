@@ -178,7 +178,9 @@
           const refs = findAllocations(index, initials, w).filter((r) => r.taskRef !== task);
           for (const ref of refs) {
             const settimanaLabel = isBulk ? ` (${formatWeekLabel(w)})` : '';
-            righe.push(`<strong>${initials}</strong>${settimanaLabel} already allocated to ${ref.projectName} / BL ${ref.baselineVersion} / ${ref.taskName}`);
+            const entry = MP.schema.findResourceEntry(dataset.teamResources, initials);
+            const displayName = entry ? entry.resource.name : initials;
+            righe.push(`<strong>${displayName}</strong>${settimanaLabel} already allocated to ${ref.projectName} / BL ${ref.baselineVersion} / ${ref.taskName}`);
           }
         }
       }

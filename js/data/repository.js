@@ -25,6 +25,9 @@
         const rawText = await MP.fsAccess.readTextFile(dirHandle, voce.file);
         const data = JSON.parse(rawText);
         data.referents = MP.schema.normalizeProjectReferents(data.referents);
+        for (const baseline of data.baseline || []) {
+          baseline.team = MP.schema.normalizeBaselineTeam(baseline.team);
+        }
         projects.set(voce.file, { data, rawText });
       } catch (e) {
         warnings.push(`Unable to load "${voce.file}" (${voce.name}): ${e.message}`);

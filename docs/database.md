@@ -96,6 +96,7 @@ Deleting a team is blocked while it still has resources assigned (move or delete
       "version": "1.0",
       "completed": false,
       "note": "",
+      "team": null,
       "task": [
         {
           "name": "Integration Testing",
@@ -121,10 +122,21 @@ Deleting a team is blocked while it still has resources assigned (move or delete
   value (or `''` if unassigned) picked from any team in `team-resources.json`, resolved to a name
   on demand rather than denormalized; `note` is free multi-line text. Edited as a whole via a
   dedicated form (project row's "⋮" menu → "Project team…"); a read-only summary card
-  (project row's "i" icon) shows the resolved values alongside the project's baseline/task counts
-  and completed status. A resource `initials` value referenced here that no longer exists in
+  (project row's "T" icon) shows the resolved values alongside the project's baseline/task counts
+  and completed status, with a pencil button that jumps straight into the same edit form. A
+  resource `initials` value referenced here that no longer exists in
   `team-resources.json` is an **orphan reference**, flagged the same non-blocking way as the
   orphan team/resource references below.
+- `baseline.team` holds a baseline's **BL team** — the same shape as `project.referents` — and
+  defaults to `null`, meaning the baseline *inherits* the project's team (see
+  `MP.schema.resolveBaselineTeam`). Setting it to an object overrides the project team with a
+  baseline-specific BL team; the baseline row then shows a "T" icon (only when overridden) opening
+  a read-only card (`MP.modal.showBaselineTeamCard`), edited via "BL team…" in the baseline's "⋮"
+  menu (`MP.baselineCrud.setBaselineTeam`, which offers an "Inherit from project team" toggle) or
+  via the card's pencil button, and
+  reverted to the project team via "Revert to project team". A BL team's
+  `solutionAnalyst`/`vvReference` initials that no longer exist are the same **orphan reference**
+  warning as the project-level ones.
 - Allocation is **boolean**, per task per week — a resource is either on a task that week, or it
   isn't. There's no percentage/fractional-effort field anywhere in the schema.
 - A week entry (`task.weeks[iso]`) is only meaningful with `team` + non-empty `resources`
@@ -161,7 +173,8 @@ Deleting a team is blocked while it still has resources assigned (move or delete
   multi-week selection alike.
 - `baseline.note`/`task.note` are free multi-line text (default `''`), independent of
   `project.referents.note`. Both follow the same UI pattern: an "i" icon on the row, shown only
-  when the note is non-empty, opens a read-only card; editing is exclusively via "Add note"/"Edit
+  when the note is non-empty, opens a read-only card with a pencil button that jumps into editing;
+  the edit itself is "Add note"/"Edit
   note" in the row's "⋮" menu (`MP.baselineCrud.setBaselineNote`/`MP.taskCrud.setTaskNote`), which
   trims the input and caps it at 200 characters. An empty string is a valid save that clears the
   note — only cancelling the prompt leaves the existing value untouched.

@@ -87,8 +87,8 @@
   }
 
   // Initials orfane nei riferimenti risorsa di progetto (solutionAnalyst/vvReference in
-  // progetto.referents), stesso principio di findOrphanResources ma sul livello progetto invece
-  // che sulle week entry.
+  // progetto.referents) e nei BL team delle baseline (baseline.team, stessi due campi) — stesso
+  // principio di findOrphanResources ma sui riferimenti di team invece che sulle week entry.
   function findOrphanProjectReferents(dataset) {
     const initialsValide = MP.schema.existingInitials(dataset.teamResources);
     const CAMPI = [
@@ -96,13 +96,18 @@
       ['vvReference', 'V&V reference'],
     ];
     const orfani = [];
-    for (const [, { data: progetto }] of dataset.projects) {
-      const referents = progetto.referents || {};
+    const pushOrfani = (team, progettoNome, baselineVersion) => {
       for (const [chiave, etichetta] of CAMPI) {
-        const initials = referents[chiave];
+        const initials = team && team[chiave];
         if (initials && !initialsValide.has(initials)) {
-          orfani.push({ progetto: progetto.name, campo: etichetta, valore: initials });
+          orfani.push({ progetto: progettoNome, baseline: baselineVersion, campo: etichetta, valore: initials });
         }
+      }
+    };
+    for (const [, { data: progetto }] of dataset.projects) {
+      pushOrfani(progetto.referents, progetto.name, null);
+      for (const baseline of progetto.baseline || []) {
+        if (baseline.team) pushOrfani(baseline.team, progetto.name, baseline.version);
       }
     }
     return orfani;

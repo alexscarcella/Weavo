@@ -123,5 +123,30 @@
     await persistProject(state, file);
   }
 
-  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaselineToPosition, toggleCompleted, shiftBaseline, setBaselineNote };
+  // Modifica il BL team di una baseline: apre il form (promptBaselineTeamForm) precompilato
+  // col team effettivo corrente, con la checkbox "Inherit from project team" spuntata se la
+  // baseline non ha ancora un BL team specifico. `result.team` è `null` (eredita) o un oggetto
+  // (BL team dedicato). `teamInput` (usato dai test) bypassa il form.
+  async function setBaselineTeam(state, file, baseline, teamInput) {
+    const progetto = state.dataset.projects.get(file).data;
+    const result = teamInput !== undefined
+      ? { team: teamInput }
+      : await MP.modal.promptBaselineTeamForm({
+          title: 'BL team',
+          baselineTeam: baseline.team,
+          projectTeam: progetto.referents,
+          teamResources: state.dataset.teamResources,
+        });
+    if (!result) return;
+    baseline.team = result.team === undefined ? null : result.team;
+    await persistProject(state, file);
+  }
+
+  // Riporta la baseline a ereditare il project team (cancella il BL team specifico).
+  async function revertBaselineTeam(state, file, baseline) {
+    baseline.team = null;
+    await persistProject(state, file);
+  }
+
+  MP.baselineCrud = { createBaseline, renameBaseline, deleteBaseline, moveBaselineToPosition, toggleCompleted, shiftBaseline, setBaselineNote, setBaselineTeam, revertBaselineTeam };
 })(window.MP = window.MP || {});

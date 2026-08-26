@@ -12,10 +12,23 @@ Always **boolean** — either allocated or not, never a percentage or fraction o
 ### Baseline
 A **project**'s release/version line (e.g. `"1.0"`, `"2.0"`). A project has one or more baselines;
 each baseline owns its own list of **tasks**. In the JSON, the field is `version`. Can carry a
-free-text [Note](#note-note-on-a-taskbaseline) (`note`). Can independently be marked **completed** (`completed: true`, checkbox to the left of the version,
+free-text [Note](#note-note-on-a-taskbaseline) (`note`) and an optional
+[BL team](#bl-team) (`team`). Can independently be marked **completed** (`completed: true`, checkbox to the left of the version,
 confirmed before marking — same "no destructive auto-correction" principle as
 [completed task](#completed-task-completed)) — hidden from the gantt/milestones views unless the
 "Show completed projects/baselines" toggle is on, but never deleted or rewritten.
+
+### BL team
+A baseline's team/people info (`baseline.team`), with the same shape as a project's `referents`
+(`projectManager`, `projectEngineer`, `solutionAnalyst`, `vvReference`, `note`). `null` (the
+default) means the baseline **inherits the project team** (resolved live via
+`MP.schema.resolveBaselineTeam`); an object is a **custom BL team** that overrides it. A baseline
+with a custom BL team shows a "T" icon in its row (project rows always show one, for the project
+team) — the note icons stay "i". Edited via "BL team…" in the baseline's "⋮" menu
+(`MP.baselineCrud.setBaselineTeam`), which offers an "Inherit from project team" toggle, or via
+the pencil button on the BL team card, and
+reverted with "Revert to project team". Its `solutionAnalyst`/`vvReference` initials get the same
+[orphan reference](#orphan-reference) treatment as project referents.
 
 ### Completed task (`completed`)
 A task-level flag (`completed: true`) marking a task as finished. Completed tasks are excluded
@@ -83,7 +96,8 @@ fields once "UAT" is picked. See [database.md](database.md).
 ### Note (`note` on a task/baseline)
 A free-text, multi-line field on a **task** or a **baseline** (`task.note`/`baseline.note`, default
 `''`), distinct from a project's `referents.note`. Shown as an "i" icon in the row — visible only
-when non-empty — opening a read-only card; edited exclusively via "Add note"/"Edit note" in the
+when non-empty — opening a read-only card with a pencil button that jumps into editing; the edit
+itself is "Add note"/"Edit note" in the
 row's "⋮" menu (`MP.taskCrud.setTaskNote`/`MP.baselineCrud.setBaselineNote`), trimmed and capped at
 200 characters. An empty string is a valid save (clears the note); only cancelling the prompt
 leaves it untouched.

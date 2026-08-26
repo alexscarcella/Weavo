@@ -190,21 +190,24 @@
     }[c]));
   }
 
+  // Opzioni delle select "risorsa" (solutionAnalyst/vvReference): raggruppate per team,
+  // con una voce "— None —" in cima. Condivisa da promptProjectForm e promptBaselineTeamForm.
+  function resourceOptions(teamResources) {
+    const groups = teamResources.teams.map((t) => {
+      const opts = (t.resources || [])
+        .map((r) => `<option value="${escapeHtml(r.initials)}">${escapeHtml(r.initials)} — ${escapeHtml(r.name)}</option>`)
+        .join('');
+      return opts ? `<optgroup label="${escapeHtml(t.name)}">${opts}</optgroup>` : '';
+    }).join('');
+    return `<option value="">— None —</option>${groups}`;
+  }
+
   // Form strutturato per i referenti di progetto (§ CLAUDE.md "Data model" > projects).
   // Se `name` è una stringa (anche vuota) mostra in cima un campo nome obbligatorio (caso
   // creazione progetto); se `name` è null il form modifica solo i referenti di un progetto
   // esistente. Risolve con `{ name?, referents: {...} } | null` (null se annullato).
   function promptProjectForm({ title, name = null, referents, teamResources }) {
     return new Promise((resolve) => {
-      const resourceOptions = () => {
-        const groups = teamResources.teams.map((t) => {
-          const opts = (t.resources || [])
-            .map((r) => `<option value="${escapeHtml(r.initials)}">${escapeHtml(r.initials)} — ${escapeHtml(r.name)}</option>`)
-            .join('');
-          return opts ? `<optgroup label="${escapeHtml(t.name)}">${opts}</optgroup>` : '';
-        }).join('');
-        return `<option value="">— None —</option>${groups}`;
-      };
 
       const { overlay, box } = openModal('modal-box modal-box-wide', `
         <h2>${escapeHtml(title)}</h2>
@@ -216,9 +219,9 @@
         <label class="modal-field-label" for="mpf-pe">Project Engineer</label>
         <input type="text" id="mpf-pe" class="modal-input">
         <label class="modal-field-label" for="mpf-sa">Solution analyst reference</label>
-        <select id="mpf-sa" class="modal-select">${resourceOptions()}</select>
+        <select id="mpf-sa" class="modal-select">${resourceOptions(teamResources)}</select>
         <label class="modal-field-label" for="mpf-vv">V&amp;V reference</label>
-        <select id="mpf-vv" class="modal-select">${resourceOptions()}</select>
+        <select id="mpf-vv" class="modal-select">${resourceOptions(teamResources)}</select>
         <label class="modal-field-label" for="mpf-note">Notes</label>
         <textarea id="mpf-note" class="modal-textarea" rows="3"></textarea>
         <div class="modal-actions">
@@ -268,10 +271,119 @@
     });
   }
 
-  // Scheda di sola lettura con i dati completi di un progetto (icona "i" nella riga Gantt).
-  // Per modificare si usa "Team di progetto…" nel menu ⋮ (promptProjectForm) — nessun bottone
-  // "Modifica" qui, per non duplicare l'azione di scrittura in due punti.
-  function showProjectCard({ progetto, teamResources }) {
+  // Riepilogo testuale compatto di un team (project team o BL team) per il caso "inherit":
+  // usato per mostrare cosa si sta ereditando senza aprire una seconda scheda.
+  function formatTeamSummary(team) {
+    const t = team || {};
+    const parts = [];
+    if (t.projectManager) parts.push(`PM ${t.projectManager}`);
+    if (t.projectEngineer) parts.push(`PE ${t.projectEngineer}`);
+    if (t.solutionAnalyst) parts.push(`SA ${t.solutionAnalyst}`);
+    if (t.vvReference) parts.push(`V&V ${t.vvReference}`);
+    return parts.length ? parts.join(' · ') : '— none —';
+  }
+
+  // Form per il BL team di una baseline. A differenza di promptProjectForm non ha il campo nome,
+  // ma ha una checkbox "Inherit from project team": se spuntata, il BL team resta quello del
+  // progetto (live) e i campi sono disabilitati (mostrando il project team ereditato); se
+  // deselezionata, i campi diventano editabili, precompilati col team effettivo corrente
+  // (BL team specifico, o il project team se si parte dall'ereditato). Risolve con
+  // `{ team: {...} | null } | null` (null se annullato): `team: null` = ereditato.
+  function promptBaselineTeamForm({ title, baselineTeam, projectTeam, teamResources }) {
+    return new Promise((resolve) => {
+      const inherited = baselineTeam === null || baselineTeam === undefined;
+      const current = MP.schema.resolveBaselineTeam({ referents: projectTeam || {} }, { team: baselineTeam });
+
+      const { overlay, box } = openModal('modal-box modal-box-wide', `
+        <h2>${escapeHtml(title)}</h2>
+        <label class="modal-field-label">
+          <input type="checkbox" id="mpb-inherit" ${inherited ? 'checked' : ''}> Inherit from project team
+        </label>
+        <p class="hint" id="mpb-inherit-hint">${inherited ? `Currently inherited: ${escapeHtml(formatTeamSummary(projectTeam))}` : ''}</p>
+        <label class="modal-field-label" for="mpb-pm">Project manager</label>
+        <input type="text" id="mpb-pm" class="modal-input">
+        <label class="modal-field-label" for="mpb-pe">Project Engineer</label>
+        <input type="text" id="mpb-pe" class="modal-input">
+        <label class="modal-field-label" for="mpb-sa">Solution analyst reference</label>
+        <select id="mpb-sa" class="modal-select">${resourceOptions(teamResources)}</select>
+        <label class="modal-field-label" for="mpb-vv">V&amp;V reference</label>
+        <select id="mpb-vv" class="modal-select">${resourceOptions(teamResources)}</select>
+        <label class="modal-field-label" for="mpb-note">Notes</label>
+        <textarea id="mpb-note" class="modal-textarea" rows="3"></textarea>
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Cancel</button>
+          <button type="button" class="modal-btn-save">Save</button>
+        </div>`);
+
+      const inheritChk = box.querySelector('#mpb-inherit');
+      const inheritHint = box.querySelector('#mpb-inherit-hint');
+      const pmField = box.querySelector('#mpb-pm');
+      const peField = box.querySelector('#mpb-pe');
+      const saField = box.querySelector('#mpb-sa');
+      const vvField = box.querySelector('#mpb-vv');
+      const noteField = box.querySelector('#mpb-note');
+
+      pmField.value = current.projectManager || '';
+      peField.value = current.projectEngineer || '';
+      saField.value = current.solutionAnalyst || '';
+      vvField.value = current.vvReference || '';
+      noteField.value = current.note || '';
+
+      const fields = [pmField, peField, saField, vvField, noteField];
+      const updateInheritState = () => {
+        const isInherited = inheritChk.checked;
+        fields.forEach((f) => { f.disabled = isInherited; });
+        inheritHint.textContent = isInherited
+          ? `Currently inherited: ${formatTeamSummary(projectTeam)}`
+          : '';
+      };
+      inheritChk.addEventListener('change', updateInheritState);
+      updateInheritState();
+      (inheritChk.checked ? inheritChk : pmField).focus();
+
+      const close = (result) => {
+        overlay.remove();
+        resolve(result);
+      };
+      const save = () => {
+        if (inheritChk.checked) {
+          close({ team: null });
+          return;
+        }
+        close({
+          team: MP.schema.createProjectReferents({
+            projectManager: pmField.value.trim(),
+            projectEngineer: peField.value.trim(),
+            solutionAnalyst: saField.value,
+            vvReference: vvField.value,
+            note: noteField.value.trim(),
+          }),
+        });
+      };
+      box.querySelector('.modal-btn-cancel').addEventListener('click', () => close(null));
+      box.querySelector('.modal-btn-save').addEventListener('click', save);
+      wireModalDismiss(overlay, box, () => close(null));
+    });
+  }
+
+  // Icona "matita" (stroke-only, eredita il colore via currentColor) per passare da una scheda
+  // di sola lettura alla modalità edit del team/nota corrispondente — vedi cardHeader sotto.
+  const PENCIL_ICON_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>';
+
+  // Header condiviso dalle schede di sola lettura (project card, BL team card, note card):
+  // titolo + bottone "matita" che apre la modalità edit. `editTitle` è il tooltip del bottone;
+  // il chiamante collega il click all'azione di edit (es. editReferents/setBaselineTeam/…).
+  function cardHeader(title, editTitle) {
+    return `<div class="modal-card-header">
+      <h2>${escapeHtml(title)}</h2>
+      <button type="button" class="modal-icon-btn" title="${escapeHtml(editTitle)}">${PENCIL_ICON_SVG}</button>
+    </div>`;
+  }
+
+  // Scheda di sola lettura con i dati completi di un progetto (icona "T" nella riga Gantt).
+  // La "matita" nell'header apre l'edit del project team (promptProjectForm) — l'azione di
+  // scrittura resta unica in MP.projectCrud.editReferents, qui c'è solo l'ingresso rapido.
+  function showProjectCard({ progetto, teamResources, state, file }) {
     return new Promise((resolve) => {
       const resolveRef = (initials) => {
         if (!initials) return '—';
@@ -286,7 +398,7 @@
         `<div class="project-card-row"><span class="project-card-label">${escapeHtml(label)}</span><span class="project-card-value">${valueHtml || '—'}</span></div>`;
 
       const { overlay, box } = openModal('modal-box modal-box-wide project-card', `
-        <h2>${escapeHtml(progetto.name)}</h2>
+        ${cardHeader(progetto.name, 'Edit project team')}
         ${row('Status', progetto.completed ? 'Completed' : 'Active')}
         ${row('Baseline', `${progetto.baseline.length} (${totTask} tasks total)`)}
         ${row('Project manager', escapeHtml(referents.projectManager))}
@@ -302,19 +414,66 @@
         overlay.remove();
         resolve();
       };
+      box.querySelector('.modal-icon-btn').addEventListener('click', () => {
+        close();
+        MP.projectCrud.editReferents(state, file);
+      });
+      box.querySelector('.modal-btn-cancel').addEventListener('click', close);
+      wireModalDismiss(overlay, box, close);
+    });
+  }
+
+  // Scheda di sola lettura con il BL team di una baseline (icona "T" nella riga Gantt, visibile
+  // solo se la baseline ha un BL team specifico — vedi gantt-row.js). Mostra il team effettivo
+  // (risolto via MP.schema.resolveBaselineTeam) e un badge "Custom BL team"/"Inherited from
+  // project team". La "matita" apre l'edit del BL team (setBaselineTeam).
+  function showBaselineTeamCard({ progetto, baseline, teamResources, state, file }) {
+    return new Promise((resolve) => {
+      const resolveRef = (initials) => {
+        if (!initials) return '—';
+        const found = MP.schema.findResourceEntry(teamResources, initials);
+        return found
+          ? `${escapeHtml(initials)} — ${escapeHtml(found.resource.name)}`
+          : `${escapeHtml(initials)} <span class="project-card-orphan" title="Resource not found in team-resources.json">(not found)</span>`;
+      };
+      const inherited = !baseline.team;
+      const team = MP.schema.resolveBaselineTeam(progetto, baseline);
+      const row = (label, valueHtml) =>
+        `<div class="project-card-row"><span class="project-card-label">${escapeHtml(label)}</span><span class="project-card-value">${valueHtml || '—'}</span></div>`;
+
+      const { overlay, box } = openModal('modal-box modal-box-wide project-card', `
+        ${cardHeader(baseline.version, 'Edit BL team')}
+        ${row('BL team', inherited ? '<em>Inherited from project team</em>' : 'Custom BL team')}
+        ${row('Project manager', escapeHtml(team.projectManager))}
+        ${row('Project Engineer', escapeHtml(team.projectEngineer))}
+        ${row('Solution analyst reference', resolveRef(team.solutionAnalyst))}
+        ${row('V&V reference', resolveRef(team.vvReference))}
+        ${row('Notes', team.note ? escapeHtml(team.note).replace(/\n/g, '<br>') : '')}
+        <div class="modal-actions">
+          <button type="button" class="modal-btn-cancel">Close</button>
+        </div>`, { focusBox: true });
+
+      const close = () => {
+        overlay.remove();
+        resolve();
+      };
+      box.querySelector('.modal-icon-btn').addEventListener('click', () => {
+        close();
+        MP.baselineCrud.setBaselineTeam(state, file, baseline);
+      });
       box.querySelector('.modal-btn-cancel').addEventListener('click', close);
       wireModalDismiss(overlay, box, close);
     });
   }
 
   // Scheda di sola lettura con la nota di un task (icona "i" nella riga Gantt, visibile solo
-  // se il task ha una nota). Per modificare si usa "Add note"/"Edit note" nel menu ⋮ del task
-  // (setTaskNote) — nessun bottone "Modifica" qui, stesso principio di showProjectCard.
-  function showTaskNoteCard({ task }) {
+  // se il task ha una nota). La "matita" apre l'edit della nota (setTaskNote) — l'azione di
+  // scrittura resta unica in MP.taskCrud.setTaskNote, qui c'è solo l'ingresso rapido.
+  function showTaskNoteCard({ task, state, file }) {
     return new Promise((resolve) => {
       const noteHtml = task.note ? escapeHtml(task.note).replace(/\n/g, '<br>') : '—';
       const { overlay, box } = openModal('modal-box project-card', `
-        <h2>${escapeHtml(task.name)}</h2>
+        ${cardHeader(task.name, 'Edit note')}
         <div class="project-card-row"><span class="project-card-label">Note</span><span class="project-card-value">${noteHtml}</span></div>
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Close</button>
@@ -324,20 +483,23 @@
         overlay.remove();
         resolve();
       };
+      box.querySelector('.modal-icon-btn').addEventListener('click', () => {
+        close();
+        MP.taskCrud.setTaskNote(state, file, task);
+      });
       box.querySelector('.modal-btn-cancel').addEventListener('click', close);
       wireModalDismiss(overlay, box, close);
     });
   }
 
   // Scheda di sola lettura con la nota di una baseline (icona "i" nella riga Gantt, visibile
-  // solo se la baseline ha una nota). Per modificare si usa "Add note"/"Edit note" nel menu
-  // ⋮ della baseline (setBaselineNote) — nessun bottone "Modifica" qui, stesso principio di
-  // showTaskNoteCard.
-  function showBaselineNoteCard({ baseline }) {
+  // solo se la baseline ha una nota). La "matita" apre l'edit della nota (setBaselineNote) —
+  // stesso principio di showTaskNoteCard.
+  function showBaselineNoteCard({ baseline, state, file }) {
     return new Promise((resolve) => {
       const noteHtml = baseline.note ? escapeHtml(baseline.note).replace(/\n/g, '<br>') : '—';
       const { overlay, box } = openModal('modal-box project-card', `
-        <h2>${escapeHtml(baseline.version)}</h2>
+        ${cardHeader(baseline.version, 'Edit note')}
         <div class="project-card-row"><span class="project-card-label">Note</span><span class="project-card-value">${noteHtml}</span></div>
         <div class="modal-actions">
           <button type="button" class="modal-btn-cancel">Close</button>
@@ -347,6 +509,10 @@
         overlay.remove();
         resolve();
       };
+      box.querySelector('.modal-icon-btn').addEventListener('click', () => {
+        close();
+        MP.baselineCrud.setBaselineNote(state, file, baseline);
+      });
       box.querySelector('.modal-btn-cancel').addEventListener('click', close);
       wireModalDismiss(overlay, box, close);
     });
@@ -698,5 +864,5 @@
     });
   }
 
-  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, showProjectCard, showTaskNoteCard, showBaselineNoteCard, showResourceAllocations, showTeamAllocations, showMilestoneList, confirmWithReport, showHelpGuide };
+  MP.modal = { confirmConflict, promptText, promptSelect, promptColor, promptProjectForm, promptBaselineTeamForm, showProjectCard, showBaselineTeamCard, showTaskNoteCard, showBaselineNoteCard, showResourceAllocations, showTeamAllocations, showMilestoneList, confirmWithReport, showHelpGuide };
 })(window.MP = window.MP || {});

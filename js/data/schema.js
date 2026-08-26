@@ -158,6 +158,45 @@
   }
 
   /**
+   * Normalizza il campo `team` di una baseline letto da disco (vedi `createBaseline`): `null`/
+   * `undefined` significa "eredita il project team" (nessun BL team specifico) e resta `null`;
+   * un oggetto viene ripassato in `createProjectReferents` per completare le chiavi mancanti
+   * (stessa forma dei referents di progetto). Usato in `repository.loadDataset` come self-heal.
+   * @param {string|Object|null|undefined} team - valore letto da baseline.team.
+   * @returns {{projectManager: string, projectEngineer: string, solutionAnalyst: string, vvReference: string, note: string}|null}
+   */
+  function normalizeBaselineTeam(team) {
+    if (team === null || team === undefined) return null;
+    if (typeof team === 'string') return createProjectReferents({ note: team });
+    return createProjectReferents(team || {});
+  }
+
+  /**
+   * Risolve il team effettivo di una baseline: il BL team specifico se presente
+   * (`baseline.team`), altrimenti il project team del progetto di appartenenza
+   * (`progetto.referents`) — la baseline "eredita" il team di progetto finché non
+   * viene sovrascritto da un BL team dedicato.
+   * @param {{referents: Object}} progetto - il progetto della baseline.
+   * @param {{team?: Object|null}} baseline - la baseline.
+   * @returns {{projectManager: string, projectEngineer: string, solutionAnalyst: string, vvReference: string, note: string}}
+   */
+  function resolveBaselineTeam(progetto, baseline) {
+    return baseline.team || progetto.referents || createProjectReferents();
+  }
+
+  /**
+   * Indica se un team (BL team o project referents, stessa forma) è "vuoto", cioè null/undefined
+   * o con tutti i campi vuoti — usato per mostrare l'icona "T" solo quando c'è davvero un team
+   * popolato (stesso principio di `isWeekEntryEmpty` e del check `note.trim()` per l'icona "i").
+   * @param {{projectManager?: string, projectEngineer?: string, solutionAnalyst?: string, vvReference?: string, note?: string}|null|undefined} team
+   * @returns {boolean}
+   */
+  function isBaselineTeamEmpty(team) {
+    if (!team) return true;
+    return !(team.projectManager || team.projectEngineer || team.solutionAnalyst || team.vvReference || team.note);
+  }
+
+  /**
    * Crea un nuovo progetto vuoto (nessuna baseline).
    * @param {string} name - nome del progetto.
    * @param {Object} [referents] - referenti di progetto, vedi `createProjectReferents`.
@@ -168,12 +207,14 @@
   }
 
   /**
-   * Crea una nuova baseline/release vuota (nessun task).
+   * Crea una nuova baseline/release vuota (nessun task). `team: null` significa che la
+   * baseline eredita il project team del progetto (vedi `resolveBaselineTeam`); un oggetto
+   * (stessa forma di `project.referents`) rappresenta un BL team specifico che lo sovrascrive.
    * @param {string} version - identificativo/versione della baseline.
-   * @returns {{version: string, completed: boolean, task: Array, note: string}}
+   * @returns {{version: string, completed: boolean, task: Array, note: string, team: null}}
    */
   function createBaseline(version) {
-    return { version, completed: false, task: [], note: '' };
+    return { version, completed: false, task: [], note: '', team: null };
   }
 
   /**
@@ -245,6 +286,9 @@
     existingInitials,
     createProjectReferents,
     normalizeProjectReferents,
+    normalizeBaselineTeam,
+    resolveBaselineTeam,
+    isBaselineTeamEmpty,
     createProject,
     createBaseline,
     createTask,
