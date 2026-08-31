@@ -54,7 +54,7 @@ flowchart TB
     subgraph ui["js/ui — rendering + events"]
         common["common/\nmodal, toast, context-menu, floating-position, toolbar, dataset-header, app-header"]
         crud["crud/\nproject, baseline, task, resource, team"]
-        gantt["gantt/\nmain view, cell popover, shift, task/baseline drag&amp;drop, legend"]
+        gantt["gantt/\nmain view, cell popover, shift, task/baseline drag&amp;drop (within or across projects), project filter, legend"]
         other["resource-load/, team-resources/, milestones/, weeks/"]
     end
     app["js/app.js — entry point"]
@@ -74,7 +74,10 @@ flowchart TB
    `save-coordinator.js` is the *only* place a user-triggered write should go through, because it
    adds reread-before-write conflict detection, showing a summary of what changed
    (`conflict-diff.js`, a pure structural diff with no I/O of its own) before the user decides
-   whether to overwrite. `remote-check.js` reuses the same reread primitive for an unrelated,
+   whether to overwrite. It also exposes `saveProjects(state, files)` for operations spanning two
+   project files (cross-project baseline/task drag): it conflict-checks every file before writing
+   any, but provides **no on-disk transaction** — a hard failure mid-write leaves earlier files
+   written (see [database.md](database.md#conflict-detection)). `remote-check.js` reuses the same reread primitive for an unrelated,
    opt-in purpose: a focus-triggered (never timer-driven) heads-up that something changed on disk,
    independent of the save path (see [database.md](database.md#conflict-detection)).
 2. **`js/state/store.js`** — a state container in the classic sense: one object, `getState`,
@@ -97,7 +100,11 @@ flowchart TB
    legend) via `common/dataset-header.js`, so the two views always report identical numbers; the
    upcoming-baseline counts come from `MP.milestones.countUpcomingBaselines` (release week ≥ today,
    returns `{ readyForUat, uat }` — the 2 shared milestone types are tracked as independent series
-   throughout `milestones.js`) and the milestones page reuses the same header component.
+   throughout `milestones.js`) and the milestones page reuses the same header component. Gantt-only
+   controls ride on that shared header row as an "extra actions" slot: the two "show completed"
+   toggles and the multi-project filter (`gantt/project-filter.js`), all session-only `state.ui`
+   flags scoping only the gantt grid — the header's row/project counts follow the project filter
+   in the gantt view but not in resource-load/milestones.
 5. **`js/app.js`** — the entry point. Subscribes to the store, maps `state.status` to a render
    function, and owns the initial directory-picker flow. Also renders the static brand header
    (`MP.appHeader`) once at startup into `#app-header`, a sibling of `#app` — it sits outside the
@@ -173,7 +180,12 @@ to test, and they carry the app's sharpest edge-case logic (milestone ordering, 
 collision detection, orphan/mismatch detection). This is a norm, not an enforced CI gate.
 
 `js/ui/` has no equivalent convention (no jsdom in this stack) — verify UI changes by actually
-running the app (open `index.html`) rather than reaching for Jest. To check headlessly for
+running the app (open `index.html`) rather than reaching for Jest. The exception is `js/ui/crud/`
+logic that is *near-pure* (mutates plain dataset objects, then delegates persistence/rendering to
+stubbable `MP.saveCoordinator`/`MP.store`): `unit/ui/baseline-move.test.js` and
+`unit/ui/task-move.test.js` cover `moveBaselineToPosition`/`moveTaskToPosition` — including the
+cross-project two-file save and its rollback — by `loadMP`-ing the crud file with those globals
+stubbed. Anything touching the DOM stays out of Jest. To check headlessly for
 console errors after a change, run headless Chrome with an explicit `--user-data-dir` and a
 **native Windows path** (a Git-Bash style `/tmp/...` path resolves incorrectly):
 
@@ -215,6 +227,14 @@ A few non-obvious decisions and bugs worth knowing before touching the same code
   background. Found by rendering the grid in isolation in headless Chrome and reading
   `getBoundingClientRect()` on every cell, not from the CSS/JS alone. Fixed by giving that view its
   own dedicated column classes (`rl-col-initials`, `rl-col-name`) sized to match its own grid.
+  For the same reason the gantt view's three frozen-column widths live in **two places that must
+  change together**: the inline `grid.style.gridTemplateColumns` in `gantt-view.js` and the
+  `.gantt-cell.col-1/col-2/col-3` rules in `styles.css` (where `col-2`/`col-3` also carry the
+  cumulative `left` sticky offset — widen `col-1` or `col-2` and every later column's `left` must
+  move by the same amount). `col-1` and `ms-col-baseline` are **also reused by the Milestones
+  grid** (`milestones-view.js` has its own `gridTemplateColumns` string and a totals mini-grid),
+  so changing `col-1`'s width means updating that string and `ms-col-baseline`'s `left` too — only
+  `col-2` is gantt-private (Milestones swapped in `ms-col-baseline` precisely to decouple it).
 - **Single-scrollbar page layout.** The outer document (`html body`) never scrolls
   (`overflow: hidden`); the gantt/resource-load/milestones pages are flex columns stretched to
   fill the viewport, with everything except the grid pinned `flex: 0 0 auto` so only the grid's own
@@ -224,6 +244,16 @@ A few non-obvious decisions and bugs worth knowing before touching the same code
   the grid's `scrollLeft`/`scrollTop` across a rebuild, and the gantt view tracks the last-edited
   cell outside `state` so it can be briefly re-highlighted after the rebuild — otherwise every edit
   would snap the grid back to the top-left and visually lose the cell just changed.
+- **Cross-project drag writes two files with no on-disk transaction.** Dragging a baseline or task
+  between two *different* projects mutates two `projects/*.json` files. `MP.saveCoordinator.saveProjects`
+  runs the reread-before-write conflict check on **every** file before writing **any** of them, so a
+  cancelled conflict prompt means nothing was written and `MP.baselineCrud.moveBaselineToPosition` /
+  `MP.taskCrud.moveTaskToPosition` can roll the in-memory move back exactly. But a hard write failure
+  in the second phase still leaves the first file written — there's no journaling or rollback for
+  that. The write order is fixed as `[destination, source]` so that failure duplicates the object
+  (visible, hand-fixable on the source's next save) instead of losing it. A plain sequential loop of
+  `saveProject` was rejected precisely because it can write file 1 and then have the user cancel the
+  conflict prompt on file 2, stranding a one-sided write. There is no undo.
 
 ## Where to look for a given change
 
@@ -232,6 +262,21 @@ A few non-obvious decisions and bugs worth knowing before touching the same code
   thread through `js/data/repository.js`, then the `js/ui/` renderer(s) that display it.
 - **Anything that writes a file in response to a user action** → must go through
   `MP.saveCoordinator`, never call `MP.repository.save*` directly, or conflict detection is
-  silently skipped.
+  silently skipped. An action touching **two** project files at once (cross-project baseline/task
+  drag) → `MP.saveCoordinator.saveProjects(state, files)`, and handle its `false` return (a
+  cancelled conflict prompt) by rolling the in-memory change back.
+- **Reordering / moving a baseline or task via drag** → `js/ui/gantt/baseline-drag.js` /
+  `task-drag.js` (gesture + drop-target wiring in `gantt-row.js`), calling
+  `MP.baselineCrud.moveBaselineToPosition` / `MP.taskCrud.moveTaskToPosition` (same-file vs.
+  cross-file branch inside each).
 - **A new kind of cross-cutting warning** (like orphan references) → `js/model/validation.js`,
   surfaced by the gantt view's warnings panel and per-cell badges.
+- **A gantt view-scoped display toggle/filter** (like "show completed" or the project filter) →
+  a session-only field on `state.ui` (`store.js`), a control built in `gantt-view.js`'s
+  `toolbarActions` (passed into `common/dataset-header.js`), and — if it changes which rows
+  render — a parameter on `MP.ganttView.buildRows`. The project filter also has its own
+  `js/ui/gantt/project-filter.js` (a dropdown checkbox panel that batches its edits and only
+  calls `setState` on close, so the full re-render doesn't fight the open panel). A row-hiding
+  filter interacts with reorder gestures: baseline/task drag needs no change (a hidden row is
+  simply never a drop target, and index math runs on the raw arrays), but `MP.projectCrud.moveProject`
+  skips over hidden neighbours so `↑/↓` isn't a no-op under a filter.

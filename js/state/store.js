@@ -14,6 +14,9 @@
       currentView: 'gantt', // gantt | resource-load | milestones | team-resources
       showCompletedProjects: false,
       showCompleted: false,
+      // Filtro multi-progetto della vista gantt: array dei `file` di progetto
+      // selezionati; [] = mostra tutti. Sessione-only come showCompleted*.
+      projectFilter: [],
       autoBackupOnExit: localStorage.getItem(AUTO_BACKUP_KEY) === 'true',
       // Preavviso "il dataset è cambiato su disco" al ritorno di focus sulla scheda
       // (vedi remote-check.js/app.js) — opt-in, off di default: introduce una rilettura

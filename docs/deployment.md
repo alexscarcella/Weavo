@@ -94,7 +94,10 @@ a bad release — delete it (local + remote) and the GitHub Release, then re-tag
 The toolbar exposes a manual "💾 Backup" action that snapshots `manifest.json`,
 `team-resources.json`, and every file under `projects/` into a timestamped
 `backup/<YYYYMMDD>_<HHMMSS>/` subfolder of the data folder (`MP.repository.createBackup`). If you
-want one before a risky bulk edit, trigger it from the menu first.
+want one before a risky bulk edit, trigger it from the menu first. Dragging a baseline or task
+**between two projects** is one such edit: it rewrites two project files at once, has no on-disk
+transaction, and can't be undone from the app (see
+[database.md](database.md#conflict-detection)).
 
 Next to it, an opt-in **"Backup on exit"** toggle (off by default, preference remembered
 per-browser via `localStorage`) additionally runs the same backup automatically when the app's tab

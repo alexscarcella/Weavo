@@ -1,6 +1,6 @@
 // Drag&drop dei task: trascinare un task su un'altra riga lo riposiziona
-// esattamente lì, anche in un'altra baseline dello stesso progetto (mai tra
-// progetti diversi). Nessun elemento DOM rappresenta "una riga" nella griglia
+// esattamente lì, anche in un'altra baseline — dello stesso progetto o di un
+// progetto DIVERSO. Nessun elemento DOM rappresenta "una riga" nella griglia
 // (vedi gantt-row.js/gantt-view.js: ogni riga è solo una sequenza di
 // .gantt-cell fratelli), quindi l'indicatore di drop viene applicato alle 3
 // celle fisse (col-1/col-2/col-3) della riga sotto il puntatore — sempre
@@ -40,10 +40,10 @@
     cells.forEach((c) => c.classList.add('dragging'));
   }
 
-  function handleDragOver(event, { file, baseline, task, cells }) {
+  function handleDragOver(event, { baseline, task, cells }) {
     if (!dragging) return;
-    if (file !== dragging.file || !baseline) {
-      event.dataTransfer.dropEffect = 'none';
+    if (!baseline) {
+      event.dataTransfer.dropEffect = 'none'; // riga "— no baseline —": nessun array task in cui inserire
       return;
     }
     event.preventDefault();
@@ -72,7 +72,7 @@
     event.preventDefault();
     const dragged = dragging;
     reset();
-    if (!dragged || file !== dragged.file || !baseline) return;
+    if (!dragged || !baseline) return;
 
     let targetIndex;
     if (task) {
@@ -82,7 +82,8 @@
     } else {
       targetIndex = 0;
     }
-    MP.taskCrud.moveTaskToPosition(dragged.state, dragged.file, dragged.sourceBaseline, dragged.task, baseline, targetIndex);
+    // `file` è il progetto della riga di destinazione (può differire da dragged.file).
+    MP.taskCrud.moveTaskToPosition(dragged.state, dragged.file, dragged.sourceBaseline, dragged.task, file, baseline, targetIndex);
   }
 
   function handleDragEnd() {

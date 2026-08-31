@@ -198,9 +198,9 @@ code {
   z-index: 2;
   font-weight: 500;
 }
-.gantt-cell.col-1 { left: 0; width: 170px; }
-.gantt-cell.col-2 { left: 170px; width: 234px; color: #555; }
-.gantt-cell.col-3 { left: 404px; width: 300px; font-weight: 400; }
+.gantt-cell.col-1 { left: 0; width: 255px; }
+.gantt-cell.col-2 { left: 255px; width: 351px; color: #555; }
+.gantt-cell.col-3 { left: 606px; width: 300px; font-weight: 400; }
 .gantt-cell.completed-dim { color: #888; }
 
 .gantt-cell.header {
@@ -345,6 +345,61 @@ code {
 
 .toggle-completed { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; }
 
+/* --- Filtro multi-progetto (js/ui/gantt/project-filter.js): bottone nella
+   toolbar dell'header + pannello a tendina posizionato via position:fixed
+   sotto il bottone (appeso a document.body per non essere clippato dagli
+   header sticky). --- */
+.project-filter { display: inline-flex; align-items: center; }
+.project-filter-btn {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid #b9c2cc;
+  border-radius: 4px;
+  background: #fff;
+  color: #2a3542;
+  cursor: pointer;
+}
+.project-filter-btn:hover { background: #eef1f5; }
+.project-filter-panel {
+  z-index: 50;
+  background: #fff;
+  border: 1px solid #b9c2cc;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  padding: 0.4rem;
+  min-width: 200px;
+  max-height: 320px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+.project-filter-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0 0.15rem 0.35rem;
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 0.35rem;
+}
+.project-filter-actions button {
+  font: inherit;
+  font-size: 0.8rem;
+  border: none;
+  background: none;
+  color: #2E86FF;
+  cursor: pointer;
+  padding: 0;
+}
+.project-filter-actions button:hover { text-decoration: underline; }
+.project-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.project-filter-item:hover { background: #eef1f5; }
+
 .gantt-cell.editable-cell { cursor: pointer; }
 .gantt-cell.editable-cell:hover { outline: 2px solid #2E86FF; outline-offset: -2px; }
 
@@ -455,10 +510,10 @@ code {
 .legend-swatch.load-3plus { background: #ffcdd2; }
 
 /* --- Vista milestone --- */
-/* Colonna "Baseline" dedicata (non riusa .col-2 del gantt, condivisa con
-   quella pagina) perché qui è larga il doppio (234px invece di 117px) per
-   ospitare versioni di baseline più lunghe senza troncare il testo. */
-.gantt-cell.ms-col-baseline { left: 170px; width: 234px; color: #555; }
+/* Colonna "Baseline" dedicata (non riusa .col-2 del gantt) con larghezza
+   propria (234px) tarata sulle versioni di baseline di questa pagina, slegata
+   da come .col-2 evolve nel gantt. .col-1 invece È condivisa col gantt. */
+.gantt-cell.ms-col-baseline { left: 255px; width: 234px; color: #555; }
 
 /* Mini-griglia separata per le 2 righe di totali (Ready for UAT / UAT
    releases/week), tra istogramma e calendario: riquadro + sfondo propri così
@@ -495,7 +550,7 @@ code {
   border-top: none;
   background: #fff;
 }
-.milestone-hist-spacer { flex: 0 0 404px; }
+.milestone-hist-spacer { flex: 0 0 489px; } /* = .col-1 (255) + .ms-col-baseline (234), the 2 frozen milestone columns */
 .milestone-hist-cell {
   flex: 0 0 46px;
   display: flex;

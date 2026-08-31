@@ -6,6 +6,33 @@ All notable changes to Master Plan are documented in this file.
 
 ### Added
 
+- **Multi-project filter on the gantt view** — a "Projects: N of M" button in the header toolbar
+  opens a checkbox panel (with Select all / Clear) that restricts the grid to a chosen subset of
+  projects. Session-only (`state.ui.projectFilter`, an array of project file paths; empty / all
+  checked = show everything), never persisted; applied by `MP.ganttView.buildRows` and scoped to
+  the gantt grid only (Workload and Milestones ignore it). The panel batches its edits and only
+  triggers a re-render on close, so the full-rebuild render doesn't fight the open panel. Hidden
+  projects are automatically neither a source nor a target for baseline/task drag; the project
+  `↑/↓` menu action (`MP.projectCrud.moveProject`) now skips over hidden projects so it still
+  moves the row past them instead of looking like a no-op. New module
+  [js/ui/gantt/project-filter.js](js/ui/gantt/project-filter.js) (`MP.projectFilter`).
+- **Cross-project drag & drop for baselines and tasks** — the ⠿ handle now moves a baseline to
+  a *different* project, and a task to any baseline including one in another project (previously
+  both were locked to a single project). Drop targets on every project's rows now accept the
+  drag; a project with no baselines yet accepts a dropped baseline on its "— no baseline —"
+  placeholder row. A cross-project **task** move still adopts the destination baseline's
+  `readyForUat`/`uat` dates and is blocked (with an alert, before any change) if that would break
+  the `taskDeadline < readyForUat < uat` ordering. A cross-project **baseline** move whose BL
+  team is inherited (`baseline.team === null`) snapshots the source project's effective team onto
+  the baseline, so it keeps the team it visibly had instead of silently re-inheriting the
+  destination's. Persistence for the two-file case goes through the new
+  `MP.saveCoordinator.saveProjects(state, files)`, which conflict-checks both files before
+  writing either and lets the move roll back in memory if a conflict prompt is cancelled; there
+  is no on-disk transaction, so the write order is destination-first (a hard mid-write failure
+  then leaves a recoverable duplicate, never a loss). `MP.baselineCrud.moveBaselineToPosition`
+  and `MP.taskCrud.moveTaskToPosition` gained a `targetFile` parameter; new specs
+  `unit/ui/baseline-move.test.js`, `unit/ui/task-move.test.js`, `unit/data/save-coordinator.test.js`
+  (the first `unit/ui/` and `unit/data/save-coordinator` coverage).
 - **Month-boundary separator line** — the gantt, Workload, and Milestones grids now draw a
   dashed grey vertical line (`.month-boundary`) on the first week column of every calendar month,
   a lightweight orientation aid alongside the existing solid blue "today" line
@@ -24,8 +51,13 @@ All notable changes to Master Plan are documented in this file.
   flag per allocation (true if the project, baseline, task, or that single week is already
   closed) to drive the split. `MP.modal.confirmWithReport` gained two optional params,
   `boxClass`/`rows`, to size this particular report's dialog without affecting its other caller.
-- **Gantt grid columns** — the Baseline column (`col-2`) widened from 117px to 234px (Task,
-  `col-3`, shifts right accordingly) so longer baseline/version labels no longer truncate.
+- **Gantt grid columns** — the Project/Team column (`col-1`) widened from 170px to 255px and the
+  Baseline column (`col-2`) from 117px to 351px (Task, `col-3`, shifts right accordingly) so
+  longer project names and baseline/version labels no longer truncate. `col-1` and
+  `ms-col-baseline` are shared with the Milestones grid, so its Project column widens to match.
+  Each width lives in two places kept in sync: the inline `grid-template-columns` in
+  `gantt-view.js` / `milestones-view.js` and the `.col-1`/`.col-2`/`.col-3`/`.ms-col-baseline`
+  rules in `styles.css` (whose cumulative `left` sticky offsets shift too).
 
 ### Fixed
 

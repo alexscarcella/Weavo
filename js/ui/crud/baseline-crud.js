@@ -36,20 +36,72 @@
     await persistProject(state, file);
   }
 
-  // Sposta una baseline in una posizione esatta all'interno del proprio progetto (usato dal
-  // drag&drop, vedi baseline-drag.js) — le baseline non si spostano mai tra progetti diversi.
-  // targetIndex è l'indice nell'array grezzo (non filtrato da showCompletedProjects) calcolato dal
-  // chiamante prima di questa rimozione.
-  async function moveBaselineToPosition(state, file, baseline, targetIndex) {
-    const progetto = state.dataset.projects.get(file).data;
-    const arr = progetto.baseline;
-    const idx = arr.indexOf(baseline);
-    if (idx < 0) return;
-    arr.splice(idx, 1);
-    let insertAt = targetIndex;
-    if (idx < targetIndex) insertAt -= 1;
-    arr.splice(insertAt, 0, baseline);
-    await persistProject(state, file);
+  // Sposta una baseline in una posizione esatta (usato dal drag&drop, vedi baseline-drag.js).
+  // `targetFile` può essere lo stesso `sourceFile` (riordino dentro un progetto) o un progetto
+  // diverso (spostamento cross-progetto). targetIndex è l'indice nell'array `baseline` grezzo
+  // (non filtrato da showCompletedProjects) del progetto di DESTINAZIONE, calcolato dal chiamante.
+  //
+  // Cross-progetto: la baseline esce dall'array di un progetto ed entra in quello di un altro —
+  // due file da salvare via MP.saveCoordinator.saveProjects (nessuna transazione su disco). Se la
+  // baseline eredita il team dal progetto (team == null), il team effettivo di origine viene
+  // congelato come BL team dedicato PRIMA dello spostamento, così non eredita silenziosamente
+  // quello della destinazione (vedi MP.schema.resolveBaselineTeam).
+  async function moveBaselineToPosition(state, sourceFile, baseline, targetFile, targetIndex) {
+    if (sourceFile === targetFile) {
+      const progetto = state.dataset.projects.get(sourceFile).data;
+      const arr = progetto.baseline;
+      const idx = arr.indexOf(baseline);
+      if (idx < 0) return;
+      arr.splice(idx, 1);
+      let insertAt = targetIndex;
+      if (idx < targetIndex) insertAt -= 1;
+      arr.splice(insertAt, 0, baseline);
+      await persistProject(state, sourceFile);
+      return;
+    }
+
+    const sourceProg = state.dataset.projects.get(sourceFile).data;
+    const targetProg = state.dataset.projects.get(targetFile).data;
+
+    // Congela il team ereditato (solo se non vuoto), come oggetto NUOVO — normalizeBaselineTeam
+    // passa da createProjectReferents e non aliasa sourceProg.referents.
+    let snappedTeam = false;
+    if (baseline.team == null) {
+      const resolved = MP.schema.resolveBaselineTeam(sourceProg, baseline);
+      if (!MP.schema.isBaselineTeamEmpty(resolved)) {
+        baseline.team = MP.schema.normalizeBaselineTeam(resolved);
+        snappedTeam = true;
+      }
+    }
+
+    const idx = sourceProg.baseline.indexOf(baseline);
+    if (idx < 0) {
+      if (snappedTeam) baseline.team = null;
+      return;
+    }
+    sourceProg.baseline.splice(idx, 1);
+    targetProg.baseline.splice(targetIndex, 0, baseline);
+
+    let ok = false;
+    try {
+      // Destinazione prima, origine poi: un fallimento della seconda scrittura lascia un
+      // duplicato visibile e correggibile, mai una perdita.
+      ok = await MP.saveCoordinator.saveProjects(state, [targetFile, sourceFile]);
+    } catch (e) {
+      window.alert(`Error saving: ${e.message}`);
+      return;
+    }
+
+    if (!ok) {
+      // Modal di conflitto annullato => saveProjects garantisce che nulla sia stato scritto:
+      // annulla anche la mutazione in memoria per non lasciare uno stato "avanti" rispetto al disco.
+      targetProg.baseline.splice(targetProg.baseline.indexOf(baseline), 1);
+      sourceProg.baseline.splice(idx, 0, baseline);
+      if (snappedTeam) baseline.team = null;
+      return;
+    }
+
+    MP.store.setState({});
   }
 
   async function toggleCompleted(state, file, baseline) {

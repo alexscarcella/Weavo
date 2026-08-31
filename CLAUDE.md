@@ -70,7 +70,11 @@ point). Full breakdown, state machine, render flow, and "where to look for a giv
 
 - New team/color: **no code change** — it's user-editable data in `team-resources.json`.
 - Any write in response to a user action must go through `MP.saveCoordinator`, never
-  `MP.repository.save*` directly, or conflict detection is silently skipped.
+  `MP.repository.save*` directly, or conflict detection is silently skipped. An action that writes
+  **two** project files at once (cross-project baseline/task drag) uses
+  `MP.saveCoordinator.saveProjects(state, [dest, src])` — conflict-checks both before writing
+  either, returns `false` if a prompt is cancelled (caller must then roll back its in-memory
+  change); still no on-disk transaction. See [docs/database.md](docs/database.md#conflict-detection).
 - New field on the week-entry/task/project shape: start in `js/data/schema.js`, thread through
   `repository.js`, then the `js/ui/` renderer(s). A field *rename* also needs a
   `js/data/legacy-migration.js` step and a `SCHEMA_VERSION` bump.
@@ -81,10 +85,13 @@ No build/dev server: open [index.html](index.html) directly in Chrome/Edge. Samp
 [sample-data/](sample-data/) — point the folder picker there.
 
 There **is** an automated Jest suite under [`unit/`](unit/), covering `js/data/` and `js/model/`
-(pure logic, no I/O/DOM — `js/ui/` has no test convention, verify by running the app). Run
-`npm install` once, then `npm test`. **A change to `js/data/schema.js` or `js/model/` should come
-with a matching test** — see [docs/architecture.md#testing](docs/architecture.md#testing) for the
-harness details, the headless-Chrome console-error check, and the one-off scratch-script pattern.
+(pure logic, no I/O/DOM). `js/ui/` has no general test convention — verify by running the app —
+**except** near-pure `js/ui/crud/` logic that only mutates dataset objects then delegates to
+stubbable `MP.saveCoordinator`/`MP.store` (see `unit/ui/baseline-move.test.js`,
+`unit/ui/task-move.test.js`). Run `npm install` once, then `npm test`. **A change to
+`js/data/schema.js` or `js/model/` should come with a matching test** — see
+[docs/architecture.md#testing](docs/architecture.md#testing) for the harness details, the
+headless-Chrome console-error check, and the one-off scratch-script pattern.
 
 [spike-fsa/index.html](spike-fsa/index.html) is a standalone, unrelated throwaway page for testing
 File System Access permission persistence — not part of the app's code path.

@@ -105,21 +105,25 @@
 
   // Sposta un task in una posizione esatta (usato dal drag&drop, vedi
   // task-drag.js): la baseline di destinazione può essere una qualsiasi
-  // baseline dello stesso progetto (anche la stessa in cui si trova già il
-  // task, per un riordino interno). targetIndex è l'indice nell'array della
-  // baseline di destinazione *dopo* la rimozione del task da quello di
-  // partenza.
+  // baseline — la stessa in cui si trova già il task (riordino interno),
+  // un'altra dello stesso progetto, o una di un progetto DIVERSO. targetIndex è
+  // l'indice nell'array della baseline di destinazione *dopo* la rimozione del
+  // task da quello di partenza.
   //
-  // Spostamento fra baseline DIVERSE: il task adotta le date readyForUat/uat
-  // già in vigore sulla baseline di destinazione (stesso principio di un
-  // salvataggio normale via popover — vedi gantt-view.js/syncBaselineMilestone),
-  // mantenendo la propria taskDeadline (mai condivisa). Se il risultato
-  // violerebbe il vincolo d'ordine taskDeadline < readyForUat < uat (vedi
-  // js/model/milestone-rules.js), lo spostamento è bloccato con un alert
-  // PRIMA di qualunque mutazione — il task resta dov'era, nessun salvataggio.
-  // Un riordino nella STESSA baseline non tocca mai le milestone (nessuna data
-  // può cambiare restando nella stessa baseline).
-  async function moveTaskToPosition(state, file, sourceBaseline, task, targetBaseline, targetIndex) {
+  // Spostamento fra baseline DIVERSE (stesso progetto o cross-progetto): il task
+  // adotta le date readyForUat/uat già in vigore sulla baseline di destinazione
+  // (stesso principio di un salvataggio normale via popover — vedi
+  // gantt-view.js/syncBaselineMilestone), mantenendo la propria taskDeadline
+  // (mai condivisa). Se il risultato violerebbe il vincolo d'ordine
+  // taskDeadline < readyForUat < uat (vedi js/model/milestone-rules.js), lo
+  // spostamento è bloccato con un alert PRIMA di qualunque mutazione — il task
+  // resta dov'era, nessun salvataggio. Un riordino nella STESSA baseline non
+  // tocca mai le milestone.
+  //
+  // Cross-progetto (sourceFile !== targetFile): due file da salvare via
+  // MP.saveCoordinator.saveProjects (nessuna transazione su disco). Se un modal
+  // di conflitto viene annullato, lo splice in memoria viene ripristinato.
+  async function moveTaskToPosition(state, sourceFile, sourceBaseline, task, targetFile, targetBaseline, targetIndex) {
     const sourceArr = sourceBaseline.task;
     const idx = sourceArr.indexOf(task);
     if (idx < 0) return;
@@ -142,7 +146,34 @@
     let insertAt = targetIndex;
     if (sourceBaseline === targetBaseline && idx < targetIndex) insertAt -= 1;
     targetBaseline.task.splice(insertAt, 0, task);
-    await persistProject(state, file);
+
+    if (sourceFile === targetFile) {
+      await persistProject(state, sourceFile);
+      return;
+    }
+
+    let ok = false;
+    try {
+      // Destinazione prima, origine poi (vedi saveProjects): un fallimento della seconda
+      // scrittura lascia un duplicato visibile, mai una perdita.
+      ok = await MP.saveCoordinator.saveProjects(state, [targetFile, sourceFile]);
+    } catch (e) {
+      window.alert(`Error saving: ${e.message}`);
+      return;
+    }
+
+    if (!ok) {
+      // Conflitto annullato: nulla è stato scritto, ripristina lo splice in memoria. Le
+      // riscritture di applyAdoptedSharedDates su task.weeks NON vengono annullate (riscrivono
+      // solo le settimane readyForUat/uat con valori che il task adotterebbe comunque al
+      // tentativo successivo — impatto trascurabile).
+      const back = targetBaseline.task.indexOf(task);
+      if (back >= 0) targetBaseline.task.splice(back, 1);
+      sourceArr.splice(idx, 0, task);
+      return;
+    }
+
+    MP.store.setState({});
   }
 
   MP.taskCrud = { createTask, renameTask, deleteTask, moveTaskToPosition, toggleCompleted, setTaskNote };

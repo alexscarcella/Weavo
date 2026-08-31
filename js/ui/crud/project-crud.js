@@ -107,11 +107,31 @@
     await persist(state, { manifest: true, projectFiles: [] });
   }
 
+  // Un progetto è "visibile" nella griglia gantt se ha una entry, non è
+  // completed-nascosto e passa il filtro multi-progetto (stessa logica di
+  // MP.ganttView.buildRows; duplicata qui per non far dipendere il layer crud
+  // da js/ui/gantt/).
+  function isProjectVisible(state, voce) {
+    const entry = state.dataset.projects.get(voce.file);
+    if (!entry) return false;
+    if (entry.data.completed && !state.ui.showCompletedProjects) return false;
+    const pf = state.ui.projectFilter;
+    return !pf || !pf.length || pf.includes(voce.file);
+  }
+
   async function moveProject(state, file, direction) {
     const arr = state.dataset.manifest.projects;
     const idx = arr.findIndex((p) => p.file === file);
-    const swapWith = idx + direction;
-    if (idx < 0 || swapWith < 0 || swapWith >= arr.length) return;
+    if (idx < 0) return;
+    // Scambia con il vicino VISIBILE più vicino in `direction`: con un filtro
+    // attivo il vicino adiacente può essere nascosto, e uno swap con esso
+    // sembrerebbe un no-op. I progetti nascosti restano nella loro posizione,
+    // il visibile "scavalca" il blocco nascosto.
+    let swapWith = idx + direction;
+    while (swapWith >= 0 && swapWith < arr.length && !isProjectVisible(state, arr[swapWith])) {
+      swapWith += direction;
+    }
+    if (swapWith < 0 || swapWith >= arr.length) return;
     [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
     await persist(state, { manifest: true, projectFiles: [] });
   }

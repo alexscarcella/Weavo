@@ -34,7 +34,7 @@
   // showCompleted), non deve sparire dal gantt: senza una riga non ci
   // sarebbe modo di raggiungerne il menu "⋮" per aggiungere la prima
   // baseline/task (righe segnaposto con baseline/task null).
-  function buildRows(dataset, showCompletedProjects, showCompleted) {
+  function buildRows(dataset, showCompletedProjects, showCompleted, projectFilter) {
     const rows = [];
     let projectIndex = 0;
     for (const voce of dataset.manifest.projects) {
@@ -42,6 +42,9 @@
       if (!entry) continue;
       const progetto = entry.data;
       if (progetto.completed && !showCompletedProjects) continue;
+      // Filtro multi-progetto della vista gantt (vedi project-filter.js):
+      // array vuoto/assente = nessun filtro, mostra tutti.
+      if (projectFilter && projectFilter.length && !projectFilter.includes(voce.file)) continue;
 
       const pIdx = projectIndex++;
 
@@ -388,7 +391,7 @@
     const validInitials = new Set(resourcesFlat.map((r) => r.initials));
     const initialsTeamMap = new Map(resourcesFlat.map((r) => [r.initials, r.teamCode]));
     const allocationIndex = MP.overallocation.buildAllocationIndex(dataset);
-    const rows = buildRows(dataset, state.ui.showCompletedProjects, state.ui.showCompleted);
+    const rows = buildRows(dataset, state.ui.showCompletedProjects, state.ui.showCompleted, state.ui.projectFilter);
     const currentWeek = MP.weekUtils.getCurrentWeekIso();
     const currentWeekIndex = weeks.indexOf(currentWeek);
 
@@ -412,6 +415,8 @@
     toolbarActions.querySelector('#chk-completed').addEventListener('change', (e) => {
       MP.store.setState((s) => ({ ui: { ...s.ui, showCompleted: e.target.checked } }));
     });
+    // Filtro multi-progetto in testa alla griglia, accanto ai toggle "mostra completati".
+    toolbarActions.prepend(MP.projectFilter.renderProjectFilter(state));
     page.appendChild(MP.datasetHeader.renderDatasetHeader(state, toolbarActions));
 
     const warnings = renderWarnings(dataset);
@@ -434,7 +439,7 @@
     // delle settimane invece di restare bloccate. `renderTaskRow`/`gantt-row.js`
     // non sanno nulla di queste 2 colonne (restituiscono sempre 3+weeks.length
     // celle): sono `gantt-view.js` a inserire i filler prima/dopo, riga per riga.
-    grid.style.gridTemplateColumns = `170px 234px 300px repeat(${weeks.length + 2}, 46px)`;
+    grid.style.gridTemplateColumns = `255px 351px 300px repeat(${weeks.length + 2}, 46px)`;
 
     // Riga pulsanti "a bordo tabella" in stile Excel, sopra le etichette di
     // colonna: sacrifica un'intera riga di altezza (24px, come le altre)

@@ -117,7 +117,7 @@
 
     const scroll = document.createElement('div');
     scroll.className = 'gantt-scroll';
-    const gridTemplateColumns = `170px 234px repeat(${weeks.length}, 46px)`;
+    const gridTemplateColumns = `255px 234px repeat(${weeks.length}, 46px)`;
     const grid = document.createElement('div');
     grid.className = 'gantt-grid';
     grid.style.gridTemplateColumns = gridTemplateColumns;

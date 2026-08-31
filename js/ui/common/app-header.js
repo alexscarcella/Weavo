@@ -4,7 +4,7 @@
 (function (MP) {
   'use strict';
 
-  const APP_VERSION = 'v1.5.0';
+  const APP_VERSION = 'v1.5.1';
   const APP_COPYRIGHT = '© 2026 Weavo';
 
   const LOGO_SVG = `

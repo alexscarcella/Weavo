@@ -130,7 +130,12 @@ Deleting a team is blocked while it still has resources assigned (move or delete
 - `baseline.team` holds a baseline's **BL team** — the same shape as `project.referents` — and
   defaults to `null`, meaning the baseline *inherits* the project's team (see
   `MP.schema.resolveBaselineTeam`). Setting it to an object overrides the project team with a
-  baseline-specific BL team; the baseline row then shows a "T" icon (only when overridden) opening
+  baseline-specific BL team. When a baseline with an *inherited* (`null`) team is dragged to
+  **another project** (`MP.baselineCrud.moveBaselineToPosition` cross-file branch), its currently
+  effective team is snapshotted into `baseline.team` as a fresh object before the move — so it
+  keeps the team it visibly had, instead of silently re-inheriting the destination project's
+  referents. The snapshot is skipped when the resolved source team is empty (`isBaselineTeamEmpty`),
+  leaving `team: null`. The baseline row then shows a "T" icon (only when overridden) opening
   a read-only card (`MP.modal.showBaselineTeamCard`), edited via "BL team…" in the baseline's "⋮"
   menu (`MP.baselineCrud.setBaselineTeam`, which offers an "Inherit from project team" toggle) or
   via the card's pencil button, and
@@ -152,8 +157,10 @@ Deleting a team is blocked while it still has resources assigned (move or delete
   `taskDeadline` is never propagated. Whichever of the 3 types a task carries must be strictly
   increasing in that order — Task deadline < Ready for UAT < UAT, never the same week — a hard
   block (`js/model/milestone-rules.js`) enforced on every write path that can move a milestone week:
-  cell save, per-cell ◀/▶ shift, whole-baseline shift, and dragging a task to another baseline
-  (which adopts the destination baseline's `readyForUat`/`uat` dates before validating). Enforced in
+  cell save, per-cell ◀/▶ shift, whole-baseline shift, and dragging a task to another baseline — in
+  the same project or a **different** one (which adopts the destination baseline's `readyForUat`/`uat`
+  dates before validating; the ordering check aborts the move with an alert *before* any mutation).
+  Enforced in
   the gantt UI when saving a cell (`gantt-view.js`), not in the schema itself — the flag stays
   duplicated per `task.weeks[iso]` rather than living on `baseline` directly. A `uat` week can never
   also carry `team`/`resources` — resource assignment is inhibited on the UAT week, enforced in
@@ -207,6 +214,15 @@ folder open at once. Instead, every write goes through `MP.saveCoordinator`
 
 This is a reread-before-write check, not a merge — the user resolves the conflict by choosing to
 overwrite or to cancel and reconcile by hand.
+
+**Multi-file operations** (a baseline or task dragged between two *different* projects — source
+project loses it, destination gains it) go through `MP.saveCoordinator.saveProjects(state, files)`,
+which runs the reread-before-write check on **every** file first and writes **none** of them if any
+conflict prompt is cancelled — so the caller can cleanly roll back the in-memory move. There is
+still **no on-disk transaction**: if a write in the second phase fails outright (hardware/permission
+error), files already written stay written. The write order is destination-first, then source, so
+that failure mode leaves a visible **duplicate** (recoverable — delete it from the source project on
+its next save) rather than losing the object. There is no undo.
 
 ### Soft notification of remote changes (opt-in)
 

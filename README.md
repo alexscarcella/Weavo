@@ -157,8 +157,26 @@ hand-written JSON needed. See [`docs/database.md`](docs/database.md) for the ful
   *"+ New baseline"*.
 - **Add a task to a baseline:** same "⋮" menu on the baseline's row → *"+ New task"*.
 - **Reorder a task, or move it to a different baseline:** drag it by the handle (⠿) next to its
-  name and drop it on another row — above or below to position it there, including a row that
-  belongs to a different baseline of the same project.
+  name and drop it on another row — above or below to position it there. The target row can belong
+  to a different baseline, including one in **another project**. If the task carries "Ready for
+  UAT"/"UAT" milestones, the move makes it adopt the destination baseline's dates; the move is
+  refused (with a message) if that would put the task's deadlines out of order.
+- **Move a baseline to another project, or reorder it:** drag it by the handle (⠿) next to its
+  version and drop it on any row of the target project (or on the "— no baseline —" row of a
+  project that has none yet). A baseline that was inheriting its team from the project keeps that
+  team after the move (it's copied onto the baseline), rather than silently switching to the
+  destination project's team.
+- **A note on cross-project moves:** they rewrite two project files at once and can't be undone
+  from within the app — run a **💾 Backup** first if you're moving something important. If a
+  colleague changed one of those files meanwhile, you'll get the usual conflict prompt; cancelling
+  it leaves everything as it was.
+- **Show only some projects:** on the "Master Plan" page, the **"Projects: …"** button at the top
+  of the grid opens a checklist — tick the projects you want to see (or use *Select all* /
+  *Clear*) and close it. The grid then shows only those projects; the button reads "Projects: N of
+  M" while a filter is active. This only affects the "Master Plan" view (not "Workload" or
+  "Milestones") and resets when you reopen the app. While a filter is on you can still drag
+  baselines/tasks between the visible projects, and the project "⋮" → *Move up/down* still works,
+  stepping over the hidden ones.
 - **Allocate a resource to a task for a given week:** right-click the corresponding cell in the
   grid. A popup opens: pick the team first, then the resources belonging to that team, and
   optionally pick a milestone type ("Task deadline", "Ready for UAT", or "UAT") if that week

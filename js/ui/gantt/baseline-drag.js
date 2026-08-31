@@ -1,7 +1,8 @@
-// Drag&drop per riordinare le baseline all'interno dello stesso progetto (mai tra progetti
-// diversi). Ricalca lo stesso pattern module-singleton di task-drag.js, semplificato perché
-// una baseline si sposta sempre dentro un solo array (progetto.baseline), senza la distinzione
-// baseline sorgente/destinazione che serve invece ai task.
+// Drag&drop delle baseline: trascinare il blocco di una baseline la riposiziona,
+// dentro lo stesso progetto (riordino) oppure in un progetto DIVERSO
+// (spostamento cross-progetto). Ricalca il pattern module-singleton di
+// task-drag.js. Il file di origine e quello di destinazione possono coincidere
+// o no: MP.baselineCrud.moveBaselineToPosition distingue i due casi.
 (function (MP) {
   'use strict';
 
@@ -31,18 +32,16 @@
     cells.forEach((c) => c.classList.add('dragging'));
   }
 
-  function handleDragOver(event, { file, baseline, cells }) {
+  // `baseline` è null sulla riga segnaposto "— no baseline —" di un progetto
+  // senza baseline: è comunque un bersaglio valido (unico punto di inserimento).
+  function handleDragOver(event, { baseline, cells }) {
     if (!dragging) return;
-    if (file !== dragging.file) {
-      event.dataTransfer.dropEffect = 'none';
-      return;
-    }
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
 
     const rect = cells[1].getBoundingClientRect();
-    const position = event.clientY >= rect.top + rect.height / 2 ? 'after' : 'before';
-    if (baseline === targetBaseline && position === targetPosition) return;
+    const position = baseline && event.clientY >= rect.top + rect.height / 2 ? 'after' : 'before';
+    if (targetCells === cells && baseline === targetBaseline && position === targetPosition) return;
 
     clearIndicator();
     targetCells = cells;
@@ -62,13 +61,18 @@
     event.preventDefault();
     const dragged = dragging;
     reset();
-    if (!dragged || file !== dragged.file) return;
+    if (!dragged) return;
 
     const progetto = dragged.state.dataset.projects.get(file).data;
-    const rect = cells[1].getBoundingClientRect();
-    const after = event.clientY >= rect.top + rect.height / 2;
-    const targetIndex = progetto.baseline.indexOf(baseline) + (after ? 1 : 0);
-    MP.baselineCrud.moveBaselineToPosition(dragged.state, dragged.file, dragged.baseline, targetIndex);
+    let targetIndex;
+    if (baseline) {
+      const rect = cells[1].getBoundingClientRect();
+      const after = event.clientY >= rect.top + rect.height / 2;
+      targetIndex = progetto.baseline.indexOf(baseline) + (after ? 1 : 0);
+    } else {
+      targetIndex = 0; // progetto senza baseline: unico slot di inserimento
+    }
+    MP.baselineCrud.moveBaselineToPosition(dragged.state, dragged.file, dragged.baseline, file, targetIndex);
   }
 
   function handleDragEnd() {

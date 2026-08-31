@@ -149,7 +149,7 @@
       const dragHandle = document.createElement('span');
       dragHandle.className = 'task-drag-handle';
       dragHandle.textContent = '⠿';
-      dragHandle.title = 'Drag to move (also across baselines of this project)';
+      dragHandle.title = 'Drag to move to another baseline or project';
       dragHandle.draggable = true;
       dragHandle.addEventListener('dragstart', (e) => MP.taskDrag.handleDragStart(e, { state, file, sourceBaseline: baseline, task, cells: [col1, col2, col3] }));
       dragHandle.addEventListener('dragend', (e) => MP.taskDrag.handleDragEnd(e));
@@ -207,21 +207,23 @@
       const dragHandle = document.createElement('span');
       dragHandle.className = 'task-drag-handle';
       dragHandle.textContent = '⠿';
-      dragHandle.title = 'Drag to reorder within this project';
+      dragHandle.title = 'Drag to reorder or move to another project';
       dragHandle.draggable = true;
       dragHandle.addEventListener('dragstart', (e) => MP.baselineDrag.handleDragStart(e, { state, file, baseline, cells: [col1, col2, col3] }));
       dragHandle.addEventListener('dragend', (e) => MP.baselineDrag.handleDragEnd(e));
       col2.insertBefore(dragHandle, col2.firstChild);
     }
 
-    // Bersaglio di drop del drag&drop baseline: qualunque riga della baseline (task compresi
-    // e il segnaposto "— no task —"), non solo quella col nome — altrimenti non si potrebbe
-    // agganciare il punto di inserimento "dopo l'ultima baseline" quando il suo blocco ha più
-    // righe (il "before/after" si calcola sul punto medio della riga sotto il cursore, quindi
-    // vale sempre "prima/dopo questa baseline nel suo complesso", non "prima/dopo questa riga").
+    // Bersaglio di drop del drag&drop baseline: qualunque riga di una baseline reale (task
+    // compresi e il segnaposto "— no task —"), non solo quella col nome — altrimenti non si
+    // potrebbe agganciare il punto di inserimento "dopo l'ultima baseline" quando il suo blocco
+    // ha più righe (il "before/after" si calcola sul punto medio della riga sotto il cursore,
+    // quindi vale sempre "prima/dopo questa baseline nel suo complesso", non "prima/dopo questa
+    // riga"). PIÙ la riga segnaposto "— no baseline —" (baseline null) di un progetto vuoto:
+    // unico punto per trascinarci dentro una baseline da un altro progetto (targetIndex 0).
     // Coesiste senza conflitti con i listener task-drag qui sotto: ciascun modulo tiene il
     // proprio stato `dragging` privato e i suoi handler non fanno nulla quando è null.
-    if (baseline) {
+    {
       const baselineDragCells = [col1, col2, col3];
       baselineDragCells.forEach((cell) => {
         cell.addEventListener('dragover', (e) => MP.baselineDrag.handleDragOver(e, { file, baseline, cells: baselineDragCells }));

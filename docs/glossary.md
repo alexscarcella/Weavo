@@ -88,7 +88,8 @@ internal deadline scoped to that one task, never shared; **Ready for UAT** (`rea
 other non-`completed` task of the same baseline, exactly one week per type per baseline. Whichever
 of the 3 dates a task carries must be strictly increasing in that order (Task deadline < Ready for
 UAT < UAT, never the same week) — a genuine hard block, enforced on every write path that can move
-a milestone week (cell save, per-cell shift, whole-baseline shift, cross-baseline task drag). A
+a milestone week (cell save, per-cell shift, whole-baseline shift, task drag to another baseline —
+in the same or a different project). A
 `uat` week additionally never carries a resource allocation — `team`/`resources` are stripped
 wherever a `uat` entry is built or merged, and the cell popover disables the Team/Resources
 fields once "UAT" is picked. See [database.md](database.md).
@@ -121,6 +122,15 @@ The top-level planning unit (`projects/<slug>.json`), containing one or more **b
 name, a `referents` object (project manager/engineer, solution analyst/V&V reference, free-text
 notes — see `MP.schema.normalizeProjectReferents` for the legacy-plain-string self-heal), and a
 `completed` flag (see [Completed task](#completed-task-completed)).
+
+### Project filter
+A gantt-view-only display filter: a multi-select checkbox panel ("Projects: N of M" button in the
+header toolbar, `MP.projectFilter`) restricting the grid to a chosen subset of **projects**.
+Session-only, held as `state.ui.projectFilter` (an array of project file paths; `[]` / all-selected
+means "no filter, show everything"), never persisted. It only hides rows in the gantt view — the
+milestones and resource-load views ignore it. Hidden projects are neither a source nor a target
+for baseline/task [drag](#baseline) reordering; the project `↑/↓` menu action skips over hidden
+projects so it still moves the row past them.
 
 ### Resource
 An individual (`{ initials, name }`) who belongs to exactly one **team**, nested inside it in
