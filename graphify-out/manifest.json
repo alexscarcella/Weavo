@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "js/data/save-coordinator.js": {
-    "mtime": 1784402013.0219276,
-    "ast_hash": "bca2be566d7d23d14aab47af4e6e3e11",
-    "semantic_hash": "bca2be566d7d23d14aab47af4e6e3e11"
+    "mtime": 1788180200.4433804,
+    "ast_hash": "2e9c8fcd9911e9623340fd8d63bc60fa",
+    "semantic_hash": ""
   },
   "js/data/schema.js": {
     "mtime": 1787756666.5984788,
@@ -70,13 +70,13 @@
     "semantic_hash": ""
   },
   "js/state/store.js": {
-    "mtime": 1784666520.4292142,
-    "ast_hash": "00a0be072a3fad16dfa2005ffab67fe1",
-    "semantic_hash": "00a0be072a3fad16dfa2005ffab67fe1"
+    "mtime": 1788184067.995316,
+    "ast_hash": "67b73011e0e2bf0beffdb54d4b3bb27e",
+    "semantic_hash": ""
   },
   "js/ui/common/app-header.js": {
-    "mtime": 1787765600.5072048,
-    "ast_hash": "b53ef6cd5c9fbd62198ffd187638c797",
+    "mtime": 1788185401.0400572,
+    "ast_hash": "826217527e73b302be3ae01b81fc8344",
     "semantic_hash": ""
   },
   "js/ui/common/context-menu.js": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "js/ui/common/dataset-header.js": {
-    "mtime": 1785951316.9792025,
-    "ast_hash": "5796cdf196b54d1a1bfae3c8d7eff1ba",
+    "mtime": 1788184172.7170782,
+    "ast_hash": "c2ca1278e17930f0956162b26dd8fca2",
     "semantic_hash": ""
   },
   "js/ui/common/modal.js": {
@@ -105,14 +105,14 @@
     "semantic_hash": "706bbe2725e749263dfd70aab3cb868b"
   },
   "js/ui/crud/baseline-crud.js": {
-    "mtime": 1787755937.8942716,
-    "ast_hash": "f73be0ba3ea488c0ee2dcb3390f68393",
+    "mtime": 1788180238.9394577,
+    "ast_hash": "fd49acd85aace3e9236b8f0044cbba5b",
     "semantic_hash": ""
   },
   "js/ui/crud/project-crud.js": {
-    "mtime": 1784666665.8111286,
-    "ast_hash": "69bdc14965140c6dcc3e3437492e920a",
-    "semantic_hash": "69bdc14965140c6dcc3e3437492e920a"
+    "mtime": 1788184183.8119245,
+    "ast_hash": "fdd89f7db5bbdbf66b19336af3df2a55",
+    "semantic_hash": ""
   },
   "js/ui/crud/resource-crud.js": {
     "mtime": 1784381118.861122,
@@ -120,8 +120,8 @@
     "semantic_hash": "45a3372fa69b8bede7b87be202eb7f8c"
   },
   "js/ui/crud/task-crud.js": {
-    "mtime": 1785954543.0742836,
-    "ast_hash": "365b6dccb3de92a6b0266fe276840348",
+    "mtime": 1788180273.9114368,
+    "ast_hash": "313374390b9fa5cd1ba74dfbf3faaa69",
     "semantic_hash": ""
   },
   "js/ui/crud/team-crud.js": {
@@ -130,9 +130,9 @@
     "semantic_hash": "67b55398997477de045370132d56f5aa"
   },
   "js/ui/gantt/baseline-drag.js": {
-    "mtime": 1784663832.7710166,
-    "ast_hash": "c333f4af6906eab273c652a04f1ff84a",
-    "semantic_hash": "c333f4af6906eab273c652a04f1ff84a"
+    "mtime": 1788180313.8556561,
+    "ast_hash": "e976218db5eb92bd55c919792089128d",
+    "semantic_hash": ""
   },
   "js/ui/gantt/cell-popover.js": {
     "mtime": 1787763601.235092,
@@ -150,13 +150,13 @@
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-row.js": {
-    "mtime": 1787758962.0781243,
-    "ast_hash": "73e4692692a789e07fcc988570225380",
+    "mtime": 1788180402.4910207,
+    "ast_hash": "762007e9dc4b1eb138cdc57ea792e3c7",
     "semantic_hash": ""
   },
   "js/ui/gantt/gantt-view.js": {
-    "mtime": 1787763632.15718,
-    "ast_hash": "7ccdab3ca5d327fab8e4623da71506f4",
+    "mtime": 1788190155.431331,
+    "ast_hash": "90dc707dd688803dacc4dbce3ce5dccb",
     "semantic_hash": ""
   },
   "js/ui/gantt/legend.js": {
@@ -165,13 +165,13 @@
     "semantic_hash": ""
   },
   "js/ui/gantt/task-drag.js": {
-    "mtime": 1784661521.6010165,
-    "ast_hash": "2351048a1f2223493f53a9ad3563f23b",
-    "semantic_hash": "2351048a1f2223493f53a9ad3563f23b"
+    "mtime": 1788180340.0810847,
+    "ast_hash": "7eac154f9a0272f6cdf2b4eb0d8b3f2e",
+    "semantic_hash": ""
   },
   "js/ui/milestones/milestones-view.js": {
-    "mtime": 1785995099.7068224,
-    "ast_hash": "8e35138a8cffbcafd57e7581321800d3",
+    "mtime": 1788190162.0854754,
+    "ast_hash": "8b4d7486a19ea162131e4c5e6efc1638",
     "semantic_hash": ""
   },
   "js/ui/resource-load/resource-load-view.js": {
@@ -280,33 +280,33 @@
     "semantic_hash": "d2ca65978802c89db2010fc7b303f182"
   },
   "CLAUDE.md": {
-    "mtime": 1786429870.4857407,
-    "ast_hash": "d5ce75f3e2f197dd90e9fdf65ce66db8",
+    "mtime": 1788184618.3023193,
+    "ast_hash": "fe8008eb0b94deaab3ab6001d4f3aa8c",
     "semantic_hash": ""
   },
   "docs/api.md": {
-    "mtime": 1787765557.2874146,
-    "ast_hash": "935d96804a67a8636a8b2547a7898280",
+    "mtime": 1788185353.0139534,
+    "ast_hash": "aa9ab62e92bf0af3d92ebaf501f9c034",
     "semantic_hash": ""
   },
   "docs/architecture.md": {
-    "mtime": 1787765566.683353,
-    "ast_hash": "df491bf3313a8900a3322c31159dea32",
+    "mtime": 1788190183.0183544,
+    "ast_hash": "d2c77f790508b2e65c6720e5796357c7",
     "semantic_hash": ""
   },
   "docs/database.md": {
-    "mtime": 1787759024.1975958,
-    "ast_hash": "9519dc87eddf65c83e4a0f6707736378",
+    "mtime": 1788180738.941533,
+    "ast_hash": "83853ba91ad89b3d15b52152c800bcad",
     "semantic_hash": ""
   },
   "docs/deployment.md": {
-    "mtime": 1786429820.770861,
-    "ast_hash": "3de0c6a2d4f4b109f946cc73d3c40d21",
+    "mtime": 1788184637.2063231,
+    "ast_hash": "8ce07178ecb2e16e77936d2d7e44d8bd",
     "semantic_hash": ""
   },
   "docs/glossary.md": {
-    "mtime": 1787759047.3622344,
-    "ast_hash": "a20a08b23e009242ff955a380ccec523",
+    "mtime": 1788185333.15459,
+    "ast_hash": "291d2a3afd14072c2edbb5517c67d66f",
     "semantic_hash": ""
   },
   "docs/security.md": {
@@ -315,8 +315,8 @@
     "semantic_hash": "26342c52653e84faebbf464e03d683bd"
   },
   "index.html": {
-    "mtime": 1787763535.9225457,
-    "ast_hash": "c1209376f7f2afe3b15b5fbd9743b95a",
+    "mtime": 1788184132.7118707,
+    "ast_hash": "cfc6fa62214ce6447af4a2a2a89a1f55",
     "semantic_hash": ""
   },
   "spike-fsa/index.html": {
@@ -375,13 +375,13 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1787765540.4740384,
-    "ast_hash": "c9f1680c5d35a532d2ce062e0aaa7c3d",
+    "mtime": 1788190174.3703885,
+    "ast_hash": "d4ca134e78a44582063414dd0eb55d5e",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786395124.3021426,
-    "ast_hash": "ba74bd77f7149600d50e42bb0142aeaa",
+    "mtime": 1788185412.1894965,
+    "ast_hash": "8a0d03b744a8e1c91a77a42858dac528",
     "semantic_hash": ""
   },
   "js/ui/gantt/week-drag.js": {
@@ -402,6 +402,26 @@
   "js/ui/common/floating-position.js": {
     "mtime": 1787765351.3450315,
     "ast_hash": "14b64bb540b214e5d3e4579cdc24190a",
+    "semantic_hash": ""
+  },
+  "js/ui/gantt/project-filter.js": {
+    "mtime": 1788190582.8778374,
+    "ast_hash": "d3f0bfe5b8b4f6a3864f26abef1be139",
+    "semantic_hash": ""
+  },
+  "unit/data/save-coordinator.test.js": {
+    "mtime": 1788180608.3669422,
+    "ast_hash": "7f91dc74d4ec739037119ae1a74019be",
+    "semantic_hash": ""
+  },
+  "unit/ui/baseline-move.test.js": {
+    "mtime": 1788180650.4866507,
+    "ast_hash": "b83226f6f9320cd7b762cb6d9238876a",
+    "semantic_hash": ""
+  },
+  "unit/ui/task-move.test.js": {
+    "mtime": 1788180696.2768116,
+    "ast_hash": "84ca7d96ec8e4ca72fe450d215470793",
     "semantic_hash": ""
   }
 }

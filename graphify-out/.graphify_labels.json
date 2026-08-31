@@ -15,7 +15,7 @@
   "13": "save-coordinator.js",
   "14": "milestones-view.js",
   "15": "week-utils.js",
-  "16": "cell-popover.js",
+  "16": "project-filter.js",
   "17": "project-crud.js",
   "18": "Weavo",
   "19": "week-controls.js",
@@ -52,5 +52,11 @@
   "50": "week-utils.test.js",
   "51": "AGENTS.md",
   "52": "team-crud.js",
-  "53": "floating-position.js"
+  "53": "floating-position.js",
+  "54": "repository.js",
+  "55": "APP_VERSION constant",
+  "56": "README.md",
+  "57": "gantt-row.js",
+  "58": "slug.js",
+  "59": "toast.js"
 }
