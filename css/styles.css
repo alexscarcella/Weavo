@@ -198,9 +198,31 @@ code {
   z-index: 2;
   font-weight: 500;
 }
-.gantt-cell.col-1 { left: 0; width: 255px; }
-.gantt-cell.col-2 { left: 255px; width: 351px; color: #555; }
-.gantt-cell.col-3 { left: 606px; width: 300px; font-weight: 400; }
+.gantt-cell.col-1 { left: 0; width: var(--mp-col1-w, 255px); }
+.gantt-cell.col-2 { left: var(--mp-col1-w, 255px); width: var(--mp-col2-w, 351px); color: #555; }
+.gantt-cell.col-3 { left: calc(var(--mp-col1-w, 255px) + var(--mp-col2-w, 351px)); width: var(--mp-col3-w, 300px); font-weight: 400; }
+
+/* Maniglia di resize (mouse) sul bordo destro delle 3 intestazioni fisse
+   della Gantt view. Le variabili --mp-col*-w sono impostate da
+   js/ui/gantt/column-resize.js sull'elemento .gantt-grid: essendo custom
+   property CSS, si applicano solo al sottoalbero di quel grid (le altre
+   viste che riusano .col-1/2/3, es. Milestones, restano sui default sopra
+   perché non discendono da quell'elemento). */
+.col-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  bottom: 0;
+  width: 5px;
+  cursor: col-resize;
+  z-index: 6;
+  touch-action: none;
+}
+.col-resize-handle:hover,
+.col-resize-handle.resizing {
+  background: #1a5fb4;
+  opacity: 0.5;
+}
 .gantt-cell.completed-dim { color: #888; }
 
 .gantt-cell.header {

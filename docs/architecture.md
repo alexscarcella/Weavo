@@ -227,14 +227,26 @@ A few non-obvious decisions and bugs worth knowing before touching the same code
   background. Found by rendering the grid in isolation in headless Chrome and reading
   `getBoundingClientRect()` on every cell, not from the CSS/JS alone. Fixed by giving that view its
   own dedicated column classes (`rl-col-initials`, `rl-col-name`) sized to match its own grid.
-  For the same reason the gantt view's three frozen-column widths live in **two places that must
-  change together**: the inline `grid.style.gridTemplateColumns` in `gantt-view.js` and the
-  `.gantt-cell.col-1/col-2/col-3` rules in `styles.css` (where `col-2`/`col-3` also carry the
-  cumulative `left` sticky offset — widen `col-1` or `col-2` and every later column's `left` must
-  move by the same amount). `col-1` and `ms-col-baseline` are **also reused by the Milestones
-  grid** (`milestones-view.js` has its own `gridTemplateColumns` string and a totals mini-grid),
-  so changing `col-1`'s width means updating that string and `ms-col-baseline`'s `left` too — only
-  `col-2` is gantt-private (Milestones swapped in `ms-col-baseline` precisely to decouple it).
+  The gantt view's three frozen-column widths now avoid this trap structurally instead of by
+  convention: the inline `grid.style.gridTemplateColumns` in `gantt-view.js` and the
+  `.gantt-cell.col-1/col-2/col-3` `width`/cumulative-`left` rules in `styles.css` both read three
+  CSS custom properties (`--mp-col1-w`/`--mp-col2-w`/`--mp-col3-w`, literal pixel values kept only
+  as `var()` fallbacks) instead of duplicating literal widths — one value, read in two places, so
+  they can't drift apart. `js/ui/gantt/column-resize.js` (`MP.colResize`, the Excel-style
+  mouse-drag column resize on the three header cells) is the single writer of those properties,
+  via `gridEl.style.setProperty(...)` **on the `.gantt-grid` element itself** — CSS custom
+  properties inherit down the DOM subtree they're set on, so this keeps the effect scoped to that
+  one grid instance and never leaks into Milestones' separate grid element. Chosen widths persist
+  in `localStorage` (key `mp.ganttColWidths`) as a per-browser UI preference, not project data (so
+  never written to the shared JSON files); `renderGanttView` re-reads and re-applies them on
+  *every* render (default or previously resized) since a full DOM rebuild would otherwise reset
+  them to the CSS fallback — same "reapply after rebuild" pattern as `scrollLeft`/`lastEdited`
+  below. `col-1` and `ms-col-baseline` are **still also reused by the Milestones grid**
+  (`milestones-view.js` has its own `gridTemplateColumns` string and a totals mini-grid) — it never
+  sets the `--mp-col*-w` properties itself, so it always renders at the literal `var()` fallback
+  widths and is unaffected by resizing the gantt view, by design (only `col-2` was already
+  gantt-private; Milestones swapped in `ms-col-baseline` precisely to decouple it — resizing didn't
+  change that split, it just changed how the gantt side of it is expressed).
 - **Single-scrollbar page layout.** The outer document (`html body`) never scrolls
   (`overflow: hidden`); the gantt/resource-load/milestones pages are flex columns stretched to
   fill the viewport, with everything except the grid pinned `flex: 0 0 auto` so only the grid's own
@@ -269,6 +281,12 @@ A few non-obvious decisions and bugs worth knowing before touching the same code
   `task-drag.js` (gesture + drop-target wiring in `gantt-row.js`), calling
   `MP.baselineCrud.moveBaselineToPosition` / `MP.taskCrud.moveTaskToPosition` (same-file vs.
   cross-file branch inside each).
+- **Resizing a gantt column** (Project/Team, Baseline, Task) → `js/ui/gantt/column-resize.js`
+  (`MP.colResize`: mouse gesture, `localStorage` persistence, module-level transient drag state —
+  same "never touch `state`/`setState` mid-gesture" convention as the drag modules above, but
+  plain `mousedown`/`mousemove` instead of HTML5 Drag&Drop, which doesn't suit a resize handle)
+  plus the `--mp-col1-w`/`-col2-w`/`-col3-w` CSS custom properties it writes (see "Hard-won
+  lessons" above for why those, not literal widths, are now the single source of truth).
 - **A new kind of cross-cutting warning** (like orphan references) → `js/model/validation.js`,
   surfaced by the gantt view's warnings panel and per-cell badges.
 - **A gantt view-scoped display toggle/filter** (like "show completed" or the project filter) →

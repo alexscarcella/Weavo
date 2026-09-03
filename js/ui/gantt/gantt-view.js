@@ -345,11 +345,18 @@
     if (ok) openShiftMenu({ state, file, task, baseline, weeks: targets });
   }
 
-  function headerCell(text, colClass, title, extraClass) {
+  function headerCell(text, colClass, title, extraClass, resizeKey) {
     const div = document.createElement('div');
     div.className = `gantt-cell header ${colClass ? 'col-fixed ' + colClass : 'week-cell'}${extraClass ? ' ' + extraClass : ''}`;
     div.textContent = text;
     if (title) div.title = title;
+    if (resizeKey) {
+      const handle = document.createElement('span');
+      handle.className = 'col-resize-handle';
+      handle.title = 'Drag to resize column';
+      MP.colResize.attachHandle(handle, resizeKey);
+      div.appendChild(handle);
+    }
     return div;
   }
 
@@ -439,7 +446,11 @@
     // delle settimane invece di restare bloccate. `renderTaskRow`/`gantt-row.js`
     // non sanno nulla di queste 2 colonne (restituiscono sempre 3+weeks.length
     // celle): sono `gantt-view.js` a inserire i filler prima/dopo, riga per riga.
-    grid.style.gridTemplateColumns = `255px 351px 300px repeat(${weeks.length + 2}, 46px)`;
+    const colWidths = MP.colResize.getWidths();
+    grid.style.setProperty('--mp-col1-w', `${colWidths.col1}px`);
+    grid.style.setProperty('--mp-col2-w', `${colWidths.col2}px`);
+    grid.style.setProperty('--mp-col3-w', `${colWidths.col3}px`);
+    grid.style.gridTemplateColumns = `var(--mp-col1-w) var(--mp-col2-w) var(--mp-col3-w) repeat(${weeks.length + 2}, 46px)`;
 
     // Riga pulsanti "a bordo tabella" in stile Excel, sopra le etichette di
     // colonna: sacrifica un'intera riga di altezza (24px, come le altre)
@@ -470,9 +481,9 @@
     edgeRight.appendChild(MP.weekControls.renderAddWeekButton(state));
     grid.appendChild(edgeRight);
 
-    grid.appendChild(headerCell('Project / Team', 'col-1'));
-    grid.appendChild(headerCell('Baseline', 'col-2'));
-    grid.appendChild(headerCell('Task', 'col-3'));
+    grid.appendChild(headerCell('Project / Team', 'col-1', null, null, 'col1'));
+    grid.appendChild(headerCell('Baseline', 'col-2', null, null, 'col2'));
+    grid.appendChild(headerCell('Task', 'col-3', null, null, 'col3'));
     grid.appendChild(headerCell('', null));
     weeks.forEach((settimana, i) => {
       grid.appendChild(headerCell(formatWeekLabel(settimana), null, settimana, weekExtraClass(settimana, i, currentWeek)));

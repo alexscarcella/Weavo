@@ -33,6 +33,19 @@ All notable changes to Master Plan are documented in this file.
   and `MP.taskCrud.moveTaskToPosition` gained a `targetFile` parameter; new specs
   `unit/ui/baseline-move.test.js`, `unit/ui/task-move.test.js`, `unit/data/save-coordinator.test.js`
   (the first `unit/ui/` and `unit/data/save-coordinator` coverage).
+- **Resizable gantt columns** — the three frozen columns (Project/Team, Baseline, Task) can now be
+  resized by dragging a handle on the right edge of their header cell, Excel-style. New module
+  [js/ui/gantt/column-resize.js](js/ui/gantt/column-resize.js) (`MP.colResize`) holds the drag
+  gesture in module-level state (never touches `MP.store`, so dragging causes no re-render) and
+  persists the chosen widths to `localStorage` (`mp.ganttColWidths`) as a per-browser preference —
+  not project data, so it never touches the shared JSON files. The three widths are now driven by
+  CSS custom properties (`--mp-col1-w`/`--mp-col2-w`/`--mp-col3-w`, defaulting to the previous
+  255/351/300px) that both `gantt-view.js`'s `grid-template-columns` and `styles.css`'s
+  `.col-1/2/3` `width`/cumulative-`left` rules read, replacing the literal pixel values that
+  previously had to be kept in sync by hand across those two files (see
+  [docs/architecture.md](docs/architecture.md)'s "Hard-won lessons"). Scoped to the gantt view
+  only — the Milestones grid, which reuses the `col-1` class for its own Project column, never sets
+  these properties and so stays at the fixed default width regardless of gantt-view resizing.
 - **Month-boundary separator line** — the gantt, Workload, and Milestones grids now draw a
   dashed grey vertical line (`.month-boundary`) on the first week column of every calendar month,
   a lightweight orientation aid alongside the existing solid blue "today" line
